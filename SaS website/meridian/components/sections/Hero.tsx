@@ -59,6 +59,7 @@ export default function Hero() {
         </motion.div>
 
         <h1 className="mt-16 font-display text-fluid-hero font-bold uppercase leading-[0.9] tracking-tightest text-foreground lg:mt-0">
+          
           {ready && (
             <>
               <SplitReveal
@@ -89,10 +90,10 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate={ready ? "visible" : "hidden"}
-            className="max-w-md text-fluid-md text-muted"
+            className="max-w-md  text-muted"
           >
-            SAS is the first computing platform engineered without
-            compromise — for the people who build what&apos;s next.
+            Where cinematic storytelling meets modern engineering.
+            Crafting digital experiences that transform ambitious ideas into unforgettable brands.
           </motion.p>
 
           <motion.div
