@@ -2,7 +2,7 @@ export const BRAND = {
   name: "SAS",
   short: "MRD",
   filed: "SAS SYSTEMS™ — PLACEHOLDER MARK",
-  tagline: "Precision, perfected.",
+  tagline: "Your VISION, bought to life.",
 };
 
 export const NAV_LINKS = [

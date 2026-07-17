@@ -1,4 +1,4 @@
-# SAS — Precision, Perfected.
+# SAS — Your VISION, bought to life.
 
 A cinematic, motion-first landing page built as a full Next.js production
 project. Placeholder brand (**SAS**), placeholder product (a precision

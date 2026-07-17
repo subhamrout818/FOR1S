@@ -68,7 +68,7 @@ export default function Hero() {
                 delay={0.1}
                 className="block overflow-hidden"
               >
-                PRECISION,
+                Your VISION,
               </SplitReveal>
               <SplitReveal
                 as="span"
@@ -77,7 +77,7 @@ export default function Hero() {
                 delay={0.3}
                 className="block overflow-hidden text-accent"
               >
-                PERFECTED.
+                bought to life.
               </SplitReveal>
             </>
           )}

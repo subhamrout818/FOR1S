@@ -28,7 +28,7 @@ const config: Config = {
         mono: ["var(--font-mono)", "monospace"],
       },
       fontSize: {
-        "fluid-hero": "clamp(3.25rem, 9vw, 9.5rem)",
+        "fluid-hero": "clamp(2.8rem, 6.5vw, 8.5rem)",
         "fluid-xl": "clamp(2.5rem, 6vw, 6rem)",
         "fluid-lg": "clamp(1.75rem, 3.4vw, 3.25rem)",
         "fluid-md": "clamp(1.25rem, 2vw, 1.75rem)",
