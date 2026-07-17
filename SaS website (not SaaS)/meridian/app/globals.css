@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  /* Lenis drives smooth scrolling in JS; leave native scroll-behavior alone
+     so the two don't fight each other. */
+  scroll-behavior: auto;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* The custom cursor takes over on precise pointers only — touch devices
+   keep their native cursor/tap behavior untouched. */
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+::selection {
+  background-color: #e63946;
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid #e63946;
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e63946;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
