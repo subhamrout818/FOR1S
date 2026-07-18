@@ -3,6 +3,7 @@ import Vision from "@/components/sections/Vision";
 import Features from "@/components/sections/Features";
 import ProductPreview from "@/components/sections/ProductPreview";
 import Benefits from "@/components/sections/Benefits";
+import TeamMembers from "@/components/sections/TeamMembers";
 import Testimonials from "@/components/sections/Testimonials";
 import Pricing from "@/components/sections/Pricing";
 import FAQ from "@/components/sections/FAQ";
@@ -17,6 +18,7 @@ export default function Home() {
       <ProductPreview />
       <Benefits />
       <Testimonials />
+      <TeamMembers />
       <Pricing />
       <FAQ />
       <FinalCTA />
