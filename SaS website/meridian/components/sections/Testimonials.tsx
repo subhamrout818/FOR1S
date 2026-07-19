@@ -8,11 +8,13 @@ import SplitReveal from "@/components/ui/SplitReveal";
 import { TESTIMONIALS } from "@/lib/data";
 
 export default function Testimonials() {
+  console.log("Testimonials rendered");
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(
+  useGSAP( 
     () => {
+      console.log("useGSAP started");
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
@@ -22,10 +24,14 @@ export default function Testimonials() {
 
         const distance = track.scrollWidth - window.innerWidth;
         if (distance <= 0) return;
+        console.log("GSAP is running");
+console.log(track.scrollWidth);
+console.log(window.innerWidth);
+console.log(distance);
 
         const st = ScrollTrigger.create({
           trigger: sectionRef.current,
-          start: "top top",
+          start: "top center",
           end: () => `+=${distance}`,
           pin: true,
           scrub: 1,

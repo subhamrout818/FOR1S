@@ -4,7 +4,7 @@ import Features from "@/components/sections/Features";
 import ProductPreview from "@/components/sections/ProductPreview";
 import Benefits from "@/components/sections/Benefits";
 import TeamMembers from "@/components/sections/TeamMembers";
-import Testimonials from "@/components/sections/Testimonials";
+// import Testimonials from "@/components/sections/Testimonials";
 import Pricing from "@/components/sections/Pricing";
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
@@ -17,7 +17,7 @@ export default function Home() {
       <Features />
       <ProductPreview />
       <Benefits />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <TeamMembers />
       <Pricing />
       <FAQ />
