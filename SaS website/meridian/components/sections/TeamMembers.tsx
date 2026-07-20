@@ -28,20 +28,8 @@ const TEAM: TeamMember[] = [
     image: "/subham.jpg",
   },
   {
-    id: "02",
-    name: "Sumit Meher",
-    role: "Backend Developer",
-    image: "/sumit.jpg",
-  },
-  {
-    id: "03",
-    name: "Arman Sathpathy",
-    role: "Creative Director",
-    image: "/arman.jpg",
-  },
-  {
     id: "04",
-    name: "Tanuj bhosdiwala",
+    name: "Tanuj Joshi",
     role: "Marketing",
     image: "/tanuj.jpg",
   },
