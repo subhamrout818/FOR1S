@@ -85,7 +85,7 @@ export default function TeamSection() {
         >
           <div>
             <h1 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
-              Creative <span className="text-neutral-600">Talent</span>
+              Built <span className="text-neutral-600">By</span>
             </h1>
           </div>
           <div className="h-px flex-1 bg-neutral-900 mx-8 hidden md:block" />
