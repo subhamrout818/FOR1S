@@ -30,7 +30,7 @@ export default function Vision() {
 
         <RevealMask delay={0.15} className="ml-auto mt-14 max-w-xl">
           <p className="text-right text-base leading-relaxed text-muted md:text-lg">
-            Every material, every circuit, every line of software in SAS
+            Every material, every circuit, every line of software in FOR1S
             exists to remove something — a delay, a fan, a menu, a
             compromise. What&apos;s left is a machine that responds before
             you finish the thought, and disappears the moment you stop

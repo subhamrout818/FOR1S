@@ -1,7 +1,7 @@
-# SAS — Your VISION, bought to life.
+# FOR1S — Your VISION, bought to life.
 
 A cinematic, motion-first landing page built as a full Next.js production
-project. Placeholder brand (**SAS**), placeholder product (a precision
+project. Placeholder brand (**FOR1S**), placeholder product (a precision
 computing platform) — swap the copy in `lib/data.ts` and the palette in
 `tailwind.config.ts` for your own.
 
@@ -63,7 +63,7 @@ hooks/
   `#BEBEBE` muted / `#E63946` accent — used deliberately, never as a wash.
 - **Type**: Bricolage Grotesque (display) + Geist (body) + Instrument Serif
   italic (rare emotional accents — the Vision statement, testimonials).
-- **Signature element**: the crimson "SAS line" on the right edge of the
+- **Signature element**: the crimson "FOR1S line" on the right edge of the
   viewport (desktop) — a scroll-progress spine that threads through the
   whole page (`components/layout/ScrollSpine.tsx`).
 - **Motion**: every section uses a *different* reveal technique on purpose —

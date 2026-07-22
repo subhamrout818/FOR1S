@@ -28,7 +28,7 @@ export default function FinalCTA() {
 
         <RevealMask blur={false} y={16} delay={0.2} className="mt-8">
           <p className="max-w-md text-base text-muted lg:text-lg">
-            Reserve your SAS today. The first production run is limited,
+            Reserve your FOR1S today. The first production run is limited,
             and units ship in the order they&apos;re reserved.
           </p>
         </RevealMask>

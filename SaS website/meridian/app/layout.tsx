@@ -40,9 +40,9 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SAS — Your VISION, bought to life.",
+  title: "FOR1S — Your VISION, bought to life.",
   description:
-    "SAS is a computing platform engineered without compromise — precision hardware, adaptive intelligence, and a form built to disappear into your work.",
+    "FOR1S is a computing platform engineered without compromise — precision hardware, adaptive intelligence, and a form built to disappear into your work.",
   icons: { icon: "/favicon.svg" },
 };
 

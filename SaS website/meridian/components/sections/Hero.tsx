@@ -21,11 +21,11 @@ export default function Hero() {
 
   useEffect(() => {
     const handler = () => setReady(true);
-    window.addEventListener("SAS:loaded", handler);
+    window.addEventListener("FOR1S:loaded", handler);
     // Safety net in case the preloader event never fires for any reason.
     const fallback = setTimeout(() => setReady(true), 4000);
     return () => {
-      window.removeEventListener("SAS:loaded", handler);
+      window.removeEventListener("FOR1S:loaded", handler);
       clearTimeout(fallback);
     };
   }, []);

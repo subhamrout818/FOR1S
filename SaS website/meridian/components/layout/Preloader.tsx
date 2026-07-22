@@ -22,7 +22,7 @@ export default function Preloader() {
       onComplete: () => {
         document.body.style.overflow = previousOverflow;
         setDone(true);
-        window.dispatchEvent(new CustomEvent("SAS:loaded"));
+        window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
       },
     });
 

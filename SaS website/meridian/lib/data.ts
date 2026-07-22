@@ -1,7 +1,7 @@
 export const BRAND = {
-  name: "SAS",
+  name: "FOR1S",
   short: "MRD",
-  filed: "SAS SYSTEMS™ — PLACEHOLDER MARK",
+  filed: "FOR1S SYSTEMS™ — PLACEHOLDER MARK",
   tagline: "Your VISION, bought to life.",
 };
 
@@ -126,7 +126,7 @@ export const BENEFITS = [
     id: "b4",
     title: "Built to last a decade",
     description:
-      "No glue holding it together. No parts designed to fail on schedule. We built SAS to be owned outright, not slowly replaced.",
+      "No glue holding it together. No parts designed to fail on schedule. We built FOR1S to be owned outright, not slowly replaced.",
   },
 ] as const;
 
@@ -218,9 +218,9 @@ export const PRICING_TIERS = [
 export const FAQ_ITEMS = [
   {
     id: "q1",
-    question: "How is SAS different from a typical laptop?",
+    question: "How is FOR1S different from a typical laptop?",
     answer:
-      "SAS is designed and machined as a single system — chassis, cooling, and software built together rather than assembled from off-the-shelf parts. That's what lets it run silent, cool, and fast for the entire time you're using it, not just the first ten minutes.",
+      "FOR1S is designed and machined as a single system — chassis, cooling, and software built together rather than assembled from off-the-shelf parts. That's what lets it run silent, cool, and fast for the entire time you're using it, not just the first ten minutes.",
   },
   {
     id: "q2",

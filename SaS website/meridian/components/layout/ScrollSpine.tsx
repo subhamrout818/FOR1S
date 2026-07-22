@@ -53,7 +53,7 @@ export default function ScrollSpine() {
       </div>
 
       <span className="rotate-180 font-mono text-[9px] tracking-widest text-muted [writing-mode:vertical-lr]">
-        SAS
+        FOR1S
       </span>
     </div>
   );
