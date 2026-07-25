@@ -24,17 +24,17 @@ export default function Vision() {
           stagger={0.05}
           className="max-w-4xl font-serif text-fluid-xl italic leading-[1.15] text-foreground"
         >
-          We didn&apos;t set out to build a faster machine. We set out to
-          build one that finally gets out of the way.
+          We didn&apos;t set out to build another agency. We set out to
+          build the one we wish existed when we were starting out.
         </SplitReveal>
 
         <RevealMask delay={0.15} className="ml-auto mt-14 max-w-xl">
           <p className="text-right text-base leading-relaxed text-muted md:text-lg">
-            Every material, every circuit, every line of software in FOR1S
-            exists to remove something — a delay, a fan, a menu, a
-            compromise. What&apos;s left is a machine that responds before
-            you finish the thought, and disappears the moment you stop
-            noticing it.
+            Every decision — tech stack, architecture, design system,
+            deployment — is made to serve your users and your revenue.
+            We strip away what doesn&apos;t convert, what doesn&apos;t
+            scale, and what doesn&apos;t matter. What&apos;s left is a
+            product that feels inevitable.
           </p>
         </RevealMask>
       </div>

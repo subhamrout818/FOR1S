@@ -56,8 +56,8 @@ export default function Footer() {
                 </span>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-muted">
-                Precision computing, engineered without compromise. Reserved
-                for the people who build what&apos;s next.
+                Full-stack SaaS development for startups and enterprises.
+                We design, build, and launch software that scales.
               </p>
               <span className="font-mono text-[11px] tracking-wideish text-muted/70">
                 {BRAND.filed}

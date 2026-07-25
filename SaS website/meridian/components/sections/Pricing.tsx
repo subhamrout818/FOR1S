@@ -21,7 +21,7 @@ export default function Pricing() {
             type="words"
             className="mx-auto max-w-2xl font-display text-fluid-xl font-semibold uppercase leading-[0.98] tracking-tightest text-foreground"
           >
-            Three configurations. One standard.
+            Three ways to work with us.
           </SplitReveal>
         </div>
 
@@ -77,7 +77,7 @@ export default function Pricing() {
                   cursorText="Go"
                   className="mt-10 w-full"
                 >
-                  Reserve {tier.name}
+                  Get started
                 </MagneticButton>
               </div>
             </RevealMask>
@@ -85,8 +85,7 @@ export default function Pricing() {
         </div>
 
         <p className="mt-10 text-center text-xs text-muted">
-          $100 fully refundable reservation. Final configuration confirmed
-          before production.
+          Custom scope available. Every project starts with a free discovery call.
         </p>
       </div>
     </section>

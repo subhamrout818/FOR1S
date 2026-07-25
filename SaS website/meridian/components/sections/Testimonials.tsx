@@ -61,7 +61,7 @@ console.log(distance);
             type="words"
             className="max-w-xl font-display text-fluid-lg font-semibold uppercase leading-[1] tracking-tightest text-foreground"
           >
-            Early access, honest words.
+            What our clients say.
           </SplitReveal>
         </div>
 

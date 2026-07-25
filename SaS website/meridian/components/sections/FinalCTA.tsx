@@ -15,7 +15,7 @@ export default function FinalCTA() {
       />
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center">
-        <SectionLabel scene="09" title="Final call" className="mb-10 justify-center" />
+        <SectionLabel scene="09" title="Get started" className="mb-10 justify-center" />
 
         <SplitReveal
           as="h2"
@@ -23,19 +23,19 @@ export default function FinalCTA() {
           stagger={0.05}
           className="font-display text-fluid-xl font-bold uppercase leading-[1] tracking-tightest text-foreground"
         >
-          Some machines are built to impress. This one is built to disappear.
+          Ready to stop planning and start shipping?
         </SplitReveal>
 
         <RevealMask blur={false} y={16} delay={0.2} className="mt-8">
           <p className="max-w-md text-base text-muted lg:text-lg">
-            Reserve your FOR1S today. The first production run is limited,
-            and units ship in the order they&apos;re reserved.
+            Book a free discovery call. We&apos;ll map out your product,
+            your timeline, and what it actually takes to get to launch.
           </p>
         </RevealMask>
 
         <RevealMask blur={false} y={16} delay={0.3} className="mt-12">
           <MagneticButton size="lg" cursorText="Go">
-            Reserve access — $100 refundable
+            Book a discovery call — free
           </MagneticButton>
         </RevealMask>
       </div>

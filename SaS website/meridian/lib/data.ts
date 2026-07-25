@@ -1,14 +1,14 @@
 export const BRAND = {
   name: "FOR1S",
-  short: "MRD",
-  filed: "FOR1S SYSTEMS™ — PLACEHOLDER MARK",
-  tagline: "Your VISION, bought to life.",
+  short: "FR1",
+  filed: "FOR1S DIGITAL™",
+  tagline: "Ship SaaS. Scale fast.",
 };
 
 export const NAV_LINKS = [
   { label: "Vision", href: "#vision" },
-  { label: "Features", href: "#features" },
-  { label: "Preview", href: "#preview" },
+  { label: "Services", href: "#features" },
+  { label: "Process", href: "#preview" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -17,88 +17,88 @@ export const FEATURES = [
   {
     id: "f1",
     scene: "01",
-    title: "Zero-latency interface",
+    title: "Full-stack, end to end",
     description:
-      "Every interaction is predicted before it's requested. Input to response in under a millisecond — fast enough to feel like thought, not software.",
+      "Strategy, design, frontend, backend, infrastructure — one team, one vision. No handoff gaps, no translation loss between agencies.",
     span: "large",
   },
   {
     id: "f2",
     scene: "02",
-    title: "Adaptive thermal core",
+    title: "Ship fast, iterate faster",
     description:
-      "A liquid-graphite cooling system that reshapes itself under load — silent at idle, cold under full performance. No fans, no noise, no throttling.",
+      "We launch MVPs in weeks, not months. Then we refine with real data. Speed isn't a compromise — it's a strategy.",
     span: "small",
   },
   {
     id: "f3",
     scene: "03",
-    title: "Machined from one block",
+    title: "Built to scale",
     description:
-      "The chassis is carved from a single piece of aerospace-grade aluminum. No seams, no visible screws, no flex under pressure.",
+      "Architecture designed for your first 100 users and your next 10 million. No rewrite needed when traction hits.",
     span: "small",
   },
   {
     id: "f4",
     scene: "04",
-    title: "On-device intelligence",
+    title: "Design that converts",
     description:
-      "Every model runs locally. Nothing you create leaves the machine unless you choose to send it — private by architecture, not by policy.",
+      "UI/UX isn't decoration — it's revenue. Every screen is engineered to reduce friction, increase retention, and guide users to value.",
     span: "small",
   },
   {
     id: "f5",
     scene: "05",
-    title: "72-hour density",
+    title: "Post-launch, not post-sale",
     description:
-      "A cell chemistry built for endurance, not headlines. Three full working days on a single charge, under real load.",
+      "We don't disappear after deploy. Monitoring, iterations, feature sprints — we stay in the trenches with you.",
     span: "small",
   },
 ] as const;
 
 export const PREVIEW_TABS = [
   {
-    id: "performance",
-    label: "Performance",
+    id: "strategy",
+    label: "Strategy",
     description:
-      "Sustained multi-core throughput tuned for real workloads, not synthetic peaks. It runs the same on hour eight as it does on minute one.",
+      "We start with your business goals, not code. Market research, user interviews, competitive mapping — the foundation that makes engineering decisions obvious.",
     specs: [
-      { label: "Sustained clock", value: "4.8 GHz" },
-      { label: "Cores", value: "16" },
-      { label: "Input latency", value: "0.2 ms" },
+      { label: "Discovery sprint", value: "1–2 weeks" },
+      { label: "Deliverables", value: "Roadmap + PRD" },
+      { label: "Tech advisory", value: "Included" },
     ],
   },
   {
     id: "design",
     label: "Design",
     description:
-      "Machined from a single block of aerospace-grade aluminum and finished by hand. Nothing on the surface is there by accident.",
+      "Figma-first, component-driven design systems. Every pixel has intent — from onboarding flows to billing dashboards.",
     specs: [
-      { label: "Weight", value: "1.02 kg" },
-      { label: "Thickness", value: "9.8 mm" },
-      { label: "Finish", value: "Anodized graphite" },
+      { label: "Design system", value: "Tailored" },
+      { label: "Prototyping", value: "High-fidelity" },
+      { label: "Handoff", value: "Dev-ready Figma" },
     ],
   },
   {
-    id: "intelligence",
-    label: "Intelligence",
+    id: "engineering",
+    label: "Engineering",
     description:
-      "On-device model inference, fully private by default. Your work is yours — nothing is sent anywhere unless you say so.",
+      "Modern stack, production-grade from day one. CI/CD, testing, observability — not afterthoughts, built in.",
     specs: [
-      { label: "Inference", value: "On-device" },
-      { label: "Local model", value: "70B parameters" },
-      { label: "Data sent by default", value: "0 KB" },
+      { label: "Stack", value: "Next.js / Node / Python" },
+      { label: "Infra", value: "AWS / Vercel / Docker" },
+      { label: "Deploy cadence", value: "Daily" },
     ],
   },
   {
-    id: "endurance",
-    label: "Endurance",
+    id: "scale",
+    label: "Scale",
     description:
-      "Built for the full arc of a working week, not a single afternoon. Fast to top up, slow to fade.",
+      "From MVP to millions of users. Performance tuning, cost optimization, and feature velocity that keeps up with your growth.",
     specs: [
-      { label: "Battery", value: "72 hr typical use" },
-      { label: "Fast charge", value: "0–80% in 22 min" },
-      { label: "Standby", value: "45 days" },
+      { label: "Uptime target", value: "99.9%" },
+      { label: "Avg. load time", value: "< 1.5s" },
+      { label: "Support", value: "Ongoing sprints" },
     ],
   },
 ] as const;
@@ -106,27 +106,27 @@ export const PREVIEW_TABS = [
 export const BENEFITS = [
   {
     id: "b1",
-    title: "Focus, uninterrupted",
+    title: "One team, zero handoffs",
     description:
-      "No fan noise. No thermal throttling mid-task. No notification bloat competing for your attention. Just the kind of silence that lets you notice you've been working for four hours.",
+      "No juggling five freelancers or three agencies. Strategy, design, code, and content — one team, one Slack channel, one bill.",
   },
   {
     id: "b2",
-    title: "Carry less, do more",
+    title: "Speed without shortcuts",
     description:
-      "One machine replaces the drawer of chargers, dongles, and backups. One bag, one charge, one less thing to think about before you leave the house.",
+      "We ship fast because we've done this before. Battle-tested patterns, not reinvented wheels. Your MVP in weeks, not quarters.",
   },
   {
     id: "b3",
-    title: "Private by default",
+    title: "Built for growth",
     description:
-      "Intelligence that runs on-device means your drafts, your data, and your work stay exactly where you left them — even from us.",
+      "What works for 100 users should work for 100,000. We architect for scale from day one so you never pay for a rewrite.",
   },
   {
     id: "b4",
-    title: "Built to last a decade",
+    title: "We don't disappear",
     description:
-      "No glue holding it together. No parts designed to fail on schedule. We built FOR1S to be owned outright, not slowly replaced.",
+      "Launch day isn't the finish line. We stick around for iterations, optimizations, and the feature sprints that keep your product competitive.",
   },
 ] as const;
 
@@ -136,81 +136,81 @@ export const TESTIMONIALS = [
   {
     id: "t1",
     quote:
-      "I stopped noticing the machine about a week in. That's the whole point of good tools — they disappear.",
-    name: "Analiese K.",
-    role: "Systems Architect",
+      "They didn't just build our platform — they understood the market better than we did. Launched in 8 weeks, hit 1K users in the first month.",
+    name: "Sarah K.",
+    role: "CEO, Finflow",
   },
   {
     id: "t2",
     quote:
-      "Three days of 8K timelines on a single charge. I didn't believe the number until I stopped charging it.",
-    name: "Julian R.",
-    role: "Documentary Editor",
+      "We've worked with three agencies before FOR1S. First one that actually shipped on time, on budget, and with quality we didn't have to redo.",
+    name: "Marcus L.",
+    role: "Founder, TaskHive",
   },
   {
     id: "t3",
     quote:
-      "The first machine I've used that can run a full structural simulation without sounding like it's under attack.",
-    name: "Priya M.",
-    role: "Structural Engineer",
+      "Our MVP went from napkin sketch to production in six weeks. The architecture they chose has scaled to 50K users without a single rewrite.",
+    name: "Priya N.",
+    role: "CTO, CloudDesk",
   },
   {
     id: "t4",
     quote:
-      "Nothing leaves this thing unless I tell it to. That shouldn't feel rare in 2026, but it does.",
-    name: "Devon T.",
-    role: "Independent Researcher",
+      "What impressed me most wasn't the code — it was the product thinking. They challenged our assumptions and saved us months of building the wrong thing.",
+    name: "James R.",
+    role: "Head of Product, Loopline",
   },
   {
     id: "t5",
     quote:
-      "It's the first product launch in years that felt like it was designed by people who actually use the thing.",
-    name: "Mireille S.",
-    role: "Product Designer",
+      "We needed a team that could move fast without cutting corners. FOR1S delivered a SaaS platform that our enterprise clients actually compliment.",
+    name: "Anika M.",
+    role: "COO, DataBridge",
   },
 ] as const;
 
 export const PRICING_TIERS = [
   {
-    id: "core",
-    name: "Core",
-    tagline: "For everyday precision",
-    price: "$2,400",
+    id: "landing",
+    name: "Landing Page",
+    tagline: "High-impact, single-page presence",
+    price: "$2,500",
     highlighted: false,
     specs: [
-      "16GB unified memory",
-      "512GB storage",
-      "Zero-latency interface",
-      "48-hour battery",
-      "1-year limited warranty",
+      "1–5 pages",
+      "GSAP, Three.js, premium animations",
+      "Fully responsive",
+      "SEO basics",
+      "Launch in 1–2 weeks",
     ],
   },
   {
-    id: "pro",
-    name: "Pro",
-    tagline: "For sustained performance",
-    price: "$3,200",
+    id: "business",
+    name: "Business Website",
+    tagline: "Multi-page, fully functional site",
+    price: "$5,000",
     highlighted: true,
     specs: [
-      "32GB unified memory",
-      "1TB storage",
-      "Adaptive thermal core",
-      "72-hour battery",
-      "3-year limited warranty",
+      "Multiple pages",
+      "CMS / blog if needed",
+      "Contact forms & integrations",
+      "Custom animations",
+      "Full deployment & handoff",
     ],
   },
   {
-    id: "studio",
-    name: "Studio",
-    tagline: "For uncompromising work",
-    price: "$4,600",
+    id: "saas",
+    name: "SaaS Product",
+    tagline: "Full-stack, production-grade platform",
+    price: "$12,000",
     highlighted: false,
     specs: [
-      "64GB unified memory",
-      "2TB storage",
-      "Studio-finish chassis",
-      "96-hour battery",
-      "5-year limited warranty",
+      "Authentication & user management",
+      "Dashboard & admin panel",
+      "Database & API architecture",
+      "Payments & email integration",
+      "Analytics & production deployment",
     ],
   },
 ] as const;
@@ -218,46 +218,46 @@ export const PRICING_TIERS = [
 export const FAQ_ITEMS = [
   {
     id: "q1",
-    question: "How is FOR1S different from a typical laptop?",
+    question: "What types of projects do you take on?",
     answer:
-      "FOR1S is designed and machined as a single system — chassis, cooling, and software built together rather than assembled from off-the-shelf parts. That's what lets it run silent, cool, and fast for the entire time you're using it, not just the first ten minutes.",
+      "Everything from high-end landing pages and multi-page business sites to full-stack SaaS platforms with auth, dashboards, payments, and APIs. If it runs in a browser and drives revenue, we can build it.",
   },
   {
     id: "q2",
-    question: "How long does it take to ship?",
+    question: "How long does a typical project take?",
     answer:
-      "Reservations open today. First units begin shipping in the initial production run, with confirmed orders fulfilled in the sequence they were reserved. You'll receive a tracked shipping estimate as soon as your unit enters production.",
+      "Landing pages ship in 1–2 weeks. Business websites take 3–5 weeks. Full SaaS builds run 6–12 weeks depending on complexity. We move fast because we've done this before — not because we cut corners.",
   },
   {
     id: "q3",
-    question: "Can I upgrade storage or memory later?",
+    question: "What's your tech stack?",
     answer:
-      "Memory is unified into the core architecture and set at the time of build. Storage can be expanded through a certified service visit, keeping the sealed chassis intact and the warranty valid.",
+      "We're stack-agnostic but opinionated. Next.js, React, Node.js, Python, PostgreSQL, AWS, and Vercel are our go-tos. We pick what fits your product — not what fits our resume.",
   },
   {
     id: "q4",
-    question: "What's covered under warranty?",
+    question: "Do you work with early-stage startups?",
     answer:
-      "Every configuration includes coverage for manufacturing defects, battery performance below rated capacity, and full parts and labor. Studio configurations include five years of coverage as standard.",
+      "Absolutely. Some of our best work has been with pre-revenue founders who needed a technical partner, not just a vendor. We'll help you figure out what to build first.",
   },
   {
     id: "q5",
-    question: "Is my data ever sent off-device?",
+    question: "What happens after launch?",
     answer:
-      "Not by default. On-device intelligence means inference happens locally. Nothing is transmitted unless you explicitly enable a connected feature — and you can see exactly what's shared before you turn it on.",
+      "We offer ongoing sprint-based support — bug fixes, new features, performance tuning, and scaling. Most clients stay on a monthly retainer because it's cheaper than hiring in-house.",
   },
   {
     id: "q6",
-    question: "Can I trade in an existing machine?",
+    question: "Do you also handle video production?",
     answer:
-      "Yes. Trade-in credit is calculated during checkout based on your current device's condition and applied directly to your reservation total.",
+      "Yes. We produce premium commercial edits and brand content. Single commercials start at $500, with package pricing for ongoing video needs. Ask us about bundled web + video deals.",
   },
 ] as const;
 
 export const FOOTER_LINKS = {
   product: [
-    { label: "Features", href: "#features" },
-    { label: "Preview", href: "#preview" },
+    { label: "Services", href: "#features" },
+    { label: "Process", href: "#preview" },
     { label: "Pricing", href: "#pricing" },
   ],
   company: [

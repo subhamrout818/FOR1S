@@ -12,6 +12,7 @@
     "@gsap/react": "^2.1.2",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.19",
+    "geist": "^1.7.2",
     "gsap": "^3.13.0",
     "lenis": "^1.1.13",
     "lucide-react": "^0.408.0",

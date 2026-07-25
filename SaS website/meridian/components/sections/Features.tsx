@@ -11,19 +11,19 @@ export default function Features() {
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <SectionLabel scene="03" title="Features" className="mb-6" />
+            <SectionLabel scene="03" title="Services" className="mb-6" />
             <SplitReveal
               as="h2"
               type="words"
               className="max-w-2xl font-display text-fluid-xl font-semibold uppercase leading-[0.98] tracking-tightest text-foreground"
             >
-              Five decisions that define the machine.
+              Five things we do differently.
             </SplitReveal>
           </div>
           <RevealMask blur={false} y={16} className="max-w-sm">
             <p className="text-sm leading-relaxed text-muted md:text-base">
-              Nothing here is arbitrary. Every system was built, discarded,
-              and rebuilt until it earned its place inside the chassis.
+              Every product we ship reflects these principles — not as buzzwords,
+              but as engineering decisions that compound over time.
             </p>
           </RevealMask>
         </div>

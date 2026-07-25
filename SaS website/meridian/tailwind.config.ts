@@ -22,10 +22,9 @@ const config: Config = {
         hairline: "rgba(255, 255, 255, 0.08)",
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        body: ["var(--font-body)", "sans-serif"],
-        serif: ["var(--font-serif)", "serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        display: ["var(--font-geist-sans)", "sans-serif"],
+        body: ["var(--font-geist-sans)", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "monospace"],
       },
       fontSize: {
         "fluid-hero": "clamp(2.8rem, 6.5vw, 8.5rem)",

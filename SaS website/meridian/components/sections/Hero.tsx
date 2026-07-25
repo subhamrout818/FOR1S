@@ -69,7 +69,7 @@ export default function Hero() {
                 delay={0.1}
                 className="block overflow-hidden"
               >
-                Your VISION,
+                We build SaaS,
               </SplitReveal>
               <SplitReveal
                 as="span"
@@ -78,7 +78,7 @@ export default function Hero() {
                 delay={0.3}
                 className="block overflow-hidden text-accent"
               >
-                bought to life.
+                you scale it.
               </SplitReveal>
             </>
           )}
@@ -92,8 +92,8 @@ export default function Hero() {
             animate={ready ? "visible" : "hidden"}
             className="max-w-md  text-muted"
           >
-            Where cinematic storytelling meets modern engineering.
-            Crafting digital experiences that transform ambitious ideas into unforgettable brands.
+            End-to-end SaaS development — from product strategy and UI/UX to
+            full-stack engineering and launch. We turn ambitious ideas into revenue-ready platforms.
           </motion.p>
 
           <motion.div
@@ -108,14 +108,14 @@ export default function Hero() {
               cursorText="Go"
               onClick={() => scrollToHash("#pricing")}
             >
-              Reserve access
+              Book a call
             </MagneticButton>
             <button
               data-cursor="hover"
               onClick={() => scrollToHash("#vision")}
               className="text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
             >
-              Watch the film ↓
+              See our work ↓
             </button>
           </motion.div>
         </div>
