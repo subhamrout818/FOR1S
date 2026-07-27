@@ -73,8 +73,8 @@ function BenefitRow({
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="relative overflow-hidden bg-background py-32 lg:py-40">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
+    <section id="benefits" className="relative overflow-hidden bg-background py-20 lg:py-28">
+      <div className="mx-auto max-w-[1600px] px-6 lg:px-12">
         <SectionLabel scene="05" title="Benefits" className="mb-14" />
         <div>
           {BENEFITS.map((benefit, i) => (

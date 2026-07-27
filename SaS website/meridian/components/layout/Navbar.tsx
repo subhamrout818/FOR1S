@@ -78,14 +78,20 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-3">
             <MagneticButton
               variant="outline"
               size="md"
               cursorText="Go"
-              onClick={() => handleNavClick("#pricing")}
             >
-              Reserve access
+              Log in
+            </MagneticButton>
+            <MagneticButton
+              variant="solid"
+              size="md"
+              cursorText="Go"
+            >
+              Sign up
             </MagneticButton>
           </div>
 
@@ -135,13 +141,19 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.08 * NAV_LINKS.length, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-3"
             >
+              <MagneticButton
+                variant="outline"
+                size="lg"
+              >
+                Log in
+              </MagneticButton>
               <MagneticButton
                 variant="solid"
                 size="lg"
-                onClick={() => handleNavClick("#pricing")}
               >
-                Reserve access
+                Sign up
               </MagneticButton>
             </motion.div>
           </motion.div>

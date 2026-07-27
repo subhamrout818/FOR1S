@@ -61,7 +61,7 @@ export default function FAQ() {
   const [openId, setOpenId] = useState<string | null>(FAQ_ITEMS[0].id);
 
   return (
-    <section id="faq" className="relative bg-background py-32 lg:py-40">
+    <section id="faq" className="relative bg-background py-20 lg:py-28">
       <div className="mx-auto max-w-[1000px] px-6 lg:px-12">
         <SectionLabel scene="08" title="FAQ" className="mb-6" />
         <SplitReveal

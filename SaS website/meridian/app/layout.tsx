@@ -12,9 +12,9 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "FOR1S — Your VISION, bought to life.",
+  title: "FOR1S — SaaS Development Agency",
   description:
-    "FOR1S is a digital agency specializing in web development and video production. We build high-performance websites and craft visual content that makes brands impossible to ignore.",
+    "FOR1S is a full-service digital agency — from custom websites and SaaS platforms to premium video production. We help brands stand out and scale up.",
   icons: { icon: "/favicon.svg" },
 };
 

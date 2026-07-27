@@ -54,7 +54,7 @@ console.log(distance);
       className="relative overflow-hidden bg-surface"
     >
       <div className="flex min-h-screen flex-col justify-center py-24 lg:h-screen lg:py-0">
-        <div className="mx-auto w-full max-w-[1400px] px-6 pb-10 lg:px-12">
+        <div className="mx-auto w-full max-w-[1600px] px-6 pb-10 lg:px-12">
           <SectionLabel scene="06" title="Testimonials" className="mb-4" />
           <SplitReveal
             as="h2"

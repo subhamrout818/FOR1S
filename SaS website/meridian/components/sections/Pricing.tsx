@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="relative bg-background py-32 lg:py-40">
+    <section id="pricing" className="relative bg-background py-20 lg:py-28">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="mb-16 text-center">
           <SectionLabel
@@ -43,7 +43,7 @@ export default function Pricing() {
                       className="pointer-events-none absolute -inset-x-6 -top-24 h-40 rotate-6 bg-gradient-to-b from-white/[0.08] to-transparent"
                     />
                     <span className="absolute right-6 top-6 rounded-full border border-accent/40 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
-                      Most reserved
+                      Most recommended
                     </span>
                   </>
                 )}
@@ -54,11 +54,10 @@ export default function Pricing() {
                   </h3>
                   <p className="mt-2 text-sm text-muted">{tier.tagline}</p>
 
-                  <div className="mt-8 flex items-baseline gap-2">
-                    <span className="font-display text-4xl font-bold text-foreground lg:text-5xl">
-                      {tier.price}
+                  <div className="mt-8">
+                    <span className="font-display text-3xl font-bold text-foreground lg:text-4xl">
+                      {tier.priceRange}
                     </span>
-                    <span className="text-sm text-muted">reservation</span>
                   </div>
 
                   <ul className="mt-8 flex flex-col gap-4">

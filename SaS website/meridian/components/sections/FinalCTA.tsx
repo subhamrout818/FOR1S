@@ -7,7 +7,7 @@ export default function FinalCTA() {
   return (
     <section
       id="final-cta"
-      className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center"
+      className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden bg-background px-6 py-20 text-center"
     >
       <div
         aria-hidden="true"

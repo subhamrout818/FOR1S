@@ -7,8 +7,8 @@ import { FEATURES } from "@/lib/data";
 
 export default function Features() {
   return (
-    <section id="features" className="relative bg-background py-32 lg:py-40">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
+    <section id="features" className="relative bg-background py-20 lg:py-28">
+      <div className="mx-auto max-w-[1600px] px-6 lg:px-12">
         <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <SectionLabel scene="03" title="Services" className="mb-6" />

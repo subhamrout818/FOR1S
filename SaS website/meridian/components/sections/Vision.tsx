@@ -6,7 +6,7 @@ export default function Vision() {
   return (
     <section
       id="vision"
-      className="relative overflow-hidden bg-background py-32 lg:py-48"
+      className="relative overflow-hidden bg-background py-20 lg:py-28"
     >
       <div
         aria-hidden="true"
@@ -15,7 +15,7 @@ export default function Vision() {
         <div className="h-full w-full animate-morph bg-accent blur-[90px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 lg:px-12">
         <SectionLabel scene="02" title="Vision" className="mb-14" />
 
         <SplitReveal

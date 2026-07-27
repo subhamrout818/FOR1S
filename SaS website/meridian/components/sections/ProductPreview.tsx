@@ -35,8 +35,8 @@ export default function ProductPreview() {
   };
 
   return (
-    <section id="preview" className="relative overflow-hidden bg-surface py-32 lg:py-40">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
+    <section id="preview" className="relative overflow-hidden bg-surface py-20 lg:py-28">
+      <div className="mx-auto max-w-[1600px] px-6 lg:px-12">
         <SectionLabel scene="04" title="Process" className="mb-6" />
         <SplitReveal
           as="h2"

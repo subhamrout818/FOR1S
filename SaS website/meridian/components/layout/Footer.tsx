@@ -81,8 +81,7 @@ export default function Footer() {
 
         <div className="mt-20 flex flex-col-reverse items-start justify-between gap-6 border-t border-hairline pt-8 md:flex-row md:items-center">
           <span className="text-xs text-muted">
-            © {YEAR} {BRAND.name} Systems. All rights reserved. A placeholder
-            brand created for demonstration.
+            © {YEAR} {BRAND.name} Digital. All rights reserved.
           </span>
           <button
             data-cursor="hover"
