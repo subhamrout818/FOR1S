@@ -6,3 +6,10 @@ build
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+
+/generated/prisma
+.agents
+.skills
+.env
+.env.*
+!.env.example

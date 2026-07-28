@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@prisma/client": "^6.19.3",
+    "bcrypt": "^6.0.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.19",
     "geist": "^1.7.2",
@@ -17,11 +19,14 @@
     "lenis": "^1.1.13",
     "lucide-react": "^0.408.0",
     "next": "^14.2.5",
+    "prisma": "^6.19.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20.14.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -31,5 +36,11 @@
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4"
+  },
+  "allowScripts": {
+    "@prisma/engines@7.9.0": true,
+    "bcrypt@6.0.0": true,
+    "prisma@7.9.0": true,
+    "unrs-resolver@1.12.2": true
   }
 }
