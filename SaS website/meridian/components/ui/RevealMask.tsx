@@ -55,7 +55,6 @@ export default function RevealMask({
   );
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <Tag ref={ref as any} className={cn(className)}>
       {children}
     </Tag>

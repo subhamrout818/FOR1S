@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(node -e \"const p = require\\('d:/SaaS/SaS website/meridian/node_modules/prisma/config.js'\\); console.log\\(Object.keys\\(p\\)\\)\")",
+      "Bash(npx prisma *)",
+      "Bash(node -e \"const z = require\\('zod'\\); console.log\\(typeof z.email, typeof z.string\\)\")",
+      "Bash(npx tsc *)",
+      "Read(//d//**)",
+      "Read(//mnt/**)",
+      "Bash(mount)",
+      "Bash(cmd //c \"dir d:\\\\SaaS\\\\SaS website\\\\meridian\\\\prisma.config.ts\")",
+      "Bash(npx next *)"
     ]
   }
 }

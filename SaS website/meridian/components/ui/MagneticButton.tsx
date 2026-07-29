@@ -44,7 +44,7 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
           variant === "ghost" && "text-foreground/80 hover:text-foreground",
           className
         )}
-        {...props}
+        {...(props as any)}
       >
         <span className="relative z-10">{children}</span>
       </motion.button>

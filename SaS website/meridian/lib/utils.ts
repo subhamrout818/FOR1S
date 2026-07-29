@@ -25,3 +25,4 @@ export function scrollToHash(hash: string) {
     target.scrollIntoView({ behavior: "smooth" });
   }
 }
+
