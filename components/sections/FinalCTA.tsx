@@ -1,4 +1,7 @@
+"use client";
+
 import SectionLabel from "@/components/ui/SectionLabel";
+import { CONTACT } from "@/lib/contact";
 import SplitReveal from "@/components/ui/SplitReveal";
 import RevealMask from "@/components/ui/RevealMask";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -34,8 +37,12 @@ export default function FinalCTA() {
         </RevealMask>
 
         <RevealMask blur={false} y={16} delay={0.3} className="mt-12">
-          <MagneticButton size="lg" cursorText="Go">
-            Book a discovery call — free
+          <MagneticButton
+            size="lg"
+            cursorText="Go"
+            onClick={() => window.open(CONTACT.calendar, "_blank")}
+          >
+            Book a consultation call
           </MagneticButton>
         </RevealMask>
       </div>

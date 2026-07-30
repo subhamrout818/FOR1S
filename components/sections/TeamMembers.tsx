@@ -8,6 +8,7 @@ import {
 } from 'framer-motion';
 import { ArrowUpRight, Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
+import SectionLabel from "@/components/ui/SectionLabel";
 
 /* ---------- Types ---------- */
 
@@ -84,6 +85,7 @@ export default function TeamSection() {
           className="mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
           <div>
+          <SectionLabel scene="06" title="Members" className="mb-6" />
             <h1 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
               Built <span className="text-neutral-600">By</span>
             </h1>

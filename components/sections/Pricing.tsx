@@ -1,12 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import { Check } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import SectionLabel from "@/components/ui/SectionLabel";
 import SplitReveal from "@/components/ui/SplitReveal";
 import RevealMask from "@/components/ui/RevealMask";
 import MagneticButton from "@/components/ui/MagneticButton";
+import ActionPanel from "@/components/ui/ActionPanel";
+import { CONTACT } from "@/lib/contact";
 import { PRICING_TIERS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export default function Pricing() {
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+
   return (
     <section id="pricing" className="relative bg-background py-20 lg:py-28">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
@@ -75,9 +83,22 @@ export default function Pricing() {
                   size="md"
                   cursorText="Go"
                   className="mt-10 w-full"
+                  onClick={() =>
+                    setActiveCard(activeCard === tier.id ? null : tier.id)
+                  }
                 >
                   Get started
                 </MagneticButton>
+
+                <AnimatePresence initial={false}>
+                  {activeCard === tier.id && (
+                    <ActionPanel
+                      whatsappUrl={CONTACT.whatsappUrl}
+                      email={CONTACT.contactEmail}
+                      calendarUrl={CONTACT.calendar}
+                    />
+                  )}
+                </AnimatePresence>
               </div>
             </RevealMask>
           ))}

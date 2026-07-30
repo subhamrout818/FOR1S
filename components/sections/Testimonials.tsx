@@ -55,7 +55,7 @@ console.log(distance);
     >
       <div className="flex min-h-screen flex-col justify-center py-24 lg:h-screen lg:py-0">
         <div className="mx-auto w-full max-w-[1600px] px-6 pb-10 lg:px-12">
-          <SectionLabel scene="06" title="Testimonials" className="mb-4" />
+          <SectionLabel scene="07" title="Testimonials" className="mb-4" />
           <SplitReveal
             as="h2"
             type="words"

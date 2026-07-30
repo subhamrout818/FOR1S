@@ -1,3 +1,5 @@
+import { CONTACT, SOCIAL } from "@/lib/contact";
+
 export const BRAND = {
   name: "FOR1S",
   short: "FR1",
@@ -266,15 +268,17 @@ export const FOOTER_LINKS = {
   company: [
     { label: "Vision", href: "#vision" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: "#" },
+    { label: "Contact", href: CONTACT.whatsappUrl },
+    { label: "Email", href: `mailto:${CONTACT.contactEmail}` },
   ],
   legal: [
-    { label: "Privacy", href: "#" },
-    { label: "Terms", href: "#" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
   ],
   social: [
-    { label: "Instagram", href: "#" },
-    { label: "X", href: "#" },
-    { label: "YouTube", href: "#" },
+    { label: SOCIAL.instagramOfficial.label, href: SOCIAL.instagramOfficial.url },
+    { label: SOCIAL.instagramPersonal.label, href: SOCIAL.instagramPersonal.url },
+    { label: SOCIAL.x.label, href: SOCIAL.x.url },
+    { label: SOCIAL.youtube.label, href: SOCIAL.youtube.url },
   ],
-};
+} as const;

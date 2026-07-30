@@ -1,17 +1,28 @@
 "use client";
 
+import Link from "next/link";
 import { BRAND, FOOTER_LINKS } from "@/lib/data";
 import { scrollToHash } from "@/lib/utils";
 import RevealMask from "@/components/ui/RevealMask";
 
 const YEAR = new Date().getFullYear();
 
+/** Check if a link should be rendered as an external anchor */
+function isExternal(href: string) {
+  return href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
+}
+
+/** Check if a link is an internal page route (not a hash anchor) */
+function isPageRoute(href: string) {
+  return href.startsWith("/");
+}
+
 function LinkColumn({
   title,
   links,
 }: {
   title: string;
-  links: { label: string; href: string }[];
+  links: readonly { label: string; href: string }[];
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -21,13 +32,33 @@ function LinkColumn({
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
           <li key={link.label}>
-            <button
-              data-cursor="hover"
-              onClick={() => scrollToHash(link.href)}
-              className="text-sm text-foreground/80 transition-colors duration-300 hover:text-accent"
-            >
-              {link.label}
-            </button>
+            {isExternal(link.href) ? (
+              <a
+                data-cursor="hover"
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="text-sm text-foreground/80 transition-colors duration-300 hover:text-accent"
+              >
+                {link.label}
+              </a>
+            ) : isPageRoute(link.href) ? (
+              <Link
+                data-cursor="hover"
+                href={link.href}
+                className="text-sm text-foreground/80 transition-colors duration-300 hover:text-accent"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <button
+                data-cursor="hover"
+                onClick={() => scrollToHash(link.href)}
+                className="text-sm text-foreground/80 transition-colors duration-300 hover:text-accent"
+              >
+                {link.label}
+              </button>
+            )}
           </li>
         ))}
       </ul>

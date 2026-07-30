@@ -106,7 +106,7 @@ export default function Hero() {
             <MagneticButton
               size="lg"
               cursorText="Go"
-              onClick={() => scrollToHash("#pricing")}
+              onClick={() => scrollToHash("#final-cta")}
             >
               Book a call
             </MagneticButton>
