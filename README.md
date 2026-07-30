@@ -196,9 +196,10 @@ FOR1S follows a few core principles throughout the project.
 # Preview
 
 <table>
+
 <tr>
-<td width="50%">
-  
+<td colspan="2" align="center">
+
 ### Vision
 <img src="assets/vision.png" alt="Vision">
 
@@ -206,13 +207,13 @@ FOR1S follows a few core principles throughout the project.
 </tr>
 
 <tr>
-<td>
+<td width="50%">
 
 ### Services
 <img src="assets/services.png" alt="Services">
 
 </td>
-<td>
+<td width="50%">
 
 ### Process
 <img src="assets/process.png" alt="Process">
@@ -258,6 +259,7 @@ FOR1S follows a few core principles throughout the project.
 
 </td>
 </tr>
+
 </table>
 
 ---
