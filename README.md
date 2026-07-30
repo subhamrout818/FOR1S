@@ -190,7 +190,6 @@ FOR1S follows a few core principles throughout the project.
 ---
 
 # Preview
-# Preview
 
 <table>
 <tr>
