@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Hero Banner" width="100%">
-</p>
 <div align="center">
 
 # FOR1S
@@ -193,8 +190,10 @@ FOR1S follows a few core principles throughout the project.
 ---
 
 # Preview
+<p align="center">
+  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Hero Banner" width="100%">
+</p>
 
-Project screenshots and demo GIFs will be added soon.
 
 ---
 
