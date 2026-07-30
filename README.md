@@ -2,48 +2,84 @@
 
 # FOR1S
 
-### Crafting premium digital experiences through cinematic design, immersive interactions, and modern web technologies.
+### A premium motion-first SaaS landing page built with Next.js, TypeScript, GSAP, and modern web technologies.
+
+<p>
+A frontend engineering project exploring how cinematic motion, thoughtful interaction design, and modern architecture can create memorable digital experiences without sacrificing performance or accessibility.
+</p>
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
 ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=flat&logo=greensock&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
 ![Status](https://img.shields.io/badge/status-active_development-blue)
 
 </div>
 
 ---
 
-## Overview
+# Overview
 
-FOR1S is a premium SaaS landing page that explores cinematic storytelling on the web through purposeful motion, refined typography, and modern frontend engineering.
+FOR1S is a premium SaaS landing page created to explore modern frontend engineering through cinematic motion, immersive interactions, and clean visual storytelling.
 
-Rather than functioning as a traditional marketing website, FOR1S experiments with how animation, layout, and interaction can create a memorable user experience while maintaining performance and accessibility.
+Instead of treating animation as decoration, every interaction is designed to improve hierarchy, guide attention, and create a polished user experience while maintaining responsiveness, accessibility, and performance.
+
+The project also serves as a playground for experimenting with scalable component architecture, reusable animation systems, and backend-ready infrastructure.
 
 ---
 
-## Features
+# Features
+
+### Motion & Experience
 
 - 🎬 Cinematic multi-section landing experience
-- ⚡ Smooth scrolling powered by Lenis + GSAP ScrollTrigger
-- ✨ Premium UI interactions with Framer Motion
-- 🎯 Reusable animation components and motion primitives
-- 🧩 Modular component architecture using the Next.js App Router
-- 🗄️ Prisma ORM integration with PostgreSQL for future backend expansion
-- ♿ Accessibility-conscious animations with reduced-motion support
-- 📱 Responsive design optimized for desktop, tablet, and mobile
+- ⚡ Smooth scrolling powered by Lenis
+- ✨ GSAP ScrollTrigger animations
+- 🎭 SplitText reveal animations
+- 🎯 Reusable motion primitives
+- 🖱️ Custom cursor interactions
+- 📱 Fully responsive layouts
+
+### UI Components
+
+- Premium navigation
+- Interactive FAQ accordion
+- Animated pricing section
+- Testimonial carousel
+- Product showcase
+- Call-to-action sections
+- Modular reusable React components
+
+### Engineering
+
+- Next.js App Router architecture
+- TypeScript throughout
+- Tailwind CSS utility-first styling
+- Prisma ORM integration
+- PostgreSQL support
+- Zod validation
+- API Routes ready for backend expansion
+
+### Accessibility
+
+- Reduced-motion support
+- Keyboard-friendly navigation
+- Semantic HTML structure
+- Responsive layouts
+- Performance-first animations
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-| Layer | Technology |
-|--------|------------|
+| Category | Technology |
+|-----------|------------|
 | Framework | Next.js 14 |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
-| Animations | GSAP, ScrollTrigger, SplitText, Framer Motion, Lenis |
+| Animation | GSAP, ScrollTrigger, SplitText, Framer Motion, Lenis |
 | Backend | Next.js API Routes |
 | Database | PostgreSQL |
 | ORM | Prisma |
@@ -51,43 +87,74 @@ Rather than functioning as a traditional marketing website, FOR1S experiments wi
 
 ---
 
-## Getting Started
+# Project Structure
 
-### Clone the repository
-
-```bash
-git clone <repository-url>
-cd "SaS website/FOR1S"
+```text
+.
+├── app/
+├── components/
+│   ├── layout/
+│   ├── sections/
+│   └── ui/
+├── hooks/
+├── lib/
+├── prisma/
+├── public/
+├── package.json
+├── tailwind.config.ts
+├── next.config.mjs
+└── README.md
 ```
 
-### Install dependencies
+---
+
+# Getting Started
+
+## Clone the repository
+
+```bash
+git clone https://github.com/subhamrout818/FOR1S.git
+
+cd FOR1S
+```
+
+---
+
+## Install dependencies
 
 ```bash
 npm install
 ```
 
-### Configure environment variables
+---
+
+## Configure environment variables
 
 Create a `.env` file.
 
 ```env
-DATABASE_URL="your_database_connection_string"
+DATABASE_URL="your_postgresql_connection_string"
 ```
 
-### Run Prisma
+---
+
+## Initialize Prisma
 
 ```bash
 npx prisma migrate dev
+
 npx prisma generate
 ```
 
-### Start the development server
+---
+
+## Start the development server
 
 ```bash
 npm run dev
 ```
 
-Visit:
+Visit
 
 ```
 http://localhost:3000
@@ -95,81 +162,71 @@ http://localhost:3000
 
 ---
 
-## Project Structure
+# Design Philosophy
 
-```text
-SaS website/
-└── FOR1S/
-    ├── app/
-    ├── components/
-    ├── hooks/
-    ├── lib/
-    ├── prisma/
-    ├── public/
-    └── styles/
-```
+FOR1S follows a few core principles throughout the project.
 
----
-
-## Design Philosophy
-
-FOR1S follows a simple design philosophy:
-
-- Motion should communicate, not distract.
-- Typography should lead the experience.
+- Motion should communicate, never distract.
+- Typography should establish hierarchy.
 - Every interaction should feel intentional.
-- Performance is more important than unnecessary visual effects.
-- Accessibility should never be sacrificed for animation.
+- Accessibility should never be sacrificed for aesthetics.
+- Performance always comes before visual complexity.
 
 ---
 
-## Roadmap
+# Roadmap
 
-- [ ] 3D experiences using React Three Fiber
-- [ ] Interactive product showcases
-- [ ] Advanced scroll storytelling
-- [ ] Production performance optimization
-- [ ] SEO improvements
-- [ ] Mobile UX refinements
-- [ ] Authentication & client dashboard
+- [ ] React Three Fiber integration
+- [ ] Advanced 3D interactions
+- [ ] Interactive product showcase
+- [ ] Scroll-based storytelling
+- [ ] Authentication
+- [ ] Client dashboard
 - [ ] CMS integration
+- [ ] SEO optimization
+- [ ] Performance optimization
+- [ ] Mobile interaction improvements
 
 ---
 
-## Screenshots
+# Preview
 
-> Screenshots and demo GIFs will be added soon.
+Project screenshots and demo GIFs will be added soon.
 
 ---
 
-## Live Demo
+# Live Demo
 
 Coming soon.
 
 ---
 
-## Contributing
+# Why I Built This
 
-Suggestions, ideas, and feedback are always welcome.
+FOR1S was built as a personal engineering project to explore the intersection of frontend development, motion design, and user experience.
+
+The goal wasn't simply to recreate another SaaS landing page—it was to understand how thoughtful animation, modern architecture, and reusable components can work together to create experiences that feel premium while remaining maintainable and performant.
 
 ---
 
-## Acknowledgements
+# Contributing
 
-Built with:
+Contributions, suggestions, and feedback are always welcome.
 
-- Next.js
-- GSAP
-- Framer Motion
-- Lenis
-- Tailwind CSS
-- Prisma
-- PostgreSQL
+If you'd like to improve the project, feel free to fork the repository and open a pull request.
+
+---
+
+# License
+
+This project is released under the MIT License.
 
 ---
 
 <div align="center">
 
-Made with ❤️ by **Subham Rout**
+### Built with ❤️ by **Subham Rout**
+
+**Full-Stack Developer • Motion Designer • Video Editor**
 
 </div>
