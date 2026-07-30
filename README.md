@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Banner">
+</p>
+
 <div align="center">
 
 # FOR1S
@@ -194,13 +198,7 @@ FOR1S follows a few core principles throughout the project.
 <table>
 <tr>
 <td width="50%">
-
-### Hero
-<img src="assets/for1s-hero-1920x1080.png" alt="Hero">
-
-</td>
-<td width="50%">
-
+  
 ### Vision
 <img src="assets/vision.png" alt="Vision">
 
