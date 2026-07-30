@@ -190,34 +190,78 @@ FOR1S follows a few core principles throughout the project.
 ---
 
 # Preview
-<p align="center">
-  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/vision" alt="FOR1S Hero Banner" width="100%">
-</p>\
-<p align="center">
-  <img src="assets/services" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/process" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/pricing" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/members section" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/getstarted" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/FAQ" alt="FOR1S Hero Banner" width="100%">
-</p>
-<p align="center">
-  <img src="assets/benefits" alt="FOR1S Hero Banner" width="100%">
-</p>
+# Preview
 
+<table>
+<tr>
+<td width="50%">
+
+### Hero
+<img src="assets/for1s-hero-1920x1080.png" alt="Hero">
+
+</td>
+<td width="50%">
+
+### Vision
+<img src="assets/vision.png" alt="Vision">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+### Services
+<img src="assets/services.png" alt="Services">
+
+</td>
+<td>
+
+### Process
+<img src="assets/process.png" alt="Process">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+### Pricing
+<img src="assets/pricing.png" alt="Pricing">
+
+</td>
+<td>
+
+### Team
+<img src="assets/members-section.png" alt="Team">
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+### Get Started
+<img src="assets/getstarted.png" alt="Get Started">
+
+</td>
+<td>
+
+### FAQ
+<img src="assets/faq.png" alt="FAQ">
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+
+### Benefits
+<img src="assets/benefits.png" alt="Benefits">
+
+</td>
+</tr>
+</table>
 
 ---
 
