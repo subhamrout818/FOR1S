@@ -1,152 +1,175 @@
-# Meridian
+<div align="center">
 
-> Crafting premium digital experiences through cinematic design, immersive interactions, and modern web technologies.
+# FOR1S
 
-## Overview
+### Crafting premium digital experiences through cinematic design, immersive interactions, and modern web technologies.
 
-Meridian is a high-end SaaS website built to explore the future of premium web experiences. The goal isn't just to create another landing page—it's to create an experience that feels smooth, interactive, and memorable from the moment a user arrives.
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=flat&logo=greensock&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
+![Status](https://img.shields.io/badge/status-active_development-blue)
 
-Every section is designed with attention to motion, typography, spacing, and storytelling.
+</div>
 
 ---
 
-## Vision
+## Overview
 
-The web is becoming more immersive every year.
+FOR1S is a premium SaaS landing page that explores cinematic storytelling on the web through purposeful motion, refined typography, and modern frontend engineering.
 
-Meridian is an experiment in combining:
+Rather than functioning as a traditional marketing website, FOR1S experiments with how animation, layout, and interaction can create a memorable user experience while maintaining performance and accessibility.
 
-* Cinematic animations
-* Premium UI/UX
-* Modern frontend technologies
-* Performance-first development
-* Clean, scalable architecture
+---
 
-This project serves as both a portfolio piece and a foundation for future client work.
+## Features
+
+- 🎬 Cinematic multi-section landing experience
+- ⚡ Smooth scrolling powered by Lenis + GSAP ScrollTrigger
+- ✨ Premium UI interactions with Framer Motion
+- 🎯 Reusable animation components and motion primitives
+- 🧩 Modular component architecture using the Next.js App Router
+- 🗄️ Prisma ORM integration with PostgreSQL for future backend expansion
+- ♿ Accessibility-conscious animations with reduced-motion support
+- 📱 Responsive design optimized for desktop, tablet, and mobile
 
 ---
 
 ## Tech Stack
 
-* **Next.js**
-* **React**
-* **TypeScript**
-* **Tailwind CSS**
-* **GSAP**
-* **Lenis Smooth Scroll**
-* **Three.js / React Three Fiber** *(planned)*
-* **Framer Motion** *(where appropriate)*
+| Layer | Technology |
+|--------|------------|
+| Framework | Next.js 14 |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Animations | GSAP, ScrollTrigger, SplitText, Framer Motion, Lenis |
+| Backend | Next.js API Routes |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Validation | Zod |
 
 ---
 
-## Current Progress
+## Getting Started
 
-### Completed
+### Clone the repository
 
-* Initial project setup
-* Landing page structure
-* Global styling
-* Basic responsive layout
-* Component architecture
+```bash
+git clone <repository-url>
+cd "SaS website/FOR1S"
+```
 
-### In Progress
+### Install dependencies
 
-* Hero section
-* Scroll animations
-* Motion system
-* Typography refinements
-* Premium visual effects
+```bash
+npm install
+```
 
-### Planned
+### Configure environment variables
 
-* 3D interactions
-* Interactive showcases
-* Advanced scroll storytelling
-* Performance optimization
-* Accessibility improvements
-* Mobile polish
-* SEO optimization
+Create a `.env` file.
+
+```env
+DATABASE_URL="your_database_connection_string"
+```
+
+### Run Prisma
+
+```bash
+npx prisma migrate dev
+npx prisma generate
+```
+
+### Start the development server
+
+```bash
+npm run dev
+```
+
+Visit:
+
+```
+http://localhost:3000
+```
 
 ---
 
 ## Project Structure
 
 ```text
-src/
-├── app/
-├── components/
-├── sections/
-├── hooks/
-├── lib/
-├── styles/
-├── public/
-└── assets/
+SaS website/
+└── FOR1S/
+    ├── app/
+    ├── components/
+    ├── hooks/
+    ├── lib/
+    ├── prisma/
+    ├── public/
+    └── styles/
 ```
 
 ---
 
-## Design Principles
+## Design Philosophy
 
-* Minimal but expressive
-* Motion with purpose
-* Strong typography
-* Consistent spacing
-* Performance over unnecessary effects
-* Responsive by default
-* Accessible wherever possible
+FOR1S follows a simple design philosophy:
 
----
-
-## Getting Started
-
-Clone the repository:
-
-```bash
-git clone <repository-url>
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open:
-
-```text
-http://localhost:3000
-```
+- Motion should communicate, not distract.
+- Typography should lead the experience.
+- Every interaction should feel intentional.
+- Performance is more important than unnecessary visual effects.
+- Accessibility should never be sacrificed for animation.
 
 ---
 
-## Goals
+## Roadmap
 
-* Build a production-quality SaaS experience
-* Push modern frontend animation techniques
-* Maintain clean and scalable code
-* Learn by building real-world interfaces
-* Create a showcase-worthy portfolio project
+- [ ] 3D experiences using React Three Fiber
+- [ ] Interactive product showcases
+- [ ] Advanced scroll storytelling
+- [ ] Production performance optimization
+- [ ] SEO improvements
+- [ ] Mobile UX refinements
+- [ ] Authentication & client dashboard
+- [ ] CMS integration
 
 ---
 
-## Status
+## Screenshots
 
-🚧 **Active Development**
+> Screenshots and demo GIFs will be added soon.
 
-This project is evolving continuously. Features, animations, and layouts may change as new ideas are explored and refined.
+---
+
+## Live Demo
+
+Coming soon.
 
 ---
 
 ## Contributing
 
-Feedback, suggestions, and ideas are always welcome. If you find bugs or have recommendations, feel free to open an issue or submit a pull request.
+Suggestions, ideas, and feedback are always welcome.
 
 ---
 
-Built with curiosity, creativity, and a passion for modern web experiences.
+## Acknowledgements
+
+Built with:
+
+- Next.js
+- GSAP
+- Framer Motion
+- Lenis
+- Tailwind CSS
+- Prisma
+- PostgreSQL
+
+---
+
+<div align="center">
+
+Made with ❤️ by **Subham Rout**
+
+</div>
