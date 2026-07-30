@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Hero Banner" width="100%">
+</p>
 <div align="center">
 
 # FOR1S
