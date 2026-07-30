@@ -343,12 +343,6 @@ If you'd like to contribute, report a bug, or suggest a feature, feel free to op
 
 ---
 
-# License
-
-This project is licensed under the MIT License.
-
----
-
 <div align="center">
 
 ## Built with ❤️ by **Subham Rout**
