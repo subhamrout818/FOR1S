@@ -43,5 +43,41 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  // Handle hash-based navigation from other pages
+  // (e.g. clicking "Vision" in the navbar from /login navigates to /#vision)
+  // Shows the hero section first, then smooth-scrolls to the target section
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    // First, ensure we're at the top so the hero is visible
+    window.scrollTo(0, 0);
+
+    // Wait for the page to render and Lenis to initialize,
+    // then smooth-scroll to the target section
+    const timer = setTimeout(() => {
+      const target = document.querySelector(hash);
+      if (!target) return;
+
+      const lenis = (
+        window as typeof window & { __lenis?: Lenis }
+      ).__lenis;
+
+      if (lenis) {
+        lenis.scrollTo(target as HTMLElement, {
+          duration: 2,
+          offset: -40,
+          easing: (t: number) => 1 - Math.pow(1 - t, 4),
+        });
+      } else {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return <>{children}</>;
 }

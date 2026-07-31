@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono} from "geist/font/mono";
 import "./globals.css";
 
+import { AuthProvider } from "@/lib/auth-context";
 import Providers from "@/components/layout/Providers";
 import Preloader from "@/components/layout/Preloader";
 import CustomCursor from "@/components/layout/CustomCursor";
@@ -33,15 +34,17 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <body className="bg-background font-body text-foreground antialiased selection:bg-accent selection:text-white">
-        <Providers>
-          <Preloader />
-          <CustomCursor />
-          <GrainOverlay />
-          <ScrollSpine />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </Providers>
+        <AuthProvider>
+          <Providers>
+            <Preloader />
+            <CustomCursor />
+            <GrainOverlay />
+            <ScrollSpine />
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );

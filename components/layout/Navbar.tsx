@@ -2,14 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, usePathname } from "next/navigation";
 import { BRAND, NAV_LINKS } from "@/lib/data";
 import { cn, scrollToHash } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 import MagneticButton from "@/components/ui/MagneticButton";
+import UserDropdown from "@/components/layout/UserDropdown";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -31,7 +37,14 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
-    scrollToHash(href);
+
+    if (pathname === "/") {
+      // Already on the home page — smooth-scroll with Lenis
+      scrollToHash(href);
+    } else {
+      // Navigate to the home page with the hash so the section comes into view
+      router.push("/" + href);
+    }
   };
 
   return (
@@ -78,21 +91,39 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            <MagneticButton
-              variant="outline"
-              size="md"
-              cursorText="Go"
-            >
-              Log in
-            </MagneticButton>
-            <MagneticButton
-              variant="solid"
-              size="md"
-              cursorText="Go"
-            >
-              Sign up
-            </MagneticButton>
+          <div className="hidden items-center gap-3 md:flex">
+            {isAuthenticated ? (
+              <>
+                <MagneticButton
+                  variant="solid"
+                  size="md"
+                  cursorText="Go"
+                  onClick={() => router.push("/dashboard")}
+                >
+                  Dashboard
+                </MagneticButton>
+                <UserDropdown />
+              </>
+            ) : (
+              <>
+                <MagneticButton
+                  variant="outline"
+                  size="md"
+                  cursorText="Go"
+                  onClick={() => router.push("/login")}
+                >
+                  Log in
+                </MagneticButton>
+                <MagneticButton
+                  variant="solid"
+                  size="md"
+                  cursorText="Go"
+                  onClick={() => router.push("/register")}
+                >
+                  Sign up
+                </MagneticButton>
+              </>
+            )}
           </div>
 
           <button
@@ -143,18 +174,59 @@ export default function Navbar() {
               transition={{ delay: 0.08 * NAV_LINKS.length, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col gap-3"
             >
-              <MagneticButton
-                variant="outline"
-                size="lg"
-              >
-                Log in
-              </MagneticButton>
-              <MagneticButton
-                variant="solid"
-                size="lg"
-              >
-                Sign up
-              </MagneticButton>
+              {isAuthenticated ? (
+                <>
+                  <p className="flex items-center gap-2 text-sm text-muted">
+                    <span className="text-lg">👤</span>
+                    <span className="text-foreground">{user?.name}</span>
+                  </p>
+                  <MagneticButton
+                    variant="solid"
+                    size="lg"
+                    onClick={() => { router.push("/dashboard"); setMenuOpen(false); }}
+                  >
+                    Dashboard
+                  </MagneticButton>
+                  <MagneticButton
+                    variant="outline"
+                    size="lg"
+                    onClick={() => { router.push("/dashboard"); setMenuOpen(false); }}
+                  >
+                    Account
+                  </MagneticButton>
+                  <MagneticButton
+                    variant="outline"
+                    size="lg"
+                    onClick={() => { router.push("/dashboard/billing"); setMenuOpen(false); }}
+                  >
+                    Billing
+                  </MagneticButton>
+                  <MagneticButton
+                    variant="ghost"
+                    size="lg"
+                    onClick={() => { logout(); setMenuOpen(false); }}
+                  >
+                    Log out
+                  </MagneticButton>
+                </>
+              ) : (
+                <>
+                  <MagneticButton
+                    variant="outline"
+                    size="lg"
+                    onClick={() => { router.push("/login"); setMenuOpen(false); }}
+                  >
+                    Log in
+                  </MagneticButton>
+                  <MagneticButton
+                    variant="solid"
+                    size="lg"
+                    onClick={() => { router.push("/register"); setMenuOpen(false); }}
+                  >
+                    Sign up
+                  </MagneticButton>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
