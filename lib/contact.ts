@@ -10,33 +10,17 @@ export const CONTACT = {
   email: "hello@for1s.digital",
   /** Contact / CC email (shown in footer) */
   contactEmail: "for1s.contact@gmail.com",
-  /** Primary phone number */
-  phone: "+1 (555) 000-0000",
   /** WhatsApp number (international digits only, no +) */
   whatsapp: "919237302537",
   /** WhatsApp deep-link URL */
   whatsappUrl: "https://wa.me/919237302537",
-  /** Physical / mailing address */
-  address: {
-    line1: "123 Business Avenue",
-    line2: "Suite 100",
-    city: "San Francisco",
-    state: "CA",
-    zip: "94105",
-    country: "US",
-  },
   /** Booking / calendar link */
   calendar: "https://cal.com/for1s/consultation",
 } as const;
 
 export const SOCIAL = {
-  instagramOfficial: {
-    label: "Instagram - Official",
-    handle: "",
-    url: "#",
-  },
   instagramPersonal: {
-    label: "Instagram - Personal",
+    label: "Instagram",
     handle: "@btwitssubu",
     url: "https://instagram.com/btwitssubu",
   },
@@ -55,7 +39,6 @@ export const SOCIAL = {
 /** All contact / social entries as a flat list (useful for footers, headers, etc.) */
 export const CONTACT_LINKS = [
   { label: "Email", href: `mailto:${CONTACT.email}` },
-  { label: "Phone", href: `tel:${CONTACT.phone.replace(/\s/g, "")}` },
   { label: "Book a call", href: CONTACT.calendar },
 ] as const;
 

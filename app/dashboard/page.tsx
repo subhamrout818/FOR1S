@@ -4,85 +4,70 @@ import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
-  FolderKanban,
-  CalendarCheck,
+  CreditCard,
+  User,
   FileText,
-  Receipt,
   MessageSquare,
   ArrowDown,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Card config                                                       */
+/*  Card config — real info and navigation only, no fabricated stats.  */
 /* ------------------------------------------------------------------ */
 
 interface CardDef {
   key: string;
   label: string;
-  icon: typeof LayoutDashboard;
+  icon: typeof CreditCard;
   stat: string;
   sub: string;
   accent: string; // Tailwind ring/border colour
   bgGlow: string; // subtle rgba for shadow
+  href?: string;
 }
 
 const cards: CardDef[] = [
   {
-    key: "overview",
-    label: "Overview",
-    icon: LayoutDashboard,
-    stat: "Active",
-    sub: "All systems online",
+    key: "billing",
+    label: "Billing",
+    icon: CreditCard,
+    stat: "No active plan",
+    sub: "Choose a plan to get started",
+    href: "/dashboard/billing",
     accent: "border-l-accent",
     bgGlow: "rgba(230,57,70,0.15)",
   },
   {
-    key: "projects",
-    label: "Projects",
-    icon: FolderKanban,
-    stat: "5 ongoing",
-    sub: "3 in review · 2 in dev",
+    key: "account",
+    label: "Account",
+    icon: User,
+    stat: "Your account",
+    sub: "Signed in",
     accent: "border-l-blue-500",
     bgGlow: "rgba(59,130,246,0.15)",
   },
   {
-    key: "meeting",
-    label: "Meeting",
-    icon: CalendarCheck,
-    stat: "2 today",
-    sub: "3pm sprint · 4pm 1:1",
+    key: "contact",
+    label: "Get in touch",
+    icon: MessageSquare,
+    stat: "Book a call",
+    sub: "Map out your build with us",
+    href: "/contact",
     accent: "border-l-emerald-500",
     bgGlow: "rgba(16,185,129,0.15)",
   },
   {
-    key: "files",
-    label: "Files",
+    key: "blog",
+    label: "Insights",
     icon: FileText,
-    stat: "24 docs",
-    sub: "Shared with your team",
+    stat: "Read the blog",
+    sub: "Notes on strategy, design & code",
+    href: "/blog",
     accent: "border-l-amber-500",
     bgGlow: "rgba(245,158,11,0.15)",
-  },
-  {
-    key: "invoices",
-    label: "Invoices",
-    icon: Receipt,
-    stat: "3 due",
-    sub: "Next payment in 7d",
-    accent: "border-l-violet-500",
-    bgGlow: "rgba(139,92,246,0.15)",
-  },
-  {
-    key: "messages",
-    label: "Messages",
-    icon: MessageSquare,
-    stat: "7 unread",
-    sub: "From 4 conversations",
-    accent: "border-l-cyan-500",
-    bgGlow: "rgba(6,182,212,0.15)",
   },
 ];
 
@@ -112,13 +97,20 @@ async function fetchGhibliAvatar(): Promise<string | null> {
 function DashCard({
   card,
   index,
+  userName,
+  userEmail,
 }: {
   card: CardDef;
   index: number;
+  userName: string;
+  userEmail: string;
 }) {
   const Icon = card.icon;
+  // The account card shows real signed-in data, not a static value.
+  const stat = card.key === "account" ? userName : card.stat;
+  const sub = card.key === "account" ? userEmail : card.sub;
 
-  return (
+  const inner = (
     <motion.div
       initial={{ opacity: 0, filter: "blur(6px)", y: 24 }}
       whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
@@ -153,9 +145,9 @@ function DashCard({
             {card.label}
           </p>
           <p className="font-display text-3xl font-semibold text-foreground">
-            {card.stat}
+            {stat}
           </p>
-          <p className="text-sm text-muted">{card.sub}</p>
+          <p className="text-sm text-muted">{sub}</p>
         </div>
 
         <div
@@ -169,6 +161,15 @@ function DashCard({
       </div>
     </motion.div>
   );
+
+  if (card.href) {
+    return (
+      <Link href={card.href} data-cursor="hover" className="block h-full">
+        {inner}
+      </Link>
+    );
+  }
+  return inner;
 }
 
 /* ------------------------------------------------------------------ */
@@ -346,7 +347,13 @@ export default function DashboardPage() {
         {/* Dashboard grid */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card, i) => (
-            <DashCard key={card.key} card={card} index={i} />
+            <DashCard
+              key={card.key}
+              card={card}
+              index={i}
+              userName={firstName}
+              userEmail={user?.email ?? ""}
+            />
           ))}
         </div>
       </div>

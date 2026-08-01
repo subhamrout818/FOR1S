@@ -92,7 +92,7 @@ export default function TeamSection() {
           </div>
           <div className="h-px flex-1 bg-neutral-900 mx-8 hidden md:block" />
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
-            Founding Members &apos;4
+            Founding Team
           </p>
         </motion.header>
 

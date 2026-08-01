@@ -240,7 +240,6 @@ export const FOOTER_LINKS = {
     { label: "Terms", href: "/terms" },
   ],
   social: [
-    { label: SOCIAL.instagramOfficial.label, href: SOCIAL.instagramOfficial.url },
     { label: SOCIAL.instagramPersonal.label, href: SOCIAL.instagramPersonal.url },
     { label: SOCIAL.x.label, href: SOCIAL.x.url },
     { label: SOCIAL.youtube.label, href: SOCIAL.youtube.url },

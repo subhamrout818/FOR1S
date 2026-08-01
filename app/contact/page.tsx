@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import SectionLabel from "@/components/ui/SectionLabel";
 import SplitReveal from "@/components/ui/SplitReveal";
 import RevealMask from "@/components/ui/RevealMask";
@@ -33,13 +33,6 @@ const CHANNELS = [
     icon: "mail" as const,
   },
   {
-    label: "Phone",
-    value: CONTACT.phone,
-    sub: "Mon–Fri, 9am–6pm",
-    href: `tel:${CONTACT.phone.replace(/\s/g, "")}`,
-    icon: "phone" as const,
-  },
-  {
     label: "Book a call",
     value: "Free discovery call",
     sub: "Pick a time that suits you",
@@ -50,7 +43,6 @@ const CHANNELS = [
 
 function ChannelIcon({ icon }: { icon: (typeof CHANNELS)[number]["icon"] }) {
   if (icon === "mail") return <Mail size={18} strokeWidth={1.5} />;
-  if (icon === "phone") return <Phone size={18} strokeWidth={1.5} />;
   if (icon === "calendar") {
     return (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
@@ -138,25 +130,6 @@ export default function ContactPage() {
                   />
                 </a>
               ))}
-            </div>
-
-            <div className="mt-8 flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/5 text-foreground/70">
-                <MapPin size={18} strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-muted">
-                  Studio
-                </p>
-                <p className="text-sm text-foreground/85">
-                  {CONTACT.address.line1}
-                  <br />
-                  {CONTACT.address.city}, {CONTACT.address.state}{" "}
-                  {CONTACT.address.zip}
-                  <br />
-                  {CONTACT.address.country}
-                </p>
-              </div>
             </div>
           </div>
         </RevealMask>
