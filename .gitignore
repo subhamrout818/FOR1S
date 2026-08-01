@@ -2,17 +2,19 @@ node_modules
 .next
 out
 build
-.env*.local
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
 
+# Secrets — never commit. .env.example is the only env file kept on purpose.
+.env
+.env.*
+.env*.local
+!.env.example
+
 /generated/prisma
 .agents
 .skills
-.env
-.env.*
-!.env.example
 .claude/
 .windsurf/
 .agent/
