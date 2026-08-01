@@ -40,14 +40,14 @@ body {
 .hero-extrude {
   filter:
     /* rim light (source upper-left) */
-    drop-shadow(-0.014em -0.018em 0 rgba(255, 255, 255, 0.16))
-    /* extrusion body */
-    drop-shadow(0 0.02em 0 #1a1a1a)
-    drop-shadow(0 0.04em 0 #131313)
-    drop-shadow(0 0.06em 0 #0c0c0c)
-    drop-shadow(0 0.08em 0 #050505)
+    drop-shadow(-0.016em -0.02em 0 rgba(255, 255, 255, 0.18))
+    /* extrusion body — light edge then deepening layers */
+    drop-shadow(0 0.03em 0 #262626)
+    drop-shadow(0 0.06em 0 #1a1a1a)
+    drop-shadow(0 0.09em 0 #0f0f0f)
+    drop-shadow(0 0.12em 0 #060606)
     /* grounding shadow */
-    drop-shadow(0 0.06em 0.14em rgba(0, 0, 0, 0.55));
+    drop-shadow(0 0.08em 0.16em rgba(0, 0, 0, 0.6));
 }
 
 :focus-visible {

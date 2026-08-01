@@ -35,8 +35,9 @@ export default function Hero() {
   }, []);
 
   /* Mouse parallax — the extruded headline tilts toward the pointer and a
-     soft light follows the cursor across the hero. Skipped on touch and for
-     reduced-motion users. */
+     soft light follows the cursor across the hero. Listens on `window` and
+     checks the pointer against the hero bounds, so no overlay can swallow the
+     events. Skipped on touch and for reduced-motion users. */
   useEffect(() => {
     const hero = heroRef.current;
     const tilt = tiltRef.current;
@@ -45,36 +46,51 @@ export default function Hero() {
     if (prefersReducedMotion()) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const toRotY = gsap.quickTo(tilt, "rotationY", { duration: 0.9, ease: "power2.out" });
-    const toRotX = gsap.quickTo(tilt, "rotationX", { duration: 0.9, ease: "power2.out" });
-    const toTx = gsap.quickTo(tilt, "x", { duration: 0.9, ease: "power2.out" });
-    const toTy = gsap.quickTo(tilt, "y", { duration: 0.9, ease: "power2.out" });
+    const toRotY = gsap.quickTo(tilt, "rotationY", { duration: 0.8, ease: "power2.out" });
+    const toRotX = gsap.quickTo(tilt, "rotationX", { duration: 0.8, ease: "power2.out" });
+    const toTx = gsap.quickTo(tilt, "x", { duration: 0.8, ease: "power2.out" });
+    const toTy = gsap.quickTo(tilt, "y", { duration: 0.8, ease: "power2.out" });
+
+    let inHero = false;
+
+    const apply = (nx: number, ny: number) => {
+      toRotY(nx * 14);
+      toRotX(-ny * 12);
+      toTx(nx * 16);
+      toTy(ny * 12);
+      if (light) {
+        light.style.setProperty("--lx", `${(nx * 80).toFixed(1)}px`);
+        light.style.setProperty("--ly", `${(ny * 80).toFixed(1)}px`);
+      }
+    };
 
     const onMove = (e: MouseEvent) => {
       const rect = hero.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      toRotY(nx * 12);
-      toRotX(-ny * 10);
-      toTx(nx * 10);
-      toTy(ny * 8);
-      if (light) {
-        light.style.setProperty("--lx", `${(nx * 60).toFixed(1)}px`);
-        light.style.setProperty("--ly", `${(ny * 60).toFixed(1)}px`);
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+      if (!inside) {
+        if (inHero) {
+          inHero = false;
+          toRotY(0);
+          toRotX(0);
+          toTx(0);
+          toTy(0);
+        }
+        return;
       }
-    };
-    const onLeave = () => {
-      toRotY(0);
-      toRotX(0);
-      toTx(0);
-      toTy(0);
+      inHero = true;
+      apply(
+        (e.clientX - rect.left) / rect.width - 0.5,
+        (e.clientY - rect.top) / rect.height - 0.5
+      );
     };
 
-    hero.addEventListener("mousemove", onMove);
-    hero.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mousemove", onMove);
     return () => {
-      hero.removeEventListener("mousemove", onMove);
-      hero.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("mousemove", onMove);
     };
   }, []);
 
