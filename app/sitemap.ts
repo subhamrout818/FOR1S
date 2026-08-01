@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
+import { MEMBERS } from "@/lib/members";
 import { SITE_URL } from "@/lib/contact";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -25,5 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...posts];
+  const members: MetadataRoute.Sitemap = MEMBERS.map((member) => ({
+    url: `${SITE_URL}/team/${member.slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...posts, ...members];
 }

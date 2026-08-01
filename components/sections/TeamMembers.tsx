@@ -8,12 +8,14 @@ import {
 } from 'framer-motion';
 import { ArrowUpRight, Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import SectionLabel from "@/components/ui/SectionLabel";
 
 /* ---------- Types ---------- */
 
 interface TeamMember {
   id: string;
+  slug: string;
   name: string;
   role: string;
   image: string;
@@ -24,12 +26,14 @@ interface TeamMember {
 const TEAM: TeamMember[] = [
   {
     id: "01",
+    slug: "subham-rout",
     name: "Subham Rout",
     role: "Founder & Frontend",
     image: "/subham.jpg",
   },
   {
     id: "04",
+    slug: "tanuj-joshi",
     name: "Tanuj Joshi",
     role: "Marketing",
     image: "/tanuj.jpg",
@@ -69,6 +73,7 @@ export default function TeamSection() {
 
   return (
     <div
+      id="members"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className="relative min-h-screen w-full cursor-default bg-neutral-950 px-6 py-24 text-neutral-200 md:px-12"
@@ -195,9 +200,11 @@ function TeamRow({
           <span className="font-mono text-xs text-neutral-600">
             0{index + 1}
           </span>
-          <h2 className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
-            {data.name}
-          </h2>
+          <Link href={`/team/${data.slug}`} data-cursor="hover">
+            <h2 className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
+              {data.name}
+            </h2>
+          </Link>
         </div>
 
         {/* Role & Icon Section */}
@@ -211,13 +218,20 @@ function TeamRow({
             {isActive ? <Minus size={18} /> : <Plus size={18} />}
           </div>
 
-          {/* Desktop Arrow */}
-          <motion.div
-             animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
-             className="hidden md:block text-white"
+          {/* Desktop Arrow → member profile */}
+          <Link
+            href={`/team/${data.slug}`}
+            data-cursor="hover"
+            onClick={(e) => e.stopPropagation()}
+            className="hidden md:block"
           >
-             <ArrowUpRight size={28} strokeWidth={1.5} />
-          </motion.div>
+            <motion.div
+              animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
+              className="text-white"
+            >
+              <ArrowUpRight size={28} strokeWidth={1.5} />
+            </motion.div>
+          </Link>
         </div>
       </div>
 
@@ -241,7 +255,14 @@ function TeamRow({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-4 left-4">
-                   <p className="text-xs uppercase tracking-widest text-white">View Profile</p>
+                  <Link
+                    href={`/team/${data.slug}`}
+                    data-cursor="hover"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs uppercase tracking-widest text-white"
+                  >
+                    View Profile
+                  </Link>
                 </div>
               </div>
             </div>
