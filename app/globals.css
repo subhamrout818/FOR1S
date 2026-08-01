@@ -61,3 +61,13 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Testimonials: the desktop GSAP pin/scrub is skipped under reduced motion,
+   so give the track a real scroll viewport instead of clipping it. */
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  #testimonials .testimonials-track {
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+}

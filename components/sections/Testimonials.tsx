@@ -8,13 +8,11 @@ import SplitReveal from "@/components/ui/SplitReveal";
 import { TESTIMONIALS } from "@/lib/data";
 
 export default function Testimonials() {
-  console.log("Testimonials rendered");
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  useGSAP( 
+  useGSAP(
     () => {
-      console.log("useGSAP started");
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
@@ -24,10 +22,6 @@ export default function Testimonials() {
 
         const distance = track.scrollWidth - window.innerWidth;
         if (distance <= 0) return;
-        console.log("GSAP is running");
-console.log(track.scrollWidth);
-console.log(window.innerWidth);
-console.log(distance);
 
         const st = ScrollTrigger.create({
           trigger: sectionRef.current,
@@ -67,7 +61,7 @@ console.log(distance);
 
         <div
           ref={trackRef}
-          className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-6 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] lg:w-max lg:snap-none lg:gap-8 lg:overflow-visible lg:px-12 lg:pb-0 [&::-webkit-scrollbar]:hidden"
+          className="testimonials-track flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-6 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] lg:w-max lg:snap-none lg:gap-8 lg:overflow-visible lg:px-12 lg:pb-0 [&::-webkit-scrollbar]:hidden"
         >
           {TESTIMONIALS.map((t) => (
             <div
