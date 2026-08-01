@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Loader2, X } from "lucide-react";
+import type Lenis from "lenis";
 
 /**
  * Full-screen capture modal backed by the device camera (getUserMedia).
@@ -16,8 +17,33 @@ export default function CameraCapture({
   onClose: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
+
+  /* Focus the dialog, lock scroll, and close on Escape. */
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialog?.focus();
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const lenis = (window as typeof window & { __lenis?: Lenis }).__lenis;
+    lenis?.stop();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+      lenis?.start();
+      previouslyFocused?.focus?.();
+    };
+  }, [onClose]);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,10 +106,15 @@ export default function CameraCapture({
   return (
     <AnimatePresence>
       <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Take a photo"
+        tabIndex={-1}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-background/95 px-6 backdrop-blur-sm"
+        className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-background/95 px-6 outline-none backdrop-blur-sm"
       >
         <div className="flex w-full max-w-md flex-col items-center gap-6">
           <div className="flex w-full items-center justify-between">

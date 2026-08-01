@@ -9,6 +9,7 @@ import { PRELOADED_AVATARS } from "@/lib/avatars";
 import MagneticButton from "@/components/ui/MagneticButton";
 import Avatar from "@/components/ui/Avatar";
 import CameraCapture from "@/components/account/CameraCapture";
+import CropModal from "@/components/account/CropModal";
 import {
   AlertCircle,
   ArrowLeft,
@@ -111,8 +112,8 @@ function StatusLine({
   );
 }
 
-/** Center-crop an image file into a small square JPEG data URL. */
-function fileToSquareDataUrl(file: File, size = 256): Promise<string> {
+/** Downscale an image file into a preview data URL for the crop dialog. */
+function fileToPreviewDataUrl(file: File, maxDim = 1024): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error("Could not read the file"));
@@ -120,24 +121,16 @@ function fileToSquareDataUrl(file: File, size = 256): Promise<string> {
       const img = new Image();
       img.onerror = () => reject(new Error("That doesn't look like a valid image"));
       img.onload = () => {
-        const side = Math.min(img.width, img.height);
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
         const canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
+        canvas.width = w;
+        canvas.height = h;
         const ctx = canvas.getContext("2d");
         if (!ctx) return reject(new Error("Canvas unavailable"));
-        ctx.drawImage(
-          img,
-          (img.width - side) / 2,
-          (img.height - side) / 2,
-          side,
-          side,
-          0,
-          0,
-          size,
-          size
-        );
-        resolve(canvas.toDataURL("image/jpeg", 0.85));
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.9));
       };
       img.src = String(reader.result);
     };
@@ -155,9 +148,11 @@ export default function AccountPage() {
   const [nameErr, setNameErr] = useState("");
 
   const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoPending, setPhotoPending] = useState(false);
   const [photoMsg, setPhotoMsg] = useState("");
   const [photoErr, setPhotoErr] = useState("");
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [email, setEmail] = useState("");
@@ -189,8 +184,8 @@ export default function AccountPage() {
 
   const profileImage = user?.profileImage ?? null;
 
-  const savePhoto = async (src: string) => {
-    if (!token) return;
+  const savePhoto = async (src: string): Promise<boolean> => {
+    if (!token) return false;
     setPhotoBusy(true);
     setPhotoMsg("");
     setPhotoErr("");
@@ -204,11 +199,13 @@ export default function AccountPage() {
       if (json.success) {
         await refreshUser();
         setPhotoMsg("Profile photo updated");
-      } else {
-        setPhotoErr(json.message || json.errors?.profileImage?.[0] || "Could not update photo");
+        return true;
       }
+      setPhotoErr(json.message || json.errors?.profileImage?.[0] || "Could not update photo");
+      return false;
     } catch {
       setPhotoErr("Network error. Please try again.");
+      return false;
     } finally {
       setPhotoBusy(false);
     }
@@ -217,12 +214,18 @@ export default function AccountPage() {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
-    if (!file) return;
+    if (!file || photoPending) return;
+    setPhotoErr("");
+    setPhotoPending(true);
     try {
-      const dataUrl = await fileToSquareDataUrl(file);
-      await savePhoto(dataUrl);
+      // Open the crop dialog with a downscaled preview; the cropped square
+      // is saved only after the user positions/zooms/rotates it.
+      const preview = await fileToPreviewDataUrl(file);
+      setCropSrc(preview);
     } catch (err) {
       setPhotoErr(err instanceof Error ? err.message : "Could not read the file");
+    } finally {
+      setPhotoPending(false);
     }
   };
 
@@ -360,7 +363,7 @@ export default function AccountPage() {
                     variant="outline"
                     size="md"
                     cursorText="Go"
-                    disabled={photoBusy}
+                    disabled={photoBusy || photoPending}
                     onClick={() => fileRef.current?.click()}
                   >
                     <ImagePlus size={16} />
@@ -370,7 +373,7 @@ export default function AccountPage() {
                     variant="outline"
                     size="md"
                     cursorText="Go"
-                    disabled={photoBusy}
+                    disabled={photoBusy || photoPending}
                     onClick={() => setCameraOpen(true)}
                   >
                     <Camera size={16} />
@@ -380,7 +383,7 @@ export default function AccountPage() {
                     <MagneticButton
                       variant="ghost"
                       size="md"
-                      disabled={photoBusy}
+                      disabled={photoBusy || photoPending}
                       onClick={() => savePhoto("")}
                     >
                       Reset to default
@@ -422,7 +425,11 @@ export default function AccountPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              {photoBusy ? (
+              {photoPending ? (
+                <p className="flex items-center gap-2 text-sm text-muted">
+                  <Loader2 size={14} className="animate-spin" /> Preparing…
+                </p>
+              ) : photoBusy ? (
                 <p className="flex items-center gap-2 text-sm text-muted">
                   <Loader2 size={14} className="animate-spin" /> Saving…
                 </p>
@@ -569,6 +576,21 @@ export default function AccountPage() {
             onCapture={(dataUrl) => {
               setCameraOpen(false);
               savePhoto(dataUrl);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Crop dialog (gallery photos) */}
+      <AnimatePresence>
+        {cropSrc && (
+          <CropModal
+            imageSrc={cropSrc}
+            onCancel={() => setCropSrc(null)}
+            onApply={async (dataUrl) => {
+              const ok = await savePhoto(dataUrl);
+              if (ok) setCropSrc(null); // only close on success, so a failed save can be retried
+              return ok;
             }}
           />
         )}
