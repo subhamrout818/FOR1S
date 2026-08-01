@@ -235,7 +235,7 @@ function PlanCard({ subscription }: { subscription: SubscriptionData }) {
               variant="outline"
               size="md"
               cursorText="Go"
-              onClick={() => window.open(CONTACT.whatsappUrl, "_blank")}
+              onClick={() => (window.location.href = `mailto:${CONTACT.contactEmail}`)}
             >
               Contact sales
             </MagneticButton>
@@ -298,7 +298,7 @@ function PaymentCard({ paymentMethod }: { paymentMethod: PaymentMethodData | nul
           size="md"
           cursorText="Go"
           className="mt-auto self-start"
-          onClick={() => window.open(CONTACT.whatsappUrl, "_blank")}
+          onClick={() => (window.location.href = `mailto:${CONTACT.contactEmail}`)}
         >
           Update payment method
         </MagneticButton>

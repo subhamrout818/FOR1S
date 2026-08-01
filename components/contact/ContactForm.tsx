@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { CONTACT } from "@/lib/contact";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { Check, ChevronDown, Loader2, Send } from "lucide-react";
 
@@ -351,19 +350,6 @@ export default function ContactForm() {
                 </>
               )}
             </MagneticButton>
-
-            <p className="text-center text-xs text-muted/70">
-              Prefer instant?{" "}
-              <a
-                href={CONTACT.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent underline underline-offset-2 hover:no-underline"
-              >
-                Message us on WhatsApp
-              </a>
-              .
-            </p>
           </motion.form>
         )}
       </AnimatePresence>

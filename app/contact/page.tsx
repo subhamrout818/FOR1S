@@ -19,13 +19,6 @@ export const metadata: Metadata = {
 
 const CHANNELS = [
   {
-    label: "WhatsApp",
-    value: "Chat with us",
-    sub: CONTACT.whatsappUrl.replace("https://wa.me/", "+"),
-    href: CONTACT.whatsappUrl,
-    icon: "wa" as const,
-  },
-  {
     label: "Email",
     value: CONTACT.contactEmail,
     sub: "Replies within 24 hours",
@@ -43,29 +36,12 @@ const CHANNELS = [
 
 function ChannelIcon({ icon }: { icon: (typeof CHANNELS)[number]["icon"] }) {
   if (icon === "mail") return <Mail size={18} strokeWidth={1.5} />;
-  if (icon === "calendar") {
-    return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2" />
-        <line x1="16" y1="2" x2="16" y2="6" />
-        <line x1="8" y1="2" x2="8" y2="6" />
-        <line x1="3" y1="10" x2="21" y2="10" />
-      </svg>
-    );
-  }
-  // WhatsApp
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17.507 14.307l-3.81-1.62a.72.72 0 00-.937.202l-.76.958a.465.465 0 01-.534.174 6.843 6.843 0 01-3.9-3.9.468.468 0 01.174-.534l.957-.76a.72.72 0 00.202-.938l-1.62-3.81a.72.72 0 00-.958-.396l-.79.316a1.5 1.5 0 00-.92 1.25A11.52 11.52 0 0016.593 16.7a1.5 1.5 0 001.25-.92l.316-.79a.72.72 0 00-.652-.683z" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
     </svg>
   );
 }

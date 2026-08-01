@@ -7,7 +7,6 @@ import { useMagnetic } from "@/hooks/useMagnetic";
 /* ─── Props ─────────────────────────────────── */
 
 interface ActionPanelProps {
-  whatsappUrl: string;
   email: string;
   calendarUrl: string;
 }
@@ -56,25 +55,6 @@ const itemVariants = {
   },
 };
 
-/* ─── WhatsApp inline SVG ───────────────────── */
-
-function WhatsAppIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17.507 14.307l-3.81-1.62a.72.72 0 00-.937.202l-.76.958a.465.465 0 01-.534.174 6.843 6.843 0 01-3.9-3.9.468.468 0 01.174-.534l.957-.76a.72.72 0 00.202-.938l-1.62-3.81a.72.72 0 00-.958-.396l-.79.316a1.5 1.5 0 00-.92 1.25A11.52 11.52 0 0016.593 16.7a1.5 1.5 0 001.25-.92l.316-.79a.72.72 0 00-.652-.683z" />
-    </svg>
-  );
-}
-
 /* ─── Local magnetic action button ──────────── */
 
 function MagneticActionButton({
@@ -114,7 +94,6 @@ function MagneticActionButton({
 /* ─── Panel component ───────────────────────── */
 
 export default function ActionPanel({
-  whatsappUrl,
   email,
   calendarUrl,
 }: ActionPanelProps) {
@@ -124,11 +103,6 @@ export default function ActionPanel({
   if (prefersReduced) {
     return (
       <div className="flex items-center justify-center gap-3 pt-4">
-        <MagneticActionButton
-          href={whatsappUrl}
-          label="WhatsApp"
-          icon={<WhatsAppIcon />}
-        />
         <MagneticActionButton
           href={`mailto:${email}`}
           label="Email"
@@ -158,11 +132,6 @@ export default function ActionPanel({
         exit="exit"
         className="flex items-center justify-center gap-3 pt-4"
       >
-        <MagneticActionButton
-          href={whatsappUrl}
-          label="WhatsApp"
-          icon={<WhatsAppIcon />}
-        />
         <MagneticActionButton
           href={`mailto:${email}`}
           label="Email"

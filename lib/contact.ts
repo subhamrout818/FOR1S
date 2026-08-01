@@ -10,10 +10,6 @@ export const CONTACT = {
   email: "hello@for1s.digital",
   /** Contact / CC email (shown in footer) */
   contactEmail: "for1s.contact@gmail.com",
-  /** WhatsApp number (international digits only, no +) */
-  whatsapp: "919237302537",
-  /** WhatsApp deep-link URL */
-  whatsappUrl: "https://wa.me/919237302537",
   /** Booking / calendar link */
   calendar: "https://cal.com/for1s/consultation",
 } as const;

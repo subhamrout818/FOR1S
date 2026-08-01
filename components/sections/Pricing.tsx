@@ -93,7 +93,6 @@ export default function Pricing() {
                 <AnimatePresence initial={false}>
                   {activeCard === tier.id && (
                     <ActionPanel
-                      whatsappUrl={CONTACT.whatsappUrl}
                       email={CONTACT.contactEmail}
                       calendarUrl={CONTACT.calendar}
                     />
