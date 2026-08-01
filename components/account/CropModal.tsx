@@ -39,7 +39,10 @@ export default function CropModal({
   );
 
   // A pending apply must never fire after the user cancels / the dialog closes.
+  // Reset on mount: Next dev runs effects twice (StrictMode), so the cleanup
+  // below would otherwise leave the flag stuck at true and silently drop Apply.
   useEffect(() => {
+    cancelledRef.current = false;
     return () => {
       cancelledRef.current = true;
     };
