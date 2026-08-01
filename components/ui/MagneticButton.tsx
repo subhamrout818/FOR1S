@@ -54,7 +54,7 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
             "border border-foreground/25 text-foreground hover:border-accent hover:text-accent",
           variant === "ghost" && "text-foreground/80 hover:text-foreground",
           variant === "glass" &&
-            "rounded-2xl border border-hairline bg-surface/70 text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.12),inset_0_0_50px_-24px_rgba(230,57,70,0.55),0_8px_30px_-12px_rgba(230,57,70,0.4)] hover:border-accent/50",
+            "rounded-2xl border border-hairline bg-surface/80 text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:border-accent/50",
           className
         )}
         {...(props as any)}
