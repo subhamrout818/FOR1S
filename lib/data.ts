@@ -261,6 +261,8 @@ export const FAQ_ITEMS = [
 
 export const FOOTER_LINKS = {
   product: [
+    { label: "Projects", href: "/projects" },
+    { label: "Case Studies", href: "/case-studies" },
     { label: "Services", href: "#features" },
     { label: "Process", href: "#preview" },
     { label: "Pricing", href: "#pricing" },
@@ -268,7 +270,8 @@ export const FOOTER_LINKS = {
   company: [
     { label: "Vision", href: "#vision" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact", href: CONTACT.whatsappUrl },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
     { label: "Email", href: `mailto:${CONTACT.contactEmail}` },
   ],
   legal: [

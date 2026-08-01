@@ -2,6 +2,9 @@
 // Contact & Social credentials
 // ──── UPDATE THESE WITH YOUR REAL INFO ─────────
 
+/** Canonical production domain — used by sitemap, robots, and Open Graph. */
+export const SITE_URL = "https://for1s.digital";
+
 export const CONTACT = {
   /** Primary business email */
   email: "hello@for1s.digital",
