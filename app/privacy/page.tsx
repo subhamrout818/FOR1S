@@ -4,6 +4,7 @@ import { BRAND } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — FOR1S",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

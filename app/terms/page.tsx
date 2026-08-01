@@ -4,6 +4,7 @@ import { BRAND } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions — FOR1S",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

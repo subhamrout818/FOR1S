@@ -11,16 +11,79 @@ import GrainOverlay from "@/components/layout/GrainOverlay";
 import ScrollSpine from "@/components/layout/ScrollSpine";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { SITE_URL } from "@/lib/contact";
+
+const TITLE = "FOR1S — SaaS Development Agency";
+const DESCRIPTION =
+  "FOR1S is a full-service digital agency — from custom websites and SaaS platforms to premium video production. We help brands stand out and scale up.";
 
 export const metadata: Metadata = {
-  title: "FOR1S — SaaS Development Agency",
-  description:
-    "FOR1S is a full-service digital agency — from custom websites and SaaS platforms to premium video production. We help brands stand out and scale up.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  applicationName: "FOR1S",
+  keywords: [
+    "SaaS development",
+    "web agency",
+    "SaaS agency",
+    "full-stack development",
+    "product design",
+    "custom websites",
+    "Next.js development",
+    "startup agency",
+  ],
+  authors: [{ name: "Subham Rout", url: SITE_URL }],
+  creator: "Subham Rout",
+  openGraph: {
+    type: "website",
+    siteName: "FOR1S",
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
   icons: { icon: "/favicon.svg" },
 };
 
 export const viewport: Viewport = {
   themeColor: "#050505",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "FOR1S",
+      url: SITE_URL,
+      description: DESCRIPTION,
+      email: "hello@for1s.digital",
+      logo: `${SITE_URL}/favicon.svg`,
+      sameAs: [
+        "https://x.com/for1s",
+        "https://instagram.com/btwitssubu",
+        "https://youtube.com/@for1s",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "FOR1S",
+      description: DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -45,6 +108,10 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </AuthProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </body>
     </html>
   );
