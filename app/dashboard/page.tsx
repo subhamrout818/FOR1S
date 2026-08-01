@@ -176,7 +176,7 @@ function DashCard({
 /* ------------------------------------------------------------------ */
 
 export default function DashboardPage() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const { user, token, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
 
   const [splashDone, setSplashDone] = useState(false);
@@ -185,10 +185,11 @@ export default function DashboardPage() {
   const [ghibliFilm, setGhibliFilm] = useState("");
   const gridRef = useRef<HTMLDivElement>(null);
 
-  /* Auth guard */
+  /* Auth guard — key on the stored token, not isAuthenticated, so a
+     transient /api/auth/me network failure doesn't bounce a valid user to login. */
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) router.push("/login");
-  }, [isLoading, isAuthenticated, router]);
+    if (!isLoading && !token) router.push("/login");
+  }, [isLoading, token, router]);
 
   /* Fetch Ghibli avatar on mount */
   useEffect(() => {
@@ -222,7 +223,7 @@ export default function DashboardPage() {
     return () => clearTimeout(t);
   }, [splashDone, isAuthenticated]);
 
-  if (isLoading || !isAuthenticated) return null;
+  if (isLoading || !token) return null;
 
   const firstName = user?.name?.split(" ")[0] ?? "User";
 
