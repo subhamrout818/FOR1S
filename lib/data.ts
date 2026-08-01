@@ -134,43 +134,6 @@ export const BENEFITS = [
 
 
 
-export const TESTIMONIALS = [
-  {
-    id: "t1",
-    quote:
-      "They didn't just build our platform — they understood the market better than we did. Launched in 8 weeks, hit 1K users in the first month.",
-    name: "Sarah K.",
-    role: "CEO, Finflow",
-  },
-  {
-    id: "t2",
-    quote:
-      "We've worked with three agencies before FOR1S. First one that actually shipped on time, on budget, and with quality we didn't have to redo.",
-    name: "Marcus L.",
-    role: "Founder, TaskHive",
-  },
-  {
-    id: "t3",
-    quote:
-      "Our MVP went from napkin sketch to production in six weeks. The architecture they chose has scaled to 50K users without a single rewrite.",
-    name: "Priya N.",
-    role: "CTO, CloudDesk",
-  },
-  {
-    id: "t4",
-    quote:
-      "What impressed me most wasn't the code — it was the product thinking. They challenged our assumptions and saved us months of building the wrong thing.",
-    name: "James R.",
-    role: "Head of Product, Loopline",
-  },
-  {
-    id: "t5",
-    quote:
-      "We needed a team that could move fast without cutting corners. FOR1S delivered a SaaS platform that our enterprise clients actually compliment.",
-    name: "Anika M.",
-    role: "COO, DataBridge",
-  },
-] as const;
 
 export const PRICING_TIERS = [
   {
@@ -261,8 +224,6 @@ export const FAQ_ITEMS = [
 
 export const FOOTER_LINKS = {
   product: [
-    { label: "Projects", href: "/projects" },
-    { label: "Case Studies", href: "/case-studies" },
     { label: "Services", href: "#features" },
     { label: "Process", href: "#preview" },
     { label: "Pricing", href: "#pricing" },

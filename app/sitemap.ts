@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
-import { CASE_STUDIES } from "@/lib/case-studies";
 import { SITE_URL } from "@/lib/contact";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -8,8 +7,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
-    "/projects",
-    "/case-studies",
     "/blog",
     "/contact",
     "/privacy",
@@ -28,12 +25,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const caseStudies: MetadataRoute.Sitemap = CASE_STUDIES.map((study) => ({
-    url: `${SITE_URL}/case-studies/${study.id}`,
-    lastModified,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
-
-  return [...staticRoutes, ...posts, ...caseStudies];
+  return [...staticRoutes, ...posts];
 }
