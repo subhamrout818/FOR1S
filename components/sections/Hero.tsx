@@ -191,7 +191,6 @@ export default function Hero() {
             className="flex items-center gap-7"
           >
             <MagneticButton
-              variant="glass"
               size="lg"
               cursorText="Go"
               onClick={() => scrollToHash("#final-cta")}
