@@ -95,7 +95,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <>
                 <MagneticButton
-                  variant="solid"
+                  variant="glass"
                   size="md"
                   cursorText="Go"
                   onClick={() => router.push("/dashboard")}

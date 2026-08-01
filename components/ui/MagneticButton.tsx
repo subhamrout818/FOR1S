@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "solid" | "outline" | "ghost";
+  variant?: "solid" | "outline" | "ghost" | "glass";
   size?: "md" | "lg";
   cursorText?: string;
 }
@@ -42,6 +42,8 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
           variant === "outline" &&
             "border border-foreground/25 text-foreground hover:border-accent hover:text-accent",
           variant === "ghost" && "text-foreground/80 hover:text-foreground",
+          variant === "glass" &&
+            "border border-white/20 bg-accent/[0.14] text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_8px_30px_-12px_rgba(230,57,70,0.55)] hover:bg-accent/[0.24] hover:border-accent/50",
           className
         )}
         {...(props as any)}
