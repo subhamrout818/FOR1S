@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { BRAND, FOOTER_LINKS } from "@/lib/data";
 import { scrollToHash } from "@/lib/utils";
 import RevealMask from "@/components/ui/RevealMask";
@@ -24,6 +25,9 @@ function LinkColumn({
   title: string;
   links: readonly { label: string; href: string }[];
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
     <div className="flex flex-col gap-4">
       <span className="font-mono text-xs uppercase tracking-widest text-muted">
@@ -53,7 +57,12 @@ function LinkColumn({
             ) : (
               <button
                 data-cursor="hover"
-                onClick={() => scrollToHash(link.href)}
+                onClick={() => {
+                  // On the home page smooth-scroll; elsewhere go home + let
+                  // Providers glide to the section.
+                  if (pathname === "/") scrollToHash(link.href);
+                  else router.push("/" + link.href);
+                }}
                 className="text-sm text-foreground/80 transition-colors duration-300 hover:text-accent"
               >
                 {link.label}
