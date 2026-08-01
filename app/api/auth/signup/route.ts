@@ -1,6 +1,12 @@
 
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
+import {
+  consumeRateLimit,
+  clientIp,
+  rateLimitedResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -12,6 +18,15 @@ const signupSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+    // Cap account creation per IP to slow mass-signup / abuse.
+    const limitKey = `auth:signup:${clientIp(req)}`;
+    const rate = consumeRateLimit(
+      limitKey,
+      RATE_LIMITS.signup.limit,
+      RATE_LIMITS.signup.windowMs
+    );
+    if (!rate.ok) return rateLimitedResponse(rate.resetAt);
+
     const body = await req.json();
 
     const result = signupSchema.safeParse(body);

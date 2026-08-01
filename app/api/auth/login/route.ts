@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { comparePassword, signToken } from "@/lib/auth";
+import {
+  checkRateLimit,
+  consumeRateLimit,
+  clientIp,
+  rateLimitedResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -10,6 +17,15 @@ const loginSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+    // Only *failed* attempts burn quota, so rate limit before validating.
+    const limitKey = `auth:login:${clientIp(req)}`;
+    const check = checkRateLimit(
+      limitKey,
+      RATE_LIMITS.login.limit,
+      RATE_LIMITS.login.windowMs
+    );
+    if (!check.ok) return rateLimitedResponse(check.resetAt);
+
     const body = await req.json();
 
     const result = loginSchema.safeParse(body);
@@ -32,6 +48,7 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
+      consumeRateLimit(limitKey, RATE_LIMITS.login.limit, RATE_LIMITS.login.windowMs);
       return NextResponse.json(
         {
           success: false,
@@ -45,6 +62,7 @@ export async function POST(req: Request) {
     const isValid = await comparePassword(password, user.password);
 
     if (!isValid) {
+      consumeRateLimit(limitKey, RATE_LIMITS.login.limit, RATE_LIMITS.login.windowMs);
       return NextResponse.json(
         {
           success: false,
