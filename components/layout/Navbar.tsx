@@ -190,7 +190,7 @@ export default function Navbar() {
                   <MagneticButton
                     variant="outline"
                     size="lg"
-                    onClick={() => { router.push("/dashboard"); setMenuOpen(false); }}
+                    onClick={() => { router.push("/dashboard/account"); setMenuOpen(false); }}
                   >
                     Account
                   </MagneticButton>
