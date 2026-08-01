@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 import { useMagnetic } from "@/hooks/useMagnetic";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +20,18 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
     const { ref, x, y, handleMouseMove, handleMouseLeave } = useMagnetic({
       strength: 0.35,
     });
+    const glowRef = useRef<HTMLDivElement>(null);
+
+    // Magnetic pull + a Services-card-style radial glow that follows the cursor.
+    const onMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+      handleMouseMove(e);
+      const glow = glowRef.current;
+      if (glow) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        glow.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+        glow.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+      }
+    };
 
     return (
       <motion.button
@@ -28,7 +40,7 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
           if (typeof forwardedRef === "function") forwardedRef(node);
           else if (forwardedRef) forwardedRef.current = node;
         }}
-        onMouseMove={handleMouseMove}
+        onMouseMove={onMouseMove}
         onMouseLeave={handleMouseLeave}
         data-cursor="view"
         data-cursor-text={cursorText ?? ""}
@@ -37,17 +49,28 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
         className={cn(
           "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-wide transition-colors duration-300",
           size === "md" ? "px-6 py-3 text-sm" : "px-8 py-4 text-base",
-          variant === "solid" &&
-            "bg-accent text-white hover:bg-accent-dim",
+          variant === "solid" && "bg-accent text-white hover:bg-accent-dim",
           variant === "outline" &&
             "border border-foreground/25 text-foreground hover:border-accent hover:text-accent",
           variant === "ghost" && "text-foreground/80 hover:text-foreground",
           variant === "glass" &&
-            "border border-white/20 bg-accent/[0.14] text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_8px_30px_-12px_rgba(230,57,70,0.55)] hover:bg-accent/[0.24] hover:border-accent/50",
+            "rounded-2xl border border-hairline bg-surface/70 text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.12),inset_0_0_50px_-24px_rgba(230,57,70,0.55),0_8px_30px_-12px_rgba(230,57,70,0.4)] hover:border-accent/50",
           className
         )}
         {...(props as any)}
       >
+        {/* Cursor-following crimson glow (glass only) — mirrors the Services cards */}
+        {variant === "glass" && (
+          <div
+            ref={glowRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(240px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(230,57,70,0.28), transparent 70%)",
+            }}
+          />
+        )}
         <span className="relative z-10">{children}</span>
       </motion.button>
     );
