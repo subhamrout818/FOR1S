@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import SplitReveal from "@/components/ui/SplitReveal";
 import SectionLabel from "@/components/ui/SectionLabel";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { scrollToHash } from "@/lib/utils";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -18,6 +19,9 @@ const fadeUp: Variants = {
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const tiltRef = useRef<HTMLHeadingElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = () => setReady(true);
@@ -30,9 +34,54 @@ export default function Hero() {
     };
   }, []);
 
+  /* Mouse parallax — the extruded headline tilts toward the pointer and a
+     soft light follows the cursor across the hero. Skipped on touch and for
+     reduced-motion users. */
+  useEffect(() => {
+    const hero = heroRef.current;
+    const tilt = tiltRef.current;
+    const light = lightRef.current;
+    if (!hero || !tilt) return;
+    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    const toRotY = gsap.quickTo(tilt, "rotationY", { duration: 0.9, ease: "power2.out" });
+    const toRotX = gsap.quickTo(tilt, "rotationX", { duration: 0.9, ease: "power2.out" });
+    const toTx = gsap.quickTo(tilt, "x", { duration: 0.9, ease: "power2.out" });
+    const toTy = gsap.quickTo(tilt, "y", { duration: 0.9, ease: "power2.out" });
+
+    const onMove = (e: MouseEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      toRotY(nx * 12);
+      toRotX(-ny * 10);
+      toTx(nx * 10);
+      toTy(ny * 8);
+      if (light) {
+        light.style.setProperty("--lx", `${(nx * 60).toFixed(1)}px`);
+        light.style.setProperty("--ly", `${(ny * 60).toFixed(1)}px`);
+      }
+    };
+    const onLeave = () => {
+      toRotY(0);
+      toRotX(0);
+      toTx(0);
+      toTy(0);
+    };
+
+    hero.addEventListener("mousemove", onMove);
+    hero.addEventListener("mouseleave", onLeave);
+    return () => {
+      hero.removeEventListener("mousemove", onMove);
+      hero.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
     <section
       id="hero"
+      ref={heroRef}
       className="relative flex min-h-[100svh] flex-col overflow-hidden bg-background"
     >
       <div
@@ -58,31 +107,53 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        <h1 className="mt-16 font-display text-fluid-hero font-bold uppercase leading-[0.9] tracking-tightest text-foreground lg:mt-0">
-          
-          {ready && (
-            <>
-              <SplitReveal
-                as="span"
-                type="lines"
-                trigger="immediate"
-                delay={0.1}
-                className="block overflow-hidden"
-              >
-                We build SaaS,
-              </SplitReveal>
-              <SplitReveal
-                as="span"
-                type="lines"
-                trigger="immediate"
-                delay={0.3}
-                className="block overflow-hidden text-accent"
-              >
-                you scale it.
-              </SplitReveal>
-            </>
-          )}
-        </h1>
+        <div className="relative mt-16 lg:mt-0">
+          {/* Pointer-following light — makes the extrusion feel lit. */}
+          <div
+            ref={lightRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 rounded-full blur-3xl"
+            style={{
+              width: "min(46vw, 520px)",
+              aspectRatio: "1",
+              background:
+                "radial-gradient(circle, rgba(255,255,255,0.10), rgba(230,57,70,0.12) 45%, transparent 72%)",
+              transform:
+                "translate(-50%, -50%) translate(var(--lx, 0px), var(--ly, 0px))",
+            }}
+          />
+
+          <div style={{ perspective: "1000px" }} className="relative z-10">
+            <h1
+              ref={tiltRef}
+              className="hero-extrude font-display text-fluid-hero font-bold uppercase leading-[0.9] tracking-tightest text-foreground"
+              style={{ transformStyle: "preserve-3d", willChange: "transform" }}
+            >
+              {ready && (
+                <>
+                  <SplitReveal
+                    as="span"
+                    type="lines"
+                    trigger="immediate"
+                    delay={0.1}
+                    className="block overflow-hidden"
+                  >
+                    We build SaaS,
+                  </SplitReveal>
+                  <SplitReveal
+                    as="span"
+                    type="lines"
+                    trigger="immediate"
+                    delay={0.3}
+                    className="block overflow-hidden text-accent"
+                  >
+                    you scale it.
+                  </SplitReveal>
+                </>
+              )}
+            </h1>
+          </div>
+        </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
           <motion.p

@@ -32,6 +32,24 @@ body {
   color: #ffffff;
 }
 
+/* Extruded 3D headline text — layered drop-shadows give the type depth and a
+   top-left rim light, so it reads as raised with clear lighting. `em` units
+   keep the extrusion proportionate to the fluid font size. We use
+   drop-shadow (not text-shadow) so the effect renders at the element level
+   and isn't clipped by SplitReveal's overflow-hidden line masks. */
+.hero-extrude {
+  filter:
+    /* rim light (source upper-left) */
+    drop-shadow(-0.014em -0.018em 0 rgba(255, 255, 255, 0.16))
+    /* extrusion body */
+    drop-shadow(0 0.02em 0 #1a1a1a)
+    drop-shadow(0 0.04em 0 #131313)
+    drop-shadow(0 0.06em 0 #0c0c0c)
+    drop-shadow(0 0.08em 0 #050505)
+    /* grounding shadow */
+    drop-shadow(0 0.06em 0.14em rgba(0, 0, 0, 0.55));
+}
+
 :focus-visible {
   outline: 2px solid #e63946;
   outline-offset: 3px;
