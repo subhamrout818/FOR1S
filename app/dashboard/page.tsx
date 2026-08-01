@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Avatar from "@/components/ui/Avatar";
 import {
   CreditCard,
   User,
@@ -45,7 +46,8 @@ const cards: CardDef[] = [
     label: "Account",
     icon: User,
     stat: "Your account",
-    sub: "Signed in",
+    sub: "Manage profile & security",
+    href: "/dashboard/account",
     accent: "border-l-blue-500",
     bgGlow: "rgba(59,130,246,0.15)",
   },
@@ -70,25 +72,6 @@ const cards: CardDef[] = [
     bgGlow: "rgba(245,158,11,0.15)",
   },
 ];
-
-/* ------------------------------------------------------------------ */
-/*  Ghibli profile picture                                            */
-/* ------------------------------------------------------------------ */
-
-async function fetchGhibliAvatar(): Promise<string | null> {
-  try {
-    const res = await fetch("https://ghibliapi.vercel.app/films");
-    if (!res.ok) return null;
-    const films: { movie_banner?: string }[] = await res.json();
-    const banners = films
-      .map((f) => f.movie_banner)
-      .filter((b): b is string => !!b);
-    if (!banners.length) return null;
-    return banners[Math.floor(Math.random() * banners.length)]!;
-  } catch {
-    return null;
-  }
-}
 
 /* ------------------------------------------------------------------ */
 /*  Card component                                                    */
@@ -181,9 +164,6 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [splashDone, setSplashDone] = useState(false);
-  const [ghibliUrl, setGhibliUrl] = useState<string | null>(null);
-  const [ghibliLoaded, setGhibliLoaded] = useState(false);
-  const [ghibliFilm, setGhibliFilm] = useState("");
   const gridRef = useRef<HTMLDivElement>(null);
 
   /* Auth guard — key on the stored token, not isAuthenticated, so a
@@ -191,18 +171,6 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!isLoading && !token) router.push("/login");
   }, [isLoading, token, router]);
-
-  /* Fetch Ghibli avatar on mount */
-  useEffect(() => {
-    fetchGhibliAvatar().then((url) => {
-      if (url) {
-        setGhibliUrl(url);
-        // derive film name from URL for alt text
-        const slug = url.split("/").pop()?.split(".")[0] ?? "";
-        setGhibliFilm(slug.replace(/-/g, " "));
-      }
-    });
-  }, []);
 
   /* Splash → auto-scroll to grid */
   useEffect(() => {
@@ -248,18 +216,11 @@ export default function DashboardPage() {
               transition={{ type: "spring", stiffness: 250, damping: 18, mass: 1 }}
               className="mb-6 h-24 w-24 overflow-hidden rounded-full border-2 border-hairline"
             >
-              {ghibliUrl ? (
-                <img
-                  src={ghibliUrl}
-                  alt={ghibliFilm || "Ghibli avatar"}
-                  className="h-full w-full object-cover"
-                  onLoad={() => setGhibliLoaded(true)}
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-white/5 text-2xl">
-                  {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
-                </div>
-              )}
+              <Avatar
+                src={user?.profileImage}
+                size={96}
+                className="border-2 border-hairline"
+              />
             </motion.div>
 
             {/* Greeting */}
@@ -330,17 +291,11 @@ export default function DashboardPage() {
             transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
             className="group relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-hairline transition-all duration-300 hover:border-accent hover:shadow-[0_0_30px_rgba(230,57,70,0.3)]"
           >
-            {ghibliUrl ? (
-              <img
-                src={ghibliUrl}
-                alt={ghibliFilm || "Profile"}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-white/5 text-lg font-medium text-foreground/70">
-                {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
-              </div>
-            )}
+            <Avatar
+              src={user?.profileImage}
+              size={56}
+              className="border-2 border-hairline transition-transform duration-500 group-hover:scale-110"
+            />
           </motion.div>
         </div>
 

@@ -14,6 +14,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  profileImage?: string | null;
 }
 
 interface AuthContextValue {
@@ -24,6 +25,7 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   signup: (name: string, email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -142,6 +144,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/");
   }, [router]);
 
+  /** Re-fetch the current user (after profile/email changes). */
+  const refreshUser = useCallback(async () => {
+    const stored = getStoredToken();
+    if (!stored) return;
+    try {
+      const res = await fetch("/api/auth/me", {
+        headers: { authorization: `Bearer ${stored}` },
+      });
+      const data = await res.json();
+      if (data.success && data.user) setUser(data.user);
+    } catch {
+      // Keep whatever we have; a network blip shouldn't clear the session.
+    }
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -152,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         signup,
         logout,
+        refreshUser,
       }}
     >
       {children}

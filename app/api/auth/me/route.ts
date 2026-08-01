@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     // Fetch fresh user data from the database
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true, name: true, email: true },
+      select: { id: true, name: true, email: true, profileImage: true },
     });
 
     if (!user) {

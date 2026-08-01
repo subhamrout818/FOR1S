@@ -8,12 +8,6 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    remotePatterns: [
-      // Ghibli avatar source used by the dashboard
-      { protocol: "https", hostname: "ghibliapi.vercel.app" },
-    ],
-  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Avatar from "@/components/ui/Avatar";
 import {
   User,
   CreditCard,
@@ -13,7 +14,7 @@ import {
 } from "lucide-react";
 
 const items = [
-  { label: "Account", href: "/dashboard", icon: User },
+  { label: "Account", href: "/dashboard/account", icon: User },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Log out", href: null, icon: LogOut, action: "logout" as const },
 ] as const;
@@ -66,7 +67,7 @@ export default function UserDropdown() {
           open && "text-foreground bg-white/5"
         )}
       >
-        <span className="text-base">👤</span>
+        <Avatar src={user?.profileImage} size={28} />
         <span className="font-medium">{firstName}</span>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
