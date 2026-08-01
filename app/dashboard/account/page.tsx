@@ -575,7 +575,9 @@ export default function AccountPage() {
             onClose={() => setCameraOpen(false)}
             onCapture={(dataUrl) => {
               setCameraOpen(false);
-              savePhoto(dataUrl);
+              // Send the fresh shot through the same crop dialog so the user
+              // can fine-tune framing before it's saved.
+              setCropSrc(dataUrl);
             }}
           />
         )}
