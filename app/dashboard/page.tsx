@@ -1,317 +1,428 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/lib/auth-context";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import Avatar from "@/components/ui/Avatar";
+import { ArrowRight, ArrowUpRight, CalendarClock, CircleAlert, FileCheck2, Loader2, Wallet } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { usePortalData } from "@/components/portal/usePortal";
+import Reveal from "@/components/portal/Reveal";
+import Badge from "@/components/portal/Badge";
+import ProgressBar from "@/components/portal/ProgressBar";
+import GlowCard from "@/components/ui/GlowCard";
 import {
-  CreditCard,
-  User,
-  FileText,
-  MessageSquare,
-  ArrowDown,
-} from "lucide-react";
+  formatINR,
+  formatDayMonth,
+  formatDate,
+  timeAgo,
+  DELIVERABLE_STATUS,
+  INVOICE_STATUS,
+  metaFor,
+} from "@/lib/portal-format";
+import type { WorkspaceData } from "@/lib/portal-types";
+import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
-/*  Card config — real info and navigation only, no fabricated stats.  */
+/*  Greeting + date                                                    */
 /* ------------------------------------------------------------------ */
 
-interface CardDef {
-  key: string;
-  label: string;
-  icon: typeof CreditCard;
-  stat: string;
-  sub: string;
-  accent: string; // Tailwind ring/border colour
-  bgGlow: string; // subtle rgba for shadow
-  href?: string;
+function greetingForNow(): string {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
 }
 
-const cards: CardDef[] = [
-  {
-    key: "billing",
-    label: "Billing",
-    icon: CreditCard,
-    stat: "No active plan",
-    sub: "Choose a plan to get started",
-    href: "/dashboard/billing",
-    accent: "border-l-accent",
-    bgGlow: "rgba(230,57,70,0.15)",
-  },
-  {
-    key: "account",
-    label: "Account",
-    icon: User,
-    stat: "Your account",
-    sub: "Manage profile & security",
-    href: "/dashboard/account",
-    accent: "border-l-blue-500",
-    bgGlow: "rgba(59,130,246,0.15)",
-  },
-  {
-    key: "contact",
-    label: "Get in touch",
-    icon: MessageSquare,
-    stat: "Book a call",
-    sub: "Map out your build with us",
-    href: "/contact",
-    accent: "border-l-emerald-500",
-    bgGlow: "rgba(16,185,129,0.15)",
-  },
-  {
-    key: "blog",
-    label: "Insights",
-    icon: FileText,
-    stat: "Read the blog",
-    sub: "Notes on strategy, design & code",
-    href: "/blog",
-    accent: "border-l-amber-500",
-    bgGlow: "rgba(245,158,11,0.15)",
-  },
-];
-
 /* ------------------------------------------------------------------ */
-/*  Card component                                                    */
+/*  Stat strip                                                         */
 /* ------------------------------------------------------------------ */
 
-function DashCard({
-  card,
-  index,
-  userName,
-  userEmail,
-}: {
-  card: CardDef;
-  index: number;
-  userName: string;
-  userEmail: string;
-}) {
-  const Icon = card.icon;
-  // The account card shows real signed-in data, not a static value.
-  const stat = card.key === "account" ? userName : card.stat;
-  const sub = card.key === "account" ? userEmail : card.sub;
+function StatStrip({ data }: { data: WorkspaceData }) {
+  const activeHref = data.activeProject
+    ? `/dashboard/projects/${data.activeProject.slug}`
+    : "/dashboard/projects";
 
-  const inner = (
-    <motion.div
-      initial={{ opacity: 0, filter: "blur(6px)", y: 24 }}
-      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{
-        delay: index * 0.1,
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-      whileHover={{ y: -4, scale: 1.01 }}
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border border-hairline p-6 transition-all duration-500",
-        "bg-background/60 backdrop-blur-sm",
-        card.accent,
-        "border-l-4"
-      )}
-      style={{
-        boxShadow: `0 0 40px ${card.bgGlow}`,
-      }}
-    >
-      {/* Hover glow overlay */}
-      <div
-        className="pointer-events-none absolute -inset-1/2 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(600px circle at 50% 50%, ${card.bgGlow}, transparent 70%)`,
-        }}
-      />
+  const items = [
+    {
+      label: "Active projects",
+      value: String(
+        data.projects.filter((p) => p.status === "active").length || data.projects.length
+      ),
+      sub: `${data.projects.length} total`,
+      icon: FileCheck2,
+      accent: "border-l-accent",
+      glow: "rgba(230,57,70,0.15)",
+      href: "/dashboard/projects",
+    },
+    {
+      label: "Next deadline",
+      value: formatDayMonth(data.activeProject?.nextDeadline),
+      sub: data.activeProject
+        ? `${data.activeProject.name} · ${formatDayMonth(data.activeProject.nextDeadline)}`
+        : "No deadlines yet",
+      icon: CalendarClock,
+      accent: "border-l-blue-500",
+      glow: "rgba(59,130,246,0.15)",
+      href: activeHref,
+    },
+    {
+      label: "Outstanding",
+      value: formatINR(data.billing.remaining),
+      sub: `${formatINR(data.billing.paid)} paid of ${formatINR(data.billing.totalValue)}`,
+      icon: Wallet,
+      accent: "border-l-emerald-500",
+      glow: "rgba(16,185,129,0.15)",
+      href: "/dashboard/billing",
+    },
+  ];
 
-      <div className="relative z-10 flex items-start justify-between">
-        <div className="space-y-2">
-          <p className="text-xs font-medium uppercase tracking-widest text-muted">
-            {card.label}
-          </p>
-          <p className="font-display text-3xl font-semibold text-foreground">
-            {stat}
-          </p>
-          <p className="text-sm text-muted">{sub}</p>
-        </div>
-
-        <div
-          className={cn(
-            "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
-            "bg-white/5 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110"
-          )}
-        >
-          <Icon size={22} strokeWidth={1.5} className="text-foreground/70" />
-        </div>
-      </div>
-    </motion.div>
+  return (
+    <div className="grid gap-5 sm:grid-cols-3">
+      {items.map((item, i) => (
+        <Reveal key={item.label} delay={i * 0.05}>
+          <GlowCard
+            href={item.href}
+            className={cn("h-full bg-background/60 border-l-4 p-5", item.accent)}
+            style={{ boxShadow: `0 0 40px ${item.glow}` }}
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-widest text-muted">
+                  {item.label}
+                </p>
+                <p className="mt-1.5 font-display text-2xl font-semibold text-foreground">
+                  {item.value}
+                </p>
+                <p className="mt-1 truncate text-xs text-muted">{item.sub}</p>
+              </div>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5">
+                <item.icon size={18} strokeWidth={1.5} className="text-foreground/70" />
+              </div>
+            </div>
+          </GlowCard>
+        </Reveal>
+      ))}
+    </div>
   );
+}
 
-  if (card.href) {
+/* ------------------------------------------------------------------ */
+/*  Active project card                                                */
+/* ------------------------------------------------------------------ */
+
+function ActiveProjectCard({ project }: { project: WorkspaceData["activeProject"] }) {
+  if (!project) {
     return (
-      <Link href={card.href} data-cursor="hover" className="block h-full">
-        {inner}
-      </Link>
+      <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-dashed border-hairline bg-background/40 text-center">
+        <p className="font-display text-lg text-foreground">No active project</p>
+        <p className="mt-1 text-sm text-muted">
+          When FOR1S starts your build it will show up here.
+        </p>
+      </div>
     );
   }
-  return inner;
+
+  return (
+    <GlowCard
+      href={`/dashboard/projects/${project.slug}`}
+      className="border-accent/30 bg-surface p-6 md:p-7"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-6 -top-20 h-32 rotate-6 bg-gradient-to-b from-white/[0.07] to-transparent"
+      />
+      <div className="relative z-10 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-medium uppercase tracking-widest text-muted">
+            Active project
+          </p>
+          <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tightest text-foreground md:text-3xl">
+            {project.name}
+          </h2>
+          {project.tagline && (
+            <p className="mt-1 text-sm text-muted">{project.tagline}</p>
+          )}
+        </div>
+        <Badge meta={metaFor(PROJECT_STATUS_LABELS, project.status)} />
+      </div>
+
+      <div className="relative z-10 mt-6">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted">{project.progress}%</span>
+          <span className="font-mono text-xs text-muted">
+            {project.stats.done} / {project.stats.total} deliverables
+          </span>
+        </div>
+        <ProgressBar value={project.progress} className="mt-2 h-2" />
+      </div>
+
+      <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-5">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-muted">
+            Next delivery
+          </p>
+          <p className="mt-0.5 font-display text-lg font-semibold text-foreground">
+            {formatDate(project.nextDeadline)}
+          </p>
+        </div>
+        <span
+          data-cursor="hover"
+          className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white"
+        >
+          View project
+          <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
+      </div>
+    </GlowCard>
+  );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Page                                                              */
+/*  Needs attention                                                    */
+/* ------------------------------------------------------------------ */
+
+function NeedsAttention({ data }: { data: WorkspaceData }) {
+  const { reviews, outstanding } = data.needsAttention;
+
+  return (
+    <GlowCard className="bg-background/60">
+      <div className="flex items-center gap-2 px-6 pt-6">
+        <CircleAlert size={16} className="text-accent" />
+        <p className="text-xs font-medium uppercase tracking-widest text-foreground">
+          Needs your attention
+        </p>
+      </div>
+
+      {reviews.length === 0 && outstanding.length === 0 ? (
+        <p className="px-6 py-6 text-sm text-muted">
+          Nothing waiting on you right now. 🎉
+        </p>
+      ) : (
+        <div className="divide-y divide-hairline/60">
+          {reviews.map((d) => (
+            <Link
+              key={d.id}
+              href={`/dashboard/deliverables/${d.id}`}
+              data-cursor="hover"
+              className="group flex items-center justify-between gap-4 px-6 py-4 transition-colors hover:bg-white/[0.02]"
+            >
+              <div className="min-w-0">
+                <p className="truncate font-medium text-foreground">
+                  {d.title}
+                </p>
+                <p className="truncate text-xs text-muted">
+                  {d.project?.name} · v{d.version}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                <Badge meta={metaFor(DELIVERABLE_STATUS, d.status)} />
+                <ArrowRight size={14} className="text-muted transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
+          {outstanding.map((inv) => (
+            <Link
+              key={inv.id}
+              href="/dashboard/billing"
+              data-cursor="hover"
+              className="group flex items-center justify-between gap-4 px-6 py-4 transition-colors hover:bg-white/[0.02]"
+            >
+              <div className="min-w-0">
+                <p className="truncate font-medium text-foreground">{inv.number}</p>
+                <p className="truncate text-xs text-muted">{inv.description}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                <span className="font-display text-sm font-semibold text-foreground">
+                  {formatINR(inv.amount)}
+                </span>
+                <Badge meta={metaFor(INVOICE_STATUS, inv.status)} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </GlowCard>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Upcoming                                                           */
+/* ------------------------------------------------------------------ */
+
+function Upcoming({ items }: { items: WorkspaceData["upcoming"] }) {
+  return (
+    <GlowCard className="bg-background/60">
+      <div className="px-6 pt-6">
+        <p className="text-xs font-medium uppercase tracking-widest text-foreground">
+          Upcoming
+        </p>
+      </div>
+      {items.length === 0 ? (
+        <p className="px-6 py-6 text-sm text-muted">Nothing scheduled yet.</p>
+      ) : (
+        <div className="divide-y divide-hairline/60">
+          {items.map((item) => (
+            <Link
+              key={item.href + item.title}
+              href={item.href}
+              data-cursor="hover"
+              className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-white/[0.02]"
+            >
+              <span className="w-14 shrink-0 font-mono text-xs uppercase tracking-widest text-muted">
+                {formatDayMonth(item.date)}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate font-medium text-foreground">{item.title}</p>
+                <p className="truncate text-xs text-muted">{item.project}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </GlowCard>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Recent activity                                                    */
+/* ------------------------------------------------------------------ */
+
+const ACTIVITY_ICON: Record<string, { char: string; cls: string }> = {
+  approval: { char: "✓", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
+  payment: { char: "₹", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
+  upload: { char: "↑", cls: "border-blue-500/30 bg-blue-500/10 text-blue-400" },
+  comment: { char: "↳", cls: "border-amber-500/30 bg-amber-500/10 text-amber-400" },
+  delivery: { char: "→", cls: "border-accent/40 bg-accent/10 text-accent" },
+};
+
+function Activity({ items }: { items: WorkspaceData["activity"] }) {
+  return (
+    <GlowCard className="bg-background/60">
+      <div className="px-6 pt-6">
+        <p className="text-xs font-medium uppercase tracking-widest text-foreground">
+          Recent activity
+        </p>
+      </div>
+      <div className="divide-y divide-hairline/60">
+        {items.map((a) => {
+          const meta = ACTIVITY_ICON[a.type] ?? {
+            char: "↳",
+            cls: "border-amber-500/30 bg-amber-500/10 text-amber-400",
+          };
+          return (
+            <div key={a.id} className="flex items-start gap-3 px-6 py-4">
+              <span
+                className={cn(
+                  "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
+                  meta.cls
+                )}
+              >
+                {meta.char}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-foreground">{a.title}</p>
+                {a.detail && <p className="truncate text-xs text-muted">{a.detail}</p>}
+              </div>
+              <span className="ml-auto shrink-0 pl-3 text-xs text-muted">
+                {timeAgo(a.createdAt)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </GlowCard>
+  );
+}
+
+/* Local project status labels (mirrors PROJECT_STATUS in portal-format) */
+const PROJECT_STATUS_LABELS = {
+  active: { label: "In progress", cls: "inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-emerald-400" },
+  paused: { label: "Paused", cls: "inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-amber-400" },
+  completed: { label: "Completed", cls: "inline-flex items-center gap-1.5 rounded-full border border-hairline bg-white/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted" },
+};
+
+/* ------------------------------------------------------------------ */
+/*  Page                                                               */
 /* ------------------------------------------------------------------ */
 
 export default function DashboardPage() {
-  const { user, token, isLoading, isAuthenticated } = useAuth();
-  const router = useRouter();
-
-  const [splashDone, setSplashDone] = useState(false);
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  /* Auth guard — key on the stored token, not isAuthenticated, so a
-     transient /api/auth/me network failure doesn't bounce a valid user to login. */
-  useEffect(() => {
-    if (!isLoading && !token) router.push("/login");
-  }, [isLoading, token, router]);
-
-  /* Splash → auto-scroll to grid */
-  useEffect(() => {
-    if (splashDone || !isAuthenticated) return;
-    const t = setTimeout(() => {
-      setSplashDone(true);
-      // scroll down to the grid after splash
-      requestAnimationFrame(() => {
-        const lenis = (
-          window as typeof window & { __lenis?: import("lenis").default }
-        ).__lenis;
-        if (lenis && gridRef.current) {
-          lenis.scrollTo(gridRef.current, { duration: 1.8, offset: -80 });
-        } else if (gridRef.current) {
-          gridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
-    }, 1200);
-    return () => clearTimeout(t);
-  }, [splashDone, isAuthenticated]);
+  const { token, isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
 
   if (isLoading || !token) return null;
 
-  const firstName = user?.name?.split(" ")[0] ?? "User";
+  const firstName = data?.user?.name?.split(" ")[0] ?? "there";
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "long",
+    day: "2-digit",
+  });
 
   return (
-    <>
-      {/* ================================================================ */}
-      {/*  SPLASH                                                          */}
-      {/* ================================================================ */}
-      <AnimatePresence>
-        {!splashDone && (
-          <motion.section
-            key="splash"
-            exit={{ opacity: 0, filter: "blur(6px)", y: -40 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-background px-6"
-          >
-            {/* Avatar */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 250, damping: 18, mass: 1 }}
-              className="mb-6 h-24 w-24 overflow-hidden rounded-full border-2 border-hairline"
-            >
-              <Avatar
-                src={user?.profileImage}
-                size={96}
-                className="border-2 border-hairline"
-              />
-            </motion.div>
-
-            {/* Greeting */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-4xl font-semibold text-foreground md:text-5xl"
-            >
-              Welcome, {firstName}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="mt-3 text-sm text-muted"
-            >
-              {user?.email}
-            </motion.p>
-
-            {/* Scroll cue */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="absolute bottom-12 flex flex-col items-center gap-2"
-            >
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
-                Your dashboard
-              </span>
-              <motion.span
-                animate={{ y: [0, 6, 0] }}
-                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              >
-                <ArrowDown size={16} className="text-muted" />
-              </motion.span>
-            </motion.div>
-          </motion.section>
-        )}
-      </AnimatePresence>
-
-      {/* ================================================================ */}
-      {/*  MAIN DASHBOARD                                                  */}
-      {/* ================================================================ */}
-      <div
-        ref={gridRef}
-        className={cn(
-          "relative mx-auto min-h-screen max-w-7xl px-6 pb-24 pt-32 transition-opacity duration-700",
-          splashDone ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-      >
-        {/* Top bar — title + profile picture */}
-        <div className="mb-14 flex items-center justify-between">
+    <div>
+      {/* Greeting */}
+      <div className="mb-10">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-2xl font-semibold text-foreground">
-              Dashboard
-            </h2>
-            <p className="mt-1 text-sm text-muted">
-              Welcome back, {firstName}
+            <p className="font-mono text-xs uppercase tracking-widest text-accent">
+              {today.toUpperCase()}
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-semibold uppercase tracking-tightest text-foreground md:text-5xl">
+              {greetingForNow()}, {firstName}
+            </h1>
+            <p className="mt-2 text-sm text-muted">
+              Your workspace — everything happening with your projects.
             </p>
           </div>
-
-          {/* Profile picture — top right */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 20 }}
-            className="group relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-hairline transition-all duration-300 hover:border-accent hover:shadow-[0_0_30px_rgba(230,57,70,0.3)]"
-          >
-            <Avatar
-              src={user?.profileImage}
-              size={56}
-              className="border-2 border-hairline transition-transform duration-500 group-hover:scale-110"
-            />
-          </motion.div>
-        </div>
-
-        {/* Dashboard grid */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((card, i) => (
-            <DashCard
-              key={card.key}
-              card={card}
-              index={i}
-              userName={firstName}
-              userEmail={user?.email ?? ""}
-            />
-          ))}
         </div>
       </div>
-    </>
+
+      {/* Loading */}
+      {loading && !data && (
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
+          <Loader2 size={28} className="animate-spin text-accent" />
+          <p className="text-sm text-muted">Loading your workspace…</p>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && !data && (
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 rounded-2xl border border-accent/30 bg-accent/10 p-8 text-center">
+          <p className="text-sm text-red-300">{error}</p>
+          <button
+            data-cursor="hover"
+            onClick={reload}
+            className="text-xs uppercase tracking-widest text-foreground/70 underline underline-offset-2 hover:text-accent"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* Content */}
+      {data && (
+        <>
+          <StatStrip data={data} />
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+            <div className="space-y-6">
+              <Reveal>
+                <ActiveProjectCard project={data.activeProject} />
+              </Reveal>
+              <Reveal delay={0.1}>
+                <NeedsAttention data={data} />
+              </Reveal>
+            </div>
+
+            <div className="space-y-6">
+              <Reveal delay={0.15}>
+                <Upcoming items={data.upcoming} />
+              </Reveal>
+              <Reveal delay={0.2}>
+                <Activity items={data.activity} />
+              </Reveal>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
