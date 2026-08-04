@@ -23,6 +23,19 @@ export async function POST(req: Request) {
       );
     }
 
+    // Passwordless (OAuth) accounts should set a password via the email flow
+    // ('Forgot password') rather than guessing at a current password here.
+    if (!user.password) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Your account has no password yet. Use 'Forgot password' to set one.",
+        },
+        { status: 400 }
+      );
+    }
+
     const body = await req.json().catch(() => null);
     const result = changePasswordSchema.safeParse(body);
     if (!result.success) {

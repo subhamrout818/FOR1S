@@ -9,8 +9,7 @@ import Preloader from "@/components/layout/Preloader";
 import CustomCursor from "@/components/layout/CustomCursor";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import ScrollSpine from "@/components/layout/ScrollSpine";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import RouteChrome from "@/components/layout/RouteChrome";
 import { SITE_URL } from "@/lib/contact";
 
 const TITLE = "FOR1S — SaaS Development Agency";
@@ -103,9 +102,9 @@ export default function RootLayout({
             <CustomCursor />
             <GrainOverlay />
             <ScrollSpine />
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
+            <RouteChrome>
+              <main>{children}</main>
+            </RouteChrome>
           </Providers>
         </AuthProvider>
         <script

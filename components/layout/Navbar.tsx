@@ -13,9 +13,12 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  // Owners land in the admin workspace; everyone else in the client portal.
+  const dashboardHref = isAdmin ? "/admin" : "/dashboard";
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -98,7 +101,7 @@ export default function Navbar() {
                   variant="glass"
                   size="md"
                   cursorText="Go"
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push(dashboardHref)}
                 >
                   Dashboard
                 </MagneticButton>
@@ -183,16 +186,16 @@ export default function Navbar() {
                   <MagneticButton
                     variant="solid"
                     size="lg"
-                    onClick={() => { router.push("/dashboard"); setMenuOpen(false); }}
+                    onClick={() => { router.push(dashboardHref); setMenuOpen(false); }}
                   >
                     Dashboard
                   </MagneticButton>
                   <MagneticButton
                     variant="outline"
                     size="lg"
-                    onClick={() => { router.push("/dashboard/account"); setMenuOpen(false); }}
+                    onClick={() => { router.push("/dashboard/settings"); setMenuOpen(false); }}
                   >
-                    Account
+                    Settings
                   </MagneticButton>
                   <MagneticButton
                     variant="outline"

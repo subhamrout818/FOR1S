@@ -183,6 +183,13 @@ export default function AccountPage() {
   if (isLoading || !token) return null;
 
   const profileImage = user?.profileImage ?? null;
+  const hasPassword = !!user?.hasPassword;
+  const providerLabel =
+    user?.provider === "google"
+      ? "Google"
+      : user?.provider === "github"
+        ? "GitHub"
+        : user?.provider ?? "your provider";
 
   const savePhoto = async (src: string): Promise<boolean> => {
     if (!token) return false;
@@ -310,7 +317,7 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="relative mx-auto min-h-screen max-w-3xl px-6 pb-24 pt-32">
+    <div className="mx-auto max-w-3xl">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -321,7 +328,7 @@ export default function AccountPage() {
         <div>
           <div className="mb-4 flex items-center gap-3">
             <span className="font-mono text-xs tracking-wideish text-accent">
-              SC.AC
+              FOR1S
             </span>
             <span className="h-px w-8 bg-hairline" />
             <span className="font-mono text-xs uppercase tracking-widest text-muted">
@@ -476,95 +483,119 @@ export default function AccountPage() {
 
         {/* Email */}
         <SectionCard title="Email" sub="Change the email you sign in with.">
-          <form onSubmit={handleEmail} className="flex flex-col gap-4">
-            <Field label="New email" htmlFor="email">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={inputClasses}
-              />
-            </Field>
-            <Field label="Current password" htmlFor="emailPw">
-              <input
-                id="emailPw"
-                name="emailPw"
-                type="password"
-                required
-                autoComplete="current-password"
-                value={emailPw}
-                onChange={(e) => setEmailPw(e.target.value)}
-                placeholder="Confirm your password"
-                className={inputClasses}
-              />
-            </Field>
-            <div className="flex items-center justify-between gap-4">
-              <StatusLine message={emailMsg} error={emailErr} />
-              <MagneticButton
-                type="submit"
-                variant="solid"
-                size="md"
-                disabled={emailBusy}
-              >
-                {emailBusy ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  "Update email"
-                )}
-              </MagneticButton>
-            </div>
-          </form>
+          {hasPassword ? (
+            <form onSubmit={handleEmail} className="flex flex-col gap-4">
+              <Field label="New email" htmlFor="email">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={inputClasses}
+                />
+              </Field>
+              <Field label="Current password" htmlFor="emailPw">
+                <input
+                  id="emailPw"
+                  name="emailPw"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  value={emailPw}
+                  onChange={(e) => setEmailPw(e.target.value)}
+                  placeholder="Confirm your password"
+                  className={inputClasses}
+                />
+              </Field>
+              <div className="flex items-center justify-between gap-4">
+                <StatusLine message={emailMsg} error={emailErr} />
+                <MagneticButton
+                  type="submit"
+                  variant="solid"
+                  size="md"
+                  disabled={emailBusy}
+                >
+                  {emailBusy ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    "Update email"
+                  )}
+                </MagneticButton>
+              </div>
+            </form>
+          ) : (
+            <p className="text-sm text-muted">
+              You signed up with {providerLabel}. Set a password first to change
+              your email.
+            </p>
+          )}
         </SectionCard>
 
         {/* Password */}
         <SectionCard title="Password" sub="Change your password. Use at least 8 characters.">
-          <form onSubmit={handlePassword} className="flex flex-col gap-4">
-            <Field label="Current password" htmlFor="pw">
-              <input
-                id="pw"
-                name="pw"
-                type="password"
-                required
-                autoComplete="current-password"
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
-                className={inputClasses}
-              />
-            </Field>
-            <Field label="New password" htmlFor="pwNew">
-              <input
-                id="pwNew"
-                name="pwNew"
-                type="password"
-                required
-                minLength={8}
-                autoComplete="new-password"
-                value={pwNew}
-                onChange={(e) => setPwNew(e.target.value)}
-                placeholder="At least 8 characters"
-                className={inputClasses}
-              />
-            </Field>
-            <div className="flex items-center justify-between gap-4">
-              <StatusLine message={pwMsg} error={pwErr} />
+          {hasPassword ? (
+            <form onSubmit={handlePassword} className="flex flex-col gap-4">
+              <Field label="Current password" htmlFor="pw">
+                <input
+                  id="pw"
+                  name="pw"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  value={pw}
+                  onChange={(e) => setPw(e.target.value)}
+                  className={inputClasses}
+                />
+              </Field>
+              <Field label="New password" htmlFor="pwNew">
+                <input
+                  id="pwNew"
+                  name="pwNew"
+                  type="password"
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  value={pwNew}
+                  onChange={(e) => setPwNew(e.target.value)}
+                  placeholder="At least 8 characters"
+                  className={inputClasses}
+                />
+              </Field>
+              <div className="flex items-center justify-between gap-4">
+                <StatusLine message={pwMsg} error={pwErr} />
+                <MagneticButton
+                  type="submit"
+                  variant="solid"
+                  size="md"
+                  disabled={pwBusy}
+                >
+                  {pwBusy ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    "Update password"
+                  )}
+                </MagneticButton>
+              </div>
+            </form>
+          ) : (
+            <div className="flex flex-col items-start gap-3">
+              <p className="text-sm text-muted">
+                You signed up with {providerLabel} and don&apos;t have a password
+                yet. Set one to also log in with your email.
+              </p>
               <MagneticButton
-                type="submit"
-                variant="solid"
+                variant="outline"
                 size="md"
-                disabled={pwBusy}
+                cursorText="Go"
+                onClick={() => router.push("/forgot-password")}
               >
-                {pwBusy ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  "Update password"
-                )}
+                Set a password
               </MagneticButton>
             </div>
-          </form>
+          )}
         </SectionCard>
       </div>
 

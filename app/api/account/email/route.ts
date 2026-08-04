@@ -23,6 +23,18 @@ export async function POST(req: Request) {
       );
     }
 
+    // Passwordless (OAuth) accounts can't confirm with a password.
+    if (!user.password) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Your account has no password. Use 'Forgot password' to create one before changing your email.",
+        },
+        { status: 400 }
+      );
+    }
+
     const body = await req.json().catch(() => null);
     const result = changeEmailSchema.safeParse(body);
     if (!result.success) {

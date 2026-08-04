@@ -7,23 +7,34 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Avatar from "@/components/ui/Avatar";
 import {
+  LayoutDashboard,
+  Settings,
   User,
   CreditCard,
   LogOut,
   ChevronDown,
 } from "lucide-react";
 
-const items = [
-  { label: "Account", href: "/dashboard/account", icon: User },
-  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
-  { label: "Log out", href: null, icon: LogOut, action: "logout" as const },
-] as const;
-
 export default function UserDropdown() {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
+
+  const items = [
+    {
+      label: isAdmin ? "Admin" : "Dashboard",
+      href: isAdmin ? "/admin" : "/dashboard",
+      icon: isAdmin ? LayoutDashboard : User,
+    },
+    ...(isAdmin
+      ? [{ label: "Settings", href: "/admin/settings", icon: Settings }]
+      : [
+          { label: "Account", href: "/dashboard/account", icon: User },
+          { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+        ]),
+    { label: "Log out", href: null, icon: LogOut, action: "logout" as const },
+  ] as const;
 
   const firstName = user?.name?.split(" ")[0] ?? "User";
 
