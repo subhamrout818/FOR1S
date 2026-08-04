@@ -9,12 +9,28 @@ import {
   type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { isSafeRelativePath } from "@/lib/utils";
 
 interface User {
   id: string;
   name: string;
   email: string;
   profileImage?: string | null;
+  emailVerified?: boolean;
+  provider?: string;
+  hasPassword?: boolean;
+  role?: string; // "client" | "admin"
+  company?: string | null;
+}
+
+interface AuthResult {
+  success: boolean;
+  message?: string;
+  needsVerification?: boolean;
+  /** Machine-readable error code (e.g. "EMAIL_NOT_VERIFIED"). */
+  code?: string;
+  /** The submitted email, echoed back so a resend can target it. */
+  email?: string;
 }
 
 interface AuthContextValue {
@@ -22,10 +38,13 @@ interface AuthContextValue {
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
-  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  /** True when the signed-in user has the "admin" role. */
+  isAdmin: boolean;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<AuthResult>;
+  signup: (name: string, email: string, password: string) => Promise<AuthResult>;
   logout: () => void;
   refreshUser: () => Promise<void>;
+  completeOAuth: (token: string, next?: string | null) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -80,12 +99,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, rememberMe = true): Promise<AuthResult> => {
       try {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, password, rememberMe }),
         });
 
         const data = await res.json();
@@ -100,6 +119,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return {
           success: false,
           message: data.message || "Login failed",
+          code: data.code,
+          email: data.email,
         };
       } catch {
         return { success: false, message: "Network error. Please try again." };
@@ -109,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signup = useCallback(
-    async (name: string, email: string, password: string) => {
+    async (name: string, email: string, password: string): Promise<AuthResult> => {
       try {
         const res = await fetch("/api/auth/signup", {
           method: "POST",
@@ -120,21 +141,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await res.json();
 
         if (data.success) {
-          // Auto-login after signup
-          return await login(email, password);
+          // With verification enabled the API issues no token — the user must
+          // confirm their email first. In dev (no email provider) it returns
+          // a token so the old auto-login behavior still works.
+          if (data.token) {
+            localStorage.setItem(TOKEN_KEY, data.token);
+            setToken(data.token);
+            setUser(data.user);
+          }
+          return {
+            success: true,
+            needsVerification: !!data.needsVerification,
+          };
         }
 
         return {
           success: false,
           message: data.message || data.errors
-            ? Object.values(data.errors).flat().join(", ")
+            ? Object.values(data.errors ?? {}).flat().join(", ")
             : "Registration failed",
         };
       } catch {
         return { success: false, message: "Network error. Please try again." };
       }
     },
-    [login]
+    []
   );
 
   const logout = useCallback(() => {
@@ -159,6 +190,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  /** Finish an OAuth sign-in: store the token, load the user, redirect. */
+  const completeOAuth = useCallback(
+    async (incomingToken: string, next?: string | null) => {
+      localStorage.setItem(TOKEN_KEY, incomingToken);
+      setToken(incomingToken);
+      try {
+        const res = await fetch("/api/auth/me", {
+          headers: { authorization: `Bearer ${incomingToken}` },
+        });
+        const data = await res.json();
+        if (data.success && data.user) setUser(data.user);
+      } catch {
+        // Keep the token; the next /me call will hydrate the user.
+      }
+      router.replace(isSafeRelativePath(next) ? next : "/dashboard");
+    },
+    [router]
+  );
+
   return (
     <AuthContext.Provider
       value={{
@@ -166,10 +216,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         isLoading,
         isAuthenticated: !!user,
+        isAdmin: user?.role === "admin",
         login,
         signup,
         logout,
         refreshUser,
+        completeOAuth,
       }}
     >
       {children}

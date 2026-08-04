@@ -10,6 +10,20 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * True only for same-origin relative paths ("/dashboard"), never protocol-
+ * relative ("//evil.com") or backslash tricks ("/\\evil.com"). Used when
+ * redirecting after OAuth / auth to block open-redirects.
+ */
+export function isSafeRelativePath(path: string | null | undefined): path is string {
+  return (
+    typeof path === "string" &&
+    path.startsWith("/") &&
+    !path.startsWith("//") &&
+    !path.startsWith("/\\")
+  );
+}
+
+/**
  * Smooth-scrolls to a section using the shared Lenis instance set up in
  * <Providers>, falling back to native scrolling if it isn't ready yet.
  */

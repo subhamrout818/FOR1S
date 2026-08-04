@@ -13,11 +13,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  name         String
-  email        String   @unique
-  password     String
-  profileImage String?
+  id                String   @id @default(cuid())
+  name              String
+  email             String   @unique
+  password          String? // nullable — OAuth users have no password
+  profileImage      String?
+  provider          String   @default("credentials") // "credentials" | "google" | "github"
+  providerAccountId String?
+  emailVerified     Boolean  @default(false)
+  role              String   @default("client") // "client" | "admin"
+  company           String? // client business / company name
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -25,6 +30,8 @@ model User {
   subscription   Subscription?
   invoices       Invoice[]
   paymentMethods PaymentMethod[]
+
+  @@unique([provider, providerAccountId])
 }
 
 model Plan {

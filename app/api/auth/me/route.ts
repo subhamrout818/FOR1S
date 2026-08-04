@@ -32,7 +32,17 @@ export async function GET(req: Request) {
     // Fetch fresh user data from the database
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true, name: true, email: true, profileImage: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        profileImage: true,
+        provider: true,
+        emailVerified: true,
+        role: true,
+        company: true,
+        password: true,
+      },
     });
 
     if (!user) {
@@ -47,7 +57,17 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       success: true,
-      user,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+        provider: user.provider,
+        emailVerified: user.emailVerified,
+        role: user.role,
+        company: user.company,
+        hasPassword: !!user.password,
+      },
     });
   } catch (error) {
     console.error(error);

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
+import OAuthButtons from "@/components/auth/OAuthButtons";
 
 const stagger = {
   initial: { opacity: 0, y: 16 },
@@ -26,21 +27,53 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [banner, setBanner] = useState<"verified" | "invalid" | "resent" | null>(null);
+
+  // Read one-shot banner flags from the URL (?verified=1 / ?verify=invalid).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("verified") === "1") setBanner("verified");
+    if (params.get("verify") === "invalid") setBanner("invalid");
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setErrorCode(null);
     setLoading(true);
 
-    const result = await login(email, password);
+    const result = await login(email, password, rememberMe);
 
     if (result.success) {
       router.push("/");
     } else {
       setError(result.message || "Login failed");
+      setErrorCode(result.code ?? null);
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!email) return;
+    setResending(true);
+    try {
+      await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      setError("");
+      setErrorCode(null);
+      setBanner("resent");
+    } catch {
+      // Keep the error banner; the user can retry.
+    } finally {
+      setResending(false);
     }
   };
 
@@ -58,7 +91,7 @@ export default function LoginPage() {
           variants={stagger}
           initial="initial"
           animate="animate"
-          className="mb-10 text-center"
+          className="mb-8 text-center"
         >
           <h1 className="font-display text-3xl font-semibold text-foreground">
             Welcome back
@@ -68,50 +101,15 @@ export default function LoginPage() {
           </p>
         </motion.div>
 
-        {/* Continue with Google */}
-        <motion.button
+        {/* Social login */}
+        <motion.div
           custom={1}
           variants={stagger}
           initial="initial"
           animate="animate"
-          onClick={() => {}}
-          className={cn(
-            "group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl",
-            "border border-hairline bg-background px-5 py-3.5",
-            "text-sm font-medium text-foreground/90 transition-all duration-300",
-            "hover:border-foreground/30 hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-          )}
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
         >
-          {/* Shine effect on hover */}
-          <motion.span
-            className="pointer-events-none absolute inset-0 -z-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-            initial={{ x: "-100%" }}
-            whileHover={{ x: "200%" }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-          />
-          <svg viewBox="0 0 24 24" width="20" height="20" className="z-10 shrink-0">
-            <path
-              fill="#4285F4"
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-            />
-            <path
-              fill="#34A853"
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-            />
-            <path
-              fill="#EA4335"
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            />
-          </svg>
-          <span className="z-10">Continue with Google</span>
-        </motion.button>
+          <OAuthButtons mode="login" />
+        </motion.div>
 
         {/* Divider */}
         <motion.div
@@ -128,6 +126,47 @@ export default function LoginPage() {
           <span className="h-px flex-1 bg-hairline" />
         </motion.div>
 
+        {/* One-shot banners */}
+        <AnimatePresence>
+          {banner === "verified" && (
+            <motion.p
+              initial={{ opacity: 0, y: -8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -8, height: 0 }}
+              className="mb-4 overflow-hidden rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300"
+            >
+              Email verified — you can log in now.
+            </motion.p>
+          )}
+          {banner === "invalid" && (
+            <motion.p
+              initial={{ opacity: 0, y: -8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -8, height: 0 }}
+              className="mb-4 overflow-hidden rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-red-300"
+            >
+              That verification link is invalid or expired.{" "}
+              <Link
+                href="/forgot-password"
+                className="underline underline-offset-2"
+              >
+                Request a new one
+              </Link>
+              .
+            </motion.p>
+          )}
+          {banner === "resent" && (
+            <motion.p
+              initial={{ opacity: 0, y: -8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -8, height: 0 }}
+              className="mb-4 overflow-hidden rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300"
+            >
+              Verification email sent — check your inbox.
+            </motion.p>
+          )}
+        </AnimatePresence>
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <AnimatePresence>
@@ -139,6 +178,16 @@ export default function LoginPage() {
                 className="overflow-hidden rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400"
               >
                 {error}
+                {errorCode === "EMAIL_NOT_VERIFIED" && (
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={resending}
+                    className="ml-2 underline underline-offset-2 disabled:opacity-60"
+                  >
+                    {resending ? "Resending…" : "Resend verification email"}
+                  </button>
+                )}
               </motion.p>
             )}
           </AnimatePresence>
@@ -178,12 +227,20 @@ export default function LoginPage() {
             initial="initial"
             animate="animate"
           >
-            <label
-              htmlFor="password"
-              className="mb-1.5 block text-sm font-medium text-foreground"
-            >
-              Password
-            </label>
+            <div className="mb-1.5 flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-foreground"
+              >
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-xs text-muted underline underline-offset-2 transition-colors hover:text-accent"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <input
               id="password"
               type="password"
@@ -201,8 +258,27 @@ export default function LoginPage() {
             />
           </motion.div>
 
+          {/* Remember me */}
           <motion.div
             custom={5}
+            variants={stagger}
+            initial="initial"
+            animate="animate"
+            className="flex items-center justify-between"
+          >
+            <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-muted">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 rounded border-hairline bg-background accent-[#E63946]"
+              />
+              Keep me signed in for 7 days
+            </label>
+          </motion.div>
+
+          <motion.div
+            custom={6}
             variants={stagger}
             initial="initial"
             animate="animate"
@@ -221,7 +297,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <motion.p
-          custom={6}
+          custom={7}
           variants={stagger}
           initial="initial"
           animate="animate"

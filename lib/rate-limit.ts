@@ -92,6 +92,11 @@ export const RATE_LIMITS = {
   login: { limit: 15, windowMs: 15 * 60_000 }, // 15 attempts / 15 min / IP
   signup: { limit: 5, windowMs: 60 * 60_000 }, // 5 accounts / hour / IP
   contact: { limit: 5, windowMs: 60 * 60_000 }, // 5 messages / hour / IP
+  oauth: { limit: 20, windowMs: 15 * 60_000 }, // 20 OAuth starts / 15 min / IP
+  forgotPassword: { limit: 5, windowMs: 60 * 60_000 }, // per email+IP
+  resetPassword: { limit: 10, windowMs: 15 * 60_000 }, // per IP
+  resendVerification: { limit: 5, windowMs: 60 * 60_000 }, // per email+IP
+  verifyEmail: { limit: 20, windowMs: 15 * 60_000 }, // per IP
 } as const;
 
 /** 429 response with a Retry-After header so clients know when to back off. */
