@@ -8,6 +8,21 @@ import RevealMask from "@/components/ui/RevealMask";
 
 const YEAR = new Date().getFullYear();
 
+/**
+ * Public source-code repo — never a secret, but overridable via env so the
+ * URL lives alongside the rest of the project config (see .env.example).
+ */
+const REPO_URL =
+  process.env.NEXT_PUBLIC_GITHUB_REPO_URL || "https://github.com/subhamrout818/FOR1S";
+
+function GithubIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
+      <path d="M12 1.5a10.5 10.5 0 0 0-3.32 20.46c.53.1.72-.23.72-.51v-1.78c-2.94.64-3.56-1.42-3.56-1.42-.48-1.22-1.17-1.55-1.17-1.55-.96-.65.07-.64.07-.64 1.06.07 1.62 1.09 1.62 1.09.94 1.61 2.47 1.15 3.07.88.1-.68.37-1.15.67-1.41-2.34-.27-4.8-1.17-4.8-5.2 0-1.15.41-2.09 1.08-2.82-.11-.27-.47-1.34.1-2.8 0 0 .88-.28 2.89 1.08a10.1 10.1 0 0 1 5.26 0c2-1.36 2.88-1.08 2.88-1.08.57 1.46.21 2.53.1 2.8.67.73 1.08 1.67 1.08 2.82 0 4.04-2.46 4.93-4.81 5.19.38.32.72.97.72 1.96v2.9c0 .28.19.62.73.51A10.5 10.5 0 0 0 12 1.5Z" />
+    </svg>
+  );
+}
+
 /** Check if a link should be rendered as an external anchor */
 function isExternal(href: string) {
   return href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
@@ -123,13 +138,25 @@ export default function Footer() {
           <span className="text-xs text-muted">
             © {YEAR} {BRAND.name} Digital. All rights reserved.
           </span>
-          <button
-            data-cursor="hover"
-            onClick={() => scrollToHash("#hero")}
-            className="text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:text-accent"
-          >
-            Back to top ↑
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              data-cursor="hover"
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-hairline px-4 py-2 text-xs uppercase tracking-widest text-foreground/80 transition-all duration-300 hover:border-accent/60 hover:text-accent"
+            >
+              <GithubIcon size={14} />
+              REPO
+            </a>
+            <button
+              data-cursor="hover"
+              onClick={() => scrollToHash("#hero")}
+              className="text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:text-accent"
+            >
+              Back to top ↑
+            </button>
+          </div>
         </div>
       </div>
 
