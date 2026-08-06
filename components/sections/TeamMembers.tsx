@@ -80,7 +80,7 @@ export default function TeamSection() {
     >
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay" />
+      <div className="pointer-events-none absolute inset-0 bg-[url('/noise.svg')] opacity-[0.05] mix-blend-overlay" />
 
       <div className="mx-auto max-w-6xl">
         <motion.header

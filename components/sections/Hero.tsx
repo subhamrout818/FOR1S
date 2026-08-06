@@ -145,28 +145,26 @@ export default function Hero() {
               className="hero-extrude font-display text-fluid-hero font-bold uppercase leading-[0.9] tracking-tightest text-foreground"
               style={{ transformStyle: "preserve-3d", willChange: "transform" }}
             >
-              {ready && (
-                <>
-                  <SplitReveal
-                    as="span"
-                    type="lines"
-                    trigger="immediate"
-                    delay={0.1}
-                    className="block overflow-hidden"
-                  >
-                    We build SaaS,
-                  </SplitReveal>
-                  <SplitReveal
-                    as="span"
-                    type="lines"
-                    trigger="immediate"
-                    delay={0.3}
-                    className="block overflow-hidden text-accent"
-                  >
-                    you scale it.
-                  </SplitReveal>
-                </>
-              )}
+              <SplitReveal
+                as="span"
+                type="lines"
+                trigger="immediate"
+                delay={0.1}
+                play={ready}
+                className="block overflow-hidden"
+              >
+                We build SaaS,
+              </SplitReveal>
+              <SplitReveal
+                as="span"
+                type="lines"
+                trigger="immediate"
+                delay={0.3}
+                play={ready}
+                className="block overflow-hidden text-accent"
+              >
+                you scale it.
+              </SplitReveal>
             </h1>
           </div>
         </div>

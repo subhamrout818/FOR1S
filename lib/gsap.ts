@@ -2,13 +2,19 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger };
+
+/**
+ * SplitText is intentionally NOT registered here: it is only used by
+ * SplitReveal, so it is imported on demand there to keep the ~40 KB plugin
+ * out of routes that never split text (privacy, terms, auth, workspaces, …).
+ * Import it from `gsap/SplitText` and register before use.
+ */
 
 /**
  * Components check this before wiring up parallax, pinning, or long
