@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { isSafeRelativePath } from "@/lib/utils";
-import { verifyOAuthState, signToken } from "@/lib/auth";
+import { verifyOAuthState, signToken, setSessionCookie } from "@/lib/auth";
 import { allowedOrigin } from "@/lib/email";
 import {
   oauthProvider,
@@ -65,10 +65,12 @@ export async function GET(
     const jwt = signToken(user.id, user.email, "7d");
     const next = isSafeRelativePath(state.redirectTo) ? state.redirectTo : "/";
     const location = new URL("/oauth/callback", origin);
-    location.searchParams.set("token", jwt);
+    location.searchParams.set("done", "1");
     location.searchParams.set("next", next);
 
-    const response = NextResponse.redirect(location);
+    // The session JWT goes into an httpOnly cookie — never into the URL or
+    // localStorage. The handoff page just hydrates via /api/auth/me.
+    const response = setSessionCookie(NextResponse.redirect(location), jwt, true);
     // Single-use state cookie — clear it on every callback.
     response.cookies.delete("for1s_oauth_verifier");
     return response;

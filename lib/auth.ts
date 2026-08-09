@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 const JWT_SECRET =
   process.env.JWT_SECRET ??
@@ -46,6 +48,65 @@ export function verifyToken(token: string): JwtPayload | null {
 /** Normalize an email for storage/lookup: trim + lowercase. */
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
+}
+
+/* ------------------------------------------------------------------ */
+/*  HttpOnly session cookie                                            */
+/*                                                                     */
+/*  The session token lives in an httpOnly SameSite=Lax cookie, not    */
+/*  localStorage, so injected scripts can't read it and cross-site      */
+/*  requests can't send it (CSRF-safe for POSTs). A Bearer header is    */
+/*  still accepted as a fallback for compatibility during rollout.      */
+/* ------------------------------------------------------------------ */
+
+export const SESSION_COOKIE = "for1s_session";
+
+/**
+ * Read the session token from the httpOnly cookie, falling back to a Bearer
+ * header. `cookies()` from next/headers is the reliable way to read cookies in
+ * Route Handlers — `request.cookies` is not populated in this Next version.
+ */
+export function getSessionToken(req?: Request): string | null {
+  try {
+    const fromCookie = cookies().get(SESSION_COOKIE)?.value;
+    if (fromCookie) return fromCookie;
+  } catch {
+    // cookies() throws outside a request scope (e.g. build-time prerender).
+  }
+
+  const authHeader = req?.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) return authHeader.slice(7);
+
+  return null;
+}
+
+/** Attach the session cookie to a response. `remember` sets a 7-day cookie;
+ *  otherwise the cookie is a session cookie (cleared when the browser closes). */
+export function setSessionCookie(
+  res: NextResponse,
+  token: string,
+  remember: boolean
+): NextResponse {
+  res.cookies.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: remember ? 7 * 24 * 60 * 60 : undefined,
+  });
+  return res;
+}
+
+/** Expire the session cookie immediately. */
+export function clearSessionCookie(res: NextResponse): NextResponse {
+  res.cookies.set(SESSION_COOKIE, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
+  return res;
 }
 
 /* ------------------------------------------------------------------ */

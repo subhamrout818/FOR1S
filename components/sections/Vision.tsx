@@ -30,11 +30,11 @@ export default function Vision() {
 
         <RevealMask delay={0.15} className="ml-auto mt-14 max-w-xl">
           <p className="text-right text-base leading-relaxed text-muted md:text-lg">
-            Every decision — tech stack, architecture, design system,
-            deployment — is made to serve your users and your revenue.
-            We strip away what doesn&apos;t convert, what doesn&apos;t
-            scale, and what doesn&apos;t matter. What&apos;s left is a
-            product that feels inevitable.
+            Every decision — design, copy, layout, speed — exists to turn
+            a visitor into a customer. We strip away what doesn&apos;t
+            help your business, what doesn&apos;t load fast, and what
+            doesn&apos;t get you found. What&apos;s left is a website
+            that makes your business look as good as it is.
           </p>
         </RevealMask>
       </div>

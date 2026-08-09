@@ -86,7 +86,9 @@ export default function AdminSettingsPage() {
                 { label: "Clients", href: "/admin/clients" },
                 { label: "Deliverables", href: "/admin/deliverables" },
                 { label: "Leads", href: "/admin/leads" },
+                { label: "Tickets", href: "/admin/tickets" },
                 { label: "Payments", href: "/admin/payments" },
+                { label: "Team", href: "/admin/team" },
               ].map((item) => (
                 <Link
                   key={item.href}

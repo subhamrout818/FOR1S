@@ -1,4 +1,13 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 export default function GrainOverlay() {
+  // The grain is a cinematic flourish for the home page; workspaces and
+  // legal pages don't need the constant full-viewport blend cost.
+  const pathname = usePathname();
+  if (pathname !== "/") return null;
+
   return (
     <div
       aria-hidden="true"

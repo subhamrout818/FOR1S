@@ -1,15 +1,11 @@
-<p align="center">
-  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Banner">
-</p>
-
 <div align="center">
 
 # FOR1S
 
-### Premium websites and digital experiences for startups, businesses, creators, and modern brands.
+### Premium websites for local businesses and personal brands.
 
 <p>
-FOR1S is a motion-first web studio focused on crafting premium digital experiences that combine cinematic design, modern engineering, and seamless user interactions. From business websites and SaaS platforms to personal portfolios and custom web applications, every project is built to be visually compelling, fast, accessible, and scalable.
+FOR1S is a motion-first web studio focused on crafting premium websites that combine cinematic design, modern engineering, and seamless interactions. From business websites and online stores to personal portfolios, every project is built to be visually compelling, fast, accessible, and built to win customers.
 </p>
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
@@ -26,7 +22,7 @@ FOR1S is a motion-first web studio focused on crafting premium digital experienc
 
 # Overview
 
-FOR1S is the foundation of a modern web studio dedicated to building premium websites for startups, local businesses, creators, agencies, and growing brands.
+FOR1S is the foundation of a modern web studio dedicated to building premium websites for local businesses, creators, freelancers, and growing brands.
 
 Rather than treating design as decoration, FOR1S focuses on creating meaningful digital experiences where every animation, interaction, and layout serves a purpose. The goal is to deliver websites that not only look premium but also communicate clearly, perform exceptionally, and convert visitors into customers.
 
@@ -210,106 +206,28 @@ Every project follows these principles:
 
 # Roadmap
 
+Shipped:
+
+- [x] Contact form backend + lead pipeline (`/api/contact`, `Lead` model, admin leads page)
+- [x] Client inquiry system (admin leads + pipeline)
+- [x] Case studies / portfolio (home "Work" section + `/work/[slug]`)
+- [x] Blog & insights (`/blog` + `/blog/[slug]`)
+- [x] SEO optimization (sitemap, robots, canonicals, OG image, noindexed workspaces)
+- [x] Client portal (projects, deliverables, files, billing, support, tickets)
+- [x] Admin workspace (clients, projects, deliverables, leads, payments, tickets, team)
+
+Still planned:
+
 - [ ] Production deployment
-- [ ] Contact form backend
-- [ ] Client inquiry system
-- [ ] Portfolio case studies
-- [ ] Project showcase
-- [ ] Blog & insights
-- [ ] SEO optimization
-- [ ] Performance optimization
 - [ ] Analytics integration
 - [ ] Multi-language support
-
----
-
-# Preview
-
-<table>
-
-<tr>
-<td colspan="2" align="center">
-
-### Vision
-
-<img src="assets/vision.png" alt="Vision">
-
-</td>
-</tr>
-
-<tr>
-<td width="50%">
-
-### Services
-
-<img src="assets/services.png" alt="Services">
-
-</td>
-
-<td width="50%">
-
-### Process
-
-<img src="assets/process.png" alt="Process">
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-### Pricing
-
-<img src="assets/pricing.png" alt="Pricing">
-
-</td>
-
-<td>
-
-### Team
-
-<img src="assets/members-section.png" alt="Team">
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-### Get Started
-
-<img src="assets/getstarted.png" alt="Get Started">
-
-</td>
-
-<td>
-
-### FAQ
-
-<img src="assets/faq.png" alt="FAQ">
-
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-
-### Benefits
-
-<img src="assets/benefits.png" alt="Benefits">
-
-</td>
-</tr>
-
-</table>
+- [ ] Online payment gateway (portal "Pay" is simulated until wired)
 
 ---
 
 # Live Demo
 
-🚧 **Currently in development**
-
-The production deployment will be available soon.
+The app is deployed at **[for1s.digital](https://for1s.digital)** (or your configured `SITE_URL`). Local dev: `npm run dev`.
 
 ---
 

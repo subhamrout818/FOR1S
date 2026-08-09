@@ -60,6 +60,26 @@ export async function POST(req: Request) {
       select: { id: true },
     });
 
+    // Mirror the enquiry into the Lead pipeline so it shows up in the admin
+    // workspace (leads page). Best-effort: a lead write failure shouldn't
+    // fail the contact submission itself.
+    await prisma.lead
+      .create({
+        data: {
+          name,
+          email,
+          company: company ?? null,
+          budget: budget ?? null,
+          service: projectType ?? null,
+          source: "contact-form",
+          status: "new",
+          notes: message.slice(0, 500),
+        },
+      })
+      .catch((error) => {
+        console.error("lead ingestion failed:", error);
+      });
+
     // Notify the business email when a provider is configured.
     let emailed = false;
     const apiKey = process.env.RESEND_API_KEY;

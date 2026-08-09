@@ -8,7 +8,7 @@ import Reveal from "@/components/portal/Reveal";
 import Badge from "@/components/portal/Badge";
 import ProgressBar from "@/components/portal/ProgressBar";
 import {
-  formatINR,
+  formatMoney,
   formatDate,
   metaFor,
   MILESTONE_STATUS,
@@ -25,10 +25,10 @@ export default function ProjectDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error } = usePortalData<WorkspaceData>("/api/portal");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   if (loading && !data) {
     return (
@@ -95,10 +95,10 @@ export default function ProjectDetailPage({
           <div className="rounded-2xl border border-hairline bg-background/60 px-6 py-4 text-right">
             <p className="text-[10px] uppercase tracking-widest text-muted">Project value</p>
             <p className="mt-1 font-display text-2xl font-semibold text-foreground">
-              {formatINR(project.value)}
+              {formatMoney(project.value)}
             </p>
             <p className="mt-1 text-xs text-muted">
-              {formatINR(project.stats.totalPaid)} paid
+              {formatMoney(project.stats.totalPaid)} paid
             </p>
           </div>
         ) : null}

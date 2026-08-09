@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "node prisma/seed.mjs"
+    "db:seed": "node prisma/seed.mjs",
+    "db:clear": "node prisma/clear.mjs"
   },
   "prisma": {
     "seed": "node prisma/seed.mjs"

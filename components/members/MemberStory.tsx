@@ -59,14 +59,14 @@ export default function MemberStory({ member }: { member: Member }) {
                 className="h-full w-full object-cover"
               />
             </motion.div>
-            <motion.h1
+            <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="mt-6 font-display text-4xl font-semibold text-foreground md:text-5xl"
             >
               {member.name}
-            </motion.h1>
+            </motion.p>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

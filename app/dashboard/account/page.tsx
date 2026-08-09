@@ -139,7 +139,7 @@ function fileToPreviewDataUrl(file: File, maxDim = 1024): Promise<string> {
 }
 
 export default function AccountPage() {
-  const { user, token, isLoading, refreshUser } = useAuth();
+  const { user, isLoading, refreshUser } = useAuth();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -167,10 +167,10 @@ export default function AccountPage() {
   const [pwMsg, setPwMsg] = useState("");
   const [pwErr, setPwErr] = useState("");
 
-  /* Auth guard — key on the stored token like the other dashboards. */
+  /* Auth guard — bounce to login when no session is present. */
   useEffect(() => {
-    if (!isLoading && !token) router.push("/login");
-  }, [isLoading, token, router]);
+    if (!isLoading && !user) router.push("/login");
+  }, [isLoading, user, router]);
 
   /* Sync editable fields when the user loads. */
   useEffect(() => {
@@ -180,7 +180,7 @@ export default function AccountPage() {
     }
   }, [user]);
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const profileImage = user?.profileImage ?? null;
   const hasPassword = !!user?.hasPassword;
@@ -192,14 +192,13 @@ export default function AccountPage() {
         : user?.provider ?? "your provider";
 
   const savePhoto = async (src: string): Promise<boolean> => {
-    if (!token) return false;
     setPhotoBusy(true);
     setPhotoMsg("");
     setPhotoErr("");
     try {
       const res = await fetch("/api/account", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", authorization: `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profileImage: src }),
       });
       const json = await res.json();
@@ -238,14 +237,13 @@ export default function AccountPage() {
 
   const handleName = async (e: FormEvent) => {
     e.preventDefault();
-    if (!token) return;
     setNameBusy(true);
     setNameMsg("");
     setNameErr("");
     try {
       const res = await fetch("/api/account", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", authorization: `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       });
       const json = await res.json();
@@ -264,14 +262,13 @@ export default function AccountPage() {
 
   const handleEmail = async (e: FormEvent) => {
     e.preventDefault();
-    if (!token) return;
     setEmailBusy(true);
     setEmailMsg("");
     setEmailErr("");
     try {
       const res = await fetch("/api/account/email", {
         method: "POST",
-        headers: { "Content-Type": "application/json", authorization: `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, currentPassword: emailPw }),
       });
       const json = await res.json();
@@ -291,14 +288,13 @@ export default function AccountPage() {
 
   const handlePassword = async (e: FormEvent) => {
     e.preventDefault();
-    if (!token) return;
     setPwBusy(true);
     setPwMsg("");
     setPwErr("");
     try {
       const res = await fetch("/api/account/password", {
         method: "POST",
-        headers: { "Content-Type": "application/json", authorization: `Bearer ${token}` },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ currentPassword: pw, newPassword: pwNew }),
       });
       const json = await res.json();

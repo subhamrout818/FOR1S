@@ -63,7 +63,7 @@ export default function FAQ() {
   return (
     <section id="faq" className="relative bg-background py-20 lg:py-28">
       <div className="mx-auto max-w-[1000px] px-6 lg:px-12">
-        <SectionLabel scene="08" title="FAQ" className="mb-6" />
+        <SectionLabel scene="09" title="FAQ" className="mb-6" />
         <SplitReveal
           as="h2"
           type="words"

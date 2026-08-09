@@ -111,8 +111,8 @@ export default function Footer() {
                 </span>
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-muted">
-                Full-stack SaaS development for startups and enterprises.
-                We design, build, and launch software that scales.
+                Websites for local businesses and personal brands. We design,
+                build, and care for sites that win customers.
               </p>
               <span className="font-mono text-[11px] tracking-wideish text-muted/70">
                 {BRAND.filed}

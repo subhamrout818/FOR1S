@@ -1,74 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Bell, Check, KeyRound, ShieldCheck, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import Reveal from "@/components/portal/Reveal";
 import PageHeader from "@/components/portal/PageHeader";
 import Avatar from "@/components/ui/Avatar";
-import { cn } from "@/lib/utils";
-
-const NOTIF_KEYS = {
-  deliveries: "for1s_notif_deliveries",
-  approvals: "for1s_notif_approvals",
-  payments: "for1s_notif_payments",
-};
-
-function readPref(key: string): boolean {
-  if (typeof window === "undefined") return true;
-  const v = localStorage.getItem(key);
-  return v === null ? true : v === "1";
-}
-
-function Toggle({
-  on,
-  onChange,
-}: {
-  on: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <button
-      data-cursor="hover"
-      role="switch"
-      aria-checked={on}
-      onClick={() => onChange(!on)}
-      className={cn(
-        "relative h-6 w-11 rounded-full border transition-colors duration-300",
-        on ? "border-accent/50 bg-accent/70" : "border-hairline bg-white/5"
-      )}
-    >
-      <span
-        className={cn(
-          "absolute top-0.5 h-[18px] w-[18px] rounded-full bg-white transition-all duration-300",
-          on ? "left-[22px]" : "left-0.5"
-        )}
-      />
-    </button>
-  );
-}
 
 export default function SettingsPage() {
   const { user } = useAuth();
-  const [prefs, setPrefs] = useState({ deliveries: true, approvals: true, payments: true });
-
-  useEffect(() => {
-    setPrefs({
-      deliveries: readPref(NOTIF_KEYS.deliveries),
-      approvals: readPref(NOTIF_KEYS.approvals),
-      payments: readPref(NOTIF_KEYS.payments),
-    });
-  }, []);
-
-  const setPref = (key: keyof typeof NOTIF_KEYS, v: boolean) => {
-    setPrefs((p) => ({ ...p, [key]: v }));
-    try {
-      localStorage.setItem(NOTIF_KEYS[key], v ? "1" : "0");
-    } catch {
-      /* storage unavailable */
-    }
-  };
 
   const provider = user?.provider ?? "credentials";
   const googleLinked = provider === "google";
@@ -179,27 +119,25 @@ export default function SettingsPage() {
               <Bell size={14} className="text-accent" /> Notifications
             </p>
             <div className="mt-5 space-y-3">
-              {(
-                [
-                  { key: "deliveries", label: "New deliveries", sub: "When FOR1S uploads a new version" },
-                  { key: "approvals", label: "Approval reminders", sub: "When something's waiting on you" },
-                  { key: "payments", label: "Payments", sub: "Invoices, receipts and confirmations" },
-                ] as const
-              ).map((n) => (
+              {[
+                "New deliveries",
+                "Approval reminders",
+                "Invoice & payment updates",
+              ].map((label) => (
                 <div
-                  key={n.key}
+                  key={label}
                   className="flex items-center justify-between gap-4 rounded-xl border border-hairline bg-white/[0.02] px-4 py-3"
                 >
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{n.label}</p>
-                    <p className="text-xs text-muted">{n.sub}</p>
-                  </div>
-                  <Toggle on={prefs[n.key]} onChange={(v) => setPref(n.key, v)} />
+                  <span className="text-sm font-medium text-foreground">{label}</span>
+                  <span className="rounded-full border border-hairline px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-muted">
+                    Coming soon
+                  </span>
                 </div>
               ))}
             </div>
             <p className="mt-4 text-sm text-muted">
-              Preferences are stored on this device for now.
+              Email notifications aren&apos;t wired up yet. Everything still
+              shows up here in your workspace the moment it happens.
             </p>
           </div>
         </Reveal>

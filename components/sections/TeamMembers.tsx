@@ -91,9 +91,9 @@ export default function TeamSection() {
         >
           <div>
           <SectionLabel scene="06" title="Members" className="mb-6" />
-            <h1 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
+            <h2 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
               Built <span className="text-neutral-600">By</span>
-            </h1>
+            </h2>
           </div>
           <div className="h-px flex-1 bg-neutral-900 mx-8 hidden md:block" />
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">

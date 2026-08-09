@@ -16,7 +16,8 @@ export default function GlobalError({
         Something went wrong
       </h1>
       <p className="mt-3 max-w-md text-sm text-muted">
-        {error.message || "An unexpected error occurred. Please try again."}
+        An unexpected error occurred. Please try again — or email us and
+        we&apos;ll sort it out.
       </p>
       <button
         data-cursor="hover"

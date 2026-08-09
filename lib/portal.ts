@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/auth";
+import { verifyToken, getSessionToken } from "@/lib/auth";
 
 /* ------------------------------------------------------------------ */
 /*  Auth helper                                                        */
@@ -14,15 +14,21 @@ export interface AuthUser {
   profileImage: string | null;
 }
 
-/** Resolve the authenticated user (no password) from a Bearer token. */
+/**
+ * Resolve the authenticated user from the httpOnly cookie (or a Bearer token).
+ * Sessions issued before the account's last update (password reset, email or
+ * password change) are rejected so a stolen token dies with those events.
+ */
 export async function requireAuth(req: Request): Promise<AuthUser | null> {
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = getSessionToken(req);
+  if (!token) return null;
 
-  const payload = verifyToken(authHeader.slice(7));
+  const payload = verifyToken(token);
   if (!payload) return null;
 
-  return prisma.user.findUnique({
+  const iat = (payload as { iat?: number }).iat ?? 0;
+
+  const user = await prisma.user.findUnique({
     where: { id: payload.userId },
     select: {
       id: true,
@@ -31,8 +37,21 @@ export async function requireAuth(req: Request): Promise<AuthUser | null> {
       role: true,
       company: true,
       profileImage: true,
+      updatedAt: true,
     },
   });
+  if (!user) return null;
+  // 60s grace absorbs clock skew between the DB and the token signer.
+  if (iat * 1000 + 60_000 < user.updatedAt.getTime()) return null;
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    company: user.company,
+    profileImage: user.profileImage,
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -190,10 +209,10 @@ export async function getClientWorkspace(userId: string) {
     };
   });
 
+  // Only a genuinely active project is "active" — no fallback to a completed
+  // or paused one, which would misrepresent the client's state.
   const activeProject =
-    projectsSerialized.find((p) => p.status === "active") ??
-    projectsSerialized[0] ??
-    null;
+    projectsSerialized.find((p) => p.status === "active") ?? null;
 
   // ---- Invoices + billing ------------------------------------------
   const invoicesSerialized = invoices.map((i) => ({
@@ -315,7 +334,15 @@ export async function getClientWorkspace(userId: string) {
         : null,
     })),
     invoices: invoicesSerialized,
-    billing: { totalValue, paid, remaining: totalValue - paid },
+    billing: {
+      totalValue,
+      paid,
+      // "Remaining" is what's actually owed: the open invoices, not a
+      // (project value − paid) gap that can drift negative or hide unpaid bills.
+      remaining: invoicesSerialized
+        .filter((i) => ["pending", "overdue"].includes(i.status))
+        .reduce((a, i) => a + i.amount, 0),
+    },
     folders: foldersSerialized,
     threads: commentThreads,
     tickets: tickets.map((t) => ({

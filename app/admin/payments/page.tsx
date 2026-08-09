@@ -4,14 +4,14 @@ import { Loader2, Wallet } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData } from "@/components/portal/usePortal";
 import PageHeader from "@/components/portal/PageHeader";
-import { formatINR, formatDate } from "@/lib/portal-format";
+import { formatMoney, formatDate } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 export default function AdminPaymentsPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const payments = data?.payments ?? [];
   const totalReceived = payments.reduce((a, p) => a + p.amount, 0);
@@ -21,7 +21,7 @@ export default function AdminPaymentsPage() {
       <PageHeader
         eyebrow="Payments"
         title="Payments"
-        sub={`${payments.length} received · ${formatINR(totalReceived)} total.`}
+        sub={`${payments.length} received · ${formatMoney(totalReceived)} total.`}
       />
 
       {loading && !data && (
@@ -88,7 +88,7 @@ export default function AdminPaymentsPage() {
                       {p.reference ?? "—"}
                     </td>
                     <td className="px-6 py-4 text-right font-display font-semibold text-emerald-400">
-                      {formatINR(p.amount)}
+                      {formatMoney(p.amount)}
                     </td>
                   </tr>
                 ))}

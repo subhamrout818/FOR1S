@@ -17,22 +17,21 @@ import type { AdminWorkspace } from "@/lib/portal-types";
 const STATUS_ORDER = ["draft", "in-review", "changes-requested", "approved", "delivered"];
 
 export default function AdminDeliverablesPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
   const [savingId, setSavingId] = useState<string | null>(null);
 
   const changeStatus = useCallback(
     async (id: string, status: string) => {
-      if (!token) return;
       setSavingId(id);
-      const res = await portalAction(`/api/admin/deliverables/${id}`, token, { status });
+      const res = await portalAction(`/api/admin/deliverables/${id}`, { status });
       setSavingId(null);
       if (res.ok) reload();
     },
-    [token, reload]
+    [reload]
   );
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const deliverables = data?.deliverables ?? [];
 

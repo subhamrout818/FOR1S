@@ -1,35 +1,32 @@
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/auth";
+import { verifyToken, getSessionToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
+/**
+ * GET /api/auth/me — return the signed-in user from the httpOnly session
+ * cookie. Sessions issued before the account's last update (password reset,
+ * email/password change) are rejected so a stolen token dies with those events.
+ */
 export async function GET(req: Request) {
   try {
-    const authHeader = req.headers.get("authorization");
-
-    if (!authHeader?.startsWith("Bearer ")) {
+    const token = getSessionToken(req);
+    if (!token) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized",
-        },
+        { success: false, message: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    const token = authHeader.slice(7);
     const payload = verifyToken(token);
-
     if (!payload) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid or expired token",
-        },
+        { success: false, message: "Invalid or expired token" },
         { status: 401 }
       );
     }
 
-    // Fetch fresh user data from the database
+    const iat = (payload as { iat?: number }).iat ?? 0;
+
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
       select: {
@@ -42,16 +39,22 @@ export async function GET(req: Request) {
         role: true,
         company: true,
         password: true,
+        updatedAt: true,
       },
     });
 
     if (!user) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "User not found",
-        },
+        { success: false, message: "User not found" },
         { status: 404 }
+      );
+    }
+
+    // 60s grace absorbs clock skew between the DB and the token signer.
+    if (iat * 1000 + 60_000 < user.updatedAt.getTime()) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
       );
     }
 

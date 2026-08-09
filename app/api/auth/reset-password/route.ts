@@ -17,9 +17,9 @@ const schema = z.object({
 /**
  * POST /api/auth/reset-password
  *
- * Validates the signed reset token and sets a new password. Also marks the
- * account verified — this doubles as the "create a password" path for
- * passwordless OAuth users.
+ * Validates the signed reset token and sets a new password. Reset links are
+ * only issued to verified accounts (see forgot-password), and OAuth users are
+ * verified through their provider, so this doesn't touch the verification flag.
  */
 export async function POST(req: Request) {
   try {
@@ -58,9 +58,11 @@ export async function POST(req: Request) {
     }
 
     const hashedPassword = await hashPassword(password);
+    // Bumping updatedAt here revokes all prior sessions via the requireAuth /
+    // getAuthUser updatedAt check — a reset kills stolen tokens.
     await prisma.user.update({
       where: { id: user.id },
-      data: { password: hashedPassword, emailVerified: true },
+      data: { password: hashedPassword },
     });
 
     return NextResponse.json({ success: true });

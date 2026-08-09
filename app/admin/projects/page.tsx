@@ -7,7 +7,7 @@ import Badge from "@/components/portal/Badge";
 import ProgressBar from "@/components/portal/ProgressBar";
 import PageHeader from "@/components/portal/PageHeader";
 import {
-  formatINR,
+  formatMoney,
   formatDate,
   metaFor,
   PROJECT_STATUS,
@@ -15,10 +15,10 @@ import {
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 export default function AdminProjectsPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const projects = data?.projects ?? [];
 
@@ -94,7 +94,7 @@ export default function AdminProjectsPage() {
                       {formatDate(p.nextDeadline)}
                     </td>
                     <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
-                      {p.value ? formatINR(p.value) : "—"}
+                      {p.value ? formatMoney(p.value) : "—"}
                     </td>
                   </tr>
                 ))}

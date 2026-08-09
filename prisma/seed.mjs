@@ -27,60 +27,58 @@ async function upsertUser({ email, name, role, company, password }) {
   });
 }
 
-const SAMPLE_VIDEOS = {
-  reelA: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-  reelB: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-  reelC: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-};
-
 /* ------------------------------------------------------------------ */
-/*  Plans (kept from the original seed)                                */
+/*  Plans — mirrored from the marketing pricing (lib/data.ts)          */
 /* ------------------------------------------------------------------ */
 
 const PLANS = [
   {
-    key: "landing",
-    name: "Landing Page",
-    tagline: "High-impact, single-page presence",
-    price: 2500,
-    priceRange: "$2,500 – $4,500",
+    key: "personal",
+    name: "Personal",
+    tagline: "For portfolios, freelancers, and personal brands",
+    price: 899,
+    priceRange: "$499 – $1,499",
     highlighted: false,
     specs: [
-      "1–5 pages",
-      "GSAP, Three.js, premium animations",
-      "Fully responsive",
+      "1–3 pages, custom designed",
+      "Mobile-first, loads fast",
+      "Contact form",
       "SEO basics",
-      "Launch in 1–2 weeks",
-    ],
-  },
-  {
-    key: "saas",
-    name: "SaaS Product",
-    tagline: "Full-stack, production-grade platform",
-    price: 12000,
-    priceRange: "$12,000 – $20,000+",
-    highlighted: true,
-    specs: [
-      "Authentication & user management",
-      "Dashboard & admin panel",
-      "Database & API architecture",
-      "Payments & email integration",
-      "Analytics & production deployment",
+      "Domain + hosting set up",
+      "Launch in ~1 week",
     ],
   },
   {
     key: "business",
-    name: "Business Website",
-    tagline: "Multi-page, fully functional site",
-    price: 5000,
-    priceRange: "$5,000 – $8,000",
+    name: "Business",
+    tagline: "For local businesses that want to win online",
+    price: 2900,
+    priceRange: "$1,900 – $4,500",
+    highlighted: true,
+    specs: [
+      "Up to 7 pages, custom designed",
+      "Booking, contact, and map",
+      "Copy polish that sells",
+      "Google-ready SEO",
+      "Speed + mobile optimization",
+      "Care plan — first month included",
+      "Launch in 2–3 weeks",
+    ],
+  },
+  {
+    key: "custom",
+    name: "Custom",
+    tagline: "E-commerce, booking systems, brands, and more",
+    price: 6500,
+    priceRange: "$4,500 – $12,000+",
     highlighted: false,
     specs: [
-      "Multiple pages",
-      "CMS / blog if needed",
-      "Contact forms & integrations",
-      "Custom animations",
-      "Full deployment & handoff",
+      "Online store or custom features",
+      "Brand identity & logo",
+      "Photo or video add-ons",
+      "Priority support",
+      "Monthly care plan",
+      "Custom timeline",
     ],
   },
 ];
@@ -97,7 +95,10 @@ async function seedPlans() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Demo workspace — The Brew House (a café client)                    */
+/*  Demo workspace — Brew & Co. (a café client)                        */
+/*                                                                     */
+/*  Website-focused demo so the portal reads like a web studio's       */
+/*  client workspace, not a video agency. All amounts in USD.          */
 /* ------------------------------------------------------------------ */
 
 async function resetDemoWorkspace(clientId) {
@@ -130,26 +131,26 @@ async function resetDemoWorkspace(clientId) {
 async function seedDemoWorkspace(client) {
   await resetDemoWorkspace(client.id);
 
-  // Project 1 — Website Redesign
+  // Project 1 — Brew & Co. Website
   const website = await prisma.project.create({
     data: {
       clientId: client.id,
-      name: "Website Redesign",
+      name: "Brew & Co. Website",
       slug: "brew-website",
-      tagline: "A fresh digital presence for the cafe",
+      tagline: "A new website for the neighborhood café",
       description:
-        "A complete redesign of the The Brew House website — new brand direction, modern motion, and a booking flow that actually converts.",
+        "A custom website for Brew & Co. — warm design, real photography, and a booking flow that turns searches into tables.",
       status: "active",
       progress: 68,
-      value: 22000,
-      currency: "INR",
+      value: 2900,
+      currency: "USD",
       nextDeadline: daysFromNow(4),
       endsAt: daysFromNow(16),
       milestones: {
         create: [
           {
-            title: "Discovery & brand audit",
-            description: "Stakeholder calls, menu deep-dive, competitor scan.",
+            title: "Discovery & menu deep-dive",
+            description: "Kickoff call, menu review, competitor scan.",
             dueDate: daysAgo(25),
             status: "completed",
             sortOrder: 0,
@@ -164,15 +165,15 @@ async function seedDemoWorkspace(client) {
             completedAt: daysAgo(8),
           },
           {
-            title: "Development",
-            description: "Build, motion, CMS, and integrations.",
+            title: "Build",
+            description: "Home, menu, booking flow, and SEO.",
             dueDate: daysFromNow(4),
             status: "in-progress",
             sortOrder: 2,
           },
           {
-            title: "Launch & handoff",
-            description: "QA, training, and going live.",
+            title: "Launch & go live",
+            description: "QA, training, and publishing.",
             dueDate: daysFromNow(16),
             status: "upcoming",
             sortOrder: 3,
@@ -182,11 +183,11 @@ async function seedDemoWorkspace(client) {
       deliverables: {
         create: [
           {
-            title: "Website Hero",
+            title: "Home page",
             kind: "website",
             status: "in-review",
             description:
-              "The opening scene — headline, extruded artwork, and the booking CTA.",
+              "The opening page — headline, photos, and the book-a-table button above the fold.",
             version: 2,
             dueAt: daysAgo(7),
             deliveredAt: daysAgo(7),
@@ -201,7 +202,7 @@ async function seedDemoWorkspace(client) {
                 {
                   version: 2,
                   status: "in-review",
-                  note: "Swapped display face, tightened the fold",
+                  note: "New hero photos, booking button above the fold",
                   createdAt: daysAgo(7),
                 },
               ],
@@ -222,10 +223,10 @@ async function seedDemoWorkspace(client) {
             },
           },
           {
-            title: "Landing Page",
+            title: "Menu & hours",
             kind: "website",
             status: "changes-requested",
-            description: "The scroll experience below the hero.",
+            description: "The menu page with the updated autumn menu and hours.",
             version: 1,
             dueAt: daysFromNow(7),
             deliveredAt: daysAgo(1),
@@ -250,10 +251,29 @@ async function seedDemoWorkspace(client) {
             },
           },
           {
-            title: "Case Studies",
+            title: "Book a table",
+            kind: "website",
+            status: "in-review",
+            description: "The booking flow — date, time, party size, confirm.",
+            version: 1,
+            dueAt: daysFromNow(2),
+            deliveredAt: daysAgo(0),
+            versions: {
+              create: [
+                {
+                  version: 1,
+                  status: "in-review",
+                  note: "First pass",
+                  createdAt: daysAgo(0),
+                },
+              ],
+            },
+          },
+          {
+            title: "SEO & launch prep",
             kind: "website",
             status: "draft",
-            description: "Three customer stories for the new site.",
+            description: "Google Business sync, meta tags, and launch checklist.",
             version: 1,
             dueAt: daysFromNow(11),
           },
@@ -261,6 +281,7 @@ async function seedDemoWorkspace(client) {
       },
       folders: {
         create: [
+          { name: "Pages", kind: "final" },
           { name: "Brand Assets", kind: "brand" },
           { name: "Documents", kind: "documents" },
         ],
@@ -268,41 +289,41 @@ async function seedDemoWorkspace(client) {
     },
   });
 
-  // Project 2 — August Social Media
-  const social = await prisma.project.create({
+  // Project 2 — Brew & Co. Brand Identity
+  const brand = await prisma.project.create({
     data: {
       clientId: client.id,
-      name: "August Social Media",
-      slug: "brew-social",
-      tagline: "Reels, carousels & stories for the summer push",
+      name: "Brew & Co. Brand Identity",
+      slug: "brew-brand",
+      tagline: "Logo, colors, and type for the new look",
       description:
-        "A monthly content engine: 8 reels, weekly carousels, and story templates that keep The Brew House front-of-mind.",
+        "A refreshed identity to match the new website — logo, palette, and type used consistently across the site and storefront.",
       status: "active",
       progress: 55,
-      value: 12000,
-      currency: "INR",
+      value: 1400,
+      currency: "USD",
       nextDeadline: daysFromNow(4),
       endsAt: daysFromNow(25),
       milestones: {
         create: [
           {
-            title: "Content calendar",
-            description: "Themes, hooks, and the August grid.",
+            title: "Brand workshop",
+            description: "Moodboards and the words the brand lives by.",
             dueDate: daysAgo(6),
             status: "completed",
             sortOrder: 0,
             completedAt: daysAgo(5),
           },
           {
-            title: "Reels batch 1",
-            description: "Reels 01–08.",
+            title: "Logo directions",
+            description: "Two logo routes, refined to one.",
             dueDate: daysFromNow(4),
             status: "in-progress",
             sortOrder: 1,
           },
           {
-            title: "Reels batch 2",
-            description: "Reels 09–12 + carousels.",
+            title: "Guidelines",
+            description: "Colors, type, and usage rules.",
             dueDate: daysFromNow(18),
             status: "upcoming",
             sortOrder: 2,
@@ -312,11 +333,10 @@ async function seedDemoWorkspace(client) {
       deliverables: {
         create: [
           {
-            title: "Reel 06",
-            kind: "reel",
+            title: "Logo concepts",
+            kind: "design",
             status: "approved",
-            description: "Cold brew pour — the 'recipe in 20 seconds' hook.",
-            mediaUrl: SAMPLE_VIDEOS.reelA,
+            description: "The chosen wordmark and its primary variations.",
             version: 1,
             dueAt: daysAgo(5),
             deliveredAt: daysAgo(5),
@@ -325,8 +345,7 @@ async function seedDemoWorkspace(client) {
                 {
                   version: 1,
                   status: "approved",
-                  note: "Final approved cut",
-                  mediaUrl: SAMPLE_VIDEOS.reelA,
+                  note: "Final approved logo set",
                   createdAt: daysAgo(5),
                 },
               ],
@@ -342,11 +361,10 @@ async function seedDemoWorkspace(client) {
             },
           },
           {
-            title: "Reel 07",
-            kind: "reel",
+            title: "Colors & type",
+            kind: "design",
             status: "in-review",
-            description: "Barista spotlight — the 'why I love this job' angle.",
-            mediaUrl: SAMPLE_VIDEOS.reelB,
+            description: "The palette and typeface pairing for the site.",
             version: 2,
             dueAt: daysAgo(2),
             deliveredAt: daysAgo(0),
@@ -355,15 +373,13 @@ async function seedDemoWorkspace(client) {
                 {
                   version: 1,
                   status: "changes-requested",
-                  note: "First cut",
-                  mediaUrl: SAMPLE_VIDEOS.reelB,
+                  note: "First palette",
                   createdAt: daysAgo(3),
                 },
                 {
                   version: 2,
                   status: "in-review",
-                  note: "Reshot the 0:17 shot as requested",
-                  mediaUrl: SAMPLE_VIDEOS.reelB,
+                  note: "Warmed the browns as requested",
                   createdAt: daysAgo(0),
                 },
               ],
@@ -372,42 +388,22 @@ async function seedDemoWorkspace(client) {
               create: [
                 {
                   authorId: client.id,
-                  body: "Can we change the shot at 0:17?",
+                  body: "Can the brown be warmer? It's fighting the photos.",
                   createdAt: daysAgo(2),
                 },
                 {
                   authorId: client.id,
-                  body: "The new cut is great, ready when you are.",
+                  body: "This is much better, ready when you are.",
                   createdAt: daysAgo(0),
                 },
               ],
             },
           },
           {
-            title: "Reel 08",
-            kind: "reel",
+            title: "Brand guidelines",
+            kind: "document",
             status: "draft",
-            description: "Customer POV — slow Sunday mornings.",
-            mediaUrl: SAMPLE_VIDEOS.reelC,
-            version: 1,
-            dueAt: daysFromNow(4),
-            versions: {
-              create: [
-                {
-                  version: 1,
-                  status: "draft",
-                  note: "Rough cut",
-                  mediaUrl: SAMPLE_VIDEOS.reelC,
-                  createdAt: daysAgo(1),
-                },
-              ],
-            },
-          },
-          {
-            title: "Reel 09",
-            kind: "reel",
-            status: "draft",
-            description: "Behind the counter — batch day.",
+            description: "The one-page rules for using the brand.",
             version: 1,
             dueAt: daysFromNow(11),
           },
@@ -415,99 +411,48 @@ async function seedDemoWorkspace(client) {
       },
       folders: {
         create: [
-          { name: "Raw Footage", kind: "raw" },
-          { name: "Final Exports", kind: "final" },
+          { name: "Brand Assets", kind: "brand" },
+          { name: "Documents", kind: "documents" },
         ],
       },
     },
   });
 
-  const socialRaw = await prisma.folder.findFirst({ where: { projectId: social.id, name: "Raw Footage" } });
-  const socialFinal = await prisma.folder.findFirst({ where: { projectId: social.id, name: "Final Exports" } });
-  await prisma.fileAsset.createMany({
-    data: [
-      {
-        projectId: social.id,
-        folderId: socialFinal.id,
-        name: "Reel_06_final.mp4",
-        url: SAMPLE_VIDEOS.reelA,
-        mimeType: "video/mp4",
-        size: 18420230,
-        kind: "final",
-        uploadedById: client.id,
-        createdAt: daysAgo(5),
-      },
-      {
-        projectId: social.id,
-        folderId: socialFinal.id,
-        name: "Reel_07_v2.mp4",
-        url: SAMPLE_VIDEOS.reelB,
-        mimeType: "video/mp4",
-        size: 19280113,
-        kind: "final",
-        uploadedById: client.id,
-        createdAt: daysAgo(0),
-      },
-      {
-        projectId: social.id,
-        folderId: socialRaw.id,
-        name: "august_shoot_cutdowns.mp4",
-        url: SAMPLE_VIDEOS.reelC,
-        mimeType: "video/mp4",
-        size: 482312000,
-        kind: "raw",
-        uploadedById: client.id,
-        createdAt: daysAgo(1),
-      },
-      {
-        projectId: social.id,
-        folderId: socialRaw.id,
-        name: "august_cover_takes.zip",
-        url: "#",
-        mimeType: "application/zip",
-        size: 8904120,
-        kind: "raw",
-        uploadedById: client.id,
-        createdAt: daysAgo(2),
-      },
-    ],
-  });
-
-  // Project 3 — Product Photography
-  const photos = await prisma.project.create({
+  // Project 3 — Brew & Co. Care Plan
+  const care = await prisma.project.create({
     data: {
       clientId: client.id,
-      name: "Product Photography",
-      slug: "brew-photoshoot",
-      tagline: "Signature brews & merch, shot for the web",
+      name: "Brew & Co. Care Plan",
+      slug: "brew-care",
+      tagline: "Monthly website care & updates",
       description:
-        "A dedicated shoot day for hero product shots of the signature range — used across the website, menu and socials.",
+        "Monthly updates, SEO tweaks, and support so the website keeps working while the café runs itself.",
       status: "active",
       progress: 30,
-      value: 8500,
-      currency: "INR",
+      value: 1440,
+      currency: "USD",
       nextDeadline: daysFromNow(10),
       endsAt: daysFromNow(24),
       milestones: {
         create: [
           {
-            title: "Scouting & styling",
-            description: "Location, props, and the shot list.",
+            title: "July refresh",
+            description: "Menu update, summer hours, small tweaks.",
             dueDate: daysAgo(3),
             status: "completed",
             sortOrder: 0,
             completedAt: daysAgo(2),
           },
           {
-            title: "Product shoot",
-            description: "The full day on set.",
+            title: "August refresh",
+            description: "Seasonal menu, photos, SEO pass.",
             dueDate: daysFromNow(10),
             status: "upcoming",
             sortOrder: 1,
           },
           {
-            title: "Post-production",
-            description: "Colour, retouch, and final exports.",
+            title: "September refresh",
+            description: "Fall menu and event page.",
             dueDate: daysFromNow(18),
             status: "upcoming",
             sortOrder: 2,
@@ -517,31 +462,45 @@ async function seedDemoWorkspace(client) {
       deliverables: {
         create: [
           {
-            title: "Product Shots",
-            kind: "photo",
-            status: "draft",
-            description: "Hero shots of the signature range.",
+            title: "July refresh report",
+            kind: "document",
+            status: "delivered",
+            description: "What changed on the site this month.",
             version: 1,
-            dueAt: daysFromNow(14),
+            dueAt: daysAgo(3),
+            deliveredAt: daysAgo(2),
+            versions: {
+              create: [
+                {
+                  version: 1,
+                  status: "delivered",
+                  note: "July update shipped",
+                  createdAt: daysAgo(2),
+                },
+              ],
+            },
+          },
+          {
+            title: "August refresh",
+            kind: "website",
+            status: "draft",
+            description: "Seasonal menu and photo refresh.",
+            version: 1,
+            dueAt: daysFromNow(10),
           },
         ],
       },
       folders: {
-        create: [{ name: "Shot List", kind: "documents" }],
+        create: [{ name: "Reports", kind: "documents" }],
       },
     },
   });
 
   /* Files for the project folders */
-  const webBrand = await prisma.folder.findFirst({
-    where: { projectId: website.id, name: "Brand Assets" },
-  });
-  const webDocs = await prisma.folder.findFirst({
-    where: { projectId: website.id, name: "Documents" },
-  });
-  const photoDocs = await prisma.folder.findFirst({
-    where: { projectId: photos.id, name: "Shot List" },
-  });
+  const webPages = await prisma.folder.findFirst({ where: { projectId: website.id, name: "Pages" } });
+  const webBrand = await prisma.folder.findFirst({ where: { projectId: website.id, name: "Brand Assets" } });
+  const webDocs = await prisma.folder.findFirst({ where: { projectId: website.id, name: "Documents" } });
+  const brandBrand = await prisma.folder.findFirst({ where: { projectId: brand.id, name: "Brand Assets" } });
   await prisma.fileAsset.createMany({
     data: [
       {
@@ -567,27 +526,38 @@ async function seedDemoWorkspace(client) {
         createdAt: daysAgo(4),
       },
       {
-        projectId: photos.id,
-        folderId: photoDocs.id,
-        name: "shot_list_v1.pdf",
+        projectId: website.id,
+        folderId: webPages.id,
+        name: "sitemap_v2.pdf",
         url: "#",
         mimeType: "application/pdf",
         size: 1182033,
-        kind: "documents",
+        kind: "final",
         uploadedById: client.id,
         createdAt: daysAgo(2),
+      },
+      {
+        projectId: brand.id,
+        folderId: brandBrand.id,
+        name: "logo_pack.zip",
+        url: "#",
+        mimeType: "application/zip",
+        size: 8612000,
+        kind: "brand",
+        uploadedById: client.id,
+        createdAt: daysAgo(4),
       },
     ],
   });
 
-  /* Invoices + payments */
+  /* Invoices + payments (USD) */
   const inv001 = await prisma.invoice.create({
     data: {
       number: "INV-001",
       userId: client.id,
       projectId: website.id,
-      description: "Website Redesign — 50% milestone",
-      amount: 11000,
+      description: "Brew & Co. Website — 50% milestone",
+      amount: 1450,
       status: "paid",
       dueDate: daysAgo(8),
       issuedAt: daysAgo(16),
@@ -598,8 +568,8 @@ async function seedDemoWorkspace(client) {
       number: "INV-002",
       userId: client.id,
       projectId: website.id,
-      description: "Website Redesign — final payment",
-      amount: 11000,
+      description: "Brew & Co. Website — final payment",
+      amount: 1450,
       status: "pending",
       dueDate: daysFromNow(14),
       issuedAt: daysAgo(3),
@@ -609,9 +579,9 @@ async function seedDemoWorkspace(client) {
     data: {
       number: "INV-003",
       userId: client.id,
-      projectId: social.id,
-      description: "August Social Media — batch 1",
-      amount: 6000,
+      projectId: brand.id,
+      description: "Brand Identity — 50% milestone",
+      amount: 700,
       status: "paid",
       dueDate: daysAgo(2),
       issuedAt: daysAgo(12),
@@ -621,9 +591,9 @@ async function seedDemoWorkspace(client) {
     data: {
       number: "INV-004",
       userId: client.id,
-      projectId: social.id,
-      description: "August Social Media — batch 2",
-      amount: 8500,
+      projectId: brand.id,
+      description: "Brand Identity — final payment",
+      amount: 700,
       status: "pending",
       dueDate: daysFromNow(6),
       issuedAt: daysAgo(1),
@@ -633,9 +603,9 @@ async function seedDemoWorkspace(client) {
     data: {
       number: "INV-005",
       userId: client.id,
-      projectId: photos.id,
-      description: "Product Photography — booking",
-      amount: 4250,
+      projectId: care.id,
+      description: "Care Plan — July",
+      amount: 120,
       status: "paid",
       dueDate: daysAgo(4),
       issuedAt: daysAgo(9),
@@ -647,25 +617,25 @@ async function seedDemoWorkspace(client) {
       {
         invoiceId: inv001.id,
         userId: client.id,
-        amount: 11000,
+        amount: 1450,
         method: "bank",
-        reference: "NEFT-882140",
+        reference: "TR-882140",
         paidAt: daysAgo(3),
       },
       {
         invoiceId: inv003.id,
         userId: client.id,
-        amount: 6000,
-        method: "upi",
-        reference: "UPI-550912",
+        amount: 700,
+        method: "manual",
+        reference: "SIM-550912",
         paidAt: daysAgo(2),
       },
       {
         invoiceId: inv005.id,
         userId: client.id,
-        amount: 4250,
-        method: "upi",
-        reference: "UPI-601118",
+        amount: 120,
+        method: "manual",
+        reference: "SIM-601118",
         paidAt: daysAgo(4),
       },
     ],
@@ -675,19 +645,19 @@ async function seedDemoWorkspace(client) {
   await prisma.activityEvent.createMany({
     data: [
       {
-        projectId: social.id,
+        projectId: website.id,
         actorId: client.id,
         type: "approval",
-        title: "Reel 06 approved",
-        detail: "Approved on August Social Media",
+        title: "Logo concepts approved",
+        detail: "Approved on Brew & Co. Brand Identity",
         createdAt: daysAgo(0.08), // ~2h ago
       },
       {
-        projectId: social.id,
+        projectId: website.id,
         actorId: client.id,
         type: "upload",
-        title: "14 new assets uploaded",
-        detail: "august_shoot_cutdowns.mp4 and 13 more",
+        title: "12 new assets uploaded",
+        detail: "brand_kit.zip and 11 more",
         createdAt: daysAgo(1),
       },
       {
@@ -695,14 +665,14 @@ async function seedDemoWorkspace(client) {
         actorId: client.id,
         type: "payment",
         title: "Payment received",
-        detail: "INV-001 · ₹11,000",
+        detail: "INV-001 · $1,450",
         createdAt: daysAgo(3),
       },
       {
         projectId: website.id,
         actorId: client.id,
         type: "comment",
-        title: "New comment on Website Hero",
+        title: "New comment on Home page",
         detail: "The booking button should sit above the fold.",
         createdAt: daysAgo(2),
       },
@@ -710,7 +680,7 @@ async function seedDemoWorkspace(client) {
         projectId: website.id,
         actorId: client.id,
         type: "delivery",
-        title: "Website Hero v2 delivered",
+        title: "Home page v2 delivered",
         detail: "Ready for review",
         createdAt: daysAgo(7),
       },
@@ -722,9 +692,9 @@ async function seedDemoWorkspace(client) {
     data: [
       {
         userId: client.id,
-        subject: "How do I download the brand kit?",
+        subject: "How do I update my menu prices myself?",
         message:
-          "I need the updated logo files for a new print run. Where are they stored?",
+          "We changed some prices this week. Can I edit them on the site, or do I send you the list?",
         status: "open",
         createdAt: daysAgo(2),
       },
@@ -739,7 +709,7 @@ async function seedDemoWorkspace(client) {
     ],
   });
 
-  console.log("✓ demo workspace (The Brew House)");
+  console.log("✓ demo workspace (Brew & Co.)");
 }
 
 /* ------------------------------------------------------------------ */
@@ -758,19 +728,19 @@ async function seedLeads() {
         name: "Rohan Kapoor",
         email: "rohan@northwind.studio",
         company: "Northwind Studio",
-        budget: "₹3–5L",
-        service: "SaaS Product",
+        budget: "$4,500 – $8,000",
+        service: "Business Website",
         source: "contact-form",
         status: "new",
-        notes: "Wants a multi-tenant booking platform.",
+        notes: "Wants a booking flow and an online store.",
         createdAt: daysAgo(1),
       },
       {
         name: "Meera Nair",
         email: "meera@lumina.co",
         company: "Lumina & Co",
-        budget: "₹1–2L",
-        service: "Website Redesign",
+        budget: "$1,500 – $3,000",
+        service: "Business Website",
         source: "instagram",
         status: "contacted",
         createdAt: daysAgo(3),
@@ -779,8 +749,8 @@ async function seedLeads() {
         name: "Arjun Bhat",
         email: "arjun@fitmile.in",
         company: "FitMile",
-        budget: "₹4–6L",
-        service: "SaaS Product",
+        budget: "$6,000+",
+        service: "Custom Website",
         source: "referral",
         status: "won",
         createdAt: daysAgo(26),
@@ -789,8 +759,8 @@ async function seedLeads() {
         name: "Sara Ali",
         email: "sara@mothmag.com",
         company: "Moth Magazine",
-        budget: "₹50–80k",
-        service: "Business Website",
+        budget: "$1,500 – $3,000",
+        service: "Personal Portfolio",
         source: "contact-form",
         status: "qualified",
         createdAt: daysAgo(5),
@@ -807,29 +777,35 @@ async function seedLeads() {
 async function main() {
   await seedPlans();
 
-  const admin = await upsertUser({
-    email: "admin@for1s.in",
-    name: "Subham Rout",
-    role: "admin",
-    password: "admin1234",
-  });
-  console.log("✓ admin:", admin.email, "(role: admin)");
+  // Demo accounts + demo data are a development convenience. Never seed them
+  // against a production database — gate on NODE_ENV / SEED_DEMO.
+  const demo = process.env.NODE_ENV !== "production" || process.env.SEED_DEMO === "1";
 
-  const client = await upsertUser({
-    email: "client@for1s.in",
-    name: "Aarav Mehta",
-    role: "client",
-    company: "The Brew House",
-    password: "client1234",
-  });
-  console.log("✓ client:", client.email, "(role: client)");
+  if (demo) {
+    const admin = await upsertUser({
+      email: "admin@for1s.in",
+      name: "Subham Rout",
+      role: "admin",
+      password: process.env.SEED_ADMIN_PASSWORD || "admin1234",
+    });
+    console.log("✓ admin:", admin.email, "(role: admin)");
 
-  await seedDemoWorkspace(client);
-  await seedLeads();
+    const client = await upsertUser({
+      email: "client@for1s.in",
+      name: "Aarav Mehta",
+      role: "client",
+      company: "Brew & Co.",
+      password: process.env.SEED_CLIENT_PASSWORD || "client1234",
+    });
+    console.log("✓ client:", client.email, "(role: client)");
+
+    await seedDemoWorkspace(client);
+    await seedLeads();
+  } else {
+    console.log("✓ demo data skipped (production)");
+  }
 
   console.log("\nSeed complete.");
-  console.log("  → Admin portal:  admin@for1s.in / admin1234");
-  console.log("  → Client portal: client@for1s.in / client1234");
 }
 
 main()

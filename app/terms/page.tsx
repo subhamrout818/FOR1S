@@ -32,8 +32,8 @@ export default function TermsPage() {
             2. Services
           </h2>
           <p>
-            {BRAND.name} Digital provides full-stack SaaS development, web design, brand
-            content, and video production services. The specific scope, deliverables,
+            {BRAND.name} Digital provides web design and development, brand identity,
+            website care, and video production services. The specific scope, deliverables,
             timeline, and fees for each engagement will be outlined in a separate
             project proposal or contract signed by both parties.
           </p>

@@ -25,10 +25,10 @@ function fileIcon(file: FileItem) {
 }
 
 export default function FilesPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const folders = data?.folders ?? [];
   const totalFiles = folders.reduce((acc, f) => acc + f.files.length, 0);

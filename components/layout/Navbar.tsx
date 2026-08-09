@@ -115,15 +115,15 @@ export default function Navbar() {
                   cursorText="Go"
                   onClick={() => router.push("/login")}
                 >
-                  Log in
+                  Client log in
                 </MagneticButton>
                 <MagneticButton
                   variant="solid"
                   size="md"
                   cursorText="Go"
-                  onClick={() => router.push("/register")}
+                  onClick={() => router.push("/contact")}
                 >
-                  Sign up
+                  Start a project
                 </MagneticButton>
               </>
             )}
@@ -219,14 +219,14 @@ export default function Navbar() {
                     size="lg"
                     onClick={() => { router.push("/login"); setMenuOpen(false); }}
                   >
-                    Log in
+                    Client log in
                   </MagneticButton>
                   <MagneticButton
                     variant="solid"
                     size="lg"
-                    onClick={() => { router.push("/register"); setMenuOpen(false); }}
+                    onClick={() => { router.push("/contact"); setMenuOpen(false); }}
                   >
-                    Sign up
+                    Start a project
                   </MagneticButton>
                 </>
               )}

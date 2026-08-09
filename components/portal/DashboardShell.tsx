@@ -49,6 +49,7 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/deliverables", label: "Deliverables", icon: Film },
   { href: "/admin/leads", label: "Leads", icon: Magnet },
   { href: "/admin/payments", label: "Payments", icon: Wallet },
+  { href: "/admin/tickets", label: "Tickets", icon: LifeBuoy },
   { href: "/admin/team", label: "Team", icon: UsersRound },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
@@ -68,7 +69,7 @@ export default function DashboardShell({
   variant: "client" | "admin";
   children: React.ReactNode;
 }) {
-  const { user, token, isLoading, isAdmin } = useAuth();
+  const { user, isLoading, isAdmin } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -76,11 +77,12 @@ export default function DashboardShell({
   const nav = variant === "client" ? CLIENT_NAV : ADMIN_NAV;
   const portalLabel = variant === "client" ? "Client portal" : "Studio";
 
-  /* Auth + role guard. Keys on the stored token so a transient /me failure
-     doesn't bounce a valid session. */
+  /* Auth + role guard. The session comes from the httpOnly cookie via /me;
+     a transient /me failure keeps the shell on the loading state instead of
+     bouncing a valid session. */
   useEffect(() => {
     if (isLoading) return;
-    if (!token) {
+    if (!user) {
       router.replace("/login");
       return;
     }
@@ -91,12 +93,12 @@ export default function DashboardShell({
     if (variant === "admin" && !isAdmin) {
       router.replace("/dashboard");
     }
-  }, [isLoading, token, isAdmin, variant, router]);
+  }, [isLoading, user, isAdmin, variant, router]);
 
   // Close the mobile drawer on navigation.
   useEffect(() => setOpen(false), [pathname]);
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
   if ((variant === "client" && isAdmin) || (variant === "admin" && !isAdmin)) {
     return null;
   }

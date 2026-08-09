@@ -26,10 +26,10 @@ const KIND_ICON: Record<string, string> = {
 };
 
 export default function DeliverablesPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const all = data?.projects.flatMap((p) =>
     p.deliverables.map((d) => ({ ...d, project: { id: p.id, name: p.name, slug: p.slug } }))

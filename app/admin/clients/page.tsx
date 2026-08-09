@@ -7,14 +7,14 @@ import { usePortalData } from "@/components/portal/usePortal";
 import Reveal from "@/components/portal/Reveal";
 import PageHeader from "@/components/portal/PageHeader";
 import Avatar from "@/components/ui/Avatar";
-import { formatINR, formatDate } from "@/lib/portal-format";
+import { formatMoney, formatDate } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 export default function AdminClientsPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const clients = data?.clients ?? [];
 
@@ -88,7 +88,7 @@ export default function AdminClientsPage() {
                   </div>
                   <div className="rounded-xl bg-white/[0.03] px-2 py-2">
                     <p className="font-display text-sm font-semibold text-emerald-400">
-                      {formatINR(c.paid)}
+                      {formatMoney(c.paid)}
                     </p>
                     <p className="text-[9px] uppercase tracking-widest text-muted">Paid</p>
                   </div>
@@ -96,9 +96,9 @@ export default function AdminClientsPage() {
 
                 <div className="mt-4 flex items-center justify-between border-t border-hairline pt-4 text-xs">
                   <span className="text-muted">
-                    Value {formatINR(c.totalValue)} · Outstanding{" "}
+                    Value {formatMoney(c.totalValue)} · Outstanding{" "}
                     <span className={c.outstanding > 0 ? "text-accent" : "text-muted"}>
-                      {formatINR(c.outstanding)}
+                      {formatMoney(c.outstanding)}
                     </span>
                   </span>
                   <span className="font-mono text-[10px] text-muted">

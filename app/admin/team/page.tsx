@@ -1,12 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import PageHeader from "@/components/portal/PageHeader";
 import { MEMBERS } from "@/lib/members";
-
-export const metadata = {
-  title: "Team — FOR1S Studio",
-};
+import { useAuth } from "@/lib/auth-context";
 
 export default function AdminTeamPage() {
+  const { isLoading } = useAuth();
+
+  // Client-gated like every other admin page — the data APIs enforce the role
+  // server-side, this just prevents anonymous visitors from seeing the shell.
+  if (isLoading) return null;
+
   return (
     <div>
       <PageHeader

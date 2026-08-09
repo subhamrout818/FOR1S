@@ -35,7 +35,6 @@ interface AuthResult {
 
 interface AuthContextValue {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   /** True when the signed-in user has the "admin" role. */
@@ -44,56 +43,32 @@ interface AuthContextValue {
   signup: (name: string, email: string, password: string) => Promise<AuthResult>;
   logout: () => void;
   refreshUser: () => Promise<void>;
-  completeOAuth: (token: string, next?: string | null) => Promise<void>;
+  /** Finish an OAuth sign-in: the session cookie is already set by the server,
+   *  so we hydrate the user via /api/auth/me and redirect. */
+  completeOAuth: (next?: string | null) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const TOKEN_KEY = "for1s_token";
-
 /**
- * Retrieve the stored token synchronously (for immediate reads).
+ * Session auth uses an httpOnly cookie set by the server — the browser sends
+ * it automatically, so the client never holds the token (no localStorage, no
+ * XSS token theft). On mount we hydrate the user from /api/auth/me.
  */
-function getStoredToken(): string | null {
-  if (typeof window === "undefined") return null;
-  try {
-    return localStorage.getItem(TOKEN_KEY);
-  } catch {
-    return null;
-  }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Restore session from localStorage on mount
+  // Restore the session from the httpOnly cookie on mount.
   useEffect(() => {
-    const stored = getStoredToken();
-    if (!stored) {
-      setIsLoading(false);
-      return;
-    }
-
-    setToken(stored);
-
-    fetch("/api/auth/me", {
-      headers: { authorization: `Bearer ${stored}` },
-    })
+    fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.user) {
-          setUser(data.user);
-        } else {
-          // Token invalid — clear it
-          localStorage.removeItem(TOKEN_KEY);
-          setToken(null);
-        }
+        if (data.success && data.user) setUser(data.user);
       })
       .catch(() => {
-        // Network error — keep the token, user stays logged in if valid
+        // Network error — treat as not logged in; a retry happens on reload.
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -110,8 +85,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await res.json();
 
         if (data.success) {
-          localStorage.setItem(TOKEN_KEY, data.token);
-          setToken(data.token);
           setUser(data.user);
           return { success: true };
         }
@@ -141,14 +114,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await res.json();
 
         if (data.success) {
-          // With verification enabled the API issues no token — the user must
-          // confirm their email first. In dev (no email provider) it returns
-          // a token so the old auto-login behavior still works.
-          if (data.token) {
-            localStorage.setItem(TOKEN_KEY, data.token);
-            setToken(data.token);
-            setUser(data.user);
-          }
+          // With verification enabled the API issues no session — the user must
+          // confirm their email first. In dev (no email provider) the server
+          // sets a session cookie, so we can hydrate the user immediately.
+          if (data.user && !data.needsVerification) setUser(data.user);
           return {
             success: true,
             needsVerification: !!data.needsVerification,
@@ -157,9 +126,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return {
           success: false,
-          message: data.message || data.errors
-            ? Object.values(data.errors ?? {}).flat().join(", ")
-            : "Registration failed",
+          message:
+            data.message ||
+            (data.errors
+              ? Object.values(data.errors ?? {}).flat().join(", ")
+              : "Registration failed"),
         };
       } catch {
         return { success: false, message: "Network error. Please try again." };
@@ -169,20 +140,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    setToken(null);
+    // Best-effort: expire the httpOnly cookie server-side, then clear state.
+    fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     setUser(null);
     router.push("/");
   }, [router]);
 
   /** Re-fetch the current user (after profile/email changes). */
   const refreshUser = useCallback(async () => {
-    const stored = getStoredToken();
-    if (!stored) return;
     try {
-      const res = await fetch("/api/auth/me", {
-        headers: { authorization: `Bearer ${stored}` },
-      });
+      const res = await fetch("/api/auth/me");
       const data = await res.json();
       if (data.success && data.user) setUser(data.user);
     } catch {
@@ -190,19 +157,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  /** Finish an OAuth sign-in: store the token, load the user, redirect. */
+  /** Finish an OAuth sign-in. The server set the session cookie, so just
+   *  hydrate the user and redirect. */
   const completeOAuth = useCallback(
-    async (incomingToken: string, next?: string | null) => {
-      localStorage.setItem(TOKEN_KEY, incomingToken);
-      setToken(incomingToken);
+    async (next?: string | null) => {
       try {
-        const res = await fetch("/api/auth/me", {
-          headers: { authorization: `Bearer ${incomingToken}` },
-        });
+        const res = await fetch("/api/auth/me");
         const data = await res.json();
         if (data.success && data.user) setUser(data.user);
       } catch {
-        // Keep the token; the next /me call will hydrate the user.
+        // Keep the redirect moving even if hydration fails; the shell will
+        // gate on /me again.
       }
       router.replace(isSafeRelativePath(next) ? next : "/dashboard");
     },
@@ -213,7 +178,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        token,
         isLoading,
         isAuthenticated: !!user,
         isAdmin: user?.role === "admin",

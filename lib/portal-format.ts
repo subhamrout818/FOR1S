@@ -2,8 +2,14 @@
 /*  Client-safe formatting + status metadata for the portal            */
 /* ------------------------------------------------------------------ */
 
-export function formatINR(n: number): string {
-  return "₹" + Math.round(n).toLocaleString("en-IN");
+/** Format an amount as USD — the currency the site sells in. */
+export function formatMoney(n: number): string {
+  const whole = Math.abs(n) >= 100;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: whole ? 0 : 2,
+  }).format(n);
 }
 
 export function formatDate(

@@ -81,6 +81,9 @@ model Invoice {
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   project  Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
   payments Payment[]
+
+  @@index([userId])
+  @@index([projectId])
 }
 
 model Payment {
@@ -95,6 +98,8 @@ model Payment {
 
   invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
 }
 
 model PaymentMethod {
@@ -119,6 +124,8 @@ model ContactMessage {
   budget      String?
   message     String
   createdAt   DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 /* ============================================================ */
@@ -135,7 +142,7 @@ model Project {
   status        String   @default("active") // "active" | "paused" | "completed"
   progress      Int      @default(0) // 0–100
   value         Decimal? @db.Decimal(12, 2)
-  currency      String   @default("INR")
+  currency      String   @default("USD")
   nextDeadline  DateTime?
   endsAt        DateTime?
   createdAt     DateTime @default(now())
@@ -263,6 +270,9 @@ model Lead {
   notes     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
 }
 
 model SupportTicket {

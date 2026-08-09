@@ -11,7 +11,7 @@ import { POSTS } from "@/lib/blog";
 export const metadata: Metadata = {
   title: "Blog — FOR1S",
   description:
-    "Notes and ideas on SaaS strategy, design, engineering, and growth from the FOR1S team.",
+    "Practical notes on websites, local business marketing, design, and growth from the FOR1S team.",
   alternates: { canonical: "/blog" },
 };
 

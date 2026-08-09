@@ -166,8 +166,8 @@ export default function ProductPreview() {
 
                 <div className="relative z-10 flex h-full flex-col justify-between">
                   <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-foreground/50">
-                    <span>MRD-01</span>
-                    <span className="text-accent">● live</span>
+                    <span>FOR1S-01</span>
+                    <span className="text-accent">● in progress</span>
                   </div>
                   <div className="flex items-end justify-between">
                     <span className="font-display text-2xl font-semibold uppercase text-foreground">

@@ -18,7 +18,7 @@ export default function FinalCTA() {
       />
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center">
-        <SectionLabel scene="09" title="Get started" className="mb-10 justify-center" />
+        <SectionLabel scene="10" title="Get started" className="mb-10 justify-center" />
 
         <SplitReveal
           as="h2"
@@ -26,13 +26,13 @@ export default function FinalCTA() {
           stagger={0.05}
           className="font-display text-fluid-xl font-bold uppercase leading-[1] tracking-tightest text-foreground"
         >
-          Ready to stop planning and start shipping?
+          Ready to look like the business you are?
         </SplitReveal>
 
         <RevealMask blur={false} y={16} delay={0.2} className="mt-8">
           <p className="max-w-md text-base text-muted lg:text-lg">
-            Book a free discovery call. We&apos;ll map out your product,
-            your timeline, and what it actually takes to get to launch.
+            Book a free discovery call. We&apos;ll map out your website, your
+            timeline, and exactly what it costs — no pressure, no jargon.
           </p>
         </RevealMask>
 

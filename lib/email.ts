@@ -44,26 +44,32 @@ export function emailEnabled(): boolean {
   return !!process.env.RESEND_API_KEY;
 }
 
-const ALLOWED_HOSTS = new Set(["for1s.digital", "localhost", "localhost:3000"]);
+const ALLOWED_HOSTS = new Set(["for1s.digital"]);
 
 /**
- * The request's origin, but only when the Host header is on the allowlist —
+ * The request's origin, but only when the Host header is trusted —
  * prevents Host-header injection from driving open redirects or a mismatched
- * OAuth `redirect_uri`. Returns null for unknown hosts.
+ * OAuth `redirect_uri`. Production domains must be in ALLOWED_HOSTS (or APP_URL
+ * set); any localhost port is accepted for local development. Returns null for
+ * unknown hosts.
  */
 export function allowedOrigin(req: Request): string | null {
   const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "")
     .toLowerCase()
     .replace(/\/$/, "");
-  if (!ALLOWED_HOSTS.has(host)) return null;
+  const trusted = ALLOWED_HOSTS.has(host) || host.startsWith("localhost");
+  if (!trusted) return null;
   const proto =
     req.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
   return `${proto}://${host}`;
 }
 
-/** Absolute URL for a path, derived from the validated origin or APP_URL. */
+/**
+ * Absolute URL for a path, derived from APP_URL or the validated origin.
+ * Falls back to a dev default rather than throwing — email links are
+ * best-effort, so a build failure shouldn't crash the request.
+ */
 export function absoluteUrl(req: Request, path: string): string {
-  const origin = process.env.APP_URL || allowedOrigin(req) || "";
-  if (!origin) throw new Error("Cannot build absolute URL: unknown origin");
+  const origin = process.env.APP_URL || allowedOrigin(req) || "http://localhost:3000";
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
 }

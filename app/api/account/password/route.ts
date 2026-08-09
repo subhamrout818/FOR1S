@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
-import { comparePassword, hashPassword } from "@/lib/auth";
+import { comparePassword, hashPassword, signToken, setSessionCookie } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -60,7 +60,10 @@ export async function POST(req: Request) {
       data: { password: await hashPassword(newPassword) },
     });
 
-    return NextResponse.json({ success: true });
+    // Re-issue the session so the password change doesn't log the user out;
+    // every previously issued token is now invalid server-side.
+    const token = signToken(user.id, user.email);
+    return setSessionCookie(NextResponse.json({ success: true }), token, true);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

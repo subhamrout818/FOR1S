@@ -12,9 +12,9 @@ import ScrollSpine from "@/components/layout/ScrollSpine";
 import RouteChrome from "@/components/layout/RouteChrome";
 import { SITE_URL } from "@/lib/contact";
 
-const TITLE = "FOR1S — SaaS Development Agency";
+const TITLE = "FOR1S — Web Design for Local Businesses & Personal Brands";
 const DESCRIPTION =
-  "FOR1S is a full-service digital agency — from custom websites and SaaS platforms to premium video production. We help brands stand out and scale up.";
+  "FOR1S designs and builds premium websites for local businesses and personal brands — fast, mobile-first, and built to win customers. From cafés and salons to portfolios and freelancers.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -22,14 +22,16 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: "FOR1S",
   keywords: [
-    "SaaS development",
-    "web agency",
-    "SaaS agency",
-    "full-stack development",
-    "product design",
-    "custom websites",
-    "Next.js development",
-    "startup agency",
+    "web design",
+    "website design",
+    "small business website",
+    "local business website",
+    "personal portfolio website",
+    "café website design",
+    "salon website design",
+    "business website design",
+    "custom website",
+    "website design for small business",
   ],
   authors: [{ name: "Subham Rout", url: SITE_URL }],
   creator: "Subham Rout",

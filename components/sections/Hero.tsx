@@ -117,9 +117,9 @@ export default function Hero() {
           animate={ready ? "visible" : "hidden"}
           className="flex items-start justify-between"
         >
-          <SectionLabel scene="01" title="Introducing" light />
+          <SectionLabel scene="01" title="Web design studio" light />
           <span className="hidden font-mono text-xs tracking-wideish text-muted md:block">
-            REEL 01 — 09
+            WEBSITES — BRAND — VIDEO
           </span>
         </motion.div>
 
@@ -153,7 +153,7 @@ export default function Hero() {
                 play={ready}
                 className="block overflow-hidden"
               >
-                We build SaaS,
+                We build the website,
               </SplitReveal>
               <SplitReveal
                 as="span"
@@ -163,7 +163,7 @@ export default function Hero() {
                 play={ready}
                 className="block overflow-hidden text-accent"
               >
-                you scale it.
+                you win customers.
               </SplitReveal>
             </h1>
           </div>
@@ -177,8 +177,9 @@ export default function Hero() {
             animate={ready ? "visible" : "hidden"}
             className="max-w-md  text-muted"
           >
-            End-to-end SaaS development — from product strategy and UI/UX to
-            full-stack engineering and launch. We turn ambitious ideas into revenue-ready platforms.
+            Premium websites for local businesses and personal brands —
+            designed to look expensive, built to get found, and made to win
+            you customers. No jargon, no templates, no handoff gaps.
           </motion.p>
 
           <motion.div
@@ -197,7 +198,7 @@ export default function Hero() {
             </MagneticButton>
             <button
               data-cursor="hover"
-              onClick={() => scrollToHash("#vision")}
+              onClick={() => scrollToHash("#work")}
               className="text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
             >
               See our work ↓

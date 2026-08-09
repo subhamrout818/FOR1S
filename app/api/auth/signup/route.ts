@@ -5,7 +5,7 @@ import {
   rateLimitedResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
-import { hashPassword, normalizeEmail, signToken, signVerifyEmail } from "@/lib/auth";
+import { hashPassword, normalizeEmail, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -43,16 +43,46 @@ export async function POST(req: Request) {
     const { name, password } = result.data;
     const email = normalizeEmail(result.data.email);
 
+    // Fail closed: without email configured, don't silently create verified
+    // accounts that anyone can mass-register. Dev keeps the old behavior.
+    if (!emailEnabled() && process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { success: false, message: "Signup is unavailable right now." },
+        { status: 503 }
+      );
+    }
+
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
+      // Don't reveal whether the email is registered. When email is configured,
+      // respond as if signup succeeded (the client shows the "check your inbox"
+      // screen) and notify the existing holder instead. In local dev (no email)
+      // the account is known to exist, so return a helpful message.
+      if (emailEnabled()) {
+        await sendEmail({
+          to: existingUser.email,
+          subject: "A FOR1S account already exists",
+          text: `Someone tried to sign up with this email address. If that was you, log in instead. If it wasn't you, you can ignore this message.`,
+        }).catch(() => {});
+        return NextResponse.json(
+          {
+            success: true,
+            needsVerification: true,
+            token: null,
+            user: null,
+            message: "If this email is available, you'll get a confirmation shortly.",
+          },
+          { status: 200 }
+        );
+      }
       return NextResponse.json(
         {
           success: false,
-          message: "Email already exists",
+          message: "An account with this email already exists — try logging in.",
         },
         { status: 409 }
       );
@@ -89,11 +119,10 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       {
         success: true,
         needsVerification,
-        token,
         user: {
           id: user.id,
           name: user.name,
@@ -105,6 +134,12 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
+
+    // Dev convenience: no email to confirm, so sign straight in — the session
+    // goes into an httpOnly cookie, not localStorage.
+    if (token) setSessionCookie(response, token, true);
+
+    return response;
   } catch (error) {
     console.error(error);
 

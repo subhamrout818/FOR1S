@@ -1,25 +1,25 @@
 "use client";
 
 /* ------------------------------------------------------------------ */
-/*  Tech ticker                                                        */
+/*  Audience ticker                                                    */
 /*                                                                     */
-/*  Decorative, truthful element — lists the technologies FOR1S works  */
-/*  with. No fabricated client counts or metrics.                      */
+/*  Decorative, truthful element — the kinds of businesses FOR1S       */
+/*  designs and builds websites for. No fabricated metrics.            */
 /* ------------------------------------------------------------------ */
 
 const TICKER = [
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "PostgreSQL",
-  "AWS",
-  "Vercel",
-  "GSAP",
-  "Three.js",
-  "Stripe",
-  "Tailwind CSS",
-  "Prisma",
-  "React",
+  "Cafés & Restaurants",
+  "Salons & Spas",
+  "Gyms & Studios",
+  "Clinics & Dentists",
+  "Shops & Retail",
+  "Real Estate",
+  "Restaurants",
+  "Photographers",
+  "Freelancers",
+  "Coaches & Consultants",
+  "Personal Brands",
+  "Local Services",
 ];
 
 export default function Marquee() {

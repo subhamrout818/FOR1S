@@ -17,8 +17,9 @@ body {
 }
 
 /* The custom cursor takes over on precise pointers only — touch devices
-   keep their native cursor/tap behavior untouched. */
-@media (pointer: fine) {
+   keep their native cursor/tap behavior untouched, and reduced-motion users
+   keep the native cursor too. */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
   body,
   a,
   button,

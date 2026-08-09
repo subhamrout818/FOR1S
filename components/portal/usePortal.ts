@@ -10,21 +10,19 @@ interface PortalState<T> {
 }
 
 /**
- * Fetch a Bearer-authenticated portal endpoint and expose loading/error/reload.
+ * Fetch a cookie-authenticated portal endpoint and expose loading/error/reload.
+ * The httpOnly session cookie is sent automatically — no client token needed.
  */
-export function usePortalData<T>(url: string, token: string | null): PortalState<T> {
+export function usePortalData<T>(url: string): PortalState<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const reload = useCallback(async () => {
-    if (!token) return;
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(url, {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(url);
       const json = await res.json();
       if (json.success) {
         setData(json as T);
@@ -36,29 +34,24 @@ export function usePortalData<T>(url: string, token: string | null): PortalState
     } finally {
       setLoading(false);
     }
-  }, [url, token]);
+  }, [url]);
 
   useEffect(() => {
-    if (token) reload();
-  }, [token, reload]);
+    reload();
+  }, [reload]);
 
   return { data, loading, error, reload };
 }
 
-/** Minimal mutating POST helper for portal actions. */
+/** Minimal mutating POST helper for portal actions (cookie-authenticated). */
 export async function portalAction<T = { success: boolean }>(
   url: string,
-  token: string | null,
   body?: unknown
 ): Promise<{ ok: boolean; data: T; message: string }> {
-  if (!token) return { ok: false, data: {} as T, message: "Not signed in" };
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     const data = (await res.json()) as T & { message?: string; success?: boolean };

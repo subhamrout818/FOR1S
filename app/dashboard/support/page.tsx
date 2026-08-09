@@ -11,8 +11,8 @@ import { timeAgo, metaFor, TICKET_STATUS } from "@/lib/portal-format";
 import type { WorkspaceData } from "@/lib/portal-types";
 
 export default function SupportPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -21,11 +21,10 @@ export default function SupportPage() {
   const [err, setErr] = useState("");
 
   const submit = useCallback(async () => {
-    if (!token) return;
     setBusy(true);
     setMsg("");
     setErr("");
-    const res = await portalAction("/api/portal/tickets", token, { subject, message });
+    const res = await portalAction("/api/portal/tickets", { subject, message });
     setBusy(false);
     if (res.ok) {
       setMsg("Ticket raised — we'll get back to you here and by email.");
@@ -35,9 +34,9 @@ export default function SupportPage() {
     } else {
       setErr(res.message || "Could not raise the ticket");
     }
-  }, [token, subject, message, reload]);
+  }, [subject, message, reload]);
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const tickets = data?.tickets ?? [];
 

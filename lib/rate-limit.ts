@@ -78,12 +78,29 @@ export function consumeRateLimit(
   };
 }
 
-/** Best-effort client IP from common proxy headers. */
+/**
+ * Best-effort client IP from common proxy headers.
+ *
+ * x-forwarded-for is a comma-separated chain where the LEFTMOST entry is
+ * client-supplied (spoofable) and each proxy appends the real upstream IP to
+ * the right. We take the RIGHTMOST entry so a spoofed leading header can't
+ * rotate the rate-limit key. x-real-ip (set by the terminating proxy) is
+ * preferred when present. If FOR1S runs directly without a stripping proxy,
+ * an attacker can still forge these headers — add a trusted proxy in front.
+ */
 export function clientIp(req: Request): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]!.trim();
   const real = req.headers.get("x-real-ip");
   if (real) return real.trim();
+
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const hops = forwarded
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (hops.length) return hops[hops.length - 1]!;
+  }
+
   return "unknown";
 }
 

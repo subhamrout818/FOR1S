@@ -1,18 +1,18 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { AlertCircle, Check, CreditCard, Loader2, Receipt, Wallet } from "lucide-react";
+import { Check, CreditCard, Download, Loader2, Receipt, Wallet } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { usePortalData, portalAction } from "@/components/portal/usePortal";
+import { usePortalData } from "@/components/portal/usePortal";
 import Reveal from "@/components/portal/Reveal";
 import Badge from "@/components/portal/Badge";
 import PageHeader from "@/components/portal/PageHeader";
 import {
-  formatINR,
+  formatMoney,
   formatDate,
   metaFor,
   INVOICE_STATUS,
 } from "@/lib/portal-format";
+import { downloadInvoiceHtml } from "@/lib/invoice";
 import type { WorkspaceData, InvoiceItem } from "@/lib/portal-types";
 import { cn } from "@/lib/utils";
 
@@ -62,42 +62,27 @@ function StatTile({
 }
 
 export default function BillingPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
-  const [payingId, setPayingId] = useState<string | null>(null);
-  const [msg, setMsg] = useState("");
-  const [err, setErr] = useState("");
-
-  const handlePay = useCallback(
-    async (invoice: InvoiceItem) => {
-      if (!token) return;
-      setPayingId(invoice.id);
-      setMsg("");
-      setErr("");
-      const res = await portalAction(`/api/portal/invoices/${invoice.id}/pay`, token);
-      setPayingId(null);
-      if (res.ok) {
-        setMsg(`${invoice.number} paid — thank you!`);
-        reload();
-      } else {
-        setErr(res.message);
-      }
-    },
-    [token, reload]
-  );
-
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const billing = data?.billing;
   const invoices = data?.invoices ?? [];
+  const billedTo = {
+    billedToName: data?.user?.name ?? null,
+    billedToCompany: data?.user?.company ?? null,
+  };
+
+  const download = (invoice: InvoiceItem) =>
+    downloadInvoiceHtml(invoice, billedTo);
 
   return (
     <div>
       <PageHeader
         eyebrow="Billing"
         title="Billing &amp; invoices"
-        sub="Track what's been billed, what's paid, and what's left on each project."
+        sub="A clear record of what's been billed and what's been paid — payment is arranged directly, no checkout needed."
       />
 
       {loading && !data && (
@@ -126,7 +111,7 @@ export default function BillingPage() {
           <div className="grid gap-5 sm:grid-cols-3">
             <StatTile
               label="Project value"
-              value={formatINR(billing?.totalValue ?? 0)}
+              value={formatMoney(billing?.totalValue ?? 0)}
               sub="Total across all projects"
               icon={Wallet}
               accent="border-l-accent"
@@ -135,7 +120,7 @@ export default function BillingPage() {
             />
             <StatTile
               label="Paid"
-              value={formatINR(billing?.paid ?? 0)}
+              value={formatMoney(billing?.paid ?? 0)}
               sub="Received to date"
               icon={Check}
               accent="border-l-emerald-500"
@@ -144,7 +129,7 @@ export default function BillingPage() {
             />
             <StatTile
               label="Remaining"
-              value={formatINR(billing?.remaining ?? 0)}
+              value={formatMoney(billing?.remaining ?? 0)}
               sub="Open invoices"
               icon={Receipt}
               accent="border-l-blue-500"
@@ -152,18 +137,6 @@ export default function BillingPage() {
               delay={0.1}
             />
           </div>
-
-          {/* Feedback */}
-          {msg && (
-            <p className="mt-6 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
-              <Check size={15} /> {msg}
-            </p>
-          )}
-          {err && (
-            <p className="mt-6 flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-red-300">
-              <AlertCircle size={15} /> {err}
-            </p>
-          )}
 
           {/* Invoices */}
           <div className="mt-6 overflow-hidden rounded-2xl border border-hairline bg-background/60">
@@ -192,48 +165,39 @@ export default function BillingPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {invoices.map((invoice) => {
-                      const payable = ["pending", "overdue"].includes(invoice.status);
-                      return (
-                        <tr
-                          key={invoice.id}
-                          className="border-t border-hairline/60 transition-colors hover:bg-white/[0.02]"
-                        >
-                          <td className="px-6 py-4 font-mono text-xs text-foreground/90">
-                            {invoice.number}
-                          </td>
-                          <td className="px-6 py-4 text-muted">
-                            {formatDate(invoice.issuedAt)}
-                          </td>
-                          <td className="px-6 py-4 text-foreground/85">
-                            {invoice.description}
-                          </td>
-                          <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
-                            {formatINR(invoice.amount)}
-                          </td>
-                          <td className="px-6 py-4">
-                            <Badge meta={metaFor(INVOICE_STATUS, invoice.status)} />
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            {payable && (
-                              <button
-                                data-cursor="hover"
-                                onClick={() => handlePay(invoice)}
-                                disabled={payingId !== null}
-                                className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-dim disabled:opacity-50"
-                              >
-                                {payingId === invoice.id ? (
-                                  <Loader2 size={13} className="animate-spin" />
-                                ) : (
-                                  <CreditCard size={13} />
-                                )}
-                                Pay {formatINR(invoice.amount)}
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {invoices.map((invoice) => (
+                      <tr
+                        key={invoice.id}
+                        className="border-t border-hairline/60 transition-colors hover:bg-white/[0.02]"
+                      >
+                        <td className="px-6 py-4 font-mono text-xs text-foreground/90">
+                          {invoice.number}
+                        </td>
+                        <td className="px-6 py-4 text-muted">
+                          {formatDate(invoice.issuedAt)}
+                        </td>
+                        <td className="px-6 py-4 text-foreground/85">
+                          {invoice.description}
+                        </td>
+                        <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
+                          {formatMoney(invoice.amount)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge meta={metaFor(INVOICE_STATUS, invoice.status)} />
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            data-cursor="hover"
+                            onClick={() => download(invoice)}
+                            title={`Download ${invoice.number}`}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-hairline px-3 py-1.5 text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:border-accent/50 hover:text-accent"
+                          >
+                            <Download size={12} />
+                            Download
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -242,8 +206,9 @@ export default function BillingPage() {
 
           <p className="mt-6 flex items-center gap-1.5 text-xs text-muted">
             <CreditCard size={13} className="shrink-0 text-emerald-400" />
-            UPI / Razorpay checkout is being wired up — paying marks the invoice
-            as received for now.
+            Every project starts with a free call — we&apos;ll talk scope and
+            money there, then send your invoice over email when it&apos;s time.
+            Nothing is charged online.
           </p>
         </>
       )}

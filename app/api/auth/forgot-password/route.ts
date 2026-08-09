@@ -46,7 +46,9 @@ export async function POST(req: Request) {
 
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (user && emailEnabled()) {
+    // Only verified accounts may reset — otherwise "forgot password" becomes
+    // a backdoor around the signup verification gate.
+    if (user && user.emailVerified && emailEnabled()) {
       const token = signResetPassword(user.id, user.email);
       const link = absoluteUrl(req, `/reset-password?token=${encodeURIComponent(token)}`);
       const hasPassword = !!user.password;

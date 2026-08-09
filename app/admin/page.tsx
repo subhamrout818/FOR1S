@@ -17,7 +17,7 @@ import Reveal from "@/components/portal/Reveal";
 import Badge from "@/components/portal/Badge";
 import GlowCard from "@/components/ui/GlowCard";
 import {
-  formatINR,
+  formatMoney,
   formatDayMonth,
   timeAgo,
   metaFor,
@@ -30,17 +30,17 @@ import { cn } from "@/lib/utils";
 
 const ACTIVITY_ICON: Record<string, { char: string; cls: string }> = {
   approval: { char: "✓", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
-  payment: { char: "₹", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
+  payment: { char: "$", cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" },
   upload: { char: "↑", cls: "border-blue-500/30 bg-blue-500/10 text-blue-400" },
   comment: { char: "↳", cls: "border-amber-500/30 bg-amber-500/10 text-amber-400" },
   delivery: { char: "→", cls: "border-accent/40 bg-accent/10 text-accent" },
 };
 
 export default function AdminOverviewPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   return (
     <div>
@@ -83,7 +83,7 @@ export default function AdminOverviewPage() {
             {[
               {
                 label: "Revenue this month",
-                value: formatINR(data.metrics.revenueThisMonth),
+                value: formatMoney(data.metrics.revenueThisMonth),
                 sub: "Paid this calendar month",
                 icon: Banknote,
                 accent: "border-l-emerald-500",
@@ -92,7 +92,7 @@ export default function AdminOverviewPage() {
               },
               {
                 label: "Outstanding",
-                value: formatINR(data.metrics.outstanding),
+                value: formatMoney(data.metrics.outstanding),
                 sub: "Open invoices",
                 icon: Wallet,
                 accent: "border-l-accent",
@@ -268,7 +268,7 @@ export default function AdminOverviewPage() {
                       .map((t) => (
                         <Link
                           key={t.id}
-                          href="/admin/settings"
+                          href="/admin/tickets"
                           data-cursor="hover"
                           className="block px-6 py-3.5 transition-colors hover:bg-white/[0.02]"
                         >

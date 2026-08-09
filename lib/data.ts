@@ -4,13 +4,14 @@ export const BRAND = {
   name: "FOR1S",
   short: "FR1",
   filed: "FOR1S DIGITAL™",
-  tagline: "Ship SaaS. Scale fast.",
+  tagline: "Websites that win customers.",
 };
 
 export const NAV_LINKS = [
   { label: "Vision", href: "#vision" },
   { label: "Services", href: "#features" },
   { label: "Process", href: "#preview" },
+  { label: "Work", href: "#work" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
@@ -19,88 +20,88 @@ export const FEATURES = [
   {
     id: "f1",
     scene: "01",
-    title: "Full-stack, end to end",
+    title: "End to end, one team",
     description:
-      "Strategy, design, frontend, backend, infrastructure — one team, one vision. No handoff gaps, no translation loss between agencies.",
+      "Design, copy, build, and launch — handled by the same small team. One person to talk to, one timeline, one price. No agencies juggling, no handoff gaps.",
     span: "large",
   },
   {
     id: "f2",
     scene: "02",
-    title: "Ship fast, iterate faster",
+    title: "Fast on every phone",
     description:
-      "We launch MVPs in weeks, not months. Then we refine with real data. Speed isn't a compromise — it's a strategy.",
+      "Your customers browse on phones with patchy connections. We build pages that load in a blink and feel premium everywhere — speed isn't a bonus, it's expected.",
     span: "small",
   },
   {
     id: "f3",
     scene: "03",
-    title: "Built to scale",
+    title: "Found on Google",
     description:
-      "Architecture designed for your first 100 users and your next 10 million. No rewrite needed when traction hits.",
+      "A beautiful site nobody finds is just a poster. SEO is built in from day one — so your business shows up when people search for what you do.",
     span: "small",
   },
   {
     id: "f4",
     scene: "04",
-    title: "Design that converts",
+    title: "Made to stand out",
     description:
-      "UI/UX isn't decoration — it's revenue. Every screen is engineered to reduce friction, increase retention, and guide users to value.",
+      "No templates, no borrowed layouts. Your site is designed from scratch around your business, your customers, and your goals — so you never look like your competitor.",
     span: "small",
   },
   {
     id: "f5",
     scene: "05",
-    title: "Post-launch, not post-sale",
+    title: "We don't disappear",
     description:
-      "We don't disappear after deploy. Monitoring, iterations, feature sprints — we stay in the trenches with you.",
+      "Launch day isn't the finish line. Updates, fixes, and improvements — we stay with you so your site keeps working while you run your business.",
     span: "small",
   },
 ] as const;
 
 export const PREVIEW_TABS = [
   {
-    id: "strategy",
-    label: "Strategy",
+    id: "discover",
+    label: "Discover",
     description:
-      "We start with your business goals, not code. Market research, user interviews, competitive mapping — the foundation that makes engineering decisions obvious.",
+      "We start with your business, not code. What you do, who your customers are, what they search for, and what your competitors are up to. Then we map exactly what your website needs to win.",
     specs: [
-      { label: "Discovery sprint", value: "1–2 weeks" },
-      { label: "Deliverables", value: "Roadmap + PRD" },
-      { label: "Tech advisory", value: "Included" },
+      { label: "Kickoff call", value: "1–2 days" },
+      { label: "Deliverables", value: "Sitemap + copy plan" },
+      { label: "Cost", value: "Included" },
     ],
   },
   {
     id: "design",
     label: "Design",
     description:
-      "Figma-first, component-driven design systems. Every pixel has intent — from onboarding flows to billing dashboards.",
+      "Wireframes first, then design. Every page is built around one goal — turning a visitor into a customer — with a look that's unmistakably yours. You review, we refine, until you love it.",
     specs: [
-      { label: "Design system", value: "Tailored" },
-      { label: "Prototyping", value: "High-fidelity" },
-      { label: "Handoff", value: "Dev-ready Figma" },
+      { label: "Design", value: "Tailored to your brand" },
+      { label: "Preview", value: "Clickable mockup" },
+      { label: "Revisions", value: "Until you love it" },
     ],
   },
   {
-    id: "engineering",
-    label: "Engineering",
+    id: "build",
+    label: "Build",
     description:
-      "Modern stack, production-grade from day one. CI/CD, testing, observability — not afterthoughts, built in.",
+      "Clean, modern code on a platform that's fast, secure, and easy to update. Mobile-first, SEO-ready, and tested on real phones — so it looks premium everywhere it loads.",
     specs: [
-      { label: "Stack", value: "Next.js / Node / Python" },
-      { label: "Infra", value: "AWS / Vercel / Docker" },
-      { label: "Deploy cadence", value: "Daily" },
+      { label: "Stack", value: "Modern web platform" },
+      { label: "Mobile", value: "Perfect on every phone" },
+      { label: "SEO", value: "Built in from day one" },
     ],
   },
   {
-    id: "scale",
-    label: "Scale",
+    id: "launch",
+    label: "Launch & care",
     description:
-      "From MVP to millions of users. Performance tuning, cost optimization, and feature velocity that keeps up with your growth.",
+      "We handle the domain, hosting, and going live — then we stay. Updates, SEO tweaks, and support so your website keeps earning for months and years, not just launch week.",
     specs: [
-      { label: "Uptime target", value: "99.9%" },
-      { label: "Avg. load time", value: "< 1.5s" },
-      { label: "Support", value: "Ongoing sprints" },
+      { label: "Domain + hosting", value: "Handled for you" },
+      { label: "Going live", value: "1–3 weeks typical" },
+      { label: "Support", value: "Care plans included" },
     ],
   },
 ] as const;
@@ -108,77 +109,78 @@ export const PREVIEW_TABS = [
 export const BENEFITS = [
   {
     id: "b1",
-    title: "One team, zero handoffs",
+    title: "One team, zero chaos",
     description:
-      "No juggling five freelancers or three agencies. Strategy, design, code, and content — one team, one Slack channel, one bill.",
+      "Design, copy, build, and launch from the same small team. One person to talk to, one timeline, one price. No juggling freelancers who blame each other.",
   },
   {
     id: "b2",
-    title: "Speed without shortcuts",
+    title: "Your business can't wait months",
     description:
-      "We ship fast because we've done this before. Battle-tested patterns, not reinvented wheels. Your MVP in weeks, not quarters.",
+      "Most sites ship in 1–3 weeks — not because we cut corners, but because we've done this many times before. Your website goes live when it can start winning you customers.",
   },
   {
     id: "b3",
-    title: "Built for growth",
+    title: "Grows with your business",
     description:
-      "What works for 100 users should work for 100,000. We architect for scale from day one so you never pay for a rewrite.",
+      "Start with a site that gets you customers today. Add booking, an online store, or new pages whenever you're ready — without paying for a rebuild.",
   },
   {
     id: "b4",
     title: "We don't disappear",
     description:
-      "Launch day isn't the finish line. We stick around for iterations, optimizations, and the feature sprints that keep your product competitive.",
+      "Launch day isn't the finish line. We stay for updates, fixes, and the improvements that keep your website working while you run your business.",
   },
 ] as const;
 
-
-
-
 export const PRICING_TIERS = [
   {
-    id: "landing",
-    name: "Landing Page",
-    tagline: "High-impact, single-page presence",
-    price: "$2,500",
-    priceRange: "$2,500 – $4,500",
+    id: "personal",
+    name: "Personal",
+    tagline: "For portfolios, freelancers, and personal brands",
+    price: "$899",
+    priceRange: "$499 – $1,499",
     highlighted: false,
     specs: [
-      "1–5 pages",
-      "GSAP, Three.js, premium animations",
-      "Fully responsive",
+      "1–3 pages, custom designed",
+      "Mobile-first, loads fast",
+      "Contact form",
       "SEO basics",
-      "Launch in 1–2 weeks",
-    ],
-  },
-  {
-    id: "saas",
-    name: "SaaS Product",
-    tagline: "Full-stack, production-grade platform",
-    price: "$12,000",
-    priceRange: "$12,000 – $20,000+",
-    highlighted: true,
-    specs: [
-      "Authentication & user management",
-      "Dashboard & admin panel",
-      "Database & API architecture",
-      "Payments & email integration",
-      "Analytics & production deployment",
+      "Domain + hosting set up",
+      "Launch in ~1 week",
     ],
   },
   {
     id: "business",
-    name: "Business Website",
-    tagline: "Multi-page, fully functional site",
-    price: "$5,000",
-    priceRange: "$5,000 – $8,000",
+    name: "Business",
+    tagline: "For local businesses that want to win online",
+    price: "$2,900",
+    priceRange: "$1,900 – $4,500",
+    highlighted: true,
+    specs: [
+      "Up to 7 pages, custom designed",
+      "Booking, contact, and map",
+      "Copy polish that sells",
+      "Google-ready SEO",
+      "Speed + mobile optimization",
+      "Care plan — first month included",
+      "Launch in 2–3 weeks",
+    ],
+  },
+  {
+    id: "custom",
+    name: "Custom",
+    tagline: "E-commerce, booking systems, brands, and more",
+    price: "$6,500",
+    priceRange: "$4,500 – $12,000+",
     highlighted: false,
     specs: [
-      "Multiple pages",
-      "CMS / blog if needed",
-      "Contact forms & integrations",
-      "Custom animations",
-      "Full deployment & handoff",
+      "Online store or custom features",
+      "Brand identity & logo",
+      "Photo or video add-ons",
+      "Priority support",
+      "Monthly care plan",
+      "Custom timeline",
     ],
   },
 ] as const;
@@ -186,39 +188,39 @@ export const PRICING_TIERS = [
 export const FAQ_ITEMS = [
   {
     id: "q1",
-    question: "What types of projects do you take on?",
+    question: "Do I need to know anything technical?",
     answer:
-      "Everything from high-end landing pages and multi-page business sites to full-stack SaaS platforms with auth, dashboards, payments, and APIs. If it runs in a browser and drives revenue, we can build it.",
+      "No. You don't write code, buy hosting, or touch servers — we handle everything from domain to launch. You provide your photos, your services or menu, and your story; we do the rest.",
   },
   {
     id: "q2",
-    question: "How long does a typical project take?",
+    question: "How long does a website take?",
     answer:
-      "Landing pages ship in 1–2 weeks. Business websites take 3–5 weeks. Full SaaS builds run 6–12 weeks depending on complexity. We move fast because we've done this before — not because we cut corners.",
+      "Most sites go live in 1–3 weeks. Personal sites take about a week, business sites 2–3 weeks, and bigger builds like online stores or booking systems a little longer. You see progress the whole way — never a black box.",
   },
   {
     id: "q3",
-    question: "What's your tech stack?",
+    question: "How much does it cost?",
     answer:
-      "We're stack-agnostic but opinionated. Next.js, React, Node.js, Python, PostgreSQL, AWS, and Vercel are our go-tos. We pick what fits your product — not what fits our resume.",
+      "It depends on what you need. Personal websites start around $499, business websites from $1,900, and custom builds are quoted individually. Every project starts with a free call, so you know exactly what it'll cost before we begin — no surprises.",
   },
   {
     id: "q4",
-    question: "Do you work with early-stage startups?",
+    question: "What do I need to provide?",
     answer:
-      "Absolutely. Some of our best work has been with pre-revenue founders who needed a technical partner, not just a vendor. We'll help you figure out what to build first.",
+      "Photos of your business, your services or menu, your story, and any branding you already have. No professional photos? We'll guide you on taking great ones with your phone — or we can shoot it for you.",
   },
   {
     id: "q5",
     question: "What happens after launch?",
     answer:
-      "We offer ongoing sprint-based support — bug fixes, new features, performance tuning, and scaling. Most clients stay on a monthly retainer because it's cheaper than hiring in-house.",
+      "We offer care plans — updates, tweaks, backups, and support — so your site stays fast, secure, and fresh. Most clients keep us on a small monthly plan because it's cheaper than fixing things later.",
   },
   {
     id: "q6",
-    question: "Do you also handle video production?",
+    question: "Do you also make videos and content?",
     answer:
-      "Yes. We produce premium commercial edits and brand content. Single commercials start at $500, with package pricing for ongoing video needs. Ask us about bundled web + video deals.",
+      "Yes. We produce short commercials and brand videos for our website clients. Ask about bundled web + video deals — a video on your homepage is one of the fastest ways to build trust.",
   },
 ] as const;
 
@@ -226,6 +228,7 @@ export const FOOTER_LINKS = {
   product: [
     { label: "Services", href: "#features" },
     { label: "Process", href: "#preview" },
+    { label: "Work", href: "#work" },
     { label: "Pricing", href: "#pricing" },
   ],
   company: [

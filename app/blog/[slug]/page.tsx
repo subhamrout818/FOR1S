@@ -15,9 +15,23 @@ export function generateMetadata({
   params: { slug: string };
 }): Metadata {
   const post = POSTS.find((p) => p.slug === params.slug);
+  if (!post) {
+    return {
+      title: "Blog — FOR1S",
+      alternates: { canonical: "/blog" },
+    };
+  }
   return {
-    title: post ? `${post.title} — FOR1S` : "Blog — FOR1S",
-    alternates: { canonical: post ? `/blog/${post.slug}` : "/blog" },
+    title: `${post.title} — FOR1S`,
+    description: post.excerpt,
+    openGraph: {
+      title: `${post.title} — FOR1S`,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: undefined,
+      authors: [post.author],
+    },
+    alternates: { canonical: `/blog/${post.slug}` },
   };
 }
 

@@ -16,8 +16,7 @@ export const MEMBERS: Member[] = [
     story: [
       "I never planned to end up here — not that I'm complaining. It started in a small room with a borrowed laptop and a stubborn belief that a good website could change how a business is seen. My first build was for a family friend; watching them light up when it went live is still the feeling I chase.",
       "That first project pulled me in further than I expected. I taught myself design because the templates weren't good enough, then motion because static pages felt flat, then the engineering behind it all because I wanted what I built to actually ship. None of it came from a course — every skill arrived because a project demanded it.",
-      "FOR1S is the honest result of that path: a studio that treats every product like it's the first one. Same hunger, same care, same obsession with the details other people skip. I still build things by hand at 2am sometimes — the things that make all of this worth it.",
-      "This page is a placeholder I'll keep editing as the story keeps going. Thanks for reading this far.",
+      "FOR1S is the honest result of that path: a studio that treats every website like it's the first one. Same hunger, same care, same obsession with the details other people skip. I still build things by hand at 2am sometimes — the things that make all of this worth it.",
     ],
   },
   {
@@ -26,9 +25,9 @@ export const MEMBERS: Member[] = [
     role: "Marketing",
     image: "/tanuj.jpg",
     story: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+      "I've always been the person who noticed how businesses present themselves — the sign that's crooked, the menu that's hard to read, the website that makes a great café look forgettable. Most small businesses have one thing working against them: they're busy running the business, so nobody tells their story online.",
+      "That's where I fit at FOR1S. I listen to what makes each business special and make sure that's exactly what a visitor sees first. The right words, the right message, the right moment to ask for the booking — marketing isn't noise, it's clarity.",
+      "The best part of this work is the phone call a week after launch: 'We got three new bookings from the site today.' That's the whole job, and it's worth every late night writing copy until it's right.",
     ],
   },
 ];

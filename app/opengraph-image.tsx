@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "FOR1S — Ship SaaS. Scale fast.";
+export const alt = "FOR1S — Websites that win customers.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -57,9 +57,9 @@ export default function OpengraphImage() {
               margin: "0 0 24px 0",
             }}
           >
-            Ship SaaS.
+            Websites that
             <br />
-            <span style={{ color: "#E63946" }}>Scale fast.</span>
+            <span style={{ color: "#E63946" }}>win customers.</span>
           </h1>
           <p
             style={{
@@ -68,8 +68,8 @@ export default function OpengraphImage() {
               margin: 0,
             }}
           >
-            Full-stack development for startups and brands — design, code, and
-            launch in one team.
+            Premium websites for local businesses and personal brands — design,
+            build, and care, all in one team.
           </p>
         </div>
       </div>

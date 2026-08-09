@@ -65,6 +65,34 @@ export default function ScrollSpine() {
     scrollToFraction(e.clientY);
   };
 
+  /** Scroll to a 0–100 progress value (keyboard equivalent of dragging). */
+  const scrollToValue = (value: number) => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const y = Math.min(1, Math.max(0, value / 100)) * max;
+
+    const lenis = (window as typeof window & { __lenis?: Lenis }).__lenis;
+    if (lenis) lenis.scrollTo(y, { immediate: true });
+    else window.scrollTo(0, y);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const step = 10; // percent per arrow press
+    const current = Number(trackRef.current?.getAttribute("aria-valuenow") ?? 0);
+    let next: number | null = null;
+
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = current + step;
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = current - step;
+    else if (e.key === "PageDown") next = current + 25;
+    else if (e.key === "PageUp") next = current - 25;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = 100;
+
+    if (next !== null) {
+      e.preventDefault();
+      scrollToValue(next);
+    }
+  };
+
   return (
     <div
       ref={scope}
@@ -85,9 +113,11 @@ export default function ScrollSpine() {
         aria-valuemax={100}
         aria-valuenow={0}
         data-cursor="hover"
+        tabIndex={0}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        className="relative flex h-44 w-10 cursor-ns-resize touch-none items-center justify-center"
+        onKeyDown={handleKeyDown}
+        className="relative flex h-44 w-10 cursor-ns-resize touch-none items-center justify-center focus-visible:outline-none"
       >
         <div className="h-full w-px bg-hairline" />
         <div

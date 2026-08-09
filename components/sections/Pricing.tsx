@@ -20,7 +20,7 @@ export default function Pricing() {
       <div className="mx-auto max-w-[1400px] px-6 lg:px-12">
         <div className="mb-16 text-center">
           <SectionLabel
-            scene="07"
+            scene="08"
             title="Pricing"
             className="mb-6 justify-center"
           />

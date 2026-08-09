@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { comparePassword, signToken, normalizeEmail } from "@/lib/auth";
+import { comparePassword, signToken, normalizeEmail, setSessionCookie } from "@/lib/auth";
 import {
   checkRateLimit,
   consumeRateLimit,
@@ -81,24 +81,28 @@ export async function POST(req: Request) {
       );
     }
 
-    // Sign JWT — "remember me" controls the lifetime.
+    // Sign JWT — "remember me" controls the lifetime. The token lives in an
+    // httpOnly cookie; it is never handed to the client.
     const token = signToken(user.id, user.email, rememberMe ? "7d" : "1d");
 
-    return NextResponse.json({
-      success: true,
+    return setSessionCookie(
+      NextResponse.json({
+        success: true,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          profileImage: user.profileImage,
+          provider: user.provider,
+          hasPassword: !!user.password,
+          emailVerified: user.emailVerified,
+          role: user.role,
+          company: user.company,
+        },
+      }),
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        profileImage: user.profileImage,
-        provider: user.provider,
-        hasPassword: !!user.password,
-        emailVerified: user.emailVerified,
-        role: user.role,
-        company: user.company,
-      },
-    });
+      rememberMe
+    );
   } catch (error) {
     console.error(error);
 

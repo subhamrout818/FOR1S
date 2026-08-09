@@ -6,10 +6,9 @@ import { useAuth } from "@/lib/auth-context";
 import { Loader2 } from "lucide-react";
 
 /**
- * Client handoff after an OAuth provider redirects back. The server can't
- * touch localStorage, so the callback route bounces here with ?token=…; this
- * page scrubs the URL (so the token never stays in history/referrer), stores
- * it, hydrates the user, and redirects on.
+ * Client handoff after an OAuth provider redirects back. The server set the
+ * httpOnly session cookie before redirecting here, so this page just hydrates
+ * the user via /api/auth/me and redirects on — no token ever touches the URL.
  */
 export default function OAuthCallbackPage() {
   const { completeOAuth } = useAuth();
@@ -18,7 +17,6 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const err = params.get("error");
-    const token = params.get("token");
     const next = params.get("next");
 
     if (err) {
@@ -29,15 +27,8 @@ export default function OAuthCallbackPage() {
       );
       return;
     }
-    if (!token) {
-      setError("Missing sign-in data. Please try again.");
-      return;
-    }
 
-    // Scrub the token from the URL before navigating away — otherwise it
-    // would appear in the same-origin referrer of the next navigation.
-    window.history.replaceState({}, "", "/oauth/callback");
-    completeOAuth(token, next);
+    completeOAuth(next);
   }, [completeOAuth]);
 
   return (

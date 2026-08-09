@@ -23,10 +23,10 @@ export default function DeliverableDetailPage({
 }: {
   params: { id: string };
 }) {
-  const { user, token, isLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<{
     deliverable: DeliverableDetail;
-  }>(`/api/portal/deliverables/${params.id}`, token);
+  }>(`/api/portal/deliverables/${params.id}`);
 
   const deliverable = data?.deliverable ?? null;
 
@@ -48,13 +48,12 @@ export default function DeliverableDetailPage({
 
   const submitReview = useCallback(
     async (action: "approve" | "changes") => {
-      if (!token || !deliverable) return;
+      if (!deliverable) return;
       setBusy(true);
       setMsg("");
       setErr("");
       const res = await portalAction(
         `/api/portal/deliverables/${deliverable.id}/review`,
-        token,
         { action, note: action === "changes" ? note : "" }
       );
       setBusy(false);
@@ -67,16 +66,15 @@ export default function DeliverableDetailPage({
         setErr(res.message);
       }
     },
-    [token, deliverable, note, reload]
+    [deliverable, note, reload]
   );
 
   const submitComment = useCallback(async () => {
-    if (!token || !deliverable || !comment.trim()) return;
+    if (!deliverable || !comment.trim()) return;
     setCommentBusy(true);
     setErr("");
     const res = await portalAction(
       `/api/portal/deliverables/${deliverable.id}/comment`,
-      token,
       { body: comment }
     );
     setCommentBusy(false);
@@ -86,9 +84,9 @@ export default function DeliverableDetailPage({
     } else {
       setErr(res.message);
     }
-  }, [token, deliverable, comment, reload]);
+  }, [deliverable, comment, reload]);
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   if (loading && !deliverable) {
     return (
@@ -184,7 +182,8 @@ export default function DeliverableDetailPage({
             {metaFor(DELIVERABLE_STATUS, deliverable.status).label}
           </p>
           <p className="mt-1 text-sm text-muted">
-            {deliverable.deliveredAt
+            {["delivered", "approved"].includes(deliverable.status) &&
+            deliverable.deliveredAt
               ? `Delivered ${formatDate(deliverable.deliveredAt)}`
               : deliverable.dueAt
                 ? `Due ${formatDate(deliverable.dueAt)}`

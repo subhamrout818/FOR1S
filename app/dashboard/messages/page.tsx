@@ -14,13 +14,14 @@ import {
   timeAgo,
 } from "@/lib/portal-format";
 import type { WorkspaceData } from "@/lib/portal-types";
+import { CONTACT } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
 export default function MessagesPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   const threads = data?.threads ?? [];
   const byProject = data?.projects
@@ -131,6 +132,28 @@ export default function MessagesPage() {
           </p>
         </div>
       )}
+
+      <Reveal delay={0.1}>
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-hairline bg-background/60 p-6 sm:flex-row sm:items-center">
+          <div>
+            <p className="font-display text-base font-semibold text-foreground">
+              Need to reach FOR1S directly?
+            </p>
+            <p className="mt-1 text-sm text-muted">
+              For anything outside a deliverable thread — billing, scope, or
+              general questions — email us and we&apos;ll reply within a day.
+            </p>
+          </div>
+          <a
+            href={`mailto:${CONTACT.contactEmail}`}
+            data-cursor="hover"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dim"
+          >
+            Email FOR1S
+            <ArrowUpRight size={15} />
+          </a>
+        </div>
+      </Reveal>
     </div>
   );
 }

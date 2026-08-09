@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BRAND } from "@/lib/data";
 
@@ -9,21 +10,36 @@ export default function Preloader() {
   const counterRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // The preloader is a first-load showcase for the home page only. Legal
+    // pages, login, and the workspaces shouldn't be gated behind a black screen.
+    if (pathname !== "/") return;
+
     const reduced = prefersReducedMotion();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Fail-safe: no matter what happens with the animation, release the
+    // overlay so the site can never be stranded behind a black screen.
+    let finished = false;
+    let fallback = 0;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(fallback);
+      document.body.style.overflow = previousOverflow;
+      setDone(true);
+      window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
+    };
+    fallback = window.setTimeout(finish, 3500);
 
     const counter = { value: 0 };
 
     const tl = gsap.timeline({
       defaults: { ease: "power3.out" },
-      onComplete: () => {
-        document.body.style.overflow = previousOverflow;
-        setDone(true);
-        window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
-      },
+      onComplete: finish,
     });
 
     tl.to(counter, {
@@ -58,10 +74,13 @@ export default function Preloader() {
 
     return () => {
       tl.kill();
+      clearTimeout(fallback);
       document.body.style.overflow = previousOverflow;
     };
-  }, []);
+  }, [pathname]);
 
+  // Only the home page gets the preloader.
+  if (pathname !== "/") return null;
   if (done) return null;
 
   return (

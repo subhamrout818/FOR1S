@@ -7,7 +7,7 @@ import { usePortalData } from "@/components/portal/usePortal";
 import Reveal from "@/components/portal/Reveal";
 import ProgressBar from "@/components/portal/ProgressBar";
 import PageHeader from "@/components/portal/PageHeader";
-import { formatINR, formatDate } from "@/lib/portal-format";
+import { formatMoney, formatDate } from "@/lib/portal-format";
 import type { WorkspaceData, ProjectSummary } from "@/lib/portal-types";
 
 function ProjectCard({ project, index }: { project: ProjectSummary; index: number }) {
@@ -61,7 +61,7 @@ function ProjectCard({ project, index }: { project: ProjectSummary; index: numbe
               Value
             </p>
             <p className="mt-0.5 font-display font-semibold text-foreground">
-              {project.value ? formatINR(project.value) : "—"}
+              {project.value ? formatMoney(project.value) : "—"}
             </p>
           </div>
         </div>
@@ -71,10 +71,10 @@ function ProjectCard({ project, index }: { project: ProjectSummary; index: numbe
 }
 
 export default function ProjectsPage() {
-  const { token, isLoading } = useAuth();
-  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal", token);
+  const { isLoading } = useAuth();
+  const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
 
-  if (isLoading || !token) return null;
+  if (isLoading) return null;
 
   return (
     <div>

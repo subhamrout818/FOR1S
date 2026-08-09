@@ -102,10 +102,10 @@ function SelectField({
 /* ------------------------------------------------------------------ */
 
 const PROJECT_TYPES = [
-  "SaaS Platform",
   "Business Website",
-  "Landing Page",
-  "Video / Commercial",
+  "Personal Website / Portfolio",
+  "E-commerce / Online Store",
+  "Website + Video",
   "Something else",
 ];
 

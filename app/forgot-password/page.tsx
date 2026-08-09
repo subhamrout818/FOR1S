@@ -35,9 +35,12 @@ export default function ForgotPasswordPage() {
       if (data.success) {
         setSent(true);
       } else {
-        setError(data.message || data.errors
-          ? Object.values(data.errors ?? {}).flat().join(", ")
-          : "Something went wrong");
+        setError(
+          data.message ||
+            (data.errors
+              ? Object.values(data.errors ?? {}).flat().join(", ")
+              : "Something went wrong")
+        );
       }
     } catch {
       setError("Network error. Please try again.");
