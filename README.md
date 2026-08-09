@@ -6,10 +6,10 @@
 
 # FOR1S
 
-### Premium websites and digital experiences for startups, businesses, creators, and modern brands.
+### Websites that win customers.
 
 <p>
-FOR1S is a motion-first web studio focused on crafting premium digital experiences that combine cinematic design, modern engineering, and seamless user interactions. From business websites and SaaS platforms to personal portfolios and custom web applications, every project is built to be visually compelling, fast, accessible, and scalable.
+FOR1S is a motion-first web design studio for local businesses and personal brands. We design, write, build, and launch the website — one small team, one timeline, one price. No jargon, no templates, no handoff gaps.
 </p>
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
@@ -26,31 +26,23 @@ FOR1S is a motion-first web studio focused on crafting premium digital experienc
 
 # Overview
 
-FOR1S is the foundation of a modern web studio dedicated to building premium websites for startups, local businesses, creators, agencies, and growing brands.
+FOR1S builds premium websites for local businesses and personal brands — designed to look expensive, built to get found, and made to win you customers.
 
-Rather than treating design as decoration, FOR1S focuses on creating meaningful digital experiences where every animation, interaction, and layout serves a purpose. The goal is to deliver websites that not only look premium but also communicate clearly, perform exceptionally, and convert visitors into customers.
+We didn't set out to build another agency. We set out to build the one we wish existed when we were starting out. Every decision — design, copy, layout, speed — exists to turn a visitor into a customer. We strip away what doesn't help your business, what doesn't load fast, and what doesn't get you found. What's left is a website that makes your business look as good as it is.
 
-Built on a scalable architecture using modern web technologies, FOR1S serves as both the agency website and the design system behind future client projects.
+Most sites go live in **1–3 weeks**, because we've done this many times before — not because we cut corners. From cafés, salons, and photographers to freelancers and growing brands, every site is designed from scratch, mobile-first, and built to get found.
 
 ---
 
 # Services
 
-### Business Websites
+We do five things differently — not as buzzwords, but as engineering decisions that compound over time:
 
-Professional websites designed to establish trust, improve online presence, and help businesses attract more customers.
-
-### SaaS Landing Pages
-
-High-converting landing pages focused on product presentation, user engagement, and conversion optimization.
-
-### Personal Portfolios
-
-Modern portfolios for developers, designers, photographers, creators, and professionals looking to showcase their work.
-
-### Custom Web Applications
-
-Tailor-made frontend experiences built with scalable architecture and modern development practices.
+- 🧑‍🤝‍🧑 **End to end, one team** — Design, copy, build, and launch handled by the same small team. One person to talk to, one timeline, one price. No agencies juggling, no handoff gaps.
+- 📱 **Fast on every phone** — Pages that load in a blink and feel premium everywhere, even on patchy mobile connections. Speed isn't a bonus, it's expected.
+- 🔍 **Found on Google** — SEO is built in from day one, so your business shows up when people search for what you do.
+- ✨ **Made to stand out** — No templates, no borrowed layouts. Your site is designed from scratch around your business, your customers, and your goals.
+- 🛟 **We don't disappear** — Launch day isn't the finish line. Updates, fixes, and improvements — we stay with you.
 
 ---
 
@@ -72,9 +64,10 @@ Tailor-made frontend experiences built with scalable architecture and modern dev
 - Modern navigation
 - Services showcase
 - Vision section
-- Interactive development process
+- Interactive process (Discover → Design → Build → Launch & care)
 - Animated pricing cards
 - FAQ accordion
+- Case-study "Work" section
 - Conversion-focused call-to-actions
 - Modular reusable components
 
@@ -194,7 +187,7 @@ http://localhost:3000
 
 FOR1S is built around one simple idea:
 
-> Great websites don't just look beautiful—they communicate clearly, feel intuitive, and inspire confidence.
+> We build the website, you win customers.
 
 Every project follows these principles:
 
@@ -325,7 +318,7 @@ To help businesses establish an online presence that feels as premium as the pro
 
 Too many websites are slow, outdated, difficult to navigate, or fail to leave a lasting impression. FOR1S focuses on solving that problem by combining modern design, meaningful motion, and scalable engineering into websites that are visually engaging, performant, and built with long-term maintainability in mind.
 
-Whether it's a local business looking to attract more customers, a startup launching its first product, or a creator building a personal brand, every project is approached with the same attention to detail and commitment to quality.
+Whether it's a café, a salon, a photographer, a freelancer, or a growing local brand, every project is approached with the same attention to detail and commitment to quality.
 
 This repository showcases the frontend architecture, reusable component system, animation library, and development standards that power FOR1S and will continue to evolve as new client projects are built.
 
