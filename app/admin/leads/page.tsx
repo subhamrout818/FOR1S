@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Loader2, Magnet } from "lucide-react";
+import { ArrowUpRight, Loader2, Magnet, Target, Trophy, Users } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
 import PageHeader from "@/components/portal/PageHeader";
+import StatCard from "@/components/portal/StatCard";
+import Reveal from "@/components/portal/Reveal";
 import { timeAgo, metaFor, LEAD_STATUS } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
@@ -29,6 +31,10 @@ export default function AdminLeadsPage() {
   if (isLoading) return null;
 
   const leads = data?.leads ?? [];
+  const pipeline = leads.filter((l) =>
+    ["new", "contacted", "qualified"].includes(l.status)
+  ).length;
+  const won = leads.filter((l) => l.status === "won").length;
 
   return (
     <div>
@@ -37,6 +43,28 @@ export default function AdminLeadsPage() {
         title="Pipeline"
         sub="Enquiries from the contact form, referrals and socials — move them through to won."
       />
+
+      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+        <StatCard
+          label="Total leads"
+          value={leads.length}
+          icon={<Users size={16} />}
+          delay={0}
+        />
+        <StatCard
+          label="In pipeline"
+          value={pipeline}
+          icon={<Target size={16} />}
+          delay={0.06}
+        />
+        <StatCard
+          label="Won"
+          value={won}
+          icon={<Trophy size={16} />}
+          accent
+          delay={0.12}
+        />
+      </div>
 
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
@@ -69,62 +97,67 @@ export default function AdminLeadsPage() {
       )}
 
       {data && leads.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
-                  <th className="px-6 py-3 font-medium">Lead</th>
-                  <th className="px-6 py-3 font-medium">Company</th>
-                  <th className="px-6 py-3 font-medium">Service</th>
-                  <th className="px-6 py-3 font-medium">Budget</th>
-                  <th className="px-6 py-3 font-medium">Source</th>
-                  <th className="px-6 py-3 font-medium">Age</th>
-                  <th className="px-6 py-3 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.map((l) => (
-                  <tr key={l.id} className="border-b border-hairline/60 transition-colors hover:bg-white/[0.02]">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-foreground">{l.name}</p>
-                      <p className="text-xs text-muted">{l.email}</p>
-                    </td>
-                    <td className="px-6 py-4 text-muted">{l.company ?? "—"}</td>
-                    <td className="px-6 py-4 text-muted">{l.service ?? "—"}</td>
-                    <td className="px-6 py-4 text-muted">{l.budget ?? "—"}</td>
-                    <td className="px-6 py-4 font-mono text-[11px] text-muted">
-                      {l.source ?? "—"}
-                    </td>
-                    <td className="px-6 py-4 text-muted">{timeAgo(l.createdAt)}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        {savingId === l.id ? (
-                          <Loader2 size={15} className="animate-spin text-accent" />
-                        ) : (
-                          <Badge meta={metaFor(LEAD_STATUS, l.status)} />
-                        )}
-                        <select
-                          value={l.status}
-                          data-cursor="hover"
-                          onChange={(e) => changeStatus(l.id, e.target.value)}
-                          disabled={savingId !== null}
-                          className="rounded-lg border border-hairline bg-background px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted focus:border-accent focus:outline-none disabled:opacity-50"
-                        >
-                          {STATUS_ORDER.map((s) => (
-                            <option key={s} value={s}>
-                              {metaFor(LEAD_STATUS, s).label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
+        <Reveal delay={0.08}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[760px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
+                    <th className="px-6 py-3 font-medium">Lead</th>
+                    <th className="px-6 py-3 font-medium">Company</th>
+                    <th className="px-6 py-3 font-medium">Service</th>
+                    <th className="px-6 py-3 font-medium">Budget</th>
+                    <th className="px-6 py-3 font-medium">Source</th>
+                    <th className="px-6 py-3 font-medium">Age</th>
+                    <th className="px-6 py-3 font-medium">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {leads.map((l) => (
+                    <tr
+                      key={l.id}
+                      className="group border-b border-hairline/60 transition-colors duration-300 hover:bg-accent/[0.04]"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="font-medium text-foreground">{l.name}</p>
+                        <p className="text-xs text-muted">{l.email}</p>
+                      </td>
+                      <td className="px-6 py-4 text-muted">{l.company ?? "—"}</td>
+                      <td className="px-6 py-4 text-muted">{l.service ?? "—"}</td>
+                      <td className="px-6 py-4 text-muted">{l.budget ?? "—"}</td>
+                      <td className="px-6 py-4 font-mono text-[11px] text-muted">
+                        {l.source ?? "—"}
+                      </td>
+                      <td className="px-6 py-4 text-muted">{timeAgo(l.createdAt)}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          {savingId === l.id ? (
+                            <Loader2 size={15} className="animate-spin text-accent" />
+                          ) : (
+                            <Badge meta={metaFor(LEAD_STATUS, l.status)} />
+                          )}
+                          <select
+                            value={l.status}
+                            data-cursor="hover"
+                            onChange={(e) => changeStatus(l.id, e.target.value)}
+                            disabled={savingId !== null}
+                            className="rounded-lg border border-hairline bg-background px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted transition-colors hover:border-accent/40 focus:border-accent focus:outline-none disabled:opacity-50"
+                          >
+                            {STATUS_ORDER.map((s) => (
+                              <option key={s} value={s}>
+                                {metaFor(LEAD_STATUS, s).label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
     </div>
   );

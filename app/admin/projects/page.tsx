@@ -1,11 +1,13 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { FolderKanban, Layers, Loader2, Rocket } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
 import ProgressBar from "@/components/portal/ProgressBar";
 import PageHeader from "@/components/portal/PageHeader";
+import StatCard from "@/components/portal/StatCard";
+import Reveal from "@/components/portal/Reveal";
 import {
   formatMoney,
   formatDate,
@@ -21,6 +23,10 @@ export default function AdminProjectsPage() {
   if (isLoading) return null;
 
   const projects = data?.projects ?? [];
+  const active = projects.filter((p) => p.status === "active").length;
+  const inDelivery = projects.filter((p) =>
+    ["active", "on-hold"].includes(p.status)
+  ).length;
 
   return (
     <div>
@@ -29,6 +35,28 @@ export default function AdminProjectsPage() {
         title="All projects"
         sub="Every engagement, its progress, deliverables and deadlines."
       />
+
+      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+        <StatCard
+          label="Total projects"
+          value={projects.length}
+          icon={<FolderKanban size={16} />}
+          delay={0}
+        />
+        <StatCard
+          label="Active"
+          value={active}
+          icon={<Rocket size={16} />}
+          delay={0.06}
+        />
+        <StatCard
+          label="In delivery"
+          value={inDelivery}
+          icon={<Layers size={16} />}
+          accent
+          delay={0.12}
+        />
+      </div>
 
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
@@ -57,51 +85,56 @@ export default function AdminProjectsPage() {
       )}
 
       {data && projects.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
-                  <th className="px-6 py-3 font-medium">Project</th>
-                  <th className="px-6 py-3 font-medium">Client</th>
-                  <th className="px-6 py-3 font-medium">Status</th>
-                  <th className="px-6 py-3 font-medium">Progress</th>
-                  <th className="px-6 py-3 font-medium">Deliverables</th>
-                  <th className="px-6 py-3 font-medium">Deadline</th>
-                  <th className="px-6 py-3 text-right font-medium">Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((p) => (
-                  <tr key={p.id} className="border-b border-hairline/60 transition-colors hover:bg-white/[0.02]">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-foreground">{p.name}</p>
-                    </td>
-                    <td className="px-6 py-4 text-muted">{p.client.name}</td>
-                    <td className="px-6 py-4">
-                      <Badge meta={metaFor(PROJECT_STATUS, p.status)} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <ProgressBar value={p.progress} className="w-20" animate={false} />
-                        <span className="font-mono text-xs text-muted">{p.progress}%</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 font-mono text-xs text-muted">
-                      {p.approvedCount}/{p.deliverablesCount}
-                    </td>
-                    <td className="px-6 py-4 text-muted">
-                      {formatDate(p.nextDeadline)}
-                    </td>
-                    <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
-                      {p.value ? formatMoney(p.value) : "—"}
-                    </td>
+        <Reveal delay={0.08}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
+                    <th className="px-6 py-3 font-medium">Project</th>
+                    <th className="px-6 py-3 font-medium">Client</th>
+                    <th className="px-6 py-3 font-medium">Status</th>
+                    <th className="px-6 py-3 font-medium">Progress</th>
+                    <th className="px-6 py-3 font-medium">Deliverables</th>
+                    <th className="px-6 py-3 font-medium">Deadline</th>
+                    <th className="px-6 py-3 text-right font-medium">Value</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {projects.map((p) => (
+                    <tr
+                      key={p.id}
+                      className="group border-b border-hairline/60 transition-colors duration-300 hover:bg-accent/[0.04]"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="font-medium text-foreground">{p.name}</p>
+                      </td>
+                      <td className="px-6 py-4 text-muted">{p.client.name}</td>
+                      <td className="px-6 py-4">
+                        <Badge meta={metaFor(PROJECT_STATUS, p.status)} />
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <ProgressBar value={p.progress} className="w-20" />
+                          <span className="font-mono text-xs text-muted">{p.progress}%</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-mono text-xs text-muted">
+                        {p.approvedCount}/{p.deliverablesCount}
+                      </td>
+                      <td className="px-6 py-4 text-muted">
+                        {formatDate(p.nextDeadline)}
+                      </td>
+                      <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
+                        {p.value ? formatMoney(p.value) : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
     </div>
   );

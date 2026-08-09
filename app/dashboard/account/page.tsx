@@ -10,6 +10,7 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import Avatar from "@/components/ui/Avatar";
 import CameraCapture from "@/components/account/CameraCapture";
 import CropModal from "@/components/account/CropModal";
+import Reveal from "@/components/portal/Reveal";
 import {
   AlertCircle,
   ArrowLeft,
@@ -67,12 +68,16 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-hairline bg-background/60 p-7 lg:p-8">
+    <div className="group relative overflow-hidden rounded-2xl border border-hairline bg-background/60 p-7 transition-all duration-500 hover:border-accent/25 hover:shadow-[0_30px_90px_-40px_rgba(230,57,70,0.3)] lg:p-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-accent/[0.05] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
+      />
       <h2 className="font-display text-xl font-semibold uppercase tracking-tightest text-foreground">
         {title}
       </h2>
       {sub && <p className="mt-1 text-sm text-muted">{sub}</p>}
-      <div className="mt-6">{children}</div>
+      <div className="relative z-10 mt-6">{children}</div>
     </div>
   );
 }
@@ -352,10 +357,11 @@ export default function AccountPage() {
 
       <div className="flex flex-col gap-6">
         {/* Profile photo */}
-        <SectionCard
-          title="Profile photo"
-          sub="Pick one of the pre-loaded styles, upload from your gallery, or take a photo."
-        >
+        <Reveal delay={0}>
+          <SectionCard
+            title="Profile photo"
+            sub="Pick one of the pre-loaded styles, upload from your gallery, or take a photo."
+          >
           <div className="flex flex-col gap-8">
             <div className="flex items-center gap-6">
               <Avatar src={profileImage} size={96} className="border-2 border-hairline" />
@@ -441,9 +447,11 @@ export default function AccountPage() {
               )}
             </div>
           </div>
-        </SectionCard>
+          </SectionCard>
+        </Reveal>
 
         {/* Profile info */}
+        <Reveal delay={0.06}>
         <SectionCard title="Profile" sub="Your name as it appears around the site.">
           <form onSubmit={handleName} className="flex flex-col gap-4">
             <Field label="Name" htmlFor="name">
@@ -476,8 +484,10 @@ export default function AccountPage() {
             </div>
           </form>
         </SectionCard>
+        </Reveal>
 
         {/* Email */}
+        <Reveal delay={0.12}>
         <SectionCard title="Email" sub="Change the email you sign in with.">
           {hasPassword ? (
             <form onSubmit={handleEmail} className="flex flex-col gap-4">
@@ -529,8 +539,10 @@ export default function AccountPage() {
             </p>
           )}
         </SectionCard>
+        </Reveal>
 
         {/* Password */}
+        <Reveal delay={0.18}>
         <SectionCard title="Password" sub="Change your password. Use at least 8 characters.">
           {hasPassword ? (
             <form onSubmit={handlePassword} className="flex flex-col gap-4">
@@ -593,6 +605,7 @@ export default function AccountPage() {
             </div>
           )}
         </SectionCard>
+        </Reveal>
       </div>
 
       {/* Camera modal */}

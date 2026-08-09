@@ -22,6 +22,7 @@ export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const tiltRef = useRef<HTMLHeadingElement>(null);
   const lightRef = useRef<HTMLDivElement>(null);
+  const scrollGroupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = () => setReady(true);
@@ -32,6 +33,34 @@ export default function Hero() {
       window.removeEventListener("FOR1S:loaded", handler);
       clearTimeout(fallback);
     };
+  }, []);
+
+  /* Scroll-out — as the user scrolls away the whole hero group drifts up and
+     fades, and the headline parallaxes a touch more than the sub/CTAs for a
+     layered depth that carries the motion-first promise past first paint.
+     Skipped on touch and for reduced-motion users. */
+  useEffect(() => {
+    const hero = heroRef.current;
+    const group = scrollGroupRef.current;
+    if (!hero || !group) return;
+    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    const ctx = gsap.context(() => {
+      gsap.to(group, {
+        yPercent: -18,
+        opacity: 0.15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: hero,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }, hero);
+
+    return () => ctx.revert();
   }, []);
 
   /* Mouse parallax — the extruded headline tilts toward the pointer and a
@@ -109,7 +138,10 @@ export default function Hero() {
         className="pointer-events-none absolute bottom-[-25%] left-[-15%] h-[40vw] max-h-[420px] w-[40vw] max-w-[420px] rounded-full bg-accent/[0.06] blur-[100px]"
       />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-6 pb-10 pt-32 lg:px-12 lg:pb-16 lg:pt-40">
+      <div
+        ref={scrollGroupRef}
+        className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-6 pb-10 pt-32 lg:px-12 lg:pb-16 lg:pt-40"
+      >
         <motion.div
           custom={0}
           variants={fadeUp}
@@ -151,7 +183,7 @@ export default function Hero() {
                 trigger="immediate"
                 delay={0.1}
                 play={ready}
-                className="block overflow-hidden"
+                className="hero-extrude-face block overflow-hidden"
               >
                 We build the website,
               </SplitReveal>

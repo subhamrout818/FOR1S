@@ -33,7 +33,7 @@ export default function Preloader() {
       setDone(true);
       window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
     };
-    fallback = window.setTimeout(finish, 3500);
+    fallback = window.setTimeout(finish, 2200);
 
     const counter = { value: 0 };
 
@@ -44,7 +44,7 @@ export default function Preloader() {
 
     tl.to(counter, {
       value: 100,
-      duration: reduced ? 0.5 : 1.6,
+      duration: reduced ? 0.4 : 0.9,
       ease: "power2.inOut",
       onUpdate: () => {
         if (counterRef.current) {
@@ -59,17 +59,17 @@ export default function Preloader() {
     })
       .to(
         ".preloader-fade",
-        { opacity: 0, y: -8, duration: 0.4, stagger: 0.05 },
-        reduced ? "-=0.1" : "-=0.35"
+        { opacity: 0, y: -8, duration: 0.35, stagger: 0.04 },
+        reduced ? "-=0.1" : "-=0.25"
       )
       .to(
         rootRef.current,
         {
           yPercent: -100,
-          duration: reduced ? 0.4 : 1.05,
+          duration: reduced ? 0.35 : 0.8,
           ease: "expo.inOut",
         },
-        reduced ? "+=0" : "+=0.1"
+        reduced ? "+=0" : "+=0.05"
       );
 
     return () => {

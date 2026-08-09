@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, FileCheck2, Loader2, RefreshCcw } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
 import PageHeader from "@/components/portal/PageHeader";
+import StatCard from "@/components/portal/StatCard";
+import Reveal from "@/components/portal/Reveal";
 import {
   formatDate,
   metaFor,
@@ -34,6 +36,12 @@ export default function AdminDeliverablesPage() {
   if (isLoading) return null;
 
   const deliverables = data?.deliverables ?? [];
+  const inReview = deliverables.filter((d) =>
+    ["in-review", "changes-requested"].includes(d.status)
+  ).length;
+  const delivered = deliverables.filter((d) =>
+    ["approved", "delivered"].includes(d.status)
+  ).length;
 
   return (
     <div>
@@ -42,6 +50,28 @@ export default function AdminDeliverablesPage() {
         title="Review queue"
         sub="Move work through its lifecycle — from draft to delivered."
       />
+
+      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+        <StatCard
+          label="Total"
+          value={deliverables.length}
+          icon={<FileCheck2 size={16} />}
+          delay={0}
+        />
+        <StatCard
+          label="Awaiting review"
+          value={inReview}
+          icon={<RefreshCcw size={16} />}
+          accent
+          delay={0.06}
+        />
+        <StatCard
+          label="Approved / delivered"
+          value={delivered}
+          icon={<CheckCircle2 size={16} />}
+          delay={0.12}
+        />
+      </div>
 
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
@@ -70,60 +100,65 @@ export default function AdminDeliverablesPage() {
       )}
 
       {data && deliverables.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
-                  <th className="px-6 py-3 font-medium">Deliverable</th>
-                  <th className="px-6 py-3 font-medium">Client / Project</th>
-                  <th className="px-6 py-3 font-medium">Kind</th>
-                  <th className="px-6 py-3 font-medium">Version</th>
-                  <th className="px-6 py-3 font-medium">Due</th>
-                  <th className="px-6 py-3 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {deliverables.map((d) => (
-                  <tr key={d.id} className="border-b border-hairline/60 transition-colors hover:bg-white/[0.02]">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-foreground">{d.title}</p>
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="text-muted">{d.client.name}</p>
-                      <p className="text-xs text-muted/70">{d.project.name}</p>
-                    </td>
-                    <td className="px-6 py-4 text-muted">{KIND_LABEL[d.kind] ?? d.kind}</td>
-                    <td className="px-6 py-4 font-mono text-xs text-muted">v{d.version}</td>
-                    <td className="px-6 py-4 text-muted">{formatDate(d.dueAt)}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        {savingId === d.id ? (
-                          <Loader2 size={15} className="animate-spin text-accent" />
-                        ) : (
-                          <Badge meta={metaFor(DELIVERABLE_STATUS, d.status)} />
-                        )}
-                        <select
-                          value={d.status}
-                          data-cursor="hover"
-                          onChange={(e) => changeStatus(d.id, e.target.value)}
-                          disabled={savingId !== null}
-                          className="rounded-lg border border-hairline bg-background px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted focus:border-accent focus:outline-none disabled:opacity-50"
-                        >
-                          {STATUS_ORDER.map((s) => (
-                            <option key={s} value={s}>
-                              {metaFor(DELIVERABLE_STATUS, s).label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
+        <Reveal delay={0.08}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[760px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
+                    <th className="px-6 py-3 font-medium">Deliverable</th>
+                    <th className="px-6 py-3 font-medium">Client / Project</th>
+                    <th className="px-6 py-3 font-medium">Kind</th>
+                    <th className="px-6 py-3 font-medium">Version</th>
+                    <th className="px-6 py-3 font-medium">Due</th>
+                    <th className="px-6 py-3 font-medium">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {deliverables.map((d) => (
+                    <tr
+                      key={d.id}
+                      className="group border-b border-hairline/60 transition-colors duration-300 hover:bg-accent/[0.04]"
+                    >
+                      <td className="px-6 py-4">
+                        <p className="font-medium text-foreground">{d.title}</p>
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="text-muted">{d.client.name}</p>
+                        <p className="text-xs text-muted/70">{d.project.name}</p>
+                      </td>
+                      <td className="px-6 py-4 text-muted">{KIND_LABEL[d.kind] ?? d.kind}</td>
+                      <td className="px-6 py-4 font-mono text-xs text-muted">v{d.version}</td>
+                      <td className="px-6 py-4 text-muted">{formatDate(d.dueAt)}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          {savingId === d.id ? (
+                            <Loader2 size={15} className="animate-spin text-accent" />
+                          ) : (
+                            <Badge meta={metaFor(DELIVERABLE_STATUS, d.status)} />
+                          )}
+                          <select
+                            value={d.status}
+                            data-cursor="hover"
+                            onChange={(e) => changeStatus(d.id, e.target.value)}
+                            disabled={savingId !== null}
+                            className="rounded-lg border border-hairline bg-background px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted transition-colors hover:border-accent/40 focus:border-accent focus:outline-none disabled:opacity-50"
+                          >
+                            {STATUS_ORDER.map((s) => (
+                              <option key={s} value={s}>
+                                {metaFor(DELIVERABLE_STATUS, s).label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </Reveal>
       )}
     </div>
   );

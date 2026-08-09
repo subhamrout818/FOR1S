@@ -6,7 +6,6 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import Providers from "@/components/layout/Providers";
 import Preloader from "@/components/layout/Preloader";
-import CustomCursor from "@/components/layout/CustomCursor";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import ScrollSpine from "@/components/layout/ScrollSpine";
 import RouteChrome from "@/components/layout/RouteChrome";
@@ -101,7 +100,6 @@ export default function RootLayout({
         <AuthProvider>
           <Providers>
             <Preloader />
-            <CustomCursor />
             <GrainOverlay />
             <ScrollSpine />
             <RouteChrome>

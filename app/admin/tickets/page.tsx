@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { LifeBuoy, Loader2 } from "lucide-react";
+import { CheckCircle2, Clock, LifeBuoy, Loader2, MessageSquare } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
 import PageHeader from "@/components/portal/PageHeader";
+import StatCard from "@/components/portal/StatCard";
+import Reveal from "@/components/portal/Reveal";
 import { timeAgo, metaFor, TICKET_STATUS } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
@@ -27,6 +29,8 @@ export default function AdminTicketsPage() {
   if (isLoading) return null;
 
   const tickets = data?.tickets ?? [];
+  const open = tickets.filter((t) => t.status !== "closed").length;
+  const closed = tickets.filter((t) => t.status === "closed").length;
 
   return (
     <div>
@@ -35,6 +39,28 @@ export default function AdminTicketsPage() {
         title="Tickets"
         sub="Client support requests from the portal — reply and close them here."
       />
+
+      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+        <StatCard
+          label="Total tickets"
+          value={tickets.length}
+          icon={<MessageSquare size={16} />}
+          delay={0}
+        />
+        <StatCard
+          label="Open"
+          value={open}
+          icon={<Clock size={16} />}
+          accent
+          delay={0.06}
+        />
+        <StatCard
+          label="Closed"
+          value={closed}
+          icon={<CheckCircle2 size={16} />}
+          delay={0.12}
+        />
+      </div>
 
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
@@ -67,54 +93,58 @@ export default function AdminTicketsPage() {
       )}
 
       {data && tickets.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60">
-          {tickets.map((t, i) => (
-            <div
-              key={t.id}
-              className={`flex flex-col gap-4 p-6 ${i > 0 ? "border-t border-hairline/60" : ""}`}
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <h3 className="font-display text-base font-semibold text-foreground">
-                      {t.subject}
-                    </h3>
-                    <Badge meta={metaFor(TICKET_STATUS, t.status)} />
+        <Reveal delay={0.08}>
+          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
+            {tickets.map((t, i) => (
+              <div
+                key={t.id}
+                className={`flex flex-col gap-4 p-6 transition-colors duration-300 hover:bg-accent/[0.03] ${
+                  i > 0 ? "border-t border-hairline/60" : ""
+                }`}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h3 className="font-display text-base font-semibold text-foreground">
+                        {t.subject}
+                      </h3>
+                      <Badge meta={metaFor(TICKET_STATUS, t.status)} />
+                    </div>
+                    <p className="mt-1 truncate text-xs text-muted">
+                      {t.user?.name ?? "Client"} · {t.user?.email ?? ""} ·{" "}
+                      {timeAgo(t.createdAt)}
+                    </p>
                   </div>
-                  <p className="mt-1 truncate text-xs text-muted">
-                    {t.user?.name ?? "Client"} · {t.user?.email ?? ""} ·{" "}
-                    {timeAgo(t.createdAt)}
-                  </p>
-                </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  {t.status !== "replied" && (
+                  <div className="flex shrink-0 items-center gap-2">
+                    {t.status !== "replied" && (
+                      <button
+                        data-cursor="hover"
+                        disabled={savingId === t.id}
+                        onClick={() => setStatus(t.id, "replied")}
+                        className="rounded-full border border-hairline px-3 py-1.5 text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:border-accent/50 hover:text-accent disabled:opacity-50"
+                      >
+                        {savingId === t.id ? "Saving…" : "Mark replied"}
+                      </button>
+                    )}
                     <button
                       data-cursor="hover"
                       disabled={savingId === t.id}
-                      onClick={() => setStatus(t.id, "replied")}
-                      className="rounded-full border border-hairline px-3 py-1.5 text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:border-accent/50 hover:text-accent disabled:opacity-50"
+                      onClick={() => setStatus(t.id, t.status === "closed" ? "open" : "closed")}
+                      className={
+                        t.status === "closed"
+                          ? "rounded-full border border-hairline px-3 py-1.5 text-xs uppercase tracking-widest text-muted transition-colors hover:text-foreground disabled:opacity-50"
+                          : "rounded-full border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs uppercase tracking-widest text-accent transition-colors hover:bg-accent/20 disabled:opacity-50"
+                      }
                     >
-                      {savingId === t.id ? "Saving…" : "Mark replied"}
+                      {savingId === t.id ? "Saving…" : t.status === "closed" ? "Reopen" : "Close"}
                     </button>
-                  )}
-                  <button
-                    data-cursor="hover"
-                    disabled={savingId === t.id}
-                    onClick={() => setStatus(t.id, t.status === "closed" ? "open" : "closed")}
-                    className={
-                      t.status === "closed"
-                        ? "rounded-full border border-hairline px-3 py-1.5 text-xs uppercase tracking-widest text-muted transition-colors hover:text-foreground disabled:opacity-50"
-                        : "rounded-full border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs uppercase tracking-widest text-accent transition-colors hover:bg-accent/20 disabled:opacity-50"
-                    }
-                  >
-                    {savingId === t.id ? "Saving…" : t.status === "closed" ? "Reopen" : "Close"}
-                  </button>
+                  </div>
                 </div>
+                <p className="max-w-2xl text-sm leading-relaxed text-muted">{t.message}</p>
               </div>
-              <p className="max-w-2xl text-sm leading-relaxed text-muted">{t.message}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       )}
     </div>
   );

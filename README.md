@@ -22,6 +22,22 @@ FOR1S is a motion-first web design studio for local businesses and personal bran
 
 </div>
 
+<p align="center">
+  <svg width="180" height="56" viewBox="0 0 180 56" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="FOR1S — websites that win customers">
+    <circle cx="20" cy="28" r="14" fill="none" stroke="#E63946" stroke-width="1.5">
+      <animate attributeName="r" values="14;17;14" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.9;0.25;0.9" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M20 20 C 25 25, 25 31, 20 36 C 15 31, 15 25, 20 20 Z" fill="#E63946">
+      <animate attributeName="opacity" values="1;0.55;1" dur="2.4s" repeatCount="indefinite"/>
+    </path>
+    <text x="46" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" fill="#FFFFFF" letter-spacing="3">FOR1S</text>
+    <circle cx="132" cy="28" r="3" fill="#E63946">
+      <animate attributeName="opacity" values="0;1;0" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+</p>
+
 ---
 
 # Overview
@@ -30,7 +46,7 @@ FOR1S builds premium websites for local businesses and personal brands — desig
 
 We didn't set out to build another agency. We set out to build the one we wish existed when we were starting out. Every decision — design, copy, layout, speed — exists to turn a visitor into a customer. We strip away what doesn't help your business, what doesn't load fast, and what doesn't get you found. What's left is a website that makes your business look as good as it is.
 
-Most sites go live in **1–3 weeks**, because we've done this many times before — not because we cut corners. From cafés, salons, and photographers to freelancers and growing brands, every site is designed from scratch, mobile-first, and built to get found.
+Most sites go live in **1–3 weeks** — a deliberately tight timeline built on a repeatable process, not on cutting corners. From cafés, salons, and photographers to freelancers and growing brands, every site is designed from scratch, mobile-first, and built to get found.
 
 ---
 
@@ -95,7 +111,7 @@ We do five things differently — not as buzzwords, but as engineering decisions
 
 # Tech Stack
 
-| Category | Technology |
+| **Category** | **Technology** |
 |-----------|------------|
 | Framework | Next.js 14 |
 | Language | TypeScript |
