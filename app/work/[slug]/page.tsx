@@ -71,12 +71,37 @@ export default function WorkDetailPage({
       </p>
 
       <div className="mt-10 overflow-hidden rounded-2xl border border-hairline bg-surface/60">
-        <BrowserMock
-          name={project.name}
-          monogram={project.monogram}
-          hue={project.hue}
-        />
+        {project.demoUrl ? (
+          <Link
+            href={project.demoUrl}
+            prefetch={false}
+            data-cursor="view"
+            data-cursor-text="Open live site"
+            className="group relative block"
+          >
+            <BrowserMock
+              name={project.name}
+              monogram={project.monogram}
+              hue={project.hue}
+              thumbnail={project.thumbnail}
+            />
+            <span className="absolute right-4 top-[52px] rounded-full bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              Open live site ↗
+            </span>
+          </Link>
+        ) : (
+          <BrowserMock
+            name={project.name}
+            monogram={project.monogram}
+            hue={project.hue}
+          />
+        )}
       </div>
+      {project.demoUrl && (
+        <p className="mt-3 text-center text-xs text-muted">
+          Interactive demo of the real build — opens the live site.
+        </p>
+      )}
 
       <div className="mt-12 space-y-6 text-base leading-relaxed text-foreground/80">
         {project.overview.map((paragraph, i) => (

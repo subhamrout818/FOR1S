@@ -18,7 +18,7 @@ interface TeamMember {
   slug: string;
   name: string;
   role: string;
-  image: string;
+  image?: string;
 }
 
 /* ---------- Data ---------- */
@@ -28,15 +28,22 @@ const TEAM: TeamMember[] = [
     id: "01",
     slug: "subham-rout",
     name: "Subham Rout",
-    role: "Founder & Frontend",
-    image: "/subham.jpg",
+    role: "Founder & Full-stack",
+    image: "/blurred.png",
   },
   {
-    id: "04",
+    id: "02",
     slug: "tanuj-joshi",
     name: "Tanuj Joshi",
-    role: "Marketing",
+    role: "Co-founder & IT",
     image: "/tanuj.jpg",
+  },
+  {
+    id: "03",
+    slug: "sidhi",
+    name: "Sidhi Samantaray",
+    role: "Co-founder & Marketing",
+    image: "/Sidhi.jpeg",
   },
 ];
 
@@ -90,7 +97,7 @@ export default function TeamSection() {
           className="mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
           <div>
-          <SectionLabel scene="06" title="Members" className="mb-6" />
+            <SectionLabel scene="06" title="Members" className="mb-6" />
             <h2 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
               Built <span className="text-neutral-600">By</span>
             </h2>
@@ -124,29 +131,41 @@ export default function TeamSection() {
           className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block"
         >
           <AnimatePresence mode="wait">
-            {activeId && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="relative h-64 w-80 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
-              >
-                <Image
-                  src={TEAM.find((t) => t.id === activeId)!.image}
-                  alt="Preview"
-                  fill
-                  className="h-full w-full object-cover"
-                />
+            {activeId &&
+              (() => {
+                const member = TEAM.find((t) => t.id === activeId)!;
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="relative h-64 w-80 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
+                  >
+                    {member.image ? (
+                      <Image
+                        src={member.image}
+                        alt="Preview"
+                        fill
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-6xl font-light tracking-tight text-neutral-700">
+                          {member.name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
 
-                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
-                  <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] uppercase tracking-widest text-white/80">Active</span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
+                    <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[10px] uppercase tracking-widest text-white/80">Active</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })()}
           </AnimatePresence>
         </motion.div>
       )}

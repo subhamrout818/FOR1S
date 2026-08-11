@@ -9,7 +9,7 @@ import Preloader from "@/components/layout/Preloader";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import ScrollSpine from "@/components/layout/ScrollSpine";
 import RouteChrome from "@/components/layout/RouteChrome";
-import { SITE_URL } from "@/lib/contact";
+import { SITE_URL, CONTACT } from "@/lib/contact";
 
 const TITLE = "FOR1S — Web Design for Local Businesses & Personal Brands";
 const DESCRIPTION =
@@ -67,7 +67,7 @@ const jsonLd = {
       name: "FOR1S",
       url: SITE_URL,
       description: DESCRIPTION,
-      email: "hello@for1s.digital",
+      email: CONTACT.email,
       logo: `${SITE_URL}/favicon.svg`,
       sameAs: [
         "https://x.com/for1s",

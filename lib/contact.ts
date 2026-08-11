@@ -3,11 +3,11 @@
 // ──── UPDATE THESE WITH YOUR REAL INFO ─────────
 
 /** Canonical production domain — used by sitemap, robots, and Open Graph. */
-export const SITE_URL = "https://for1s.digital";
+export const SITE_URL = "https://for1s.com";
 
 export const CONTACT = {
   /** Primary business email */
-  email: "hello@for1s.digital",
+  email: "hello@for1s.com",
   /** Contact / CC email (shown in footer) */
   contactEmail: "for1s.contact@gmail.com",
   /** Booking / calendar link */

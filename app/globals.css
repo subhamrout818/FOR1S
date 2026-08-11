@@ -17,7 +17,7 @@ body {
 }
 
 ::selection {
-  background-color: #e63946;
+  background-color: #E63946;
   color: #ffffff;
 }
 
@@ -48,9 +48,9 @@ body {
 .hero-extrude-face {
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.06) 48%,
-    rgba(0, 0, 0, 0.35) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.55) 48%,
+    rgba(255, 255, 255, 0.28) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
@@ -60,7 +60,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #e63946;
+  outline: 2px solid #E63946;
   outline-offset: 3px;
 }
 
@@ -75,7 +75,7 @@ body {
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #e63946;
+  background: #E63946;
 }
 
 @media (prefers-reduced-motion: reduce) {

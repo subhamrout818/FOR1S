@@ -44,7 +44,7 @@ export function emailEnabled(): boolean {
   return !!process.env.RESEND_API_KEY;
 }
 
-const ALLOWED_HOSTS = new Set(["for1s.digital"]);
+const ALLOWED_HOSTS = new Set(["for1s.com"]);
 
 /**
  * The request's origin, but only when the Host header is trusted —

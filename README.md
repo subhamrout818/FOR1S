@@ -322,7 +322,7 @@ Still planned:
 
 # Live Demo
 
-The app is deployed at **[for1s.digital](https://for1s.digital)** (or your configured `SITE_URL`). Local dev: `npm run dev`.
+The app is deployed at **[for1s.com](https://for1s.com)** (or your configured `SITE_URL`). Local dev: `npm run dev`.
 
 ---
 

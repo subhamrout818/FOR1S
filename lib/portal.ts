@@ -15,7 +15,7 @@ export interface AuthUser {
 }
 
 /**
- * Resolve the authenticated user from the httpOnly cookie (or a Bearer token).
+ * Resolve the authenticated user from the httpOnly session cookie.
  * Sessions issued before the account's last update (password reset, email or
  * password change) are rejected so a stolen token dies with those events.
  */

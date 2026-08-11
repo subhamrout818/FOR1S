@@ -8,7 +8,7 @@ interface Session {
   iat: number;
 }
 
-/** Extract the session from the httpOnly cookie (or a Bearer header), or null. */
+/** Extract the session from the httpOnly cookie, or null. */
 function tokenSession(req: Request): Session | null {
   const token = getSessionToken(req);
   if (!token) return null;

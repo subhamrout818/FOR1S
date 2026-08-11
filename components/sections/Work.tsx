@@ -43,6 +43,7 @@ export default function Work() {
                   name={project.name}
                   monogram={project.monogram}
                   hue={project.hue}
+                  thumbnail={project.thumbnail}
                 />
                 <div className="flex flex-1 flex-col p-7">
                   <div className="flex items-center justify-between gap-4">

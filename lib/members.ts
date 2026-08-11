@@ -2,9 +2,10 @@ export interface Member {
   slug: string;
   name: string;
   role: string;
-  image: string;
+  /** Photo path under /public. Omit until the photo is added. */
+  image?: string;
   /** Life-story paragraphs shown on the member's profile page. */
-  story: string[];
+  story?: string[];
 }
 
 export const MEMBERS: Member[] = [
@@ -12,12 +13,14 @@ export const MEMBERS: Member[] = [
     slug: "subham-rout",
     name: "Subham Rout",
     role: "Founder & Frontend",
-    image: "/subham.jpg",
-    story: [
-      "I never planned to end up here — not that I'm complaining. It started in a small room with a borrowed laptop and a stubborn belief that a good website could change how a business is seen. My first build was for a family friend; watching them light up when it went live is still the feeling I chase.",
-      "That first project pulled me in further than I expected. I taught myself design because the templates weren't good enough, then motion because static pages felt flat, then the engineering behind it all because I wanted what I built to actually ship. None of it came from a course — every skill arrived because a project demanded it.",
-      "FOR1S is the honest result of that path: a studio that treats every website like it's the first one. Same hunger, same care, same obsession with the details other people skip. I still build things by hand at 2am sometimes — the things that make all of this worth it.",
-    ],
+    image: "/blurred.png",
+   story: [
+  "I'm a student. I'm still learning code. Still learning design. Still learning business. Still making mistakes that someone with ten years of experience probably wouldn't make. But I've never really liked waiting until I was ready.",
+  
+  "I started editing because I wanted to create. I started coding because I wanted to build. I started FOR1S because I wanted to see what would happen if I took both seriously. There was no investor, no fancy office, no big team. Just a laptop, a lot of late nights, countless things that didn't work, and the stupid belief that I could eventually figure them out.",
+  
+  "That's what FOR1S is to me. Not just a web studio. It's proof that you don't need to have everything figured out before you start building something worth believing in. I'm still at the beginning. And honestly, that's the exciting part."
+],
   },
   {
     slug: "tanuj-joshi",
@@ -29,5 +32,12 @@ export const MEMBERS: Member[] = [
       "That's where I fit at FOR1S. I listen to what makes each business special and make sure that's exactly what a visitor sees first. The right words, the right message, the right moment to ask for the booking — marketing isn't noise, it's clarity.",
       "The best part of this work is the phone call a week after launch: 'We got three new bookings from the site today.' That's the whole job, and it's worth every late night writing copy until it's right.",
     ],
+  },
+  {
+    slug: "sidhi",
+    name: "Sidhi",
+    role: "Co-founder & Marketing",
+    image: "/Sidhi.jpeg",
+    // story: [ ... ], // add her bio when available
   },
 ];

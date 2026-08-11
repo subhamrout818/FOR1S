@@ -23,18 +23,9 @@ export default function MemberStory({ member }: { member: Member }) {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Photo overlay background — low opacity, theme shows through */}
-      <div className="fixed inset-0 z-0" aria-hidden="true">
-        <Image
-          src={member.image}
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          className="object-cover opacity-[0.16] saturate-[0.9]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/25 to-background" />
-      </div>
+      {/* Background — gradient only (the member photo shows in the splash
+          circle, not as a full-screen backdrop). */}
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-background/50 via-background/25 to-background" aria-hidden="true" />
 
       {/* Splash — profile first, then ease into the page */}
       <AnimatePresence>
@@ -49,15 +40,21 @@ export default function MemberStory({ member }: { member: Member }) {
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: "spring", stiffness: 250, damping: 18 }}
-              className="h-28 w-28 overflow-hidden rounded-full border-2 border-hairline"
+              className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-hairline bg-surface"
             >
-              <Image
-                src={member.image}
-                alt={member.name}
-                width={112}
-                height={112}
-                className="h-full w-full object-cover"
-              />
+              {member.image ? (
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  width={112}
+                  height={112}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="font-display text-4xl font-semibold text-muted">
+                  {member.name.charAt(0)}
+                </span>
+              )}
             </motion.div>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -103,9 +100,20 @@ export default function MemberStory({ member }: { member: Member }) {
         </h1>
 
         <div className="mt-10 space-y-6 border-t border-hairline pt-10 text-base leading-relaxed text-foreground/80">
-          {member.story.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
+          {member.story && member.story.length > 0 ? (
+            <>
+              {member.story.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+              <p className="pt-4 text-right font-display text-2xl text-foreground/60">
+                ~{member.name.split(" ")[0]}
+              </p>
+            </>
+          ) : (
+            <p className="italic text-muted">
+              This member&apos;s story is coming soon.
+            </p>
+          )}
         </div>
       </div>
     </div>
