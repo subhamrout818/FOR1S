@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Studio Arun — Portrait & Wedding Photography</title>
+    <meta
+      name="description"
+      content="Portrait and wedding photography that feels like the work. Based in Portland, available worldwide."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      if (location.search.includes("no-loader")) {
+        document.documentElement.classList.add("no-loader");
+      }
+    </script>
+  </head>
+  <body>
+    <!-- ───────────────────────── Loading screen ───────────────────────── -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader__inner">
+        <div class="preloader__img-wrap">
+          <img src="img/hero-portrait.jpg" alt="" class="preloader__img" />
+        </div>
+        <div class="preloader__text">
+          <p class="preloader__name">Studio Arun</p>
+          <div class="preloader__bar"><span></span></div>
+          <p class="preloader__copy">loading portfolio</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- film grain -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- custom cursor follower -->
+    <div class="cursor-follower" id="cursor" aria-hidden="true"></div>
+
+    <!-- minimal top bar — just logo + contact, no nav sections -->
+    <header class="top">
+      <a class="brand" href="#top" aria-label="Studio Arun — home">
+        <span class="brand__word">Studio Arun</span>
+      </a>
+      <a class="top__contact" href="#enquiry" data-cursor="hover">Enquire</a>
+    </header>
+
+    <main id="top">
+      <!-- ───────────────────────── Hero ───────────────────────── -->
+      <section class="hero">
+        <div class="hero__img-wrap">
+          <img src="img/hero-portrait.jpg" alt="Portrait by Studio Arun" class="hero__img" />
+          <div class="hero__overlay" aria-hidden="true"></div>
+        </div>
+        <div class="hero__content">
+          <p class="hero__kicker">Portland · Available Worldwide</p>
+          <h1 class="hero__headline">
+            <span class="hero__line"><span class="hero__line-inner">Portraits</span></span>
+            <span class="hero__line"><span class="hero__line-inner">that feel</span></span>
+            <span class="hero__line"><span class="hero__line-inner">like <em>you</em>.</span></span>
+          </h1>
+          <p class="hero__deck">
+            Wedding · Portrait · Commercial
+          </p>
+        </div>
+        <div class="hero__scroll" aria-hidden="true">
+          <span>scroll</span>
+          <div class="hero__scroll-line"></div>
+        </div>
+      </section>
+
+      <!-- ───────────────────────── Gallery preview ───────────────────────── -->
+      <section class="gallery" id="gallery">
+        <div class="gallery__header reveal">
+          <p class="sec-label">Selected Work</p>
+          <h2 class="sec-title">Recent sessions.</h2>
+        </div>
+        <div class="gallery__grid">
+          <figure class="gallery__item gallery__item--wide reveal-scale" data-cursor="view">
+            <img src="img/wedding-1.jpg" alt="Wedding photography by Studio Arun" loading="lazy" />
+            <figcaption>Emma & James — Spring Wedding</figcaption>
+          </figure>
+          <figure class="gallery__item reveal-scale" data-cursor="view">
+            <img src="img/portrait-1.jpg" alt="Portrait photography by Studio Arun" loading="lazy" />
+            <figcaption>Marcus — Actor Headshots</figcaption>
+          </figure>
+          <figure class="gallery__item reveal-scale" data-cursor="view">
+            <img src="img/wedding-2.jpg" alt="Wedding photography by Studio Arun" loading="lazy" />
+            <figcaption>Priya & Dev — Summer Ceremony</figcaption>
+          </figure>
+          <figure class="gallery__item gallery__item--tall reveal-scale" data-cursor="view">
+            <img src="img/commercial-1.jpg" alt="Commercial photography by Studio Arun" loading="lazy" />
+            <figcaption>Atlas Coffee — Brand Campaign</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ───────────────────────── About ───────────────────────── -->
+      <section class="about" id="about">
+        <div class="about__grid">
+          <div class="reveal">
+            <p class="sec-label">About</p>
+            <h2 class="sec-title">The work speaks.</h2>
+            <p class="about__body">
+              Studio Arun is a portrait and wedding photography studio based in Portland.
+              Every session is built around the person in front of the lens — no templates,
+              no cookie-cutter setups. Just honest, cinematic work that feels like the
+              moment it was taken.
+            </p>
+            <p class="about__body">
+              Available for weddings, portraits, and commercial projects worldwide.
+            </p>
+          </div>
+          <div class="about__stats reveal-stagger">
+            <div class="about__stat">
+              <span class="about__stat-num">200+</span>
+              <span class="about__stat-label">Sessions</span>
+            </div>
+            <div class="about__stat">
+              <span class="about__stat-num">8</span>
+              <span class="about__stat-label">Years</span>
+            </div>
+            <div class="about__stat">
+              <span class="about__stat-num">Portland</span>
+              <span class="about__stat-label">Based in</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────────────────── Enquiry ───────────────────────── -->
+      <section class="enquiry" id="enquiry">
+        <div class="reveal">
+          <p class="sec-label">Get in touch</p>
+          <h2 class="sec-title">Let's create something.</h2>
+        </div>
+        <form class="enquiry__form reveal-stagger" onsubmit="return false;">
+          <div class="enquiry__row">
+            <input type="text" placeholder="Your name" class="enquiry__input" />
+            <input type="email" placeholder="Email" class="enquiry__input" />
+          </div>
+          <select class="enquiry__select">
+            <option value="" disabled selected>Type of session</option>
+            <option>Wedding</option>
+            <option>Portrait</option>
+            <option>Commercial</option>
+            <option>Other</option>
+          </select>
+          <textarea placeholder="Tell me about your project..." class="enquiry__textarea"></textarea>
+          <button type="submit" class="enquiry__btn">Send enquiry</button>
+        </form>
+      </section>
+
+      <!-- ───────────────────────── Footer ───────────────────────── -->
+      <footer class="foot">
+        <div class="foot__giant" aria-hidden="true">Studio Arun</div>
+        <div class="foot__meta">
+          <p>© 2026 Studio Arun — a fictional portfolio built as a FOR1S demo.</p>
+          <p>Portland, OR · Available worldwide</p>
+        </div>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

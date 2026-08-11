@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book — Glow &amp; Co.</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .book > * { opacity: 0; transform: translateY(20px); }
+    body.is-loaded .book > * {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__orb"></div>
+      <div class="preloader__name">Glow <span>&</span> Co.</div>
+      <div class="preloader__bar"><span></span></div>
+      <div class="preloader__copy">Salon &amp; Spa · Est. 2026</div>
+    </div>
+  </div>
+
+  <div class="grain"></div>
+  <div class="cursor-follower" id="cursor"></div>
+
+  <!-- Top strip -->
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="brand__g">G</span>
+      <span class="brand__word">Glow & Co.<small>Salon &amp; Spa</small></span>
+    </a>
+    <button class="menu__btn" aria-label="Open menu">
+      Menu
+      <span class="menu__btn-dot">→</span>
+    </button>
+  </header>
+
+  <!-- Overlay menu -->
+  <nav class="menu">
+    <button class="menu__close" aria-label="Close menu">
+      <span class="menu__close-dot">✕</span>
+      Close
+    </button>
+    <ul class="menu__list">
+      <li class="menu__item"><a href="index.html" class="menu__link"><span class="menu__link-num">01</span>Home</a></li>
+      <li class="menu__item"><a href="services.html" class="menu__link"><span class="menu__link-num">02</span>Services</a></li>
+      <li class="menu__item"><a href="book.html" class="menu__link"><span class="menu__link-num">03</span>Book</a></li>
+      <li class="menu__item"><a href="about.html" class="menu__link"><span class="menu__link-num">04</span>About</a></li>
+      <li class="menu__item"><a href="contact.html" class="menu__link"><span class="menu__link-num">05</span>Contact</a></li>
+    </ul>
+    <div class="menu__bottom">© 2026 Glow &amp; Co.</div>
+  </nav>
+
+  <!-- ═══ BOOKING ════════════════════════════════════════════════════ -->
+  <section class="sec" style="padding-top:calc(var(--strip-h) + 40px);">
+    <div class="book">
+      <p class="sec-label">Book online</p>
+      <h2 class="sec-title" style="margin-bottom:32px;">Your visit</h2>
+
+      <!-- Progress rail -->
+      <div class="book__prog">
+        <div class="book__prog-step is-active"></div>
+        <div class="book__prog-step"></div>
+        <div class="book__prog-step"></div>
+        <div class="book__prog-step"></div>
+      </div>
+
+      <!-- Step 1: Service -->
+      <div class="book__step is-active">
+        <p class="sec-label" style="margin-bottom:16px;">Step 1 · Choose a service</p>
+        <div class="book__cards book__cards--2col">
+          <div class="book__card" data-group="service">
+            <div class="book__card-title">Hair styling</div>
+            <div class="book__card-sub">Cut, blow-dry &amp; finish</div>
+            <div class="book__card-price">from $65</div>
+          </div>
+          <div class="book__card" data-group="service">
+            <div class="book__card-title">Color</div>
+            <div class="book__card-sub">Balayage, highlights, or full color</div>
+            <div class="book__card-price">from $120</div>
+          </div>
+          <div class="book__card" data-group="service">
+            <div class="book__card-title">Facial</div>
+            <div class="book__card-sub">Classic, anti-aging, or peel</div>
+            <div class="book__card-price">from $85</div>
+          </div>
+          <div class="book__card" data-group="service">
+            <div class="book__card-title">Nails</div>
+            <div class="book__card-sub">Manicure or pedicure</div>
+            <div class="book__card-price">from $35</div>
+          </div>
+          <div class="book__card" data-group="service">
+            <div class="book__card-title">Spa</div>
+            <div class="book__card-sub">Massage, body scrub &amp; wrap</div>
+            <div class="book__card-price">from $95</div>
+          </div>
+        </div>
+        <div class="book__error">Please select a service</div>
+        <div class="book__nav">
+          <div></div>
+          <button class="btn btn--berry book__next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Stylist -->
+      <div class="book__step">
+        <p class="sec-label" style="margin-bottom:16px;">Step 2 · Choose a stylist</p>
+        <div class="book__cards book__cards--2col">
+          <div class="book__card" data-group="stylist">
+            <div class="book__card-title">Anya</div>
+            <div class="book__card-sub">Lead stylist · 8 yrs exp</div>
+          </div>
+          <div class="book__card" data-group="stylist">
+            <div class="book__card-title">Meera</div>
+            <div class="book__card-sub">Color specialist · 6 yrs exp</div>
+          </div>
+          <div class="book__card" data-group="stylist">
+            <div class="book__card-title">Lina</div>
+            <div class="book__card-sub">Skincare expert · 5 yrs exp</div>
+          </div>
+          <div class="book__card" data-group="stylist">
+            <div class="book__card-title">No preference</div>
+            <div class="book__card-sub">Match me with availability</div>
+          </div>
+        </div>
+        <div class="book__error">Please choose a stylist</div>
+        <div class="book__nav">
+          <button class="btn btn--ghost book__back">← Back</button>
+          <button class="btn btn--berry book__next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Date & time -->
+      <div class="book__step">
+        <p class="sec-label" style="margin-bottom:16px;">Step 3 · Pick a date &amp; time</p>
+        <div class="book__form-row">
+          <div>
+            <input type="date" class="book__input" data-required>
+            <div class="book__error">Please select a date</div>
+          </div>
+          <div>
+            <select class="book__select" data-required>
+              <option value="">Select a time</option>
+              <option value="09:00">9:00 AM</option>
+              <option value="10:00">10:00 AM</option>
+              <option value="11:00">11:00 AM</option>
+              <option value="12:00">12:00 PM</option>
+              <option value="13:00">1:00 PM</option>
+              <option value="14:00">2:00 PM</option>
+              <option value="15:00">3:00 PM</option>
+              <option value="16:00">4:00 PM</option>
+              <option value="17:00">5:00 PM</option>
+            </select>
+            <div class="book__error">Please select a time</div>
+          </div>
+        </div>
+        <div class="book__nav">
+          <button class="btn btn--ghost book__back">← Back</button>
+          <button class="btn btn--berry book__next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Your details -->
+      <div class="book__step">
+        <p class="sec-label" style="margin-bottom:16px;">Step 4 · Your details</p>
+        <div class="book__form-row">
+          <div>
+            <input type="text" class="book__input" placeholder="First name" data-required>
+            <div class="book__error">Please enter your name</div>
+          </div>
+          <div>
+            <input type="text" class="book__input" placeholder="Last name">
+          </div>
+        </div>
+        <div class="book__form-row">
+          <div>
+            <input type="email" class="book__input" placeholder="Email address" data-required>
+            <div class="book__error">Please enter your email</div>
+          </div>
+          <div>
+            <input type="tel" class="book__input" placeholder="Phone number">
+          </div>
+        </div>
+        <textarea class="book__input" placeholder="Any special requests? (optional)" style="min-height:80px;resize:vertical;margin-bottom:8px;"></textarea>
+
+        <!-- Summary -->
+        <p class="sec-label" style="margin-top:24px;margin-bottom:12px;">Booking summary</p>
+        <div class="book__summary">
+          <div class="book__summary-row"><span class="book__summary-label">Service</span><span>—</span></div>
+          <div class="book__summary-row"><span class="book__summary-label">Stylist</span><span>—</span></div>
+          <div class="book__summary-row"><span class="book__summary-label">Date</span><span>—</span></div>
+          <div class="book__summary-row"><span class="book__summary-label">Name</span><span>—</span></div>
+        </div>
+
+        <div class="book__nav">
+          <button class="btn btn--ghost book__back">← Back</button>
+          <button class="btn btn--berry book__confirm">Confirm booking</button>
+        </div>
+      </div>
+
+      <!-- Done -->
+      <div class="book__step book__done">
+        <div class="book__done-check">✓</div>
+        <h2 class="sec-title">You're all set!</h2>
+        <p style="margin:12px 0 0;color:var(--ink-soft);font-size:15px;">We've sent a confirmation to your email. See you soon!</p>
+        <div class="book__done-ref">Ref: GC-2026-0847</div>
+        <div style="margin-top:28px;">
+          <a href="index.html" class="btn btn--ghost">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot__giant">GLOW &amp; CO.</div>
+    <div class="foot__meta">
+      <span>© 2026 Glow &amp; Co.</span>
+      <span>Salon &amp; Spa · All rights reserved</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">We'll be in touch soon!</div>
+  <script src="script.js"></script>
+</body>
+</html>

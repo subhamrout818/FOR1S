@@ -20,6 +20,10 @@ export interface CaseStudy {
   services: string[];
   overview: string[];
   highlights: { label: string; value: string }[];
+  /** Static screenshot of the built site — replaces the gradient mock when present */
+  thumbnail?: string;
+  /** Live demo URL — the hero screenshot links here when present */
+  demoUrl?: string;
 }
 
 export const CASE_STUDIES: CaseStudy[] = [
@@ -32,7 +36,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A café that needed to feel as good online as its coffee tastes. Custom site with menu, hours, and a booking flow that works from a phone.",
     monogram: "B",
-    hue: ["#c98a4b", "#6b3a1f"],
+    hue: ["#C9A06B", "#2C1D12"],
+    thumbnail: "/demo/brew-and-co/hero.png",
+    demoUrl: "/demo/brew-and-co/index.html",
     services: ["Design", "Build", "Booking flow", "SEO"],
     overview: [
       "Brew & Co. is a neighborhood café whose storefront was great but whose online presence didn't match it. They needed a site that answered the three questions customers actually ask: what's on the menu, when are you open, and how do I book a table.",
@@ -55,7 +61,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A personal portfolio for a photographer — cinematic gallery, fast, and made to send to clients instead of a link in the description.",
     monogram: "A",
-    hue: ["#8a9bd8", "#39426e"],
+    hue: ["#C9A06B", "#0E0D0B"],
+    thumbnail: "/demo/studio-arun/hero.png",
+    demoUrl: "/demo/studio-arun/index.html",
     services: ["Design", "Build", "Branding", "Gallery"],
     overview: [
       "Studio Arun is a portrait and wedding photographer who was sharing work through social pages and messaging apps. Every enquiry started with 'send me your work', and every answer was a link to someone else's platform.",
@@ -78,7 +86,9 @@ export const CASE_STUDIES: CaseStudy[] = [
     summary:
       "A salon that needed to look as polished as its chairs. Custom design, online booking, and a site that keeps new clients on schedule.",
     monogram: "G",
-    hue: ["#d89bb0", "#7a3f56"],
+    hue: ["#C2879B", "#5A2A3D"],
+    thumbnail: "/demo/glow-and-co/hero.png",
+    demoUrl: "/demo/glow-and-co/index.html",
     services: ["Design", "Build", "Online booking", "Brand"],
     overview: [
       "Glow & Co. is a salon where every detail is deliberate — except its website, which said nothing about the experience inside. They needed to match the premium feel of the space online and make booking painless.",

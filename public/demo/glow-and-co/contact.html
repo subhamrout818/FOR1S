@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Glow &amp; Co.</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .contact__grid > *, .faq__item { opacity: 0; transform: translateY(20px); }
+    body.is-loaded .contact__grid > *, body.is-loaded .faq__item {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    body.is-loaded .contact__grid > *:nth-child(2) { transition-delay: 0.1s; }
+    body.is-loaded .faq__item:nth-child(2) { transition-delay: 0.06s; }
+    body.is-loaded .faq__item:nth-child(3) { transition-delay: 0.12s; }
+    body.is-loaded .faq__item:nth-child(4) { transition-delay: 0.18s; }
+    body.is-loaded .faq__item:nth-child(5) { transition-delay: 0.24s; }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__orb"></div>
+      <div class="preloader__name">Glow <span>&</span> Co.</div>
+      <div class="preloader__bar"><span></span></div>
+      <div class="preloader__copy">Salon &amp; Spa · Est. 2026</div>
+    </div>
+  </div>
+
+  <div class="grain"></div>
+  <div class="cursor-follower" id="cursor"></div>
+
+  <!-- Top strip -->
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="brand__g">G</span>
+      <span class="brand__word">Glow & Co.<small>Salon &amp; Spa</small></span>
+    </a>
+    <button class="menu__btn" aria-label="Open menu">
+      Menu
+      <span class="menu__btn-dot">→</span>
+    </button>
+  </header>
+
+  <!-- Overlay menu -->
+  <nav class="menu">
+    <button class="menu__close" aria-label="Close menu">
+      <span class="menu__close-dot">✕</span>
+      Close
+    </button>
+    <ul class="menu__list">
+      <li class="menu__item"><a href="index.html" class="menu__link"><span class="menu__link-num">01</span>Home</a></li>
+      <li class="menu__item"><a href="services.html" class="menu__link"><span class="menu__link-num">02</span>Services</a></li>
+      <li class="menu__item"><a href="book.html" class="menu__link"><span class="menu__link-num">03</span>Book</a></li>
+      <li class="menu__item"><a href="about.html" class="menu__link"><span class="menu__link-num">04</span>About</a></li>
+      <li class="menu__item"><a href="contact.html" class="menu__link"><span class="menu__link-num">05</span>Contact</a></li>
+    </ul>
+    <div class="menu__bottom">© 2026 Glow &amp; Co.</div>
+  </nav>
+
+  <!-- ═══ CONTACT ════════════════════════════════════════════════════ -->
+  <section class="sec" style="padding-top:calc(var(--strip-h) + 40px);">
+    <p class="sec-label">Get in touch</p>
+    <h2 class="sec-title" style="margin-bottom:40px;">Contact us</h2>
+
+    <div class="contact__grid">
+      <!-- Left: info -->
+      <div>
+        <div class="contact__info-block">
+          <div class="contact__info-title">Address</div>
+          <p style="font-size:14px;color:var(--ink-soft);line-height:1.7;">123 Blossom Lane<br>Brooklyn, NY 11201</p>
+        </div>
+        <div class="contact__info-block">
+          <div class="contact__info-title">Phone</div>
+          <p style="font-size:14px;color:var(--ink-soft);">(718) 555-0142</p>
+        </div>
+        <div class="contact__info-block">
+          <div class="contact__info-title">Email</div>
+          <p style="font-size:14px;color:var(--ink-soft);">hello@glowandco.com</p>
+        </div>
+        <div class="contact__info-block">
+          <div class="contact__info-title">Hours</div>
+          <ul class="contact__hours">
+            <li><span>Monday – Friday</span><span>9 AM – 8 PM</span></li>
+            <li><span>Saturday</span><span>9 AM – 6 PM</span></li>
+            <li><span>Sunday</span><span>10 AM – 5 PM</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <form class="contact__form">
+        <input type="text" class="contact__input" placeholder="Your name" required>
+        <input type="email" class="contact__input" placeholder="Email address" required>
+        <input type="tel" class="contact__input" placeholder="Phone (optional)">
+        <textarea class="contact__textarea" placeholder="How can we help?" required></textarea>
+        <button type="submit" class="btn btn--berry" style="align-self:flex-start;">Send message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ════════════════════════════════════════════════════════ -->
+  <section class="sec">
+    <p class="sec-label" style="text-align:center;">FAQ</p>
+    <h2 class="sec-title" style="text-align:center;margin-bottom:40px;">Common questions</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false">
+          Do I need an appointment?
+          <span class="faq__q-icon">+</span>
+        </button>
+        <div class="faq__a"><div class="faq__a-inner">Walk-ins are welcome for nail services, but we recommend booking online for hair and skin appointments to guarantee your preferred time and stylist.</div></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false">
+          What's your cancellation policy?
+          <span class="faq__q-icon">+</span>
+        </button>
+        <div class="faq__a"><div class="faq__a-inner">We ask for at least 24 hours' notice for cancellations or rescheduling. Late cancellations may incur a 50% service charge.</div></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false">
+          Do you offer gift cards?
+          <span class="faq__q-icon">+</span>
+        </button>
+        <div class="faq__a"><div class="faq__a-inner">Yes! Gift cards are available in any denomination and can be purchased in-salon or by calling us. They never expire.</div></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false">
+          What products do you use?
+          <span class="faq__q-icon">+</span>
+        </button>
+        <div class="faq__a"><div class="faq__a-inner">We exclusively use cruelty-free, professional-grade products from brands like Olaplex, Davines, and Eminence. All are available for purchase in-salon.</div></div>
+      </div>
+      <div class="faq__item">
+        <button class="faq__q" aria-expanded="false">
+          Is parking available?
+          <span class="faq__q-icon">+</span>
+        </button>
+        <div class="faq__a"><div class="faq__a-inner">We have two dedicated spots behind the salon, and there's free street parking on Blossom Lane. The nearest subway is Atlantic Ave (2 blocks).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot__giant">GLOW &amp; CO.</div>
+    <div class="foot__meta">
+      <span>© 2026 Glow &amp; Co.</span>
+      <span>Salon &amp; Spa · All rights reserved</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">Message sent! We'll get back to you soon.</div>
+  <script src="script.js"></script>
+</body>
+</html>

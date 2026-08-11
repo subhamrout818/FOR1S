@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brew &amp; Co. — Neighborhood Café</title>
+    <meta
+      name="description"
+      content="A small room, a serious grinder, and chairs worth staying in. Coffee, wrapped in warmth, served slow — in Portland."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      if (location.search.includes("no-loader")) {
+        document.documentElement.classList.add("no-loader");
+      }
+    </script>
+  </head>
+  <body>
+    <!-- ───────────────────────── Loading screen ───────────────────────── -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader__inner">
+        <svg class="preloader__svg" viewBox="0 0 120 120" aria-hidden="true">
+          <g class="preloader__steam" stroke="#C9A06B" stroke-width="2.5" stroke-linecap="round" fill="none">
+            <path d="M45 40 q4 -9 0 -18" />
+            <path d="M60 35 q4 -10 0 -20" />
+            <path d="M75 40 q4 -9 0 -18" />
+          </g>
+          <path
+            class="preloader__saucer"
+            d="M26 98 h68 a6 6 0 0 1 0 4 h-68 a6 6 0 0 1 0 -4 z"
+            fill="none"
+            stroke="#C9A06B"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <rect class="preloader__liquid" x="36" y="54" width="48" height="42" rx="5" fill="#c98a4b" />
+          <path
+            class="preloader__body"
+            d="M34 52 h52 a6 6 0 0 1 6 6 v8 a32 32 0 0 1 -64 0 v-8 a6 6 0 0 1 6 -6 z"
+            fill="none"
+            stroke="#C9A06B"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+          />
+          <path
+            class="preloader__handle"
+            d="M86 58 h9 a13 13 0 0 1 0 26 h-8"
+            fill="none"
+            stroke="#C9A06B"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+        </svg>
+        <p class="preloader__name">Brew <span>&amp;</span> Co.</p>
+        <div class="preloader__bar"><span></span></div>
+        <p class="preloader__copy">warming up — brew in progress</p>
+      </div>
+    </div>
+
+    <!-- film grain -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- custom cursor follower -->
+    <div class="cursor-follower" id="cursor" aria-hidden="true"></div>
+
+    <!-- vertical hours rail -->
+    <aside class="rail" aria-hidden="true">
+      <span class="rail__line"></span>
+      <span class="rail__text">open daily · 7:00 — 16:00</span>
+    </aside>
+
+    <!-- header -->
+    <header class="top">
+      <a class="brand" href="#top" aria-label="Brew & Co. — home">
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="23" fill="#c98a4b" />
+            <text x="24" y="31" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="20" fill="#E6D2B8">B</text>
+          </svg>
+        </span>
+        <span class="brand__word">
+          Brew &amp; Co.
+          <small>est. 2016 — Portland</small>
+        </span>
+      </a>
+      <nav class="top__nav" aria-label="Sections">
+        <a href="#roast">roast</a>
+        <a href="#menu">menu</a>
+        <a href="#visit">visit</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- ───────────────────────── Hero ───────────────────────── -->
+      <section class="hero">
+        <p class="kicker">neighborhood café — coffee · baked goods · slow mornings</p>
+
+        <h1 class="headline">
+          <span class="line line--1"><span class="line__inner">Coffee,</span></span>
+          <span class="line line--2">
+            <span class="line__inner">
+              wrapped
+              <img class="headline-img" src="img/hero-cup.jpg" alt="A steaming cup of coffee" />
+              in warmth,
+            </span>
+          </span>
+          <span class="line line--3"><span class="line__inner">served slow.</span></span>
+        </h1>
+
+        <svg class="badge" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <path id="badge-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#241610" stroke-width="0.6" stroke-dasharray="1.5 2.5" />
+          <text class="badge__text">
+            <textPath href="#badge-circle">brew &amp; co · est 2016 · portland ·</textPath>
+          </text>
+          <circle cx="50" cy="50" r="7.5" fill="#c98a4b" />
+        </svg>
+
+        <p class="deck">
+          A small room, a serious grinder, and chairs worth staying in. Come as you
+          are — the kettle is always on.
+        </p>
+
+        <p class="open-now">
+          <span class="open-now__dot" aria-hidden="true"></span>
+          open now — until 16:00
+        </p>
+      </section>
+
+      <!-- ───────────────────────── Today's roast ───────────────────────── -->
+      <section class="roast" id="roast">
+        <div class="roast__card reveal">
+          <div class="roast__img" aria-hidden="true">
+            <img src="img/roast-beans.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="roast__body">
+            <p class="roast__kicker">today's roast</p>
+            <h2 class="roast__title">La Carolina</h2>
+            <p class="roast__meta">Colombia · washed · chocolate, fig, brown sugar</p>
+            <p class="roast__cup">cup 4 · bag 18</p>
+          </div>
+          <span class="roast__stamp" aria-hidden="true">single origin</span>
+        </div>
+      </section>
+
+      <!-- ───────────────────────── Menu ───────────────────────── -->
+      <section class="menu" id="menu">
+        <div class="reveal">
+          <p class="sec-label">01 — the menu</p>
+          <h2 class="sec-title">Drinks worth the walk.</h2>
+        </div>
+
+        <ul class="menu__list reveal-stagger">
+          <li class="menu__row">
+            <span class="menu__name">Flat white</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">4.5</span>
+          </li>
+          <li class="menu__row menu__row--alt">
+            <span class="menu__name">Filter — batch</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">3.5</span>
+          </li>
+          <li class="menu__row">
+            <span class="menu__name">Pour over</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">5.5</span>
+          </li>
+          <li class="menu__row menu__row--alt">
+            <span class="menu__name">Cortado</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">4</span>
+          </li>
+          <li class="menu__row">
+            <span class="menu__name">Steamed chai</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">4.5</span>
+          </li>
+          <li class="menu__row menu__row--alt">
+            <span class="menu__name">Hot chocolate</span>
+            <span class="menu__dots" aria-hidden="true"></span>
+            <span class="menu__price">4</span>
+          </li>
+        </ul>
+
+        <p class="menu__note reveal">all drinks double-shot · oat +0.5 · decaf available · baked goods change daily</p>
+      </section>
+
+      <!-- ───────────────────────── Visit ───────────────────────── -->
+      <section class="visit" id="visit">
+        <div class="reveal">
+          <p class="sec-label">02 — hours &amp; location</p>
+        </div>
+        <div class="visit__grid">
+          <div class="reveal">
+            <h2 class="sec-title">Come say hi.</h2>
+            <ul class="hours">
+              <li>
+                <span>mon — fri</span>
+                <strong>7:00 — 15:00</strong>
+              </li>
+              <li>
+                <span>sat — sun</span>
+                <strong>8:00 — 16:00</strong>
+              </li>
+            </ul>
+            <p class="visit__addr">
+              208 E Burnside St<br />
+              Portland, OR 97214
+            </p>
+          </div>
+          <figure class="visit__photo reveal">
+            <img src="img/cafe-interior.jpg" alt="Inside Brew &amp; Co. — warm lights, wooden chairs, a full counter" loading="lazy" />
+            <figcaption>the corner table is yours if you get here before noon</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ───────────────────────── Footer ───────────────────────── -->
+      <footer class="foot">
+        <div class="foot__giant" aria-hidden="true">Brew &amp; Co.</div>
+        <div class="foot__meta">
+          <p>© 2026 Brew &amp; Co. — a fictional café built as a FOR1S demo.</p>
+          <p>mon–fri 7–3 · sat–sun 8–4 · 208 E Burnside St, Portland</p>
+        </div>
+      </footer>
+    </main>
+
+    <!-- dummy booking pill -->
+    <a class="book" href="#visit" id="book">Book a table <span aria-hidden="true">↗</span></a>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      Demo — bookings coming soon. Grab a seat and order at the counter.
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

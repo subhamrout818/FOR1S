@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Glow &amp; Co.</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .about__grid > *, .about__values > *, .team > * { opacity: 0; transform: translateY(20px); }
+    body.is-loaded .about__grid > *, body.is-loaded .about__values > *, body.is-loaded .team > * {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    body.is-loaded .about__grid > *:nth-child(2) { transition-delay: 0.1s; }
+    body.is-loaded .about__values > *:nth-child(2) { transition-delay: 0.08s; }
+    body.is-loaded .about__values > *:nth-child(3) { transition-delay: 0.16s; }
+    body.is-loaded .team > *:nth-child(2) { transition-delay: 0.06s; }
+    body.is-loaded .team > *:nth-child(3) { transition-delay: 0.12s; }
+    body.is-loaded .team > *:nth-child(4) { transition-delay: 0.18s; }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__orb"></div>
+      <div class="preloader__name">Glow <span>&</span> Co.</div>
+      <div class="preloader__bar"><span></span></div>
+      <div class="preloader__copy">Salon &amp; Spa · Est. 2026</div>
+    </div>
+  </div>
+
+  <div class="grain"></div>
+  <div class="cursor-follower" id="cursor"></div>
+
+  <!-- Top strip -->
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="brand__g">G</span>
+      <span class="brand__word">Glow & Co.<small>Salon &amp; Spa</small></span>
+    </a>
+    <button class="menu__btn" aria-label="Open menu">
+      Menu
+      <span class="menu__btn-dot">→</span>
+    </button>
+  </header>
+
+  <!-- Overlay menu -->
+  <nav class="menu">
+    <button class="menu__close" aria-label="Close menu">
+      <span class="menu__close-dot">✕</span>
+      Close
+    </button>
+    <ul class="menu__list">
+      <li class="menu__item"><a href="index.html" class="menu__link"><span class="menu__link-num">01</span>Home</a></li>
+      <li class="menu__item"><a href="services.html" class="menu__link"><span class="menu__link-num">02</span>Services</a></li>
+      <li class="menu__item"><a href="book.html" class="menu__link"><span class="menu__link-num">03</span>Book</a></li>
+      <li class="menu__item"><a href="about.html" class="menu__link"><span class="menu__link-num">04</span>About</a></li>
+      <li class="menu__item"><a href="contact.html" class="menu__link"><span class="menu__link-num">05</span>Contact</a></li>
+    </ul>
+    <div class="menu__bottom">© 2026 Glow &amp; Co.</div>
+  </nav>
+
+  <!-- ═══ ABOUT ══════════════════════════════════════════════════════ -->
+  <section class="sec" style="padding-top:calc(var(--strip-h) + 40px);">
+    <p class="sec-label">Our story</p>
+    <h2 class="sec-title" style="margin-bottom:40px;">About Glow &amp; Co.</h2>
+
+    <div class="about__grid">
+      <div class="about__text">
+        <p>Glow &amp; Co. was born from a simple idea: a salon should feel like a refuge, not a chore. We wanted to create a space where people could slow down, be themselves, and leave feeling genuinely renewed — not just styled.</p>
+        <p>Founded in 2021, we started as a two-chair studio with a big dream. Today, our team of 12 stylists, colorists, and skincare specialists serves thousands of clients each year, all while keeping that same intimate, personal feel.</p>
+        <p>Every detail — from our rose-tinted interiors to our curated playlist — is designed to make you feel at home. No rushed appointments, no upselling. Just great hair, glowing skin, and a moment of calm.</p>
+      </div>
+      <div>
+        <img src="img/interior.jpg" alt="Glow & Co. interior" style="width:100%;border-radius:16px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VALUES ══════════════════════════════════════════════════════ -->
+  <section class="sec">
+    <p class="sec-label" style="text-align:center;">What we believe</p>
+    <h2 class="sec-title" style="text-align:center;margin-bottom:40px;">Our values</h2>
+    <div class="about__values">
+      <div>
+        <div class="about__val-title">Personal touch</div>
+        <div class="about__val-text">Every client is unique. We listen first, recommend honestly, and tailor every service to you.</div>
+      </div>
+      <div>
+        <div class="about__val-title">Quality always</div>
+        <div class="about__val-text">We invest in ongoing education, premium products, and the best tools — because details matter.</div>
+      </div>
+      <div>
+        <div class="about__val-title">Sustainable beauty</div>
+        <div class="about__val-text">Cruelty-free products, refillable packaging, and a commitment to reducing waste wherever we can.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TEAM ════════════════════════════════════════════════════════ -->
+  <section class="sec">
+    <p class="sec-label" style="text-align:center;">The people</p>
+    <h2 class="sec-title" style="text-align:center;margin-bottom:40px;">Meet our team</h2>
+    <div class="team">
+      <div class="team__card">
+        <div class="team__img"><img src="img/team.jpg" alt="Anya"></div>
+        <div class="team__name">Anya</div>
+        <div class="team__role">Lead stylist</div>
+      </div>
+      <div class="team__card">
+        <div class="team__img"><img src="img/team.jpg" alt="Meera"></div>
+        <div class="team__name">Meera</div>
+        <div class="team__role">Color specialist</div>
+      </div>
+      <div class="team__card">
+        <div class="team__img"><img src="img/team.jpg" alt="Lina"></div>
+        <div class="team__name">Lina</div>
+        <div class="team__role">Skincare expert</div>
+      </div>
+      <div class="team__card">
+        <div class="team__img"><img src="img/team.jpg" alt="Rohit"></div>
+        <div class="team__name">Rohit</div>
+        <div class="team__role">Nail artist</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band reveal-scale">
+    <p class="sec-label">Ready to glow?</p>
+    <h2 class="sec-title">Book your next visit</h2>
+    <p style="margin:16px 0 28px;opacity:0.85;font-size:15px;">Online booking · instant confirmation</p>
+    <a href="book.html" class="btn btn--rose">Book now</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot__giant">GLOW &amp; CO.</div>
+    <div class="foot__meta">
+      <span>© 2026 Glow &amp; Co.</span>
+      <span>Salon &amp; Spa · All rights reserved</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">We'll be in touch soon!</div>
+  <script src="script.js"></script>
+</body>
+</html>

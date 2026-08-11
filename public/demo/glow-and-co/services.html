@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Glow &amp; Co.</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .svc__cat-title, .svc__row { opacity: 0; transform: translateY(20px); }
+    body.is-loaded .svc__cat-title, body.is-loaded .svc__row {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    body.is-loaded .svc__row:nth-child(1) { transition-delay: 0.05s; }
+    body.is-loaded .svc__row:nth-child(2) { transition-delay: 0.1s; }
+    body.is-loaded .svc__row:nth-child(3) { transition-delay: 0.15s; }
+    body.is-loaded .svc__row:nth-child(4) { transition-delay: 0.2s; }
+    body.is-loaded .svc__row:nth-child(5) { transition-delay: 0.25s; }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__orb"></div>
+      <div class="preloader__name">Glow <span>&</span> Co.</div>
+      <div class="preloader__bar"><span></span></div>
+      <div class="preloader__copy">Salon &amp; Spa · Est. 2026</div>
+    </div>
+  </div>
+
+  <div class="grain"></div>
+  <div class="cursor-follower" id="cursor"></div>
+
+  <!-- Top strip -->
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="brand__g">G</span>
+      <span class="brand__word">Glow & Co.<small>Salon &amp; Spa</small></span>
+    </a>
+    <button class="menu__btn" aria-label="Open menu">
+      Menu
+      <span class="menu__btn-dot">→</span>
+    </button>
+  </header>
+
+  <!-- Overlay menu -->
+  <nav class="menu">
+    <button class="menu__close" aria-label="Close menu">
+      <span class="menu__close-dot">✕</span>
+      Close
+    </button>
+    <ul class="menu__list">
+      <li class="menu__item"><a href="index.html" class="menu__link"><span class="menu__link-num">01</span>Home</a></li>
+      <li class="menu__item"><a href="services.html" class="menu__link"><span class="menu__link-num">02</span>Services</a></li>
+      <li class="menu__item"><a href="book.html" class="menu__link"><span class="menu__link-num">03</span>Book</a></li>
+      <li class="menu__item"><a href="about.html" class="menu__link"><span class="menu__link-num">04</span>About</a></li>
+      <li class="menu__item"><a href="contact.html" class="menu__link"><span class="menu__link-num">05</span>Contact</a></li>
+    </ul>
+    <div class="menu__bottom">© 2026 Glow &amp; Co.</div>
+  </nav>
+
+  <!-- ═══ SERVICES ═══════════════════════════════════════════════════ -->
+  <section class="sec" style="padding-top:calc(var(--strip-h) + 40px);">
+    <div class="svc">
+      <p class="sec-label">Full menu</p>
+      <h2 class="sec-title" style="margin-bottom:48px;">Our services</h2>
+
+      <!-- Hair -->
+      <div class="svc__cat">
+        <h3 class="svc__cat-title">Hair</h3>
+        <div class="svc__row" data-img="img/hair.jpg">
+          <div>
+            <div class="svc__name">Women's cut &amp; style</div>
+            <div class="svc__desc">Precision cut, wash, blow-dry &amp; finish</div>
+          </div>
+          <div class="svc__price">$65</div>
+        </div>
+        <div class="svc__row" data-img="img/hair.jpg">
+          <div>
+            <div class="svc__name">Men's cut</div>
+            <div class="svc__desc">Classic or modern cut, wash &amp; style</div>
+          </div>
+          <div class="svc__price">$40</div>
+        </div>
+        <div class="svc__row" data-img="img/hair.jpg">
+          <div>
+            <div class="svc__name">Blow-dry &amp; finish</div>
+            <div class="svc__desc">Wash, blow-dry, and styling</div>
+          </div>
+          <div class="svc__price">$45</div>
+        </div>
+        <div class="svc__row" data-img="img/hair.jpg">
+          <div>
+            <div class="svc__name">Updo / event styling</div>
+            <div class="svc__desc">Bridal, formal, or editorial looks</div>
+          </div>
+          <div class="svc__price">$85</div>
+        </div>
+      </div>
+
+      <!-- Color -->
+      <div class="svc__cat">
+        <h3 class="svc__cat-title">Color</h3>
+        <div class="svc__row" data-img="img/color.jpg">
+          <div>
+            <div class="svc__name">Single-process color</div>
+            <div class="svc__desc">Full-head permanent or semi-permanent</div>
+          </div>
+          <div class="svc__price">$120</div>
+        </div>
+        <div class="svc__row" data-img="img/color.jpg">
+          <div>
+            <div class="svc__name">Balayage / ombré</div>
+            <div class="svc__desc">Hand-painted, sun-kissed highlights</div>
+          </div>
+          <div class="svc__price">$180</div>
+        </div>
+        <div class="svc__row" data-img="img/color.jpg">
+          <div>
+            <div class="svc__name">Highlights / foils</div>
+            <div class="svc__desc">Partial or full foil placement</div>
+          </div>
+          <div class="svc__price">$150</div>
+        </div>
+        <div class="svc__row" data-img="img/color.jpg">
+          <div>
+            <div class="svc__name">Color correction</div>
+            <div class="svc__desc">Restore, fix, or transform your color</div>
+          </div>
+          <div class="svc__price">from $200</div>
+        </div>
+      </div>
+
+      <!-- Skin -->
+      <div class="svc__cat">
+        <h3 class="svc__cat-title">Skin</h3>
+        <div class="svc__row" data-img="img/skin.jpg">
+          <div>
+            <div class="svc__name">Classic facial</div>
+            <div class="svc__desc">Deep cleanse, exfoliation, mask &amp; hydration</div>
+          </div>
+          <div class="svc__price">$85</div>
+        </div>
+        <div class="svc__row" data-img="img/skin.jpg">
+          <div>
+            <div class="svc__name">Anti-aging facial</div>
+            <div class="svc__desc">Peptides, LED, and collagen boost</div>
+          </div>
+          <div class="svc__price">$120</div>
+        </div>
+        <div class="svc__row" data-img="img/skin.jpg">
+          <div>
+            <div class="svc__name">Chemical peel</div>
+            <div class="svc__desc">Glycolic, lactic, or salicylic treatment</div>
+          </div>
+          <div class="svc__price">$95</div>
+        </div>
+      </div>
+
+      <!-- Nails -->
+      <div class="svc__cat">
+        <h3 class="svc__cat-title">Nails</h3>
+        <div class="svc__row" data-img="img/nails.jpg">
+          <div>
+            <div class="svc__name">Classic manicure</div>
+            <div class="svc__desc">Shape, cuticle care, polish</div>
+          </div>
+          <div class="svc__price">$35</div>
+        </div>
+        <div class="svc__row" data-img="img/nails.jpg">
+          <div>
+            <div class="svc__name">Gel manicure</div>
+            <div class="svc__desc">Long-lasting gel polish finish</div>
+          </div>
+          <div class="svc__price">$50</div>
+        </div>
+        <div class="svc__row" data-img="img/nails.jpg">
+          <div>
+            <div class="svc__name">Spa pedicure</div>
+            <div class="svc__desc">Soak, scrub, mask &amp; massage</div>
+          </div>
+          <div class="svc__price">$60</div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="svc__cat">
+        <h3 class="svc__cat-title">Body &amp; Spa</h3>
+        <div class="svc__row" data-img="img/spa.jpg">
+          <div>
+            <div class="svc__name">Swedish massage</div>
+            <div class="svc__desc">Full-body relaxation, 60 or 90 min</div>
+          </div>
+          <div class="svc__price">from $95</div>
+        </div>
+        <div class="svc__row" data-img="img/spa.jpg">
+          <div>
+            <div class="svc__name">Deep tissue massage</div>
+            <div class="svc__desc">Targeted relief for tension &amp; knots</div>
+          </div>
+          <div class="svc__price">from $110</div>
+        </div>
+        <div class="svc__row" data-img="img/spa.jpg">
+          <div>
+            <div class="svc__name">Body scrub &amp; wrap</div>
+            <div class="svc__desc">Exfoliation, hydration, and renewal</div>
+          </div>
+          <div class="svc__price">$130</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:48px;" class="reveal">
+        <a href="book.html" class="btn btn--berry">Book a service</a>
+      </div>
+    </div>
+
+    <!-- hover preview image -->
+    <div class="svc__row-img"><img src="" alt=""></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot__giant">GLOW &amp; CO.</div>
+    <div class="foot__meta">
+      <span>© 2026 Glow &amp; Co.</span>
+      <span>Salon &amp; Spa · All rights reserved</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">We'll be in touch soon!</div>
+  <script src="script.js"></script>
+</body>
+</html>

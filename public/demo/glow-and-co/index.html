@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glow & Co. — Salon & Spa</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="img/hero-portrait.jpg">
+  <style>
+    .hero__line-inner { transform: translateY(110%); }
+    .hero__kicker { opacity: 0; transform: translateY(20px); }
+    .hero__deck { opacity: 0; transform: translateY(20px); }
+    .hero__scroll { opacity: 0; }
+    body.is-loaded .hero__line-inner { transition: transform 1.1s cubic-bezier(0.16,1,0.3,1); transform: translateY(0); }
+    body.is-loaded .hero__kicker { transition: opacity 0.7s ease 0.2s, transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s; opacity: 1; transform: translateY(0); }
+    body.is-loaded .hero__deck { transition: opacity 0.8s ease 0.6s, transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.6s; opacity: 1; transform: translateY(0); }
+    body.is-loaded .hero__scroll { transition: opacity 0.6s ease 1s; opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <div class="preloader__orb"></div>
+      <div class="preloader__name">Glow <span>&</span> Co.</div>
+      <div class="preloader__bar"><span></span></div>
+      <div class="preloader__copy">Salon &amp; Spa · Est. 2026</div>
+    </div>
+  </div>
+
+  <!-- Grain overlay -->
+  <div class="grain"></div>
+
+  <!-- Custom cursor -->
+  <div class="cursor-follower" id="cursor"></div>
+
+  <!-- Top strip -->
+  <header class="top">
+    <a href="index.html" class="brand">
+      <span class="brand__g">G</span>
+      <span class="brand__word">Glow & Co.<small>Salon &amp; Spa</small></span>
+    </a>
+    <button class="menu__btn" aria-label="Open menu">
+      Menu
+      <span class="menu__btn-dot">→</span>
+    </button>
+  </header>
+
+  <!-- Overlay menu -->
+  <nav class="menu">
+    <button class="menu__close" aria-label="Close menu">
+      <span class="menu__close-dot">✕</span>
+      Close
+    </button>
+    <ul class="menu__list">
+      <li class="menu__item">
+        <a href="index.html" class="menu__link">
+          <span class="menu__link-num">01</span>
+          Home
+        </a>
+      </li>
+      <li class="menu__item">
+        <a href="services.html" class="menu__link">
+          <span class="menu__link-num">02</span>
+          Services
+        </a>
+      </li>
+      <li class="menu__item">
+        <a href="book.html" class="menu__link">
+          <span class="menu__link-num">03</span>
+          Book
+        </a>
+      </li>
+      <li class="menu__item">
+        <a href="about.html" class="menu__link">
+          <span class="menu__link-num">04</span>
+          About
+        </a>
+      </li>
+      <li class="menu__item">
+        <a href="contact.html" class="menu__link">
+          <span class="menu__link-num">05</span>
+          Contact
+        </a>
+      </li>
+    </ul>
+    <div class="menu__bottom">© 2026 Glow &amp; Co.</div>
+  </nav>
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero__bg"></div>
+    <div class="hero__inner">
+      <div class="hero__text">
+        <p class="hero__kicker">Salon &amp; Spa · Est. 2026</p>
+        <h1 class="hero__headline">
+          <span class="hero__line"><span class="hero__line-inner">Where every</span></span>
+          <span class="hero__line"><span class="hero__line-inner">visit feels like</span></span>
+          <span class="hero__line"><span class="hero__line-inner"><em>coming home</em></span></span>
+        </h1>
+        <p class="hero__deck">Expert hair, skin, and nail services in a space designed to make you feel renewed. Walk in stressed, walk out glowing.</p>
+        <div class="hero__ctas">
+          <a href="book.html" class="btn btn--berry">Book a visit</a>
+          <a href="services.html" class="btn btn--ghost">View services</a>
+        </div>
+      </div>
+      <div class="hero__portrait">
+        <div class="hero__portrait-wrap">
+          <img src="img/hero-portrait.jpg" alt="Glow & Co. salon interior">
+        </div>
+        <!-- Rotating badge -->
+        <svg class="hero__badge" viewBox="0 0 110 110">
+          <defs>
+            <path id="circlePath" d="M55,55 m-42,0 a42,42 0 1,1 84,0 a42,42 0 1,1 -84,0"/>
+          </defs>
+          <circle cx="55" cy="55" r="42"/>
+          <text><textPath href="#circlePath" startOffset="0%">GLOW &amp; CO · SALON &amp; SPA · </textPath></text>
+          <circle class="hero__badge-dot" cx="55" cy="13" r="3"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hero__scroll">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══ MARQUEE ════════════════════════════════════════════════════ -->
+  <div class="marquee">
+    <div class="marquee__track">
+      <span class="marquee__item"><em>Hair</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Color</span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item"><em>Skin</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Nails</span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item"><em>Body</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Spa</span>
+      <span class="marquee__dot"></span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee__item"><em>Hair</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Color</span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item"><em>Skin</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Nails</span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item"><em>Body</em></span>
+      <span class="marquee__dot"></span>
+      <span class="marquee__item">Spa</span>
+      <span class="marquee__dot"></span>
+    </div>
+  </div>
+
+  <!-- ═══ FEATURED SERVICES ══════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="feat">
+      <p class="sec-label reveal">What we do</p>
+      <h2 class="sec-title reveal">Our services</h2>
+
+      <div class="feat__row reveal" data-img="img/hair.jpg">
+        <span class="feat__num">01</span>
+        <span class="feat__name">Hair styling</span>
+        <span class="feat__price">from $65</span>
+      </div>
+      <div class="feat__row reveal" data-img="img/color.jpg">
+        <span class="feat__num">02</span>
+        <span class="feat__name">Color &amp; highlights</span>
+        <span class="feat__price">from $120</span>
+      </div>
+      <div class="feat__row reveal" data-img="img/skin.jpg">
+        <span class="feat__num">03</span>
+        <span class="feat__name">Facials &amp; skincare</span>
+        <span class="feat__price">from $85</span>
+      </div>
+      <div class="feat__row reveal" data-img="img/nails.jpg">
+        <span class="feat__num">04</span>
+        <span class="feat__name">Manicure &amp; pedicure</span>
+        <span class="feat__price">from $45</span>
+      </div>
+      <div class="feat__row reveal" data-img="img/spa.jpg">
+        <span class="feat__num">05</span>
+        <span class="feat__name">Spa treatments</span>
+        <span class="feat__price">from $95</span>
+      </div>
+
+      <div style="text-align:center;margin-top:40px;" class="reveal">
+        <a href="services.html" class="btn btn--ghost">View full menu →</a>
+      </div>
+    </div>
+    <!-- hover preview -->
+    <div class="feat__img-preview"><img src="" alt=""></div>
+  </section>
+
+  <!-- ═══ HORIZONTAL GALLERY ═════════════════════════════════════════ -->
+  <section class="gallery-stage" style="height:300vh;">
+    <div class="gallery-viewport">
+      <div class="gallery-track">
+        <div class="gallery-card reveal">
+          <img src="img/interior.jpg" alt="Salon interior">
+          <div class="gallery-card__caption">Our space — designed for comfort</div>
+        </div>
+        <div class="gallery-card reveal">
+          <img src="img/hair.jpg" alt="Hair styling">
+          <div class="gallery-card__caption">Precision cuts &amp; styling</div>
+        </div>
+        <div class="gallery-card reveal">
+          <img src="img/color.jpg" alt="Color service">
+          <div class="gallery-card__caption">Color that speaks for itself</div>
+        </div>
+        <div class="gallery-card reveal">
+          <img src="img/skin.jpg" alt="Facial treatment">
+          <div class="gallery-card__caption">Skin rituals that renew</div>
+        </div>
+        <div class="gallery-card reveal">
+          <img src="img/nails.jpg" alt="Nail art">
+          <div class="gallery-card__caption">Details that complete the look</div>
+        </div>
+        <div class="gallery-card reveal">
+          <img src="img/spa.jpg" alt="Spa treatment">
+          <div class="gallery-card__caption">Quiet moments of indulgence</div>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-header">
+      <p class="sec-label reveal">Inside Glow & Co.</p>
+      <h2 class="sec-title reveal">A space made for you</h2>
+    </div>
+  </section>
+
+  <!-- ═══ STATS ═══════════════════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="stats">
+      <div class="stats__item reveal">
+        <div class="stats__num" data-count="12+">0</div>
+        <div class="stats__label">Stylists</div>
+      </div>
+      <div class="stats__item reveal">
+        <div class="stats__num" data-count="8500+">0</div>
+        <div class="stats__label">Happy clients</div>
+      </div>
+      <div class="stats__item reveal">
+        <div class="stats__num" data-count="5">0</div>
+        <div class="stats__label">Years of service</div>
+      </div>
+      <div class="stats__item reveal">
+        <div class="stats__num" data-count="4.9">0</div>
+        <div class="stats__label">Average rating</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIAL ════════════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="testi reveal">
+      <p class="testi__quote">"Every visit feels like catching up with a friend who happens to make you look incredible. Glow & Co. is my happy place."</p>
+      <p class="testi__attr">— Priya S., regular since 2023</p>
+    </div>
+  </section>
+
+  <!-- ═══ BOOKING CTA ════════════════════════════════════════════════ -->
+  <section class="cta-band reveal-scale">
+    <p class="sec-label">Ready to glow?</p>
+    <h2 class="sec-title">Book your next visit</h2>
+    <p style="margin:16px 0 28px;opacity:0.85;font-size:15px;">Online booking · instant confirmation · no credit card required</p>
+    <a href="book.html" class="btn btn--rose">Book now</a>
+  </section>
+
+  <!-- ═══ FOOTER ══════════════════════════════════════════════════════ -->
+  <footer class="foot">
+    <div class="foot__giant">GLOW &amp; CO.</div>
+    <div class="foot__meta">
+      <span>© 2026 Glow &amp; Co.</span>
+      <span>Salon &amp; Spa · All rights reserved</span>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">We'll be in touch soon!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
