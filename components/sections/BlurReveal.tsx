@@ -16,8 +16,8 @@ interface BlurRevealProps {
 export default function BlurReveal({ children, className }: BlurRevealProps) {
   return (
     <motion.div
-      initial={{ filter: "blur(6px)", opacity: 0.7 }}
-      whileInView={{ filter: "blur(0px)", opacity: 1 }}
+      initial={{ filter: "blur(6px)" }}
+      whileInView={{ filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-15% 0px" }}
       transition={{
         duration: 0.8,

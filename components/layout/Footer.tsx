@@ -162,7 +162,7 @@ export default function Footer() {
 
       <div
         aria-hidden="true"
-        className="select-none pb-4 pt-6 text-center font-display font-bold leading-none text-foreground/[0.04]"
+        className="select-none pb-4 pt-6 text-center font-display font-bold leading-none text-[#606060]"
         style={{ fontSize: "clamp(4rem, 16vw, 13rem)" }}
       >
         {BRAND.name.toUpperCase()}

@@ -69,6 +69,7 @@ export default function SplitReveal({
         const split = new SplitText(ref.current, {
           type,
           linesClass: "overflow-hidden block",
+          aria: "none",
         });
 
         const targets =

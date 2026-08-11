@@ -49,7 +49,7 @@ const MagneticButton = forwardRef<HTMLButtonElement, MagneticButtonProps>(
         className={cn(
           "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-wide transition-colors duration-300",
           size === "md" ? "px-6 py-3 text-sm" : "px-8 py-4 text-base",
-          variant === "solid" && "bg-accent text-white hover:bg-accent-dim",
+          variant === "solid" && "bg-[#CC2B38] text-white hover:bg-accent-dim",
           variant === "outline" &&
             "border border-foreground/25 text-foreground hover:border-accent hover:text-accent",
           variant === "ghost" && "text-foreground/80 hover:text-foreground",
