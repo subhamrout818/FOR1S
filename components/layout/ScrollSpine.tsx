@@ -2,12 +2,17 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
 import type Lenis from "lenis";
 
 /**
  * Right-edge scroll indicator that doubles as a scrubber: dragging the red
  * glowing line (or clicking anywhere on it) scrolls the page to that position.
+ *
+ * Progress is computed live from `window.scrollY` / real page height on every
+ * GSAP ticker frame (the same ticker that drives Lenis), rather than from a
+ * ScrollTrigger's cached start/end geometry. That keeps the readout correct
+ * even when images/fonts finish loading and the page grows after mount.
  */
 export default function ScrollSpine() {
   const scope = useRef<HTMLDivElement>(null);
@@ -16,27 +21,27 @@ export default function ScrollSpine() {
   const dotRef = useRef<HTMLDivElement>(null);
   const percentRef = useRef<HTMLSpanElement>(null);
 
+  const renderProgress = (p: number) => {
+    if (fillRef.current) fillRef.current.style.transform = `scaleY(${p})`;
+    if (dotRef.current) dotRef.current.style.top = `${p * 100}%`;
+    if (percentRef.current)
+      percentRef.current.textContent = String(Math.round(p * 100)).padStart(
+        2,
+        "0"
+      );
+    trackRef.current?.setAttribute("aria-valuenow", String(Math.round(p * 100)));
+  };
+
   useGSAP(
     () => {
-      ScrollTrigger.create({
-        trigger: document.documentElement,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.3,
-        onUpdate: (self) => {
-          const p = self.progress;
-          if (fillRef.current) fillRef.current.style.transform = `scaleY(${p})`;
-          if (dotRef.current) dotRef.current.style.top = `${p * 100}%`;
-          if (percentRef.current)
-            percentRef.current.textContent = String(
-              Math.round(p * 100)
-            ).padStart(2, "0");
-          trackRef.current?.setAttribute(
-            "aria-valuenow",
-            String(Math.round(p * 100))
-          );
-        },
-      });
+      const update = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        renderProgress(p);
+      };
+      update();
+      gsap.ticker.add(update);
+      return () => gsap.ticker.remove(update);
     },
     { scope }
   );
