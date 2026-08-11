@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "shot:brew": "node scripts/capture-brew-demo.mjs",
+    "shot:arun": "node scripts/capture-studio-arun.mjs",
+    "shot:glow": "node scripts/capture-glow-demo.mjs",
     "db:seed": "node prisma/seed.mjs",
     "db:clear": "node prisma/clear.mjs"
   },
@@ -21,6 +24,7 @@
     "framer-motion": "^11.3.19",
     "geist": "^1.7.2",
     "gsap": "^3.13.0",
+    "jose": "^6.2.8",
     "jsonwebtoken": "^9.0.3",
     "lenis": "^1.1.13",
     "lucide-react": "^0.408.0",
