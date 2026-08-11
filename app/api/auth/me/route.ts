@@ -38,6 +38,7 @@ export async function GET(req: Request) {
         emailVerified: true,
         role: true,
         company: true,
+        // Not returned in response — only used for the hasPassword boolean.
         password: true,
         updatedAt: true,
       },

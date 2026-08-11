@@ -13,8 +13,13 @@ next-env.d.ts
 !.env.example
 
 /generated/prisma
+
+# AI coding tools — never commit local state, memory, or instructions.
 .agents
 .skills
 .claude/
 .windsurf/
 .agent/
+.cursor/
+.copilot/
+CLAUDE.md

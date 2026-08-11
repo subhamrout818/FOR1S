@@ -73,7 +73,13 @@ export async function GET(
   const response = NextResponse.redirect(
     buildAuthorizeUrl(provider, { redirectUri, state, codeChallenge: challenge })
   );
-  response.cookies.set("for1s_oauth_verifier", state, {
+  // __Host- prefix in production enforces Secure + Path=/ + no Domain,
+  // preventing cookie injection over HTTP or from sibling subdomains.
+  const cookieName =
+    process.env.NODE_ENV === "production"
+      ? "__Host-for1s_oauth_verifier"
+      : "for1s_oauth_verifier";
+  response.cookies.set(cookieName, state, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

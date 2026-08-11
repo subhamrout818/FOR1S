@@ -71,14 +71,14 @@ export async function POST(req: Request) {
     const updated = await prisma.user.update({
       where: { id: user.id },
       data: { email, emailVerified: false },
-      select: { id: true, name: true, email: true, profileImage: true },
+      select: { id: true, name: true, email: true, profileImage: true, updatedAt: true },
     });
 
     // Best-effort verification to the NEW address so the account is usable
     // again. When email is unconfigured (local dev) the account stays
     // unverified — fine, since dev has no login gate anyway.
     if (emailEnabled()) {
-      const verify = signVerifyEmail(user.id, updated.email);
+      const verify = signVerifyEmail(user.id, updated.email, updated.updatedAt);
       const link = absoluteUrl(req, `/verify-email?token=${encodeURIComponent(verify)}`);
       await sendEmail({
         to: updated.email,

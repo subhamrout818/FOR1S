@@ -36,6 +36,12 @@ export async function GET(req: Request) {
     const user = await prisma.user.findUnique({ where: { id: claims.userId } });
     if (!user || user.email !== claims.email) return to("/login?verify=invalid");
 
+    // Single-use: reject tokens minted before the last updatedAt bump
+    // (e.g. a previous successful verification or email change).
+    if (user.updatedAt.getTime() !== claims.updatedAt) {
+      return to("/login?verified=1"); // Already verified — treat as success.
+    }
+
     if (!user.emailVerified) {
       await prisma.user.update({
         where: { id: user.id },

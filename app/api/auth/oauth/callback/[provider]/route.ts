@@ -38,7 +38,11 @@ export async function GET(
     if (error) return redirectToHandoff("/oauth/callback?error=access_denied");
 
     // State must match the cookie we set at initiate time.
-    const cookieState = cookies().get("for1s_oauth_verifier")?.value;
+    const verifierCookie =
+      process.env.NODE_ENV === "production"
+        ? "__Host-for1s_oauth_verifier"
+        : "for1s_oauth_verifier";
+    const cookieState = cookies().get(verifierCookie)?.value;
     if (!code || !stateParam || !cookieState || stateParam !== cookieState) {
       return redirectToHandoff("/oauth/callback?error=invalid_state");
     }
@@ -72,7 +76,7 @@ export async function GET(
     // localStorage. The handoff page just hydrates via /api/auth/me.
     const response = setSessionCookie(NextResponse.redirect(location), jwt, true);
     // Single-use state cookie — clear it on every callback.
-    response.cookies.delete("for1s_oauth_verifier");
+    response.cookies.delete(verifierCookie);
     return response;
   } catch (err) {
     console.error("OAuth callback error:", err);

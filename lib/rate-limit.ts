@@ -79,29 +79,55 @@ export function consumeRateLimit(
 }
 
 /**
- * Best-effort client IP from common proxy headers.
+ * Number of trusted reverse proxies directly in front of this app. Each
+ * trusted proxy appends the real upstream IP to the RIGHT of x-forwarded-for,
+ * so the true client IP is `TRUSTED_PROXY_COUNT` hops from the right.
  *
- * x-forwarded-for is a comma-separated chain where the LEFTMOST entry is
- * client-supplied (spoofable) and each proxy appends the real upstream IP to
- * the right. We take the RIGHTMOST entry so a spoofed leading header can't
- * rotate the rate-limit key. x-real-ip (set by the terminating proxy) is
- * preferred when present. If FOR1S runs directly without a stripping proxy,
- * an attacker can still forge these headers — add a trusted proxy in front.
+ * Defaults to 1 (e.g. a single nginx/Caddy/Cloudflare in front of `next start`).
+ * Set to 0 when the app is exposed directly to the internet — with no trusted
+ * proxy, both x-forwarded-for and x-real-ip are client-forgeable, so they are
+ * ignored entirely and every direct connection shares one rate-limit bucket.
+ * That is a deliberate trade: it caps abuse instead of letting an attacker
+ * rotate the bucket by spoofing headers.
+ */
+const TRUSTED_PROXY_COUNT = (() => {
+  const raw = process.env.TRUSTED_PROXY_COUNT;
+  if (raw === undefined) return 1;
+  const n = Number(raw);
+  return Number.isInteger(n) && n >= 0 ? n : 1;
+})();
+
+/**
+ * Best-effort client IP from proxy headers, only trusted when the chain length
+ * is consistent with the configured proxy stack.
+ *
+ * A header chain shorter than expected means the request skipped a trusted
+ * proxy (or the header was forged), so it is not trusted — we return
+ * "untrusted" rather than an attacker-chosen value, which keeps the rate-limit
+ * key from being spoofed.
  */
 export function clientIp(req: Request): string {
-  const real = req.headers.get("x-real-ip");
-  if (real) return real.trim();
+  // x-real-ip is set by the terminating proxy from the TCP connection source;
+  // only meaningful when we're actually behind that proxy.
+  if (TRUSTED_PROXY_COUNT > 0) {
+    const real = req.headers.get("x-real-ip");
+    if (real) return real.trim();
+  }
 
   const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
+  if (forwarded && TRUSTED_PROXY_COUNT > 0) {
     const hops = forwarded
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
-    if (hops.length) return hops[hops.length - 1]!;
+    // Chain must be one hop longer than the trusted-proxy count for the
+    // leftmost entries to include a genuine client IP.
+    if (hops.length > TRUSTED_PROXY_COUNT) {
+      return hops[hops.length - 1 - TRUSTED_PROXY_COUNT]!;
+    }
   }
 
-  return "unknown";
+  return "untrusted";
 }
 
 /** Per-endpoint budgets. Tune freely. */

@@ -3,13 +3,22 @@ import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const JWT_SECRET =
-  process.env.JWT_SECRET ??
-  (process.env.NODE_ENV === "production"
-    ? (() => {
-        throw new Error("JWT_SECRET environment variable is required in production");
-      })()
-    : "dev-only-secret-not-for-production");
+const JWT_SECRET = (() => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error(
+      "JWT_SECRET environment variable is required in all environments. " +
+        "Generate one with: openssl rand -base64 48"
+    );
+  }
+  if (secret.length < 32) {
+    throw new Error(
+      "JWT_SECRET must be at least 32 characters long for security. " +
+        "Generate one with: openssl rand -base64 48"
+    );
+  }
+  return secret;
+})();
 
 export interface JwtPayload {
   userId: string;
@@ -55,29 +64,28 @@ export function normalizeEmail(email: string): string {
 /*                                                                     */
 /*  The session token lives in an httpOnly SameSite=Lax cookie, not    */
 /*  localStorage, so injected scripts can't read it and cross-site      */
-/*  requests can't send it (CSRF-safe for POSTs). A Bearer header is    */
-/*  still accepted as a fallback for compatibility during rollout.      */
+/*  requests can't send it (CSRF-safe for POSTs).                      */
 /* ------------------------------------------------------------------ */
 
 export const SESSION_COOKIE = "for1s_session";
 
 /**
- * Read the session token from the httpOnly cookie, falling back to a Bearer
- * header. `cookies()` from next/headers is the reliable way to read cookies in
- * Route Handlers — `request.cookies` is not populated in this Next version.
+ * Read the session token from the httpOnly cookie. `cookies()` from
+ * next/headers is the reliable way to read cookies in Route Handlers —
+ * `request.cookies` is not populated in this Next version.
+ *
+ * A `req` argument is accepted for signature compatibility with callers that
+ * pass it, but it is intentionally NOT consulted: a Bearer-header fallback
+ * was removed because it let a stolen token be used outside the cookie flow,
+ * bypassing SameSite CSRF protections. The cookie is the only session source.
  */
-export function getSessionToken(req?: Request): string | null {
+export function getSessionToken(_req?: Request): string | null {
   try {
-    const fromCookie = cookies().get(SESSION_COOKIE)?.value;
-    if (fromCookie) return fromCookie;
+    return cookies().get(SESSION_COOKIE)?.value ?? null;
   } catch {
     // cookies() throws outside a request scope (e.g. build-time prerender).
+    return null;
   }
-
-  const authHeader = req?.headers.get("authorization");
-  if (authHeader?.startsWith("Bearer ")) return authHeader.slice(7);
-
-  return null;
 }
 
 /** Attach the session cookie to a response. `remember` sets a 7-day cookie;
@@ -184,17 +192,38 @@ export function verifyOAuthState(token: string): OAuthStatePayload | null {
   };
 }
 
-/** 24-hour email-verification link token. */
-export function signVerifyEmail(userId: string, email: string): string {
-  return signPurposeToken({ userId, email }, "verify", "24h");
+/**
+ * 24-hour email-verification link token, bound to the user's `updatedAt`
+ * timestamp so it becomes single-use: after a successful verification the
+ * `updatedAt` field is bumped, invalidating any remaining copies of the token.
+ */
+export function signVerifyEmail(
+  userId: string,
+  email: string,
+  updatedAt: Date
+): string {
+  return signPurposeToken(
+    { userId, email, updatedAt: updatedAt.getTime() },
+    "verify",
+    "24h"
+  );
 }
 
-export function verifyVerifyEmail(token: string): { userId: string; email: string } | null {
+export function verifyVerifyEmail(token: string): { userId: string; email: string; updatedAt: number } | null {
   const payload = verifyPurposeToken(token, "verify");
-  if (!payload || typeof payload.userId !== "string" || typeof payload.email !== "string") {
+  if (
+    !payload ||
+    typeof payload.userId !== "string" ||
+    typeof payload.email !== "string" ||
+    typeof payload.updatedAt !== "number"
+  ) {
     return null;
   }
-  return { userId: payload.userId, email: payload.email };
+  return {
+    userId: payload.userId,
+    email: payload.email,
+    updatedAt: payload.updatedAt,
+  };
 }
 
 /** 15-minute password-reset link token. */

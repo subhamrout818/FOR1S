@@ -11,16 +11,35 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * True only for same-origin relative paths ("/dashboard"), never protocol-
- * relative ("//evil.com") or backslash tricks ("/\\evil.com"). Used when
- * redirecting after OAuth / auth to block open-redirects.
+ * relative ("//evil.com"), backslash tricks ("/\\evil.com"), encoded bypasses
+ * ("%2f%2f"), or dot-segments ("/../secret"). Used when redirecting after
+ * OAuth / auth to block open-redirects.
  */
 export function isSafeRelativePath(path: string | null | undefined): path is string {
-  return (
-    typeof path === "string" &&
-    path.startsWith("/") &&
-    !path.startsWith("//") &&
-    !path.startsWith("/\\")
-  );
+  if (typeof path !== "string" || !path.startsWith("/")) return false;
+
+  // Block protocol-relative and backslash tricks (raw + URL-encoded).
+  if (
+    path.startsWith("//") ||
+    path.startsWith("/\\") ||
+    path.toLowerCase().startsWith("/%2f") ||
+    path.toLowerCase().startsWith("/%5c")
+  ) {
+    return false;
+  }
+
+  // Decode once and reject dot-segment paths that could escape the root.
+  try {
+    const decoded = decodeURIComponent(path);
+    if (decoded.includes("/../") || decoded.includes("/..\\") || decoded.endsWith("/..")) {
+      return false;
+    }
+  } catch {
+    // Malformed percent-encoding — reject.
+    return false;
+  }
+
+  return true;
 }
 
 /**
