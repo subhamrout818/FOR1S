@@ -14,6 +14,9 @@ next-env.d.ts
 
 /generated/prisma
 
+# Dev artifacts
+lighthouse-report*.json
+
 # AI coding tools — never commit local state, memory, or instructions.
 .agents
 .skills
