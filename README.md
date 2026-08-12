@@ -1,369 +1,212 @@
-<p align="center">
-  <img src="assets/for1s-hero-1920x1080.png" alt="FOR1S Banner">
-</p>
-
 <div align="center">
 
-# FOR1S
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:6D28D9,100:06B6D4&height=220&section=header&text=FOR1S&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=A%20Premium%20Motion-First%20SaaS%20Landing%20Experience&descAlignY=55&descSize=20" width="100%"/>
 
-### Websites that win customers.
+<img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=24&duration=3000&pause=800&color=06B6D4&center=true&vCenter=true&width=700&lines=Cinematic+animations.+Immersive+3D.;Book+a+website.+Pay.+Get+it+built.;Next.js+%2B+TypeScript+%2B+GSAP+%2B+React+Three+Fiber.;No+devs+needed.+Just+for1s." alt="Typing SVG" />
 
-<p>
-FOR1S is a motion-first web design studio for local businesses and personal brands. We design, write, build, and launch the website — one small team, one timeline, one price. No jargon, no templates, no handoff gaps.
-</p>
+<br/>
 
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
-![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=flat&logo=greensock&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
-![Status](https://img.shields.io/badge/status-active_development-blue)
+[![Status](https://img.shields.io/badge/🚧_Status-Development_Paused_·_Public_Preview-F59E0B?style=for-the-badge)](../../releases)
+[![Book a Call](https://img.shields.io/badge/📞_Book_a_Call-Schedule_Now-06B6D4?style=for-the-badge)](#)
+[![Contact](https://img.shields.io/badge/✉️_Contact-Email_Us-1E293B?style=for-the-badge)](#)
+
+![Stars](https://img.shields.io/github/stars/subhamrout818/FOR1S?style=for-the-badge&color=FFD700)
+![Forks](https://img.shields.io/github/forks/subhamrout818/FOR1S?style=for-the-badge&color=6D28D9)
+![Issues](https://img.shields.io/github/issues/subhamrout818/FOR1S?style=for-the-badge&color=06B6D4)
+![Contributors](https://img.shields.io/github/contributors/subhamrout818/FOR1S?style=for-the-badge&color=22C55E)
 
 </div>
 
-<p align="center">
-  <svg width="180" height="56" viewBox="0 0 180 56" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="FOR1S — websites that win customers">
-    <circle cx="20" cy="28" r="14" fill="none" stroke="#E63946" stroke-width="1.5">
-      <animate attributeName="r" values="14;17;14" dur="2.4s" repeatCount="indefinite"/>
-      <animate attributeName="stroke-opacity" values="0.9;0.25;0.9" dur="2.4s" repeatCount="indefinite"/>
-    </circle>
-    <path d="M20 20 C 25 25, 25 31, 20 36 C 15 31, 15 25, 20 20 Z" fill="#E63946">
-      <animate attributeName="opacity" values="1;0.55;1" dur="2.4s" repeatCount="indefinite"/>
-    </path>
-    <text x="46" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" fill="#FFFFFF" letter-spacing="3">FOR1S</text>
-    <circle cx="132" cy="28" r="3" fill="#E63946">
-      <animate attributeName="opacity" values="0;1;0" dur="2.4s" repeatCount="indefinite"/>
-    </circle>
-  </svg>
-</p>
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
 
----
+## ✨ What is `FOR1S`?
 
-# Overview
+**FOR1S** is a premium, motion-first SaaS landing page — built to *sell websites*. It's the platform where clients **browse, book, and pay** for a website, or simply **book a call / send an email** to talk through their project first.
 
-FOR1S builds premium websites for local businesses and personal brands — designed to look expensive, built to get found, and made to win you customers.
+Under the hood it's a showcase of cinematic frontend engineering: fluid GSAP-driven animations, immersive 3D scenes powered by React Three Fiber and Three.js, all wrapped in a modern Next.js + TypeScript stack.
 
-We didn't set out to build another agency. We set out to build the one we wish existed when we were starting out. Every decision — design, copy, layout, speed — exists to turn a visitor into a customer. We strip away what doesn't help your business, what doesn't load fast, and what doesn't get you found. What's left is a website that makes your business look as good as it is.
+No back-and-forth over spreadsheets. No guessing on pricing. Just pick, pay, and launch — with an experience that feels like a product demo, not a form.
 
-Most sites go live in **1–3 weeks** — a deliberately tight timeline built on a repeatable process, not on cutting corners. From cafés, salons, and photographers to freelancers and growing brands, every site is designed from scratch, mobile-first, and built to get found.
-
----
-
-# Services
-
-We do five things differently — not as buzzwords, but as engineering decisions that compound over time:
-
-- 🧑‍🤝‍🧑 **End to end, one team** — Design, copy, build, and launch handled by the same small team. One person to talk to, one timeline, one price. No agencies juggling, no handoff gaps.
-- 📱 **Fast on every phone** — Pages that load in a blink and feel premium everywhere, even on patchy mobile connections. Speed isn't a bonus, it's expected.
-- 🔍 **Found on Google** — SEO is built in from day one, so your business shows up when people search for what you do.
-- ✨ **Made to stand out** — No templates, no borrowed layouts. Your site is designed from scratch around your business, your customers, and your goals.
-- 🛟 **We don't disappear** — Launch day isn't the finish line. Updates, fixes, and improvements — we stay with you.
-
----
-
-# Features
-
-## Motion & Experience
-
-- 🎬 Cinematic scroll experiences
-- ⚡ Smooth Lenis scrolling
-- ✨ GSAP ScrollTrigger animations
-- 🎭 SplitText text reveals
-- 🎯 Reusable animation system
-- 🖱️ Interactive cursor effects
-- 📱 Fully responsive layouts
-- 🎨 Premium UI transitions
-
-## Interface
-
-- Modern navigation
-- Services showcase
-- Vision section
-- Interactive process (Discover → Design → Build → Launch & care)
-- Animated pricing cards
-- FAQ accordion
-- Case-study "Work" section
-- Conversion-focused call-to-actions
-- Modular reusable components
-
-## Engineering
-
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Prisma ORM
-- PostgreSQL support
-- API-ready architecture
-- Reusable React components
-- Scalable project structure
-
-## Performance & Accessibility
-
-- Semantic HTML
-- Keyboard-friendly navigation
-- Reduced-motion support
-- Responsive across all devices
-- Performance-first animations
-- Clean, maintainable architecture
-
----
-
-# Tech Stack
-
-| **Category** | **Technology** |
-|-----------|------------|
-| Framework | Next.js 14 |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Animation | GSAP, ScrollTrigger, SplitText, Lenis |
-| Backend | Next.js API Routes |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Validation | Zod |
-
----
-
-# Project Structure
-
-```text
-.
-├── app/
-├── components/
-│   ├── layout/
-│   ├── sections/
-│   └── ui/
-├── hooks/
-├── lib/
-├── prisma/
-├── public/
-├── assets/
-├── package.json
-├── tailwind.config.ts
-├── next.config.mjs
-└── README.md
-```
-
----
-
-# Getting Started
-
-## Clone the repository
-
-```bash
-git clone https://github.com/subhamrout818/FOR1S.git
-
-cd FOR1S
-```
-
----
-
-## Install dependencies
-
-```bash
-npm install
-```
-
----
-
-## Configure environment variables
-
-Create a `.env` file.
-
-```env
-DATABASE_URL="your_postgresql_connection_string"
-```
-
----
-
-## Initialize Prisma
-
-```bash
-npx prisma migrate dev
-
-npx prisma generate
-```
-
----
-
-## Start the development server
-
-```bash
-npm run dev
-```
-
-Visit:
-
-```text
-http://localhost:3000
-```
-
----
-# Design Philosophy
-
-FOR1S is built around one simple idea:
-
-> We build the website, you win customers.
-
-Every project follows these principles:
-
-- Motion should guide attention, never distract.
-- Design should solve problems before adding aesthetics.
-- Performance is a feature, not an afterthought.
-- Components should be reusable and scalable.
-- Accessibility should be built in from the beginning.
-- Every interaction should feel intentional.
-- Simplicity creates better user experiences.
-
----
-
-# Roadmap
-
-Shipped:
-
-- [x] Contact form backend + lead pipeline (`/api/contact`, `Lead` model, admin leads page)
-- [x] Client inquiry system (admin leads + pipeline)
-- [x] Case studies / portfolio (home "Work" section + `/work/[slug]`)
-- [x] Blog & insights (`/blog` + `/blog/[slug]`)
-- [x] SEO optimization (sitemap, robots, canonicals, OG image, noindexed workspaces)
-- [x] Client portal (projects, deliverables, files, billing, support, tickets)
-- [x] Admin workspace (clients, projects, deliverables, leads, payments, tickets, team)
-
-Still planned:
-
-- [ ] Production deployment
-- [ ] Analytics integration
-- [ ] Multi-language support
-- [ ] Online payment gateway (portal "Pay" is simulated until wired)
-
----
-
-# Preview
-
-<table>
-
-<tr>
-<td colspan="2" align="center">
-
-### Vision
-
-<img src="assets/vision.png" alt="Vision">
-
-</td>
-</tr>
-
-<tr>
-<td width="50%">
-
-### Services
-
-<img src="assets/services.png" alt="Services">
-
-</td>
-
-<td width="50%">
-
-### Process
-
-<img src="assets/process.png" alt="Process">
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-### Pricing
-
-<img src="assets/pricing.png" alt="Pricing">
-
-</td>
-
-<td>
-
-### Team
-
-<img src="assets/members-section.png" alt="Team">
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-### Get Started
-
-<img src="assets/getstarted.png" alt="Get Started">
-
-</td>
-
-<td>
-
-### FAQ
-
-<img src="assets/faq.png" alt="FAQ">
-
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-
-### Benefits
-
-<img src="assets/benefits.png" alt="Benefits">
-
-</td>
-</tr>
-
-</table>
-
----
-
-# Live Demo
-
-The app is deployed at **[for1s.com](https://for1s.com)** (or your configured `SITE_URL`). Local dev: `npm run dev`.
-
----
-
-# Why FOR1S Exists
-
-FOR1S was created with a simple mission:
-
-To help businesses establish an online presence that feels as premium as the products and services they offer.
-
-Too many websites are slow, outdated, difficult to navigate, or fail to leave a lasting impression. FOR1S focuses on solving that problem by combining modern design, meaningful motion, and scalable engineering into websites that are visually engaging, performant, and built with long-term maintainability in mind.
-
-Whether it's a café, a salon, a photographer, a freelancer, or a growing local brand, every project is approached with the same attention to detail and commitment to quality.
-
-This repository showcases the frontend architecture, reusable component system, animation library, and development standards that power FOR1S and will continue to evolve as new client projects are built.
-
----
-
-# Future Vision
-
-The long-term goal of FOR1S is to become a modern digital studio delivering exceptional websites and digital experiences for businesses around the world.
-
-Future projects will expand beyond websites into interactive experiences, advanced frontend systems, custom dashboards, and full-stack web applications while maintaining the same focus on performance, usability, and thoughtful design.
-
----
-
-# Contributing
-
-Feedback, suggestions, and improvements are always welcome.
-
-If you'd like to contribute, report a bug, or suggest a feature, feel free to open an issue or submit a pull request.
-
----
+> **📌 Current status:** Development is currently paused — this repo is in **Public Preview**. Check the [Releases](../../releases) tab for the latest notes.
 
 <div align="center">
 
-## Built with ❤️ by **Subham Rout**
+```
+   Browse   ─────▶   Book   ─────▶   Pay   ─────▶   Get Your Website 🚀
+     🔍                📅               💳                  🌐
+```
 
-**Founder of FOR1S**
+</div>
 
-Full-Stack Developer • Motion Designer • Creative Developer
+<br/>
 
-*"Crafting digital experiences that people remember."*
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
+
+## 🚀 Core Features
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🛒 Book & Buy
+Clients pick a website package that fits their needs and book it directly through the platform.
+
+### 💳 Secure Payments
+Integrated payment flow — pay for your website online, no manual invoicing required.
+
+</td>
+<td width="50%" valign="top">
+
+### 📞 Book a Call
+Not ready to commit? Clients can schedule a call to discuss requirements first.
+
+### ✉️ Direct Contact
+A built-in contact/mail flow to reach the for1s team for custom requests.
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## 🖥️ Preview
+
+<div align="center">
+
+<!-- 📸 Add your homepage screenshot below -->
+<img src="./screenshots/homepage.png" alt="for1s Homepage" width="90%"/>
+
+<br/><br/>
+
+<!-- 📸 Add booking flow screenshot below -->
+<img src="./screenshots/booking-flow.png" alt="Booking Flow" width="45%"/>
+<img src="./screenshots/payment-page.png" alt="Payment Page" width="45%"/>
+
+<br/><br/>
+
+<!-- 📸 Add contact/call booking screenshot below -->
+<img src="./screenshots/contact-call.png" alt="Contact and Call Booking" width="90%"/>
+
+</div>
+
+> 💡 Drop your screenshots inside a `/screenshots` folder in the repo root using the filenames above, and they'll render automatically here.
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)
+![React Three Fiber](https://img.shields.io/badge/React_Three_Fiber-000000?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=threedotjs&logoColor=white)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+
+<!-- Add / adjust badges above to match anything past the "and T..." cut off in your repo description -->
+
+</div>
+
+<br/>
+
+## ⚡ How It Works
+
+```mermaid
+flowchart LR
+    A[👤 Client visits for1s] --> B{What do they need?}
+    B -->|Ready to buy| C[🛒 Choose a website package]
+    B -->|Wants to discuss| D[📞 Book a call]
+    B -->|Has questions| E[✉️ Send an email]
+    C --> F[💳 Secure payment]
+    F --> G[🏗️ Website is built]
+    G --> H[🚀 Client receives their website]
+    D --> H
+    E --> H
+```
+
+<br/>
+
+## 🧩 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/subhamrout818/for1s.git
+
+# Move into the project
+cd for1s
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
+
+<br/>
+
+## 📂 Project Structure
+
+```
+FOR1S/
+├── app/ or src/       # Next.js app — pages, sections, animated scenes
+├── components/        # UI components, 3D scenes, animated elements
+├── public/            # Static assets
+├── screenshots/        # 📸 Add your screenshots here
+└── README.md
+```
+
+<sub>Update this to match your actual folder layout.</sub>
+
+<br/>
+
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
+
+## 🗺️ Roadmap
+
+- [x] Cinematic landing page & animated hero
+- [x] Immersive 3D scenes (React Three Fiber / Three.js)
+- [x] Book-a-call & contact flow
+- [ ] Website browsing & package selection
+- [ ] Secure payment integration
+- [ ] Client dashboard for order tracking
+- [ ] Admin panel for managing bookings
+
+> ⏸️ Development is currently **paused** — this reflects the public preview state, not the final roadmap.
+
+<br/>
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+Feel free to check the [issues page](../../issues) or open a pull request.
+
+```bash
+# Fork it, then:
+git checkout -b feature/your-feature
+git commit -m "Add your feature"
+git push origin feature/your-feature
+```
+
+<br/>
+
+## 📬 Get in Touch
+
+<div align="center">
+
+[![Book a Call](https://img.shields.io/badge/📞_Book_a_Call_with_for1s-Schedule_Now-6D28D9?style=for-the-badge)](#)
+[![Email](https://img.shields.io/badge/✉️_Email-Contact_for1s-06B6D4?style=for-the-badge)](#)
+
+</div>
+
+<br/>
+
+<div align="center">
+
+### ⭐ If you like what for1s is building, drop a star — it helps a lot!
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:06B6D4,100:6D28D9&height=120&section=footer" width="100%"/>
 
 </div>
