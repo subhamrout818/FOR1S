@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:6D28D9,100:06B6D4&height=220&section=header&text=FOR1S&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=A%20Premium%20Motion-First%20SaaS%20Landing%20Experience&descAlignY=55&descSize=20" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=24&duration=3000&pause=800&color=06B6D4&center=true&vCenter=true&width=700&lines=Cinematic+animations.+Immersive+3D.;Book+a+website.+Pay.+Get+it+built.;Next.js+%2B+TypeScript+%2B+GSAP+%2B+React+Three+Fiber.;No+devs+needed.+Just+for1s." alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=24&duration=3000&pause=800&color=06B6D4&center=true&vCenter=true&width=700&lines=Premium%2C+high-performance+websites.;Book+a+website.+Pay.+Get+it+built.;Next.js+%2B+React+%2B+TypeScript+%2B+Tailwind.;No+devs+needed.+Just+for1s." alt="Typing SVG" />
 
 <br/>
 
@@ -21,11 +21,11 @@
 
 ## ✨ What is `FOR1S`?
 
-**FOR1S** is a premium, motion-first SaaS landing page — built to *sell websites*. It's the platform where clients **browse, book, and pay** for a website, or simply **book a call / send an email** to talk through their project first.
+**FOR1S** is a modern web development studio building **premium, high-performance websites** for businesses, brands, and creators.
 
-Under the hood it's a showcase of cinematic frontend engineering: fluid GSAP-driven animations, immersive 3D scenes powered by React Three Fiber and Three.js, all wrapped in a modern Next.js + TypeScript stack.
+It's also the platform behind that studio — where clients **browse, book, and pay** for a website, or simply **book a call / send an email** to talk through their project first.
 
-No back-and-forth over spreadsheets. No guessing on pricing. Just pick, pay, and launch — with an experience that feels like a product demo, not a form.
+No back-and-forth over spreadsheets. No guessing on pricing. Just pick, pay, and launch — with a site that feels crafted, not templated.
 
 > **📌 Current status:** Development is currently paused — this repo is in **Public Preview**. Check the [Releases](../../releases) tab for the latest notes.
 
@@ -100,13 +100,12 @@ A built-in contact/mail flow to reach the for1s team for custom requests.
 <div align="center">
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=black)
-![React Three Fiber](https://img.shields.io/badge/React_Three_Fiber-000000?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=threedotjs&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-
-<!-- Add / adjust badges above to match anything past the "and T..." cut off in your repo description -->
 
 </div>
 
@@ -166,8 +165,7 @@ FOR1S/
 
 ## 🗺️ Roadmap
 
-- [x] Cinematic landing page & animated hero
-- [x] Immersive 3D scenes (React Three Fiber / Three.js)
+- [x] Studio landing page & animated hero
 - [x] Book-a-call & contact flow
 - [ ] Website browsing & package selection
 - [ ] Secure payment integration
