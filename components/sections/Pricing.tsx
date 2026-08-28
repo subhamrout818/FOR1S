@@ -31,6 +31,9 @@ export default function Pricing() {
           >
             Three ways to work with us.
           </SplitReveal>
+          <p className="mt-4 text-sm text-muted">
+            Founding client pricing — limited time.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:items-center">

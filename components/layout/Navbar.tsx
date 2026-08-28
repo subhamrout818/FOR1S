@@ -8,6 +8,7 @@ import { cn, scrollToHash } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 import MagneticButton from "@/components/ui/MagneticButton";
 import UserDropdown from "@/components/layout/UserDropdown";
+import Logo from "@/components/ui/Logo";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -68,17 +69,7 @@ export default function Navbar() {
             data-cursor="hover"
             className="flex items-center gap-2.5"
           >
-            <svg width="22" height="22" viewBox="0 0 64 64" fill="none">
-              <circle cx="32" cy="32" r="26" stroke="#FFFFFF" strokeWidth="2" />
-              <path
-                d="M32 6 C 20 20, 20 44, 32 58 C 44 44, 44 20, 32 6 Z"
-                stroke="#E63946"
-                strokeWidth="2"
-              />
-            </svg>
-            <span className="font-display text-sm font-semibold uppercase tracking-widest text-foreground">
-              {BRAND.name}
-            </span>
+            <Logo width={22} height={22} />
           </button>
 
           <nav className="hidden items-center gap-9 md:flex">

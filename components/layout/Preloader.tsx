@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BRAND } from "@/lib/data";
+import Logo from "@/components/ui/Logo";
 
 export default function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -90,20 +91,7 @@ export default function Preloader() {
       aria-hidden="true"
     >
       <div className="preloader-fade flex flex-col items-center gap-6">
-        <svg
-          width="34"
-          height="34"
-          viewBox="0 0 64 64"
-          fill="none"
-          className="opacity-90"
-        >
-          <circle cx="32" cy="32" r="26" stroke="#FFFFFF" strokeWidth="1.5" />
-          <path
-            d="M32 6 C 20 20, 20 44, 32 58 C 44 44, 44 20, 32 6 Z"
-            stroke="#E63946"
-            strokeWidth="1.5"
-          />
-        </svg>
+        <Logo width={34} height={34} className="opacity-90" />
 
         <div className="flex items-baseline gap-1 font-mono text-fluid-lg text-foreground tabular-nums">
           <span ref={counterRef}>000</span>

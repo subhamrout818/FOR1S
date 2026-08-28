@@ -8,6 +8,7 @@ import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import VideoPlayer from "@/components/portal/VideoPlayer";
 import Badge from "@/components/portal/Badge";
 import Avatar from "@/components/ui/Avatar";
+import Logo from "@/components/ui/Logo";
 import {
   formatDate,
   formatDayMonth,
@@ -286,10 +287,7 @@ export default function DeliverableDetailPage({
               >
                 {c.author.isAdmin ? (
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent/40 bg-accent/10">
-                    <svg width="16" height="16" viewBox="0 0 64 64" fill="none">
-                      <circle cx="32" cy="32" r="26" stroke="#E63946" strokeWidth="3" />
-                      <path d="M32 6 C 20 20, 20 44, 32 58 C 44 44, 44 20, 32 6 Z" stroke="#E63946" strokeWidth="3" />
-                    </svg>
+                    <Logo width={16} height={16} small />
                   </span>
                 ) : (
                   <Avatar src={user?.profileImage} size={32} />

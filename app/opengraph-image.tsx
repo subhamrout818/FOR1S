@@ -24,13 +24,10 @@ export default function OpengraphImage() {
       >
         {/* Brand row */}
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <svg width="44" height="44" viewBox="0 0 64 64" fill="none">
-            <circle cx="32" cy="32" r="26" stroke="#FFFFFF" strokeWidth="4" />
-            <path
-              d="M32 6 C 20 20, 20 44, 32 58 C 44 44, 44 20, 32 6 Z"
-              stroke="#E63946"
-              strokeWidth="4"
-            />
+          <svg width="44" height="44" viewBox="0 0 414 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M133.236 258.72L413.27 88.9804V0L133.236 169.74V258.72Z" fill="#E63946" />
+            <path d="M0 468.598L280.034 298.858V209.878L0 379.617V468.598Z" fill="#E63946" />
+            <path d="M190.559 264.526L280.035 209.88L280.519 560H191.527L190.559 264.526Z" fill="#E63946" />
           </svg>
           <span
             style={{

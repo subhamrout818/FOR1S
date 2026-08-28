@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BRAND, FOOTER_LINKS } from "@/lib/data";
 import { scrollToHash } from "@/lib/utils";
 import RevealMask from "@/components/ui/RevealMask";
+import Logo from "@/components/ui/Logo";
 
 const YEAR = new Date().getFullYear();
 
@@ -98,17 +99,7 @@ export default function Footer() {
           <RevealMask blur={false} y={20}>
             <div className="flex flex-col gap-5">
               <div className="flex items-center gap-2.5">
-                <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
-                  <circle cx="32" cy="32" r="26" stroke="#FFFFFF" strokeWidth="2" />
-                  <path
-                    d="M32 6 C 20 20, 20 44, 32 58 C 44 44, 44 20, 32 6 Z"
-                    stroke="#E63946"
-                    strokeWidth="2"
-                  />
-                </svg>
-                <span className="font-display text-base font-semibold uppercase tracking-widest text-foreground">
-                  {BRAND.name}
-                </span>
+                <Logo width={24} height={24} />
               </div>
               <p className="max-w-xs text-sm leading-relaxed text-muted">
                 Websites for local businesses and personal brands. We design,
