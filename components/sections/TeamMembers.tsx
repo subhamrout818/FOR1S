@@ -29,7 +29,7 @@ const TEAM: TeamMember[] = [
     slug: "subham-rout",
     name: "Subham Rout",
     role: "Founder & Full-stack",
-    image: "/blurred.png",
+    image: "/subham.jpg",
   },
   {
     id: "02",
@@ -147,6 +147,7 @@ export default function TeamSection() {
                         src={member.image}
                         alt="Preview"
                         fill
+                        sizes="(max-width: 768px) 100vw, 320px"
                         className="h-full w-full object-cover"
                       />
                     ) : (

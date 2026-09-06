@@ -29,14 +29,15 @@ export default function BrowserMock({
         </span>
       </div>
       {thumbnail ? (
-        <Image
-          src={thumbnail}
-          alt={`${name} — live site preview`}
-          width={768}
-          height={192}
-          unoptimized
-          className="h-40 w-full object-cover object-top sm:h-48"
-        />
+        <div className="relative h-40 w-full overflow-hidden sm:h-48">
+          <Image
+            src={thumbnail}
+            alt={`${name} — live site preview`}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover object-top"
+          />
+        </div>
       ) : (
         <div
           className="flex h-40 items-center justify-center sm:h-48"
