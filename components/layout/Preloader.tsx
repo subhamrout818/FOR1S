@@ -10,13 +10,18 @@ export default function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     // The preloader is a first-load showcase for the home page only. Legal
     // pages, login, and the workspaces shouldn't be gated behind a black screen.
-    if (pathname !== "/") return;
+    // `done` is also required: once it flips, the JSX below returns null, so
+    // the .preloader-fade #root elements are no longer in the DOM — rebuilding
+    // the timeline then would warn "GSAP target not found" against an empty DOM.
+    if (pathname !== "/" || done) return;
+    if (!rootRef.current) return;
 
     const reduced = prefersReducedMotion();
     const previousOverflow = document.body.style.overflow;
@@ -59,7 +64,7 @@ export default function Preloader() {
       },
     })
       .to(
-        ".preloader-fade",
+        fadeRef.current,
         { opacity: 0, y: -8, duration: 0.35, stagger: 0.04 },
         reduced ? "-=0.1" : "-=0.25"
       )
@@ -78,7 +83,7 @@ export default function Preloader() {
       clearTimeout(fallback);
       document.body.style.overflow = previousOverflow;
     };
-  }, [pathname]);
+  }, [pathname, done]);
 
   // Only the home page gets the preloader.
   if (pathname !== "/") return null;
@@ -90,7 +95,7 @@ export default function Preloader() {
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
       aria-hidden="true"
     >
-      <div className="preloader-fade flex flex-col items-center gap-6">
+      <div ref={fadeRef} className="preloader-fade flex flex-col items-center gap-6">
         <Logo width={34} height={34} className="opacity-90" />
 
         <div className="flex items-baseline gap-1 font-mono text-fluid-lg text-foreground tabular-nums">
