@@ -2,17 +2,22 @@ import { NextResponse, type NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 /**
- * Edge middleware — defense-in-depth for the authenticated API surface.
+ * Proxy — defense-in-depth for the authenticated API surface.
  *
  * The per-handler `getAuthUser()` / `requireAuth()` checks remain the source
  * of truth, but this catches the failure mode where a NEW route is added under
- * a protected prefix and its author forgets the guard: the middleware rejects
+ * a protected prefix and its author forgets the guard: the proxy rejects
  * the request before the handler runs.
  *
  * It mirrors lib/auth.ts — same session cookie, same JWT secret — and only
- * accepts the httpOnly cookie (no Bearer
- * header; that fallback was removed from the server in favor of the cookie,
- * keeping the CSRF posture of the cookie flow intact).
+ * accepts the httpOnly cookie (no Bearer header; that fallback was removed
+ * from the server in favor of the cookie, keeping the CSRF posture of the
+ * cookie flow intact).
+ *
+ * Next 16 renamed the `middleware` convention to `proxy` and the Edge runtime
+ * default to the Node.js runtime (the `runtime` export is not valid in a
+ * proxy file). This file is the direct successor of middleware.ts with
+ * byte-identical auth behavior.
  */
 
 const SESSION_COOKIE = "for1s_session";
@@ -29,7 +34,7 @@ const JWT_SECRET = (() => {
 
 const PROTECTED_PREFIXES = ["/api/admin", "/api/portal", "/api/account"] as const;
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (!PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))) {
