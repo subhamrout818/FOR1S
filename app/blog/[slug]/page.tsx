@@ -9,12 +9,13 @@ export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const post = POSTS.find((p) => p.slug === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = POSTS.find((p) => p.slug === slug);
   if (!post) {
     return {
       title: "Blog — FOR1S",
@@ -35,12 +36,13 @@ export function generateMetadata({
   };
 }
 
-export default function BlogPostPage({
+export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const post = POSTS.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const post = POSTS.find((p) => p.slug === slug);
   if (!post) notFound();
 
   return (

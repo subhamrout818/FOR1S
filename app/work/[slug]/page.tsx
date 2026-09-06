@@ -13,12 +13,13 @@ export function generateStaticParams() {
   return CASE_STUDIES.map((project) => ({ slug: project.slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const project = CASE_STUDIES.find((p) => p.slug === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = CASE_STUDIES.find((p) => p.slug === slug);
   if (!project) {
     return { title: "Work — FOR1S" };
   }
@@ -33,12 +34,13 @@ export function generateMetadata({
   };
 }
 
-export default function WorkDetailPage({
+export default async function WorkDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const project = CASE_STUDIES.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const project = CASE_STUDIES.find((p) => p.slug === slug);
   if (!project) notFound();
 
   return (

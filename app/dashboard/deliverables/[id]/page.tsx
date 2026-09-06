@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Loader2, Send } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
@@ -22,12 +22,13 @@ import { cn } from "@/lib/utils";
 export default function DeliverableDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
   const { user, isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<{
     deliverable: DeliverableDetail;
-  }>(`/api/portal/deliverables/${params.id}`);
+  }>(`/api/portal/deliverables/${id}`);
 
   const deliverable = data?.deliverable ?? null;
 

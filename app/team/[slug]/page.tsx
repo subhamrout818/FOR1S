@@ -7,25 +7,27 @@ export function generateStaticParams() {
   return MEMBERS.map((member) => ({ slug: member.slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const member = MEMBERS.find((m) => m.slug === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const member = MEMBERS.find((m) => m.slug === slug);
   return {
     title: member ? `${member.name} — FOR1S` : "Member — FOR1S",
     description: member ? `${member.role} at FOR1S.` : "FOR1S team member.",
-    alternates: { canonical: `/team/${params.slug}` },
+    alternates: { canonical: `/team/${slug}` },
   };
 }
 
-export default function MemberPage({
+export default async function MemberPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const member = MEMBERS.find((m) => m.slug === params.slug);
+  const { slug } = await params;
+  const member = MEMBERS.find((m) => m.slug === slug);
   if (!member) notFound();
 
   return <MemberStory member={member} />;

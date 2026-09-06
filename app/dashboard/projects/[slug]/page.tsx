@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
@@ -23,8 +24,9 @@ import { cn } from "@/lib/utils";
 export default function ProjectDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = use(params);
   const { isLoading } = useAuth();
   const { data, loading, error } = usePortalData<WorkspaceData>("/api/portal");
 
@@ -47,7 +49,7 @@ export default function ProjectDetailPage({
     );
   }
 
-  const project = data?.projects.find((p) => p.slug === params.slug);
+  const project = data?.projects.find((p) => p.slug === slug);
 
   if (!project) {
     return (
