@@ -79,9 +79,9 @@ export const SESSION_COOKIE = "for1s_session";
  * was removed because it let a stolen token be used outside the cookie flow,
  * bypassing SameSite CSRF protections. The cookie is the only session source.
  */
-export function getSessionToken(_req?: Request): string | null {
+export async function getSessionToken(_req?: Request): Promise<string | null> {
   try {
-    return cookies().get(SESSION_COOKIE)?.value ?? null;
+    return (await cookies()).get(SESSION_COOKIE)?.value ?? null;
   } catch {
     // cookies() throws outside a request scope (e.g. build-time prerender).
     return null;

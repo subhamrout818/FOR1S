@@ -9,8 +9,8 @@ interface Session {
 }
 
 /** Extract the session from the httpOnly cookie, or null. */
-function tokenSession(req: Request): Session | null {
-  const token = getSessionToken(req);
+async function tokenSession(req: Request): Promise<Session | null> {
+  const token = await getSessionToken(req);
   if (!token) return null;
 
   const payload = verifyToken(token);
@@ -33,7 +33,7 @@ function issuedBeforeAccountUpdate(iat: number, updatedAt: Date): boolean {
 
 /** Resolve the authenticated user (without the password hash). */
 export async function getAuthUser(req: Request) {
-  const session = tokenSession(req);
+  const session = await tokenSession(req);
   if (!session) return null;
 
   const user = await prisma.user.findUnique({
@@ -59,7 +59,7 @@ export async function getAuthUser(req: Request) {
 /** Resolve the authenticated user including the password hash, for
  *  verifying the current password on email/password changes. */
 export async function getAuthUserWithPassword(req: Request) {
-  const session = tokenSession(req);
+  const session = await tokenSession(req);
   if (!session) return null;
 
   const user = await prisma.user.findUnique({

@@ -50,6 +50,10 @@ export default function OAuthButtons({ mode }: { mode: "login" | "signup" }) {
 
   const start = (provider: "google" | "github") => {
     setPending(provider);
+    // Full-page navigation is required here: the OAuth endpoint runs the
+    // provider round-trip and redirects back, so a client-side router.push
+    // would not complete the flow.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = `/api/auth/oauth/${provider}`;
   };
 

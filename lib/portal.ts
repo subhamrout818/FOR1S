@@ -20,7 +20,7 @@ export interface AuthUser {
  * password change) are rejected so a stolen token dies with those events.
  */
 export async function requireAuth(req: Request): Promise<AuthUser | null> {
-  const token = getSessionToken(req);
+  const token = await getSessionToken(req);
   if (!token) return null;
 
   const payload = verifyToken(token);

@@ -21,14 +21,15 @@ import {
  */
 export async function GET(
   req: Request,
-  { params }: { params: { provider: string } }
+  { params }: { params: Promise<{ provider: string }> }
 ) {
   const fallbackOrigin = process.env.APP_URL || "http://localhost:3000";
   const redirectToHandoff = (path: string) =>
     NextResponse.redirect(new URL(path, fallbackOrigin));
 
   try {
-    const provider = oauthProvider(params.provider);
+    const { provider: paramProvider } = await params;
+    const provider = oauthProvider(paramProvider);
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
     const stateParam = url.searchParams.get("state");
@@ -42,7 +43,7 @@ export async function GET(
       process.env.NODE_ENV === "production"
         ? "__Host-for1s_oauth_verifier"
         : "for1s_oauth_verifier";
-    const cookieState = cookies().get(verifierCookie)?.value;
+    const cookieState = (await cookies()).get(verifierCookie)?.value;
     if (!code || !stateParam || !cookieState || stateParam !== cookieState) {
       return redirectToHandoff("/oauth/callback?error=invalid_state");
     }

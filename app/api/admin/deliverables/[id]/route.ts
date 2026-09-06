@@ -16,12 +16,13 @@ const statusSchema = z.object({
 /** Admin-side status updates (e.g. mark delivered, back to draft, etc.). */
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const user = await requireAuth(req);
   if (!user || user.role !== "admin") {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
+  const { id } = await params;
 
   const parsed = statusSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {
@@ -32,14 +33,14 @@ export async function POST(
   }
 
   const existing = await prisma.deliverable
-    .findUnique({ where: { id: params.id } })
+    .findUnique({ where: { id } })
     .catch(() => null);
   if (!existing) {
     return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
   }
 
   const deliverable = await prisma.deliverable.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       status: parsed.data.status,
       deliveredAt:
