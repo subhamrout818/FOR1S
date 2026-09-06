@@ -37,7 +37,7 @@ const PLANS = [
     name: "Personal",
     tagline: "For portfolios, freelancers, and personal brands",
     price: 899,
-    priceRange: "$499 – $1,499",
+    priceRange: "$699 – $1,499",
     highlighted: false,
     specs: [
       "1–3 pages, custom designed",
@@ -45,6 +45,7 @@ const PLANS = [
       "Contact form",
       "SEO basics",
       "Domain + hosting set up",
+      "Optional care plan — $39/mo",
       "Launch in ~1 week",
     ],
   },
@@ -70,11 +71,11 @@ const PLANS = [
     name: "Custom",
     tagline: "E-commerce, booking systems, brands, and more",
     price: 6500,
-    priceRange: "$4,500 – $12,000+",
+    priceRange: "$8,000 – $25,000+",
     highlighted: false,
     specs: [
       "Online store or custom features",
-      "Brand identity & logo",
+      "Brand identity & logo (add-on)",
       "Photo or video add-ons",
       "Priority support",
       "Monthly care plan",
@@ -783,19 +784,19 @@ async function main() {
 
   if (demo) {
     const admin = await upsertUser({
-      email: "admin@for1s.in",
+      email: "for1s.contact@gmail.com",
       name: "Subham Rout",
       role: "admin",
-      password: process.env.SEED_ADMIN_PASSWORD || "admin1234",
+      password: process.env.SEED_ADMIN_PASSWORD || "admin@123",
     });
     console.log("✓ admin:", admin.email, "(role: admin)");
 
     const client = await upsertUser({
-      email: "client@for1s.in",
-      name: "Aarav Mehta",
+      email: "subhamrout818@gmail.com",
+      name: "Subham Rout",
       role: "client",
-      company: "Brew & Co.",
-      password: process.env.SEED_CLIENT_PASSWORD || "client1234",
+      company: "FOR1S Demo",
+      password: process.env.SEED_CLIENT_PASSWORD || "client@123",
     });
     console.log("✓ client:", client.email, "(role: client)");
 
