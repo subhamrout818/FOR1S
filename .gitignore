@@ -26,3 +26,4 @@ lighthouse-report*.json
 .cursor/
 .copilot/
 CLAUDE.md
+.mcp.json
