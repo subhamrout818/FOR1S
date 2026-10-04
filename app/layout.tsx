@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
-import { GeistMono} from "geist/font/mono";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 import { AuthProvider } from "@/lib/auth-context";
@@ -9,18 +9,28 @@ import Preloader from "@/components/layout/Preloader";
 import GrainOverlay from "@/components/layout/GrainOverlay";
 import ScrollSpine from "@/components/layout/ScrollSpine";
 import RouteChrome from "@/components/layout/RouteChrome";
-import { SITE_URL, CONTACT } from "@/lib/contact";
 
 const TITLE = "FOR1S — Web Design for Local Businesses & Personal Brands";
+
 const DESCRIPTION =
   "FOR1S designs and builds premium websites for local businesses and personal brands — fast, mobile-first, and built to win customers. From cafés and salons to portfolios and freelancers.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL("https://www.for1s.com"),
+
   title: TITLE,
+
   description: DESCRIPTION,
+
   applicationName: "FOR1S",
+
+  alternates: {
+    canonical: "https://www.for1s.com/",
+  },
+
   keywords: [
+    "FOR1S",
+    "For1s",
     "web design",
     "website design",
     "small business website",
@@ -32,26 +42,44 @@ export const metadata: Metadata = {
     "custom website",
     "website design for small business",
   ],
-  authors: [{ name: "Subham Rout", url: SITE_URL }],
+
+  authors: [
+    {
+      name: "Subham Rout",
+      url: "https://www.for1s.com/",
+    },
+  ],
+
   creator: "Subham Rout",
+
   openGraph: {
     type: "website",
+    url: "https://www.for1s.com/",
     siteName: "FOR1S",
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",
   },
+
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
   },
+
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
   },
-  icons: { icon: "/favicon.svg" },
+
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export const viewport: Viewport = {
@@ -63,12 +91,12 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
+      "@id": "https://www.for1s.com/#organization",
       name: "FOR1S",
-      url: SITE_URL,
+      url: "https://www.for1s.com/",
       description: DESCRIPTION,
-      email: CONTACT.email,
-      logo: `${SITE_URL}/favicon.svg`,
+      email: "for1s.contact@gmail.com",
+      logo: "https://www.for1s.com/favicon.svg",
       sameAs: [
         "https://x.com/for1s",
         "https://instagram.com/btwitssubu",
@@ -77,20 +105,23 @@ const jsonLd = {
     },
     {
       "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      url: SITE_URL,
+      "@id": "https://www.for1s.com/#website",
+      url: "https://www.for1s.com/",
       name: "FOR1S",
+      alternateName: ["For1s", "for1s"],
       description: DESCRIPTION,
-      publisher: { "@id": `${SITE_URL}/#organization` },
+      publisher: {
+        "@id": "https://www.for1s.com/#organization",
+      },
     },
   ],
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="en"
@@ -107,9 +138,12 @@ export default function RootLayout({
             </RouteChrome>
           </Providers>
         </AuthProvider>
+
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd),
+          }}
         />
       </body>
     </html>
