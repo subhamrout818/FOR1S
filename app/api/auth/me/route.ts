@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
  */
 export async function GET(req: Request) {
   try {
-    const token = getSessionToken(req);
+    const token = await getSessionToken(req);
     if (!token) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },

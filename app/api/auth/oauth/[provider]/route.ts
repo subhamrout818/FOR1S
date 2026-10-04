@@ -19,9 +19,10 @@ import { oauthProvider, oauthConfigured, pkcePair, buildAuthorizeUrl } from "@/l
  */
 export async function GET(
   req: Request,
-  { params }: { params: { provider: string } }
+  { params }: { params: Promise<{ provider: string }> }
 ) {
-  const provider = oauthProvider(params.provider);
+  const { provider: paramProvider } = await params;
+  const provider = oauthProvider(paramProvider);
   if (!provider) {
     return NextResponse.json(
       { success: false, message: "Unknown provider" },

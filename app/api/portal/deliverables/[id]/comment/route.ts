@@ -9,12 +9,13 @@ const commentSchema = z.object({
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const user = await requireAuth(req);
   if (!user) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
+  const { id } = await params;
 
   const parsed = commentSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {
@@ -26,7 +27,7 @@ export async function POST(
 
   // Must own the project the deliverable belongs to.
   const deliverable = await prisma.deliverable.findFirst({
-    where: { id: params.id, project: { clientId: user.id } },
+    where: { id, project: { clientId: user.id } },
     include: { project: { select: { id: true, name: true } } },
   });
   if (!deliverable) {

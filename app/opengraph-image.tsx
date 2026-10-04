@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+// Next 16 deprecates the Edge runtime; `next/og` ImageResponse is fully
+// supported on the Node.js runtime, which is the default for this file.
+export const runtime = "nodejs";
 
 export const alt = "FOR1S — Websites that win customers.";
 export const size = { width: 1200, height: 630 };

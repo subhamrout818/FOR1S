@@ -9,12 +9,13 @@ const ticketSchema = z.object({
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const user = await requireAuth(req);
   if (!user || user.role !== "admin") {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
+  const { id } = await params;
 
   const parsed = ticketSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {
@@ -26,7 +27,7 @@ export async function POST(
 
   const ticket = await prisma.supportTicket
     .update({
-      where: { id: params.id },
+      where: { id },
       data: { status: parsed.data.status },
     })
     .catch(() => null);
