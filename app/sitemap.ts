@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
 import { MEMBERS } from "@/lib/members";
-import { SITE_URL } from "@/lib/contact";
+
+const SITE_URL = "https://www.for1s.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
