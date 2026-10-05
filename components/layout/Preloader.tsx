@@ -6,6 +6,8 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { BRAND } from "@/lib/data";
 import Logo from "@/components/ui/Logo";
 
+const SEEN_KEY = "for1s:preloaded";
+
 export default function Preloader() {
   const rootRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -23,6 +25,24 @@ export default function Preloader() {
     if (pathname !== "/" || done) return;
     if (!rootRef.current) return;
 
+    // The intro plays once per browser session. Returning to the home page
+    // (or reloading it) skips straight to the content.
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(SEEN_KEY) === "1";
+    } catch {
+      // Storage can be blocked (private mode, site settings) — just play it.
+    }
+    if (seen) {
+      // Deferred so Hero's FOR1S:loaded listener, registered later in this
+      // same commit, is attached before the event fires.
+      const skip = window.setTimeout(() => {
+        setDone(true);
+        window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
+      }, 0);
+      return () => clearTimeout(skip);
+    }
+
     const reduced = prefersReducedMotion();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -36,6 +56,11 @@ export default function Preloader() {
       finished = true;
       clearTimeout(fallback);
       document.body.style.overflow = previousOverflow;
+      try {
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        // Not critical — the intro will simply play again next time.
+      }
       setDone(true);
       window.dispatchEvent(new CustomEvent("FOR1S:loaded"));
     };
