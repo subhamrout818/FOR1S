@@ -226,17 +226,40 @@ export function verifyVerifyEmail(token: string): { userId: string; email: strin
   };
 }
 
-/** 15-minute password-reset link token. */
-export function signResetPassword(userId: string, email: string): string {
-  return signPurposeToken({ userId, email }, "reset", "15m");
+/**
+ * 15-minute password-reset link token, bound to the user's `updatedAt` so it
+ * is single-use: setting the new password bumps `updatedAt`, which invalidates
+ * every remaining copy of the link.
+ */
+export function signResetPassword(
+  userId: string,
+  email: string,
+  updatedAt: Date
+): string {
+  return signPurposeToken(
+    { userId, email, updatedAt: updatedAt.getTime() },
+    "reset",
+    "15m"
+  );
 }
 
-export function verifyResetPassword(token: string): { userId: string; email: string } | null {
+export function verifyResetPassword(
+  token: string
+): { userId: string; email: string; updatedAt: number } | null {
   const payload = verifyPurposeToken(token, "reset");
-  if (!payload || typeof payload.userId !== "string" || typeof payload.email !== "string") {
+  if (
+    !payload ||
+    typeof payload.userId !== "string" ||
+    typeof payload.email !== "string" ||
+    typeof payload.updatedAt !== "number"
+  ) {
     return null;
   }
-  return { userId: payload.userId, email: payload.email };
+  return {
+    userId: payload.userId,
+    email: payload.email,
+    updatedAt: payload.updatedAt,
+  };
 }
 
 /* ------------------------------------------------------------------ */

@@ -111,7 +111,7 @@ export async function POST(req: Request) {
     } else {
       // Email the verification link (best-effort; signup still succeeds).
       const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
-      const link = absoluteUrl(req, `/verify-email?token=${encodeURIComponent(verifyToken)}`);
+      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
       await sendEmail({
         to: user.email,
         subject: "Verify your FOR1S email",
