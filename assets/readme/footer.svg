@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="120" viewBox="0 0 1200 120" role="img" aria-label="FOR1S Digital">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="100%" r="60%">
+      <stop offset="0" stop-color="#E63946" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#E63946" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <style>
+    .m{font-family:'SFMono-Regular',Menlo,Consolas,'Courier New',monospace;letter-spacing:.3em}
+    .b{animation:b 2.4s ease-in-out infinite}
+    @keyframes b{0%,100%{opacity:1}50%{opacity:.2}}
+    @media (prefers-reduced-motion:reduce){.b{animation:none}}
+  </style>
+  <rect width="1200" height="120" fill="#050505"/>
+  <rect width="1200" height="120" fill="url(#g)"/>
+  <line x1="0" y1="1" x2="1200" y2="1" stroke="#E63946" stroke-opacity=".6"/>
+  <text class="m" x="600" y="62" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">FOR<tspan fill="#E63946">1</tspan>S DIGITAL</text>
+  <circle class="b" cx="470" cy="94" r="3" fill="#E63946"/>
+  <text class="m" x="600" y="98" font-size="10" fill="#ffffff" fill-opacity=".5" text-anchor="middle">SERIOUS BRANDS. BUILT ON THE WEB.</text>
+</svg>

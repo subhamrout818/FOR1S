@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-labelledby="t d">
+  <title id="t">FOR1S — web design and development studio</title>
+  <desc id="d">FOR1S wordmark and crimson logo mark on a near-black grid. Tagline: We build websites that make businesses look like serious brands.</desc>
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="100%" r="70%">
+      <stop offset="0" stop-color="#E63946" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#E63946" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="scan" x1="0" x2="1">
+      <stop offset="0" stop-color="#E63946" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#E63946" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#E63946" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity=".045" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E63946"/>
+      <stop offset="1" stop-color="#AA1515"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .mono{font-family:'SFMono-Regular',Menlo,Consolas,'Courier New',monospace;letter-spacing:.28em}
+    .sans{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+    .rise{opacity:0;animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards}
+    .d1{animation-delay:.15s}.d2{animation-delay:.4s}.d3{animation-delay:.65s}.d4{animation-delay:.9s}
+    @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .scan{animation:scan 7s linear infinite}
+    @keyframes scan{0%{transform:translateY(-20px);opacity:0}8%{opacity:1}92%{opacity:1}100%{transform:translateY(480px);opacity:0}}
+    .float{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .pulse{animation:pulse 2.4s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+        @media (prefers-reduced-motion:reduce){.rise,.scan,.float,.pulse{animation:none;opacity:1}.scan{opacity:0}}
+  </style>
+
+  <rect width="1200" height="460" fill="#050505"/>
+  <rect width="1200" height="460" fill="url(#grid)"/>
+  <rect width="1200" height="460" fill="url(#glow)"/>
+  <rect class="scan" x="0" y="0" width="1200" height="2" fill="url(#scan)"/>
+
+  <!-- top rail -->
+  <g class="rise d1">
+    <circle class="pulse" cx="64" cy="55" r="4" fill="#E63946"/>
+    <text class="mono" x="80" y="59" font-size="12" fill="#E63946">SC.01</text>
+    <line x1="150" y1="55" x2="196" y2="55" stroke="#ffffff" stroke-opacity=".3"/>
+    <text class="mono" x="210" y="59" font-size="12" fill="#ffffff" fill-opacity=".7">WEB DESIGN &amp; DEVELOPMENT STUDIO</text>
+    <text class="mono" x="1136" y="59" font-size="12" fill="#ffffff" fill-opacity=".45" text-anchor="end">FOR1S DIGITAL</text>
+  </g>
+
+  <!-- wordmark -->
+  <g class="rise d2">
+    <text class="sans" x="60" y="238" font-size="132" font-weight="800" fill="#ffffff" letter-spacing="-4">FOR<tspan fill="#E63946">1</tspan>S</text>
+  </g>
+
+  <!-- tagline -->
+  <g class="rise d3">
+    <text class="sans" x="64" y="298" font-size="26" font-weight="600" fill="#ffffff">We build websites that make businesses</text>
+    <text class="sans" x="64" y="334" font-size="26" font-weight="600" fill="#E63946">look like serious brands.</text>
+  </g>
+
+  <g class="rise d4">
+    <line x1="64" y1="380" x2="1136" y2="380" stroke="#ffffff" stroke-opacity=".12"/>
+    <text class="mono" x="64" y="412" font-size="11" fill="#ffffff" fill-opacity=".55">DESIGN</text>
+    <text class="mono" x="170" y="412" font-size="11" fill="#E63946">/</text>
+    <text class="mono" x="196" y="412" font-size="11" fill="#ffffff" fill-opacity=".55">BUILD</text>
+    <text class="mono" x="288" y="412" font-size="11" fill="#E63946">/</text>
+    <text class="mono" x="314" y="412" font-size="11" fill="#ffffff" fill-opacity=".55">MOTION</text>
+    <text class="mono" x="424" y="412" font-size="11" fill="#E63946">/</text>
+    <text class="mono" x="450" y="412" font-size="11" fill="#ffffff" fill-opacity=".55">LAUNCH</text>
+    <text class="mono" x="560" y="412" font-size="11" fill="#E63946">/</text>
+    <text class="mono" x="586" y="412" font-size="11" fill="#ffffff" fill-opacity=".55">CARE</text>
+  </g>
+
+  <!-- logo mark (from logos/svg format/logo-finalV1.svg) -->
+  <g class="float">
+    <g transform="translate(850 92) scale(.42)">
+      <g class="rise d3">
+        <path d="M133.236 258.72L413.27 88.9804V0L133.236 169.74V258.72Z" fill="url(#mark)"/>
+        <path d="M0 468.598L280.034 298.858V209.878L0 379.617V468.598Z" fill="url(#mark)"/>
+        <path d="M190.559 264.526L280.035 209.88L280.519 560H191.527L190.559 264.526Z" fill="url(#mark)"/>
+      </g>
+    </g>
+  </g>
+</svg>

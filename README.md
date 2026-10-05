@@ -1,210 +1,279 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:6D28D9,100:06B6D4&height=220&section=header&text=FOR1S&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=A%20Premium%20Motion-First%20SaaS%20Landing%20Experience&descAlignY=55&descSize=20" width="100%"/>
+<img src="./assets/readme/hero.svg" alt="FOR1S — We build websites that make businesses look like serious brands." width="100%">
 
-<img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=600&size=24&duration=3000&pause=800&color=06B6D4&center=true&vCenter=true&width=700&lines=Premium%2C+high-performance+websites.;Book+a+website.+Pay.+Get+it+built.;Next.js+%2B+React+%2B+TypeScript+%2B+Tailwind.;No+devs+needed.+Just+for1s." alt="Typing SVG" />
+<br>
 
-<br/>
+**Custom, cinematic websites for businesses and brands.**
+Design, development, motion, and launch — handled by one small team.
 
-[![Status](https://img.shields.io/badge/🚧_Status-Development_Paused_·_Public_Preview-F59E0B?style=for-the-badge)](../../releases)
-[![Book a Call](https://img.shields.io/badge/📞_Book_a_Call-Schedule_Now-06B6D4?style=for-the-badge)](#)
-[![Contact](https://img.shields.io/badge/✉️_Contact-Email_Us-1E293B?style=for-the-badge)](#)
+<br>
 
-![Stars](https://img.shields.io/github/stars/subhamrout818/FOR1S?style=for-the-badge&color=FFD700)
-![Forks](https://img.shields.io/github/forks/subhamrout818/FOR1S?style=for-the-badge&color=6D28D9)
-![Issues](https://img.shields.io/github/issues/subhamrout818/FOR1S?style=for-the-badge&color=06B6D4)
-![Contributors](https://img.shields.io/github/contributors/subhamrout818/FOR1S?style=for-the-badge&color=22C55E)
+[![Live site](https://img.shields.io/badge/LIVE-for1s.com-E63946?style=for-the-badge&labelColor=050505)](https://for1s.com)
+[![Book a call](https://img.shields.io/badge/BOOK-A_CALL-E63946?style=for-the-badge&labelColor=050505)](https://cal.com/for1s/consultation)
+[![Email](https://img.shields.io/badge/EMAIL-hello@for1s.com-ffffff?style=for-the-badge&labelColor=050505)](mailto:hello@for1s.com)
 
-</div>
-
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
-
-## ✨ What is `FOR1S`?
-
-**FOR1S** is a modern web development studio building **premium, high-performance websites** for businesses, brands, and creators.
-
-It's also the platform behind that studio — where clients **browse, book, and pay** for a website, or simply **book a call / send an email** to talk through their project first.
-
-No back-and-forth over spreadsheets. No guessing on pricing. Just pick, pay, and launch — with a site that feels crafted, not templated.
-
-> **📌 Current status:** Development is currently paused — this repo is in **Public Preview**. Check the [Releases](../../releases) tab for the latest notes.
-
-<div align="center">
-
-```
-   Browse   ─────▶   Book   ─────▶   Pay   ─────▶   Get Your Website 🚀
-     🔍                📅               💳                  🌐
-```
+![Version](https://img.shields.io/badge/version-0.1.0-E63946?style=flat-square&labelColor=050505)
+![Next.js](https://img.shields.io/badge/Next.js-16-ffffff?style=flat-square&logo=nextdotjs&logoColor=white&labelColor=050505)
+![React](https://img.shields.io/badge/React-19-ffffff?style=flat-square&logo=react&logoColor=white&labelColor=050505)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-ffffff?style=flat-square&logo=typescript&logoColor=white&labelColor=050505)
+![Status](https://img.shields.io/badge/status-live-E63946?style=flat-square&labelColor=050505)
 
 </div>
 
-<br/>
+<img src="./assets/readme/divider.svg" alt="" width="100%">
 
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
+## About
 
-## 🚀 Core Features
+Most small and growing businesses have a real product and a forgettable website. The gap costs them trust before a visitor ever reads a word.
+
+**FOR1S** closes that gap. We design and build custom websites from scratch — no templates, no borrowed layouts — so a business looks as serious online as it is in person. Design, copy, build, and launch come from the same team: one point of contact, one timeline, one price.
+
+This repository is the studio's own platform: the public site at [for1s.com](https://for1s.com), plus the client portal and admin tools that run behind it.
+
+<img src="./assets/readme/divider.svg" alt="" width="100%">
+
+## What we build
 
 <table>
 <tr>
-<td width="50%" valign="top">
+<td width="33%" valign="top">
 
-### 🛒 Book & Buy
-Clients pick a website package that fits their needs and book it directly through the platform.
-
-### 💳 Secure Payments
-Integrated payment flow — pay for your website online, no manual invoicing required.
+**`01` Custom design**
+Every site is designed around one business, its customers, and one goal: turning a visitor into a customer.
 
 </td>
-<td width="50%" valign="top">
+<td width="33%" valign="top">
 
-### 📞 Book a Call
-Not ready to commit? Clients can schedule a call to discuss requirements first.
+**`02` Full-stack development**
+Clean, modern code on a platform that is fast, secure, and easy to update.
 
-### ✉️ Direct Contact
-A built-in contact/mail flow to reach the for1s team for custom requests.
+</td>
+<td width="33%" valign="top">
+
+**`03` Motion & interaction**
+Scroll-driven reveals, magnetic controls, and cinematic transitions — used with restraint, never as decoration.
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+**`04` Performance & SEO**
+Pages built to load fast on patchy mobile connections, with SEO in place from day one.
+
+</td>
+<td width="33%" valign="top">
+
+**`05` Responsive by default**
+Mobile-first, tested on real phones, premium on every screen size.
+
+</td>
+<td width="33%" valign="top">
+
+**`06` Care & maintenance**
+Launch is not the finish line. Updates, fixes, and improvements keep the site working after go-live.
 
 </td>
 </tr>
 </table>
 
-<br/>
+<img src="./assets/readme/divider.svg" alt="" width="100%">
 
-## 🖥️ Preview
+## Selected work
+
+Three sites built and documented in this repository. Each runs as a live demo.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://for1s.com/demo/brew-and-co/index.html"><img src="./public/demo/brew-and-co/hero.png" alt="Brew & Co. website home page" width="100%"></a>
+
+### Brew & Co.
+*Café & restaurant · 2026*
+
+A neighbourhood café whose site answers three questions: what's on the menu, when are you open, and how do I book. Custom design with real photography and a booking flow short enough to finish on a phone.
+
+`Design` `Build` `Booking flow` `SEO`
+[**View demo →**](https://for1s.com/demo/brew-and-co/index.html) · [Case study](https://for1s.com/work/brew-and-co)
+
+</td>
+<td width="50%" valign="top">
+
+<a href="https://for1s.com/demo/studio-arun/index.html"><img src="./public/demo/studio-arun/hero.png" alt="Studio Arun photography portfolio home page" width="100%"></a>
+
+### Studio Arun
+*Photographer · 2026*
+
+A portrait and wedding photographer's portfolio. A full-screen cinematic gallery, separate galleries for weddings, portraits, and commercial work, and a single enquiry flow.
+
+`Design` `Build` `Branding` `Gallery`
+[**View demo →**](https://for1s.com/demo/studio-arun/index.html) · [Case study](https://for1s.com/work/studio-arun)
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://for1s.com/demo/glow-and-co/index.html"><img src="./public/demo/glow-and-co/hero.png" alt="Glow & Co. salon and spa website home page" width="100%"></a>
+
+### Glow & Co.
+*Salon & spa · 2026*
+
+An elegant, editorial site for a salon, with clear services and pricing, online booking with automatic confirmations, and a tightened brand — logo, typography, and colour used consistently.
+
+`Design` `Build` `Online booking` `Brand`
+[**View demo →**](https://for1s.com/demo/glow-and-co/index.html) · [Case study](https://for1s.com/work/glow-and-co)
+
+</td>
+<td width="50%" valign="top">
+
+### Beyond the marketing site
+
+The platform in this repo also ships:
+
+- **Client portal** — projects, milestones, deliverables with versioned review and comments, files, billing, messages, and support tickets
+- **Admin workspace** — clients, leads, projects, deliverables, payments, tickets, and team
+- **Blog** and a **contact flow** with email notifications
+
+</td>
+</tr>
+</table>
+
+<img src="./assets/readme/divider.svg" alt="" width="100%">
+
+## Technology
 
 <div align="center">
 
-<!-- 📸 Add your homepage screenshot below -->
-<img src="./screenshots/homepage.png" alt="for1s Homepage" width="90%"/>
-
-<br/><br/>
-
-<!-- 📸 Add booking flow screenshot below -->
-<img src="./screenshots/booking-flow.png" alt="Booking Flow" width="45%"/>
-<img src="./screenshots/payment-page.png" alt="Payment Page" width="45%"/>
-
-<br/><br/>
-
-<!-- 📸 Add contact/call booking screenshot below -->
-<img src="./screenshots/contact-call.png" alt="Contact and Call Booking" width="90%"/>
+![Next.js](https://img.shields.io/badge/Next.js-050505?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-050505?style=for-the-badge&logo=react&logoColor=E63946)
+![TypeScript](https://img.shields.io/badge/TypeScript-050505?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-050505?style=for-the-badge&logo=tailwindcss&logoColor=E63946)
+![GSAP](https://img.shields.io/badge/GSAP-050505?style=for-the-badge&logo=greensock&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-050505?style=for-the-badge&logo=prisma&logoColor=E63946)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-050505?style=for-the-badge&logo=postgresql&logoColor=white)
 
 </div>
 
-> 💡 Drop your screenshots inside a `/screenshots` folder in the repo root using the filenames above, and they'll render automatically here.
+| Layer | Stack |
+| :-- | :-- |
+| **Framework** | Next.js (App Router), React, TypeScript |
+| **Styling** | Tailwind CSS |
+| **Motion** | GSAP, Framer Motion, Lenis smooth scroll |
+| **Data** | PostgreSQL via Prisma |
+| **Auth & security** | JWT sessions in HTTP-only cookies (`jose`), bcrypt, Google & GitHub OAuth, Zod validation, rate limiting |
+| **Email** | Resend |
 
-<br/>
+<img src="./assets/readme/divider.svg" alt="" width="100%">
 
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+## Design philosophy
 
-## 🛠️ Tech Stack
+| | |
+| :-- | :-- |
+| **Hierarchy** | One idea per screen. The eye should know where to go before it reads. |
+| **Typography** | Large, confident type carries the brand. Everything else gets out of the way. |
+| **Motion** | Motion guides attention and adds weight to key moments. If it doesn't help, it's cut. |
+| **Interaction** | Controls respond to the pointer and feel physical, without slowing anyone down. |
+| **Performance** | Speed is part of the design. A premium site that loads slowly isn't premium. |
+| **Responsiveness** | Built mobile-first, because that's where most customers arrive. |
+| **Conversion** | Every page has a single job: move a visitor toward a booking, a call, or an enquiry. |
+| **Brand perception** | The site should make the business look as serious as the work behind it. |
 
-<div align="center">
+<img src="./assets/readme/divider.svg" alt="" width="100%">
 
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+## How we work
 
-</div>
-
-<br/>
-
-## ⚡ How It Works
-
-```mermaid
-flowchart LR
-    A[👤 Client visits for1s] --> B{What do they need?}
-    B -->|Ready to buy| C[🛒 Choose a website package]
-    B -->|Wants to discuss| D[📞 Book a call]
-    B -->|Has questions| E[✉️ Send an email]
-    C --> F[💳 Secure payment]
-    F --> G[🏗️ Website is built]
-    G --> H[🚀 Client receives their website]
-    D --> H
-    E --> H
+```text
+ DISCOVER  ───▶  DESIGN  ───▶  BUILD  ───▶  LAUNCH & CARE
 ```
 
-<br/>
+| Stage | What happens |
+| :-- | :-- |
+| **Discover** | Kickoff call. We learn the business, its customers, and its competitors, then map exactly what the site needs to win — sitemap and copy plan. |
+| **Design** | Wireframes first, then a clickable mockup tailored to the brand. Revisions until it's right. |
+| **Build** | Mobile-first, SEO-ready, tested on real phones. |
+| **Launch & care** | We handle domain, hosting, and going live — typically within 1–3 weeks — then stay on for updates and support through care plans. |
 
-## 🧩 Getting Started
+<img src="./assets/readme/divider.svg" alt="" width="100%">
+
+## Team
+
+| | | |
+| :-- | :-- | :-- |
+| **Subham Rout** | Founder & Frontend | [@subhamrout818](https://github.com/subhamrout818) |
+| **Sidhi** | Co-founder & Marketing | |
+| **Tanuj Joshi** | Marketing | |
+
+<img src="./assets/readme/divider.svg" alt="" width="100%">
+
+## Project status
+
+| | |
+| :-- | :-- |
+| **Version** | `0.1.0` |
+| **Deployment** | Live at [for1s.com](https://for1s.com) |
+| **Source** | Public repository · © 2026 FOR1S Digital. All rights reserved. |
+
+<details>
+<summary><b>Run it locally</b></summary>
+
+<br>
+
+Requires Node.js and a PostgreSQL database.
 
 ```bash
-# Clone the repository
 git clone https://github.com/subhamrout818/for1s.git
-
-# Move into the project
 cd for1s
-
-# Install dependencies
 npm install
 
-# Run the development server
+cp .env.example .env        # set DATABASE_URL and JWT_SECRET (32+ chars)
+npx prisma migrate dev
+npm run db:seed             # demo data, non-production only
 npm run dev
 ```
 
-<br/>
+Email delivery (Resend) and Google / GitHub sign-in are optional; see `.env.example`.
 
-## 📂 Project Structure
+</details>
 
-```
-FOR1S/
-├── app/ or src/       # Next.js app — pages, sections, animated scenes
-├── components/        # UI components, 3D scenes, animated elements
-├── public/            # Static assets
-├── screenshots/        # 📸 Add your screenshots here
-└── README.md
-```
+<details>
+<summary><b>Repository layout</b></summary>
 
-<sub>Update this to match your actual folder layout.</sub>
+<br>
 
-<br/>
-
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="100%">
-
-## 🗺️ Roadmap
-
-- [x] Studio landing page & animated hero
-- [x] Book-a-call & contact flow
-- [ ] Website browsing & package selection
-- [ ] Secure payment integration
-- [ ] Client dashboard for order tracking
-- [ ] Admin panel for managing bookings
-
-> ⏸️ Development is currently **paused** — this reflects the public preview state, not the final roadmap.
-
-<br/>
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-Feel free to check the [issues page](../../issues) or open a pull request.
-
-```bash
-# Fork it, then:
-git checkout -b feature/your-feature
-git commit -m "Add your feature"
-git push origin feature/your-feature
+```text
+app/          Routes: marketing site, blog, work, portal (dashboard), admin, API
+components/   Sections, layout chrome, portal UI, motion primitives
+lib/          Auth, data, email, rate limiting, content (work, members)
+prisma/       Schema, migrations, seed
+public/       Static assets and the three live demo sites
+logos/        Brand marks — SVG and PNG
+assets/       README artwork and section screenshots
 ```
 
-<br/>
+</details>
 
-## 📬 Get in Touch
+<img src="./assets/readme/divider.svg" alt="" width="100%">
+
+## Start a project
 
 <div align="center">
 
-[![Book a Call](https://img.shields.io/badge/📞_Book_a_Call_with_for1s-Schedule_Now-6D28D9?style=for-the-badge)](#)
-[![Email](https://img.shields.io/badge/✉️_Email-Contact_for1s-06B6D4?style=for-the-badge)](#)
+**Tell us about your business. We'll tell you exactly what it takes.**
+
+<br>
+
+[![Book a call](https://img.shields.io/badge/BOOK_A_CALL-cal.com/for1s-E63946?style=for-the-badge&labelColor=050505)](https://cal.com/for1s/consultation)
+[![Email](https://img.shields.io/badge/EMAIL-hello@for1s.com-ffffff?style=for-the-badge&labelColor=050505)](mailto:hello@for1s.com)
+
+<br>
+
+[Website](https://for1s.com) · [X](https://x.com/for1s) · [YouTube](https://youtube.com/@for1s) · [Instagram](https://instagram.com/btwitssubu)
 
 </div>
 
-<br/>
+<br>
 
-<div align="center">
-
-### ⭐ If you like what for1s is building, drop a star — it helps a lot!
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:06B6D4,100:6D28D9&height=120&section=footer" width="100%"/>
-
-</div>
+<img src="./assets/readme/footer.svg" alt="FOR1S Digital" width="100%">
