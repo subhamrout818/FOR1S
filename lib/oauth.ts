@@ -147,6 +147,10 @@ export async function fetchProfile(
   const data = (await res.json()) as Record<string, unknown>;
 
   if (provider === "google") {
+    // Never trust an email Google hasn't verified — it is used to link accounts.
+    if (data.email_verified !== true) {
+      throw new Error("Google account email is not verified");
+    }
     return {
       providerAccountId: String(data.sub ?? ""),
       email: normalizeEmail(typeof data.email === "string" ? data.email : ""),
@@ -225,6 +229,11 @@ export async function upsertOAuthUser(profile: OAuthProfile) {
         provider: profile.provider,
         providerAccountId: profile.providerAccountId,
         emailVerified: true,
+        // An account whose email was never verified may have been registered
+        // by someone who doesn't own the address (pre-hijacking). The provider
+        // has now proven ownership, so drop any password set before that proof.
+        // Verified accounts keep their password.
+        ...(byEmail.emailVerified ? {} : { password: null }),
         name: byEmail.name || profile.name,
         profileImage: byEmail.profileImage || profile.avatar,
       },

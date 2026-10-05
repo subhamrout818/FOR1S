@@ -97,7 +97,7 @@ export async function POST(req: Request) {
           body: JSON.stringify({
             from,
             to: [to],
-            replyTo: email,
+            reply_to: email,
             subject: `New inquiry from ${name}`,
             text: [
               `Name: ${name}`,

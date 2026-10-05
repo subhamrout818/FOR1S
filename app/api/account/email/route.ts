@@ -79,7 +79,7 @@ export async function POST(req: Request) {
     // unverified — fine, since dev has no login gate anyway.
     if (emailEnabled()) {
       const verify = signVerifyEmail(user.id, updated.email, updated.updatedAt);
-      const link = absoluteUrl(req, `/verify-email?token=${encodeURIComponent(verify)}`);
+      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}`);
       await sendEmail({
         to: updated.email,
         subject: "Verify your new FOR1S email",

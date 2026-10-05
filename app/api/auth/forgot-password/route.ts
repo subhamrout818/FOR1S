@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     // Only verified accounts may reset — otherwise "forgot password" becomes
     // a backdoor around the signup verification gate.
     if (user && user.emailVerified && emailEnabled()) {
-      const token = signResetPassword(user.id, user.email);
+      const token = signResetPassword(user.id, user.email, user.updatedAt);
       const link = absoluteUrl(req, `/reset-password?token=${encodeURIComponent(token)}`);
       const hasPassword = !!user.password;
       await sendEmail({

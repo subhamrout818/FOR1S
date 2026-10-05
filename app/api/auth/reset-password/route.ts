@@ -50,7 +50,13 @@ export async function POST(req: Request) {
     }
 
     const user = await prisma.user.findUnique({ where: { id: claims.userId } });
-    if (!user || user.email !== claims.email) {
+    // Single-use: the token was minted against an earlier `updatedAt`, so any
+    // account change since (including a previous reset) invalidates it.
+    if (
+      !user ||
+      user.email !== claims.email ||
+      user.updatedAt.getTime() !== claims.updatedAt
+    ) {
       return NextResponse.json(
         { success: false, message: "Invalid or expired reset link" },
         { status: 400 }

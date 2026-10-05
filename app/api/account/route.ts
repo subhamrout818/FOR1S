@@ -10,7 +10,12 @@ import { z } from "zod";
  * rejected to avoid storing arbitrary/external URLs.
  */
 const imageRef = z.union([
-  z.string().regex(/^data:image\/(jpeg|png|webp);base64,/, "Unsupported image format"),
+  z
+    .string()
+    // The client renders a 256x256 JPEG (a few tens of KB); cap well above that
+    // so a signed-in user can't stuff megabytes of base64 into the database.
+    .max(150_000, "Image is too large")
+    .regex(/^data:image\/(jpeg|png|webp);base64,/, "Unsupported image format"),
   z.string().regex(/^\/avatars\//, "Unknown avatar"),
 ]);
 

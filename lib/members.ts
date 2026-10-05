@@ -13,7 +13,7 @@ export const MEMBERS: Member[] = [
     slug: "subham-rout",
     name: "Subham Rout",
     role: "Founder & Frontend",
-    image: "/blurred.jpg",
+    image: "/blurred.png",
    story: [
   "I'm a student. I'm still learning code. Still learning design. Still learning business. Still making mistakes that someone with ten years of experience probably wouldn't make. But I've never really liked waiting until I was ready.",
   

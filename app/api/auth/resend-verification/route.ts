@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (user && !user.emailVerified && emailEnabled()) {
       const token = signVerifyEmail(user.id, user.email, user.updatedAt);
-      const link = absoluteUrl(req, `/verify-email?token=${encodeURIComponent(token)}`);
+      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(token)}`);
       await sendEmail({
         to: user.email,
         subject: "Verify your FOR1S email",
