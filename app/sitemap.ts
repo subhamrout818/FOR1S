@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/lib/blog";
 import { MEMBERS } from "@/lib/members";
+import { CASE_STUDIES } from "@/lib/work";
 import { SITE_URL } from "@/lib/contact";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -25,9 +26,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const work: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/#work`, priority: 0.9 },
-  ];
+  // Case-study pages are real URLs; a "/#work" fragment is ignored by crawlers.
+  const work: MetadataRoute.Sitemap = CASE_STUDIES.map((project) => ({
+    url: `${SITE_URL}/work/${project.slug}`,
+    priority: 0.9,
+  }));
 
   return [...staticRoutes, ...work, ...posts, ...members];
 }
