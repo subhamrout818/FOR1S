@@ -2,6 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
 import { comparePassword, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import {
+  checkRateLimit,
+  consumeRateLimit,
+  rateLimitedResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -48,8 +54,22 @@ export async function POST(req: Request) {
     const { email, currentPassword } = result.data;
 
     // Confirm it's really them before touching the login identifier.
+    // Only wrong guesses burn quota (see account/password).
+    const limitKey = `account:email:${user.id}`;
+    const limit = checkRateLimit(
+      limitKey,
+      RATE_LIMITS.emailChange.limit,
+      RATE_LIMITS.emailChange.windowMs
+    );
+    if (!limit.ok) return rateLimitedResponse(limit.resetAt);
+
     const passwordOk = await comparePassword(currentPassword, user.password);
     if (!passwordOk) {
+      consumeRateLimit(
+        limitKey,
+        RATE_LIMITS.emailChange.limit,
+        RATE_LIMITS.emailChange.windowMs
+      );
       return NextResponse.json(
         { success: false, message: "Current password is incorrect" },
         { status: 401 }

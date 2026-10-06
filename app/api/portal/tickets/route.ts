@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/portal";
+import { consumeRateLimit, rateLimitedResponse, RATE_LIMITS } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,6 +14,13 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
+
+  const rate = consumeRateLimit(
+    `portal:ticket:${user.id}`,
+    RATE_LIMITS.ticket.limit,
+    RATE_LIMITS.ticket.windowMs
+  );
+  if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
   const parsed = ticketSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {
