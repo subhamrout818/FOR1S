@@ -19,7 +19,7 @@ import {
   formatBytes,
 } from "@/lib/portal-format";
 import type { WorkspaceData } from "@/lib/portal-types";
-import { cn } from "@/lib/utils";
+import { cn, safeHref } from "@/lib/utils";
 
 export default function ProjectDetailPage({
   params,
@@ -246,13 +246,13 @@ export default function ProjectDetailPage({
                         {folder.files.map((file) => (
                           <a
                             key={file.id}
-                            href={file.url && file.url !== "#" ? file.url : undefined}
-                            target={file.url && file.url !== "#" ? "_blank" : undefined}
-                            rel="noreferrer"
+                            href={safeHref(file.url)}
+                            target={safeHref(file.url) ? "_blank" : undefined}
+                            rel="noopener noreferrer"
                             data-cursor="hover"
                             className={cn(
                               "rounded-lg border border-hairline bg-white/[0.02] px-3 py-1.5 text-xs text-muted transition-colors hover:border-accent/40 hover:text-foreground",
-                              (file.url === "#" || !file.url) && "pointer-events-none"
+                              !safeHref(file.url) && "pointer-events-none"
                             )}
                           >
                             {file.name} · {formatBytes(file.size)}

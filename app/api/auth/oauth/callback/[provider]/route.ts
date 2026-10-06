@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { isSafeRelativePath } from "@/lib/utils";
 import { verifyOAuthState, signToken, setSessionCookie } from "@/lib/auth";
-import { allowedOrigin } from "@/lib/email";
+import { allowedOrigin, fallbackOrigin } from "@/lib/email";
 import {
   oauthProvider,
   exchangeCodeForToken,
@@ -23,9 +23,9 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ provider: string }> }
 ) {
-  const fallbackOrigin = process.env.APP_URL || "http://localhost:3000";
+  const fallback = fallbackOrigin();
   const redirectToHandoff = (path: string) =>
-    NextResponse.redirect(new URL(path, fallbackOrigin));
+    NextResponse.redirect(new URL(path, fallback));
 
   try {
     const { provider: paramProvider } = await params;
@@ -52,7 +52,7 @@ export async function GET(
       return redirectToHandoff("/oauth/callback?error=invalid_state");
     }
 
-    const origin = allowedOrigin(req) ?? fallbackOrigin;
+    const origin = allowedOrigin(req) ?? fallback;
     const redirectUri = `${origin}/api/auth/oauth/callback/${provider}`;
 
     const accessToken = await exchangeCodeForToken(
@@ -81,7 +81,7 @@ export async function GET(
     return response;
   } catch (err) {
     console.error("OAuth callback error:", err);
-    const location = new URL("/oauth/callback", fallbackOrigin);
+    const location = new URL("/oauth/callback", fallback);
     location.searchParams.set("error", "failed");
     return NextResponse.redirect(location);
   }

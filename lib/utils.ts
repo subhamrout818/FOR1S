@@ -59,3 +59,19 @@ export function scrollToHash(hash: string) {
   }
 }
 
+
+/**
+ * Returns the URL only when it is safe to put in an `href`: http(s) or a
+ * site-relative path. Anything else (javascript:, data:, …) becomes undefined.
+ * Use for URLs that come from the database rather than from our own code.
+ */
+export function safeHref(url: string | null | undefined): string | undefined {
+  if (!url || url === "#") return undefined;
+  if (url.startsWith("/") && !url.startsWith("//") && !url.startsWith("/\\")) return url;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" || parsed.protocol === "http:" ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}

@@ -16,7 +16,8 @@ const DUMMY_HASH = "$2b$10$rRA006bFvB1IeNiu1jti8eOoq.hUCZMo8Rrlh7ckyq0F4Gvk/RrCu
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  // Generous cap: only stops absurd payloads, never a real password.
+  password: z.string().min(1, "Password is required").max(1024),
   rememberMe: z.boolean().optional(),
 });
 
