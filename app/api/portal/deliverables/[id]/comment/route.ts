@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/portal";
+import { consumeRateLimit, rateLimitedResponse, RATE_LIMITS } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -16,6 +17,13 @@ export async function POST(
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
+
+  const rate = consumeRateLimit(
+    `portal:comment:${user.id}`,
+    RATE_LIMITS.comment.limit,
+    RATE_LIMITS.comment.windowMs
+  );
+  if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
   const parsed = commentSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {

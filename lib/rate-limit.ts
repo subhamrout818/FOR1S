@@ -140,6 +140,12 @@ export const RATE_LIMITS = {
   resetPassword: { limit: 10, windowMs: 15 * 60_000 }, // per IP
   resendVerification: { limit: 5, windowMs: 60 * 60_000 }, // per email+IP
   verifyEmail: { limit: 20, windowMs: 15 * 60_000 }, // per IP
+  // Signed-in actions are keyed per user id, not per IP.
+  ticket: { limit: 10, windowMs: 60 * 60_000 }, // 10 support tickets / hour
+  comment: { limit: 30, windowMs: 60 * 60_000 }, // 30 comments / hour
+  review: { limit: 30, windowMs: 60 * 60_000 }, // 30 approve/changes actions / hour
+  passwordChange: { limit: 10, windowMs: 15 * 60_000 }, // failed current-password checks
+  emailChange: { limit: 10, windowMs: 15 * 60_000 }, // failed current-password checks
 } as const;
 
 /** 429 response with a Retry-After header so clients know when to back off. */

@@ -1,7 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { randomBytes } from "node:crypto";
 
 const prisma = new PrismaClient();
+
+/** Hostname of DATABASE_URL (lowercased), or "unknown" if it can't be parsed. */
+function databaseHost() {
+  try {
+    return new URL(process.env.DATABASE_URL ?? "").hostname.toLowerCase();
+  } catch {
+    return "unknown";
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -783,22 +793,48 @@ async function main() {
   const demo = process.env.NODE_ENV !== "production" || process.env.SEED_DEMO === "1";
 
   if (demo) {
+    // This repo is public, so there are no default passwords. Set
+    // SEED_ADMIN_PASSWORD / SEED_CLIENT_PASSWORD, or a random one is generated
+    // and printed once. Passwords are only applied when an account is created.
+    const adminPassword =
+      process.env.SEED_ADMIN_PASSWORD || randomBytes(12).toString("base64url");
+    const clientPassword =
+      process.env.SEED_CLIENT_PASSWORD || randomBytes(12).toString("base64url");
+
+    // Demo accounts must never be created on a remote database by accident.
+    const dbHost = databaseHost();
+    const isLocal = ["localhost", "127.0.0.1", "::1", "db", "postgres"].includes(dbHost);
+    if (!isLocal && process.env.ALLOW_REMOTE_SEED !== "1") {
+      console.error(
+        `Refusing to seed demo accounts into remote database "${dbHost}".\n` +
+          "If that is really what you want, re-run with ALLOW_REMOTE_SEED=1 " +
+          "and set SEED_ADMIN_PASSWORD / SEED_CLIENT_PASSWORD."
+      );
+      process.exit(1);
+    }
+
     const admin = await upsertUser({
       email: "for1s.contact@gmail.com",
       name: "Subham Rout",
       role: "admin",
-      password: process.env.SEED_ADMIN_PASSWORD || "admin@123",
+      password: adminPassword,
     });
     console.log("✓ admin:", admin.email, "(role: admin)");
+    if (!process.env.SEED_ADMIN_PASSWORD) {
+      console.log(`  generated admin password: ${adminPassword}`);
+    }
 
     const client = await upsertUser({
       email: "subhamrout818@gmail.com",
       name: "Subham Rout",
       role: "client",
       company: "FOR1S Demo",
-      password: process.env.SEED_CLIENT_PASSWORD || "client@123",
+      password: clientPassword,
     });
     console.log("✓ client:", client.email, "(role: client)");
+    if (!process.env.SEED_CLIENT_PASSWORD) {
+      console.log(`  generated client password: ${clientPassword}`);
+    }
 
     await seedDemoWorkspace(client);
     await seedLeads();

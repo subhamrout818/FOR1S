@@ -1,6 +1,6 @@
 // ──────────────────────────────────────────────
-// Contact & Social credentials
-// ──── UPDATE THESE WITH YOUR REAL INFO ─────────
+// Contact & social links (public — shown in the footer, emails and SEO data)
+// ──────────────────────────────────────────────
 
 /** Canonical production domain — used by sitemap, robots, and Open Graph. */
 export const SITE_URL = "https://for1s.com";

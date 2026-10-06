@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/portal";
+import { consumeRateLimit, rateLimitedResponse, RATE_LIMITS } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -18,6 +19,13 @@ export async function POST(
   }
   const { id } = await params;
 
+  const rate = consumeRateLimit(
+    `portal:review:${user.id}`,
+    RATE_LIMITS.review.limit,
+    RATE_LIMITS.review.windowMs
+  );
+  if (!rate.ok) return rateLimitedResponse(rate.resetAt);
+
   const parsed = reviewSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {
     return NextResponse.json(
@@ -33,6 +41,16 @@ export async function POST(
   });
   if (!deliverable) {
     return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
+  }
+
+  // Mirror the client UI: a deliverable can only be reviewed while it is
+  // awaiting review. Drafts, approved and delivered items are not the client's
+  // to flip.
+  if (!["in-review", "changes-requested"].includes(deliverable.status)) {
+    return NextResponse.json(
+      { success: false, message: "This deliverable isn't awaiting review." },
+      { status: 409 }
+    );
   }
 
   const status = action === "approve" ? "approved" : "changes-requested";

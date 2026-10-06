@@ -25,8 +25,32 @@ const TABLES = [
   "ActivityEvent",
 ];
 
+/** Hostname of DATABASE_URL (lowercased), or "unknown" if it can't be parsed. */
+function databaseHost() {
+  try {
+    return new URL(process.env.DATABASE_URL ?? "").hostname.toLowerCase();
+  } catch {
+    return "unknown";
+  }
+}
+
 async function main() {
-  console.log("Clearing all data…");
+  // This script deletes EVERY row, including all users. Make that impossible
+  // to do by accident: the caller must type the target database host.
+  const host = databaseHost();
+  if (process.env.CONFIRM_DB_HOST?.toLowerCase() !== host) {
+    console.error(
+      `Refusing to clear database "${host}".\n` +
+        `To confirm, re-run with CONFIRM_DB_HOST=${host}`
+    );
+    process.exit(1);
+  }
+  if (process.env.NODE_ENV === "production" && process.env.ALLOW_PRODUCTION_CLEAR !== "1") {
+    console.error("Refusing to clear in NODE_ENV=production without ALLOW_PRODUCTION_CLEAR=1.");
+    process.exit(1);
+  }
+
+  console.log(`Clearing all data in "${host}"…`);
   // Quote each identifier: `User` is a reserved word, so `TRUNCATE TABLE User`
   // is a syntax error — it must be `TRUNCATE TABLE "User", …`.
   const quoted = TABLES.map((t) => `"${t}"`).join(", ");

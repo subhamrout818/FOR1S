@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
 import { comparePassword, hashPassword, signToken, setSessionCookie } from "@/lib/auth";
+import {
+  checkRateLimit,
+  consumeRateLimit,
+  rateLimitedResponse,
+  RATE_LIMITS,
+} from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -47,8 +53,23 @@ export async function POST(req: Request) {
 
     const { currentPassword, newPassword } = result.data;
 
+    // Only wrong guesses burn quota, so a stolen session can't brute-force the
+    // current password.
+    const limitKey = `account:password:${user.id}`;
+    const limit = checkRateLimit(
+      limitKey,
+      RATE_LIMITS.passwordChange.limit,
+      RATE_LIMITS.passwordChange.windowMs
+    );
+    if (!limit.ok) return rateLimitedResponse(limit.resetAt);
+
     const passwordOk = await comparePassword(currentPassword, user.password);
     if (!passwordOk) {
+      consumeRateLimit(
+        limitKey,
+        RATE_LIMITS.passwordChange.limit,
+        RATE_LIMITS.passwordChange.windowMs
+      );
       return NextResponse.json(
         { success: false, message: "Current password is incorrect" },
         { status: 401 }

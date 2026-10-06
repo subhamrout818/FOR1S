@@ -21,6 +21,15 @@ const money = (n: number) =>
     maximumFractionDigits: Math.abs(n) >= 100 ? 0 : 2,
   }).format(n);
 
+/** Escape text before interpolating it into the invoice HTML. */
+const esc = (value: string | number | null | undefined): string =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 const date = (iso: string | null | undefined) =>
   iso
     ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })
@@ -42,7 +51,7 @@ export function buildInvoiceHtml(
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Invoice ${invoice.number}</title>
+<title>Invoice ${esc(invoice.number)}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111; background: #fff; padding: 48px; }
@@ -77,7 +86,7 @@ export function buildInvoiceHtml(
       </div>
       <div class="inv-title">
         <h1>Invoice</h1>
-        <div class="num">${invoice.number}</div>
+        <div class="num">${esc(invoice.number)}</div>
         <div class="status">${statusLabel}</div>
       </div>
     </div>
@@ -85,11 +94,11 @@ export function buildInvoiceHtml(
     <div class="meta">
       <div>
         <h2>From</h2>
-        <p>FOR1S Digital<br />${CONTACT.email}<br />${SITE_URL}</p>
+        <p>FOR1S Digital<br />${esc(CONTACT.email)}<br />${esc(SITE_URL)}</p>
       </div>
       <div>
         <h2>Bill to</h2>
-        <p>${billTo}</p>
+        <p>${esc(billTo)}</p>
       </div>
       <div>
         <h2>Dates</h2>
@@ -103,7 +112,7 @@ export function buildInvoiceHtml(
       </thead>
       <tbody>
         <tr>
-          <td>${invoice.description}</td>
+          <td>${esc(invoice.description)}</td>
           <td class="amount">${money(invoice.amount)}</td>
         </tr>
       </tbody>
@@ -115,7 +124,7 @@ export function buildInvoiceHtml(
 
     <div class="footer">
       <span>Thank you for working with FOR1S.</span>
-      <span>Invoice ${invoice.number}</span>
+      <span>Invoice ${esc(invoice.number)}</span>
     </div>
   </div>
 </body>
