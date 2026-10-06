@@ -10,6 +10,10 @@ import {
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+// A valid bcrypt hash (cost 10) of a throwaway string, used only to equalize
+// timing for unknown / passwordless accounts. It matches no real password.
+const DUMMY_HASH = "$2b$10$rRA006bFvB1IeNiu1jti8eOoq.hUCZMo8Rrlh7ckyq0F4Gvk/RrCu";
+
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
@@ -58,10 +62,12 @@ export async function POST(req: Request) {
       );
     };
 
-    if (!user) return invalid();
-
-    // Passwordless accounts can't use the email/password form.
-    if (!user.password) return invalid();
+    // Run a bcrypt compare even when there's nothing real to check, so the
+    // response time doesn't reveal whether an email has a password account.
+    if (!user || !user.password) {
+      await comparePassword(password, DUMMY_HASH);
+      return invalid();
+    }
 
     // Verify password
     const isValid = await comparePassword(password, user.password);

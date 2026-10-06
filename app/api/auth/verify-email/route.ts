@@ -39,7 +39,10 @@ export async function GET(req: Request) {
     // Single-use: reject tokens minted before the last updatedAt bump
     // (e.g. a previous successful verification or email change).
     if (user.updatedAt.getTime() !== claims.updatedAt) {
-      return to("/login?verified=1"); // Already verified — treat as success.
+      // Already verified (e.g. a prefetched or re-clicked link): success.
+      // Otherwise the account changed since this link was issued (new link
+      // requested, signed out, profile edit) — don't claim success.
+      return to(user.emailVerified ? "/login?verified=1" : "/login?verify=invalid");
     }
 
     if (!user.emailVerified) {

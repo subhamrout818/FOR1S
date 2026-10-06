@@ -230,11 +230,13 @@ npm install
 
 cp .env.example .env        # set DATABASE_URL and JWT_SECRET (32+ chars)
 npx prisma migrate dev
-npm run db:seed             # demo data, non-production only
+npm run db:seed             # demo data; prints generated demo passwords once
 npm run dev
 ```
 
 Email delivery (Resend) and Google / GitHub sign-in are optional; see `.env.example`.
+
+Seeding refuses a non-local database unless `ALLOW_REMOTE_SEED=1`, and `npm run db:clear` (wipes all data) requires `CONFIRM_DB_HOST=<your database host>`. Set `SEED_ADMIN_PASSWORD` / `SEED_CLIENT_PASSWORD` to choose the demo passwords.
 
 </details>
 

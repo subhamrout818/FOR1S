@@ -45,7 +45,7 @@ export async function POST(
       status: parsed.data.status,
       deliveredAt:
         parsed.data.status === "delivered" || parsed.data.status === "approved"
-          ? new Date()
+          ? existing.deliveredAt ?? new Date() // keep the original delivery date
           : null, // reverting clears the delivered stamp so clients see the real state
     },
   });
