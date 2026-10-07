@@ -18,7 +18,7 @@ export async function POST(
   }
   const { id } = await params;
 
-  const rate = consumeRateLimit(
+  const rate = await consumeRateLimit(
     `portal:comment:${user.id}`,
     RATE_LIMITS.comment.limit,
     RATE_LIMITS.comment.windowMs

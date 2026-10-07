@@ -7,6 +7,7 @@ import {
 } from "@/lib/rate-limit";
 import { hashPassword, normalizeEmail, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -17,13 +18,14 @@ const signupSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(128, "Password must be at most 128 characters"),
+  turnstileToken: z.string().max(4096).optional().nullable(),
 });
 
 export async function POST(req: Request) {
   try {
     // Cap account creation per IP to slow mass-signup / abuse.
     const limitKey = `auth:signup:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.signup.limit,
       RATE_LIMITS.signup.windowMs
@@ -39,6 +41,13 @@ export async function POST(req: Request) {
           success: false,
           errors: result.error.flatten().fieldErrors,
         },
+        { status: 400 }
+      );
+    }
+
+    if (!(await verifyTurnstile(result.data.turnstileToken, clientIp(req)))) {
+      return NextResponse.json(
+        { success: false, message: TURNSTILE_FAILED_MESSAGE },
         { status: 400 }
       );
     }

@@ -6,6 +6,7 @@ import {
   RATE_LIMITS,
 } from "@/lib/rate-limit";
 import { CONTACT } from "@/lib/contact";
+import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -16,6 +17,9 @@ const contactSchema = z.object({
   projectType: z.string().max(100).optional().nullable(),
   budget: z.string().max(100).optional().nullable(),
   message: z.string().min(10, "Message must be at least 10 characters").max(5000),
+  // Honeypot — hidden in the form; only bots fill it in.
+  trap_ref: z.string().max(500).optional().nullable(),
+  turnstileToken: z.string().max(4096).optional().nullable(),
 });
 
 /**
@@ -30,7 +34,7 @@ export async function POST(req: Request) {
   try {
     // Public form — cap submissions per IP to slow spam.
     const limitKey = `contact:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.contact.limit,
       RATE_LIMITS.contact.windowMs
@@ -42,6 +46,19 @@ export async function POST(req: Request) {
     if (!result.success) {
       return NextResponse.json(
         { success: false, errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    // A bot filled the hidden field. Answer exactly like a success so it
+    // learns nothing, but store and send nothing.
+    if (result.data.trap_ref) {
+      return NextResponse.json({ success: true, id: "ok", emailed: false });
+    }
+
+    if (!(await verifyTurnstile(result.data.turnstileToken, clientIp(req)))) {
+      return NextResponse.json(
+        { success: false, message: TURNSTILE_FAILED_MESSAGE },
         { status: 400 }
       );
     }

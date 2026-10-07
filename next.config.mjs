@@ -2,18 +2,20 @@
 
 // Pragmatic CSP: Next.js hydration + GSAP/framer-motion rely on inline
 // scripts/styles, so 'unsafe-inline' stays for now. The meaningful wins over
-// no CSP: no external script origins, no framing, restricted exfiltration
+// no CSP: only one external script origin (Cloudflare Turnstile, for the
+// CAPTCHA), no framing, restricted exfiltration
 // (connect-src 'self'), and base-uri/form-action locked down. Sessions are
 // also httpOnly-cookie-based now, so even a script injection can't lift the
 // token from localStorage.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "media-src 'self' https: blob:",
-  "connect-src 'self'",
+  "connect-src 'self' https://challenges.cloudflare.com",
+  "frame-src https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

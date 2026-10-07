@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const email = normalizeEmail(result.data.email);
 
     const limitKey = `auth:resend:${email}:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.resendVerification.limit,
       RATE_LIMITS.resendVerification.windowMs

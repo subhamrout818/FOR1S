@@ -22,7 +22,7 @@ export async function GET(req: Request) {
 
   try {
     const limitKey = `auth:verify:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.verifyEmail.limit,
       RATE_LIMITS.verifyEmail.windowMs

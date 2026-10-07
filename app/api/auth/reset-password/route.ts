@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     const limitKey = `auth:reset:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.resetPassword.limit,
       RATE_LIMITS.resetPassword.windowMs

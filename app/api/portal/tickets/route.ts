@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
   }
 
-  const rate = consumeRateLimit(
+  const rate = await consumeRateLimit(
     `portal:ticket:${user.id}`,
     RATE_LIMITS.ticket.limit,
     RATE_LIMITS.ticket.windowMs

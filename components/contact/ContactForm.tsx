@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Turnstile, { TURNSTILE_ON } from "@/components/ui/Turnstile";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
@@ -130,6 +131,11 @@ export default function ContactForm() {
     budget: "",
     message: "",
   });
+  // Honeypot: real people never see or fill this field; form-filling bots do.
+  const [trap, setTrap] = useState("");
+  // Cloudflare Turnstile (only active when configured).
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [general, setGeneral] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
@@ -147,12 +153,17 @@ export default function ContactForm() {
       return;
     }
 
+    if (TURNSTILE_ON && !captcha) {
+      setGeneral("Please wait a moment while we finish a quick security check, then send again.");
+      return;
+    }
+
     setStatus("submitting");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, trap_ref: trap, turnstileToken: captcha ?? "" }),
       });
       const json = await res.json();
 
@@ -172,6 +183,10 @@ export default function ContactForm() {
     } catch {
       setGeneral("Network error. Please try again.");
       setStatus("idle");
+    } finally {
+      // Tokens are single-use — get a fresh one for the next attempt.
+      setCaptcha(null);
+      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -233,6 +248,20 @@ export default function ContactForm() {
             <p className="text-xs font-medium uppercase tracking-widest text-muted">
               Start a project
             </p>
+
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Leave this field empty
+                <input
+                  type="text"
+                  name="trap_ref"
+                  value={trap}
+                  onChange={(e) => setTrap(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
 
             {general && (
               <div
@@ -330,6 +359,8 @@ export default function ContactForm() {
                 className={cn(inputClasses, "resize-none", errors.message && "border-red-400/50")}
               />
             </Field>
+
+            <Turnstile onToken={setCaptcha} resetSignal={captchaReset} className="mt-2" />
 
             <MagneticButton
               type="submit"
