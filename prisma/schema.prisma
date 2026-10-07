@@ -305,3 +305,13 @@ model ActivityEvent {
   @@index([createdAt])
 }
 
+
+/// Shared fixed-window counters for rate limiting (see lib/rate-limit.ts).
+/// `key` is a SHA-256 hash, so no IPs or emails are stored.
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+
+  @@index([resetAt])
+}

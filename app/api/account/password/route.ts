@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     // Only wrong guesses burn quota, so a stolen session can't brute-force the
     // current password.
     const limitKey = `account:password:${user.id}`;
-    const limit = checkRateLimit(
+    const limit = await checkRateLimit(
       limitKey,
       RATE_LIMITS.passwordChange.limit,
       RATE_LIMITS.passwordChange.windowMs
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 
     const passwordOk = await comparePassword(currentPassword, user.password);
     if (!passwordOk) {
-      consumeRateLimit(
+      await consumeRateLimit(
         limitKey,
         RATE_LIMITS.passwordChange.limit,
         RATE_LIMITS.passwordChange.windowMs

@@ -19,7 +19,7 @@ export async function POST(
   }
   const { id } = await params;
 
-  const rate = consumeRateLimit(
+  const rate = await consumeRateLimit(
     `portal:review:${user.id}`,
     RATE_LIMITS.review.limit,
     RATE_LIMITS.review.windowMs

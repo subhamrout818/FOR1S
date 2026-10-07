@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   try {
     // Only *failed* attempts burn quota, so rate limit before validating.
     const limitKey = `auth:login:${clientIp(req)}`;
-    const check = checkRateLimit(
+    const check = await checkRateLimit(
       limitKey,
       RATE_LIMITS.login.limit,
       RATE_LIMITS.login.windowMs
@@ -48,6 +48,15 @@ export async function POST(req: Request) {
     const { password, rememberMe = true } = result.data;
     const email = normalizeEmail(result.data.email);
 
+    // Per-account failure cap, so guessing from many IPs still hits a wall.
+    const accountKey = `auth:login:acct:${email}`;
+    const accountCheck = await checkRateLimit(
+      accountKey,
+      RATE_LIMITS.loginAccount.limit,
+      RATE_LIMITS.loginAccount.windowMs
+    );
+    if (!accountCheck.ok) return rateLimitedResponse(accountCheck.resetAt);
+
     // Find user by email
     const user = await prisma.user.findUnique({
       where: { email },
@@ -55,8 +64,13 @@ export async function POST(req: Request) {
 
     // Same generic response for unknown email, wrong password, AND
     // passwordless (OAuth) accounts — so we never reveal which is which.
-    const invalid = () => {
-      consumeRateLimit(limitKey, RATE_LIMITS.login.limit, RATE_LIMITS.login.windowMs);
+    const invalid = async () => {
+      await consumeRateLimit(limitKey, RATE_LIMITS.login.limit, RATE_LIMITS.login.windowMs);
+      await consumeRateLimit(
+        accountKey,
+        RATE_LIMITS.loginAccount.limit,
+        RATE_LIMITS.loginAccount.windowMs
+      );
       return NextResponse.json(
         { success: false, message: "Invalid email or password" },
         { status: 401 }

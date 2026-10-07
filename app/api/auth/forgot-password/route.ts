@@ -7,11 +7,13 @@ import {
 } from "@/lib/rate-limit";
 import { signResetPassword, normalizeEmail } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const schema = z.object({
   email: z.email("Invalid email address"),
+  turnstileToken: z.string().max(4096).optional().nullable(),
 });
 
 /**
@@ -33,11 +35,18 @@ export async function POST(req: Request) {
       );
     }
 
+    if (!(await verifyTurnstile(result.data.turnstileToken, clientIp(req)))) {
+      return NextResponse.json(
+        { success: false, message: TURNSTILE_FAILED_MESSAGE },
+        { status: 400 }
+      );
+    }
+
     const email = normalizeEmail(result.data.email);
 
     // Consume quota unconditionally (anti-spam + anti-enumeration).
     const limitKey = `auth:forgot:${email}:${clientIp(req)}`;
-    const rate = consumeRateLimit(
+    const rate = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.forgotPassword.limit,
       RATE_LIMITS.forgotPassword.windowMs

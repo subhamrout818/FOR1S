@@ -31,7 +31,7 @@ export async function GET(
   }
 
   const limitKey = `auth:oauth:${clientIp(req)}`;
-  const rate = consumeRateLimit(
+  const rate = await consumeRateLimit(
     limitKey,
     RATE_LIMITS.oauth.limit,
     RATE_LIMITS.oauth.windowMs

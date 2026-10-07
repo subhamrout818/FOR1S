@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
 import OAuthButtons from "@/components/auth/OAuthButtons";
+import Turnstile, { TURNSTILE_ON } from "@/components/ui/Turnstile";
 
 const stagger = {
   initial: { opacity: 0, y: 16 },
@@ -31,13 +32,23 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (TURNSTILE_ON && !captcha) {
+      setError("Please wait a moment while we finish a quick security check, then try again.");
+      return;
+    }
     setLoading(true);
 
-    const result = await signup(name, email, password);
+    const result = await signup(name, email, password, captcha ?? "");
+    // Tokens are single-use — get a fresh one for any retry.
+    setCaptcha(null);
+    setCaptchaReset((n) => n + 1);
 
     if (result.success) {
       if (result.needsVerification) {
@@ -236,6 +247,7 @@ export default function RegisterPage() {
                 initial="initial"
                 animate="animate"
               >
+                <Turnstile onToken={setCaptcha} resetSignal={captchaReset} className="mb-4" />
                 <MagneticButton
                   type="submit"
                   variant="solid"

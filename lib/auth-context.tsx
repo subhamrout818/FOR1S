@@ -40,7 +40,12 @@ interface AuthContextValue {
   /** True when the signed-in user has the "admin" role. */
   isAdmin: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<AuthResult>;
-  signup: (name: string, email: string, password: string) => Promise<AuthResult>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+    turnstileToken?: string
+  ) => Promise<AuthResult>;
   logout: () => void;
   refreshUser: () => Promise<void>;
   /** Finish an OAuth sign-in: the session cookie is already set by the server,
@@ -103,12 +108,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signup = useCallback(
-    async (name: string, email: string, password: string): Promise<AuthResult> => {
+    async (
+      name: string,
+      email: string,
+      password: string,
+      turnstileToken?: string
+    ): Promise<AuthResult> => {
       try {
         const res = await fetch("/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ name, email, password, turnstileToken: turnstileToken ?? "" }),
         });
 
         const data = await res.json();

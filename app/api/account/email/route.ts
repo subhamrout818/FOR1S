@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     // Confirm it's really them before touching the login identifier.
     // Only wrong guesses burn quota (see account/password).
     const limitKey = `account:email:${user.id}`;
-    const limit = checkRateLimit(
+    const limit = await checkRateLimit(
       limitKey,
       RATE_LIMITS.emailChange.limit,
       RATE_LIMITS.emailChange.windowMs
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
 
     const passwordOk = await comparePassword(currentPassword, user.password);
     if (!passwordOk) {
-      consumeRateLimit(
+      await consumeRateLimit(
         limitKey,
         RATE_LIMITS.emailChange.limit,
         RATE_LIMITS.emailChange.windowMs

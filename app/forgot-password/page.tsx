@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
+import Turnstile, { TURNSTILE_ON } from "@/components/ui/Turnstile";
 
 const stagger = {
   initial: { opacity: 0, y: 16 },
@@ -20,16 +21,22 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaReset, setCaptchaReset] = useState(0);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    if (TURNSTILE_ON && !captcha) {
+      setError("Please wait a moment while we finish a quick security check, then try again.");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, turnstileToken: captcha ?? "" }),
       });
       const data = await res.json();
       if (data.success) {
@@ -46,6 +53,9 @@ export default function ForgotPasswordPage() {
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);
+      // Tokens are single-use — get a fresh one for any retry.
+      setCaptcha(null);
+      setCaptchaReset((n) => n + 1);
     }
   };
 
@@ -143,6 +153,7 @@ export default function ForgotPasswordPage() {
               initial="initial"
               animate="animate"
             >
+              <Turnstile onToken={setCaptcha} resetSignal={captchaReset} className="mb-4" />
               <MagneticButton
                 type="submit"
                 variant="solid"
