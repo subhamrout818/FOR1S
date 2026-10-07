@@ -11,7 +11,7 @@ import {
   formatDate,
 } from "@/lib/portal-format";
 import type { WorkspaceData, FileItem } from "@/lib/portal-types";
-import { cn } from "@/lib/utils";
+import { cn, safeHref } from "@/lib/utils";
 
 function fileIcon(file: FileItem) {
   const name = file.name.toLowerCase();
@@ -100,13 +100,14 @@ export default function FilesPage() {
                     <p className="px-6 py-5 text-sm text-muted">Empty folder.</p>
                   )}
                   {folder.files.map((file) => {
-                    const downloadable = file.url && file.url !== "#";
+                    const href = safeHref(file.url);
+                    const downloadable = !!href;
                     return (
                       <a
                         key={file.id}
-                        href={downloadable ? file.url : undefined}
+                        href={href}
                         target={downloadable ? "_blank" : undefined}
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         data-cursor={downloadable ? "hover" : undefined}
                         className={cn(
                           "flex items-center gap-3 px-6 py-3.5 transition-colors hover:bg-white/[0.02]",

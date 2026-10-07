@@ -6,7 +6,7 @@ import {
   RATE_LIMITS,
 } from "@/lib/rate-limit";
 import { verifyVerifyEmail } from "@/lib/auth";
-import { allowedOrigin } from "@/lib/email";
+import { allowedOrigin, fallbackOrigin } from "@/lib/email";
 import { NextResponse } from "next/server";
 
 /**
@@ -17,7 +17,7 @@ import { NextResponse } from "next/server";
  * it). Redirects to /login with a banner flag.
  */
 export async function GET(req: Request) {
-  const origin = allowedOrigin(req) ?? process.env.APP_URL ?? "http://localhost:3000";
+  const origin = allowedOrigin(req) ?? fallbackOrigin();
   const to = (path: string) => NextResponse.redirect(new URL(path, origin));
 
   try {
