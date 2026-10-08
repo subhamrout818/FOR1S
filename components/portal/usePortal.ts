@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface PortalState<T> {
   data: T | null;
@@ -18,21 +18,28 @@ export function usePortalData<T>(url: string): PortalState<T> {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const latest = useRef(0);
+
   const reload = useCallback(async () => {
+    // Only the most recent request may write state, so a slow older response
+    // can't overwrite newer data (e.g. after approve → comment in quick succession).
+    const id = ++latest.current;
     setLoading(true);
     setError("");
     try {
       const res = await fetch(url);
       const json = await res.json();
+      if (id !== latest.current) return;
       if (json.success) {
         setData(json as T);
       } else {
         setError(json.message || "Failed to load");
       }
     } catch {
+      if (id !== latest.current) return;
       setError("Network error. Please try again.");
     } finally {
-      setLoading(false);
+      if (id === latest.current) setLoading(false);
     }
   }, [url]);
 

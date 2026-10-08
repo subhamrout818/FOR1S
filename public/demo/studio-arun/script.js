@@ -291,7 +291,11 @@
 
     window.addEventListener("wheel", function(e) {
       e.preventDefault();
-      targetScroll = Math.max(0, Math.min(targetScroll + e.deltaY, docHeight));
+      // Page height can grow after load (images/fonts), and Firefox reports
+      // mouse-wheel notches in lines rather than pixels.
+      docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var wheelDelta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      targetScroll = Math.max(0, Math.min(targetScroll + wheelDelta, docHeight));
       if (!isScrolling) {
         isScrolling = true;
         requestAnimationFrame(smoothScrollLoop);

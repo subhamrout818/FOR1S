@@ -59,20 +59,22 @@ export default function SupportPage() {
               </p>
             </div>
 
-            <label className="mt-5 block text-sm font-medium text-foreground">
+            <label htmlFor="ticket-subject" className="mt-5 block text-sm font-medium text-foreground">
               Subject
             </label>
             <input
+              id="ticket-subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="What do you need help with?"
               className="mt-1.5 w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted transition-all focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50"
             />
 
-            <label className="mt-4 block text-sm font-medium text-foreground">
+            <label htmlFor="ticket-message" className="mt-4 block text-sm font-medium text-foreground">
               Message
             </label>
             <textarea
+              id="ticket-message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
@@ -117,6 +119,20 @@ export default function SupportPage() {
               <div className="flex items-center justify-center gap-3 px-6 py-16 text-sm text-muted">
                 <Loader2 size={20} className="animate-spin text-accent" />
                 Loading…
+              </div>
+            )}
+
+            {error && !data && (
+              <div className="px-6 py-12 text-sm text-red-400">
+                <p className="flex items-center gap-2">
+                  <AlertCircle size={14} /> {error}
+                </p>
+                <button
+                  onClick={reload}
+                  className="mt-3 rounded-full border border-hairline px-4 py-1.5 text-xs text-foreground transition-colors hover:border-accent"
+                >
+                  Try again
+                </button>
               </div>
             )}
 

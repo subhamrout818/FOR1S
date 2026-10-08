@@ -98,11 +98,11 @@ export default function DeliverablesPage() {
 
                 <div className="mt-auto flex items-center justify-between border-t border-hairline pt-4 text-xs text-muted">
                   <span>
-                    {d.dueAt
-                      ? d.status === "approved" || d.status === "delivered"
-                        ? `Delivered ${formatDayMonth(d.deliveredAt)}`
-                        : `Due ${formatDayMonth(d.dueAt)}`
-                      : "No deadline"}
+                    {(d.status === "approved" || d.status === "delivered") && d.deliveredAt
+                      ? `Delivered ${formatDayMonth(d.deliveredAt)}`
+                      : d.dueAt
+                        ? `Due ${formatDayMonth(d.dueAt)}`
+                        : "No deadline"}
                   </span>
                   <ArrowUpRight
                     size={15}

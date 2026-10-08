@@ -20,6 +20,11 @@ export default function CameraCapture({
   const dialogRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
+  // Latest callback without re-running the focus/scroll-lock effect each render.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   /* Focus the dialog, lock scroll, and close on Escape. */
   useEffect(() => {
@@ -33,7 +38,7 @@ export default function CameraCapture({
     lenis?.stop();
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") onCloseRef.current();
     };
     document.addEventListener("keydown", onKey);
 
@@ -43,7 +48,7 @@ export default function CameraCapture({
       lenis?.start();
       previouslyFocused?.focus?.();
     };
-  }, [onClose]);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;

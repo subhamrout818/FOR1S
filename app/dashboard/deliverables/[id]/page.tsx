@@ -124,7 +124,7 @@ export default function DeliverableDetailPage({
 
   const canReview = ["in-review", "changes-requested"].includes(deliverable.status);
   const latestVersion = deliverable.versions[deliverable.versions.length - 1];
-  const selectedVersion = deliverable.versions.find((v) => v.mediaUrl === src);
+  const selectedVersion = src ? deliverable.versions.find((v) => v.mediaUrl === src) : undefined;
 
   return (
     <div>
@@ -359,7 +359,7 @@ export default function DeliverableDetailPage({
 
           <div className="mt-4 space-y-2">
             {deliverable.versions.map((v) => {
-              const active = v.mediaUrl === src;
+              const active = !!src && v.mediaUrl === src;
               const selected = v.id === selectedVersion?.id;
               return (
                 <button

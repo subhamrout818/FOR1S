@@ -183,7 +183,10 @@ export default function AccountPage() {
       setName(user.name);
       setEmail(user.email);
     }
-  }, [user]);
+    // Keyed on the values, not the object: refreshUser() makes a new object
+    // after a photo save, which would otherwise wipe half-typed edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, user?.name, user?.email]);
 
   if (isLoading) return null;
 

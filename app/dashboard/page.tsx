@@ -126,7 +126,7 @@ function ProgressHero({ data }: { data: WorkspaceData }) {
               </h2>
               <p className="mt-1 text-sm text-muted">
                 {active
-                  ? "Here&apos;s exactly where your project stands — updated as the team ships."
+                  ? "Here\u2019s exactly where your project stands — updated as the team ships."
                   : "When FOR1S starts your build it will show up here."}
               </p>
             </div>

@@ -32,6 +32,11 @@ export default function CropModal({
 
   const dialogRef = useRef<HTMLDivElement>(null);
   const cancelledRef = useRef(false);
+  // Latest callback without re-running the focus/scroll-lock effect each render.
+  const onCancelRef = useRef(onCancel);
+  useEffect(() => {
+    onCancelRef.current = onCancel;
+  });
 
   const onCropComplete = useCallback(
     (_: Area, croppedAreaPixels: Area) => setPixels(croppedAreaPixels),
@@ -62,7 +67,7 @@ export default function CropModal({
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         cancelledRef.current = true;
-        onCancel();
+        onCancelRef.current();
         return;
       }
       if (e.key !== "Tab" || !dialog) return;
@@ -90,7 +95,7 @@ export default function CropModal({
       lenis?.start();
       previouslyFocused?.focus?.();
     };
-  }, [onCancel]);
+  }, []);
 
   const cancel = useCallback(() => {
     cancelledRef.current = true;

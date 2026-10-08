@@ -421,6 +421,8 @@ export async function getAdminWorkspace() {
     deliverables,
     activity,
     users,
+    revenueAgg,
+    pendingApprovals,
   ] = await Promise.all([
     prisma.payment.findMany({
       orderBy: { paidAt: "desc" },
@@ -476,22 +478,26 @@ export async function getAdminWorkspace() {
       },
     }),
     prisma.user.count(),
+    // Aggregate in the database: the 50-row payments list above is only for
+    // display, so summing it would undercount a busy month.
+    prisma.payment.aggregate({
+      where: { status: "completed", paidAt: { gte: startOfMonth } },
+      _sum: { amount: true },
+    }),
+    // Likewise counted over ALL deliverables, not just the 100 most recent.
+    prisma.deliverable.count({
+      where: { status: { in: ["in-review", "changes-requested"] } },
+    }),
   ]);
 
   // Revenue this month = completed payments in the current calendar month.
-  const revenueThisMonth = payments
-    .filter((p) => p.status === "completed" && p.paidAt >= startOfMonth)
-    .reduce((acc, p) => acc + money(p.amount), 0);
+  const revenueThisMonth = money(revenueAgg._sum.amount);
 
   const outstanding = invoices
     .filter((i) =>
       ["pending", "overdue"].includes(invoiceStatus(i))
     )
     .reduce((acc, i) => acc + money(i.amount), 0);
-
-  const pendingApprovals = deliverables.filter((d) =>
-    ["in-review", "changes-requested"].includes(d.status)
-  ).length;
 
   const upcomingDeadlines = projects.filter((p) => {
     const d = p.nextDeadline ? new Date(p.nextDeadline).getTime() : 0;

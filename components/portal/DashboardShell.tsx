@@ -78,6 +78,9 @@ export default function DashboardShell({
   const nav = variant === "client" ? CLIENT_NAV : ADMIN_NAV;
   const portalLabel = variant === "client" ? "Client portal" : "Studio";
 
+  // The account page is shared: admins manage their photo/email/password here too.
+  const onSharedAccountPage = pathname.startsWith("/dashboard/account");
+
   /* Auth + role guard. The session comes from the httpOnly cookie via /me;
      a transient /me failure keeps the shell on the loading state instead of
      bouncing a valid session. */
@@ -87,20 +90,20 @@ export default function DashboardShell({
       router.replace("/login");
       return;
     }
-    if (variant === "client" && isAdmin) {
+    if (variant === "client" && isAdmin && !onSharedAccountPage) {
       router.replace("/admin");
       return;
     }
     if (variant === "admin" && !isAdmin) {
       router.replace("/dashboard");
     }
-  }, [isLoading, user, isAdmin, variant, router]);
+  }, [isLoading, user, isAdmin, variant, router, onSharedAccountPage]);
 
   // Close the mobile drawer on navigation.
   useEffect(() => setOpen(false), [pathname]);
 
-  if (isLoading) return null;
-  if ((variant === "client" && isAdmin) || (variant === "admin" && !isAdmin)) {
+  if (isLoading || !user) return null;
+  if ((variant === "client" && isAdmin && !onSharedAccountPage) || (variant === "admin" && !isAdmin)) {
     return null;
   }
 

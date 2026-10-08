@@ -25,7 +25,7 @@ export default function AdminProjectsPage() {
   const projects = data?.projects ?? [];
   const active = projects.filter((p) => p.status === "active").length;
   const inDelivery = projects.filter((p) =>
-    ["active", "on-hold"].includes(p.status)
+    ["active", "paused"].includes(p.status)
   ).length;
 
   return (
