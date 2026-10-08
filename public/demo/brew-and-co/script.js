@@ -17,13 +17,29 @@
   // ─── Preloader ───────────────────────────────────────────────
   var preloader = document.getElementById("preloader");
 
+  function revealHeroNow() {
+    document.querySelectorAll(".line__inner").forEach(function(el) {
+      el.style.transform = "none";
+    });
+    document.querySelectorAll(".headline-img").forEach(function(el) {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+    document.querySelectorAll(".kicker, .deck, .open-now").forEach(function(el) {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+  }
+
   function hidePreloader() {
     document.body.classList.remove("no-scroll");
     if (!preloader) return;
     preloader.classList.add("is-done");
     setTimeout(function () {
       if (preloader.parentNode) preloader.remove();
-      if (!isScreenshot && !prefersReducedMotion) {
+      if (prefersReducedMotion) {
+        revealHeroNow();
+      } else if (!isScreenshot) {
         animateHero();
       }
     }, 900);
@@ -272,7 +288,11 @@
 
     window.addEventListener("wheel", function(e) {
       e.preventDefault();
-      targetScroll = Math.max(0, Math.min(targetScroll + e.deltaY, docHeight));
+      // Page height can grow after load (images/fonts), and Firefox reports
+      // mouse-wheel notches in lines rather than pixels.
+      docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var wheelDelta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      targetScroll = Math.max(0, Math.min(targetScroll + wheelDelta, docHeight));
       if (!isScrolling) {
         isScrolling = true;
         requestAnimationFrame(smoothScrollLoop);

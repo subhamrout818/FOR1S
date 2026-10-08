@@ -62,11 +62,19 @@ export default function LoginPage() {
     if (!email) return;
     setResending(true);
     try {
-      await fetch("/api/auth/resend-verification", {
+      const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      if (!res.ok) {
+        setError(
+          res.status === 429
+            ? "Too many requests. Please wait a bit before trying again."
+            : "Couldn't send the verification email. Please try again."
+        );
+        return;
+      }
       setError("");
       setErrorCode(null);
       setBanner("resent");

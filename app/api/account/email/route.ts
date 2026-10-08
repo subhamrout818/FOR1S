@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
-import { comparePassword, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
+import { comparePassword, signToken, currentSessionLifetime, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
 import {
   checkRateLimit,
@@ -109,11 +109,12 @@ export async function POST(req: Request) {
 
     // Re-issue the session (see account/route.ts) so the change doesn't log
     // the user out mid-session; the old token is dead server-side.
-    const token = signToken(updated.id, updated.email);
+    const life = await currentSessionLifetime();
+    const token = signToken(updated.id, updated.email, life.expiresIn);
     return setSessionCookie(
       NextResponse.json({ success: true, user: updated }),
       token,
-      true
+      life.remember
     );
   } catch (error) {
     console.error(error);

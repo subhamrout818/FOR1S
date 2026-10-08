@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/authed-user";
-import { signToken, setSessionCookie } from "@/lib/auth";
+import { signToken, currentSessionLifetime, setSessionCookie } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -62,11 +62,12 @@ export async function PATCH(req: Request) {
     // Re-issue the session: the update bumps updatedAt, which revokes old
     // tokens server-side (a stolen token dies). A fresh token — set as an
     // httpOnly cookie — keeps this legitimate session alive.
-    const token = signToken(updated.id, updated.email);
+    const life = await currentSessionLifetime();
+    const token = signToken(updated.id, updated.email, life.expiresIn);
     return setSessionCookie(
       NextResponse.json({ success: true, user: updated }),
       token,
-      true
+      life.remember
     );
   } catch (error) {
     console.error(error);

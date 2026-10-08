@@ -33,6 +33,7 @@
   }
 
   /* ── Smooth scroll (rAF lerp) ──────────────────────────────────── */
+  var smoothLoop;
   var docHeight = 0;
   var targetScroll = 0;
   var currentScroll = 0;
@@ -51,7 +52,7 @@
     currentScroll = window.pageYOffset;
     document.documentElement.classList.add("has-smooth");
 
-    function smoothLoop() {
+    smoothLoop = function () {
       currentScroll += (targetScroll - currentScroll) * ease;
       if (Math.abs(targetScroll - currentScroll) < 0.5) {
         currentScroll = targetScroll;
@@ -60,13 +61,14 @@
       window.scrollTo(0, currentScroll);
       updateScrollEffects();
       if (isScrolling) requestAnimationFrame(smoothLoop);
-    }
+    };
 
     window.addEventListener("wheel", function (e) {
       if (lockScroll) return;
       e.preventDefault();
       recalcHeight();
-      targetScroll = Math.max(0, Math.min(targetScroll + e.deltaY, docHeight));
+      var wheelDelta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      targetScroll = Math.max(0, Math.min(targetScroll + wheelDelta, docHeight));
       if (!isScrolling) {
         isScrolling = true;
         requestAnimationFrame(smoothLoop);

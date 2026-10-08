@@ -68,7 +68,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     // Wait for the page to render + the template fade, then glide to the
     // target section with a long, eased scroll.
     const timer = setTimeout(() => {
-      const target = document.querySelector(hash);
+      let target: Element | null = null;
+      try {
+        target = document.querySelector(hash);
+      } catch {
+        return; // not a valid selector (e.g. "#1a") — nothing to scroll to
+      }
       if (!target) return;
 
       if (lenis) {

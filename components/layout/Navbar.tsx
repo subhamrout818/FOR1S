@@ -184,14 +184,14 @@ export default function Navbar() {
                   <MagneticButton
                     variant="outline"
                     size="lg"
-                    onClick={() => { router.push("/dashboard/settings"); setMenuOpen(false); }}
+                    onClick={() => { router.push(isAdmin ? "/admin/settings" : "/dashboard/settings"); setMenuOpen(false); }}
                   >
                     Settings
                   </MagneticButton>
                   <MagneticButton
                     variant="outline"
                     size="lg"
-                    onClick={() => { router.push("/dashboard/billing"); setMenuOpen(false); }}
+                    onClick={() => { router.push(isAdmin ? "/admin/payments" : "/dashboard/billing"); setMenuOpen(false); }}
                   >
                     Billing
                   </MagneticButton>

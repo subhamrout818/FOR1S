@@ -27,6 +27,7 @@ export default function VideoPlayer({
   if (hasVideo) {
     return (
       <video
+        key={src ?? "none"}
         controls
         playsInline
         preload="metadata"

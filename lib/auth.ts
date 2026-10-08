@@ -48,7 +48,7 @@ export function signToken(
  */
 export function verifyToken(token: string): JwtPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as JwtPayload;
+    return jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as JwtPayload;
   } catch {
     return null;
   }
@@ -86,6 +86,23 @@ export async function getSessionToken(_req?: Request): Promise<string | null> {
     // cookies() throws outside a request scope (e.g. build-time prerender).
     return null;
   }
+}
+
+/**
+ * Lifetime of the caller's current session, so re-issuing a token after an
+ * account edit keeps "remember me" (7d) vs. browser-session (1d) behaviour
+ * instead of silently upgrading every session to 7 days.
+ */
+export async function currentSessionLifetime(): Promise<{
+  expiresIn: string;
+  remember: boolean;
+}> {
+  const token = await getSessionToken();
+  const payload = token ? (jwt.decode(token) as { iat?: number; exp?: number } | null) : null;
+  const span = payload?.iat && payload?.exp ? payload.exp - payload.iat : 0;
+  // Anything longer than two days was issued as a 7-day "remember me" session.
+  const remember = span > 2 * 24 * 60 * 60;
+  return { expiresIn: remember ? "7d" : "1d", remember };
 }
 
 /** Attach the session cookie to a response. `remember` sets a 7-day cookie;
@@ -144,7 +161,7 @@ export function verifyPurposeToken(
   purpose: TokenPurpose
 ): (Record<string, unknown> & { purpose: TokenPurpose }) | null {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as Record<string, unknown> & {
+    const payload = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as Record<string, unknown> & {
       purpose: unknown;
     };
     if (payload.purpose !== purpose) return null;
