@@ -20,8 +20,8 @@ export function turnstileEnabled(): boolean {
  * True when the request may proceed.
  *  - Turnstile off                       → true (nothing to check)
  *  - missing / rejected / expired token  → false
- *  - Cloudflare unreachable or too slow  → true (fail open: an outage on their
- *    side must not take our forms down; rate limiting still applies)
+ *  - Cloudflare unreachable or too slow  → false (fail closed when enabled)
+ * When enabled, verification errors must not silently bypass the challenge.
  */
 export async function verifyTurnstile(
   token: unknown,
@@ -45,14 +45,14 @@ export async function verifyTurnstile(
       signal: AbortSignal.timeout(4000),
     });
     if (!res.ok) {
-      console.error("turnstile verify HTTP", res.status, "— failing open");
-      return true;
+      console.error("turnstile verify HTTP", res.status, "— failing closed");
+      return false;
     }
     const data = (await res.json()) as { success?: boolean };
     return data.success === true;
   } catch (error) {
-    console.error("turnstile verify unavailable — failing open:", error);
-    return true;
+    console.error("turnstile verify unavailable — failing closed:", error);
+    return false;
   }
 }
 
