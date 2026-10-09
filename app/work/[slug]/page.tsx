@@ -78,7 +78,7 @@ export default async function WorkDetailPage({
             href={project.demoUrl}
             prefetch={false}
             data-cursor="view"
-            data-cursor-text="Open live site"
+            data-cursor-text="Open concept demo"
             className="group relative block"
           >
             <BrowserMock
@@ -88,7 +88,7 @@ export default async function WorkDetailPage({
               thumbnail={project.thumbnail}
             />
             <span className="absolute right-4 top-[52px] rounded-full bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              Open live site ↗
+              Open concept demo ↗
             </span>
           </Link>
         ) : (
@@ -101,7 +101,7 @@ export default async function WorkDetailPage({
       </div>
       {project.demoUrl && (
         <p className="mt-3 text-center text-xs text-muted">
-          Interactive demo of the real build — opens the live site.
+          Interactive concept demo — an illustrative design, not a live client website.
         </p>
       )}
 
