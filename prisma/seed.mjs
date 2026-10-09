@@ -81,7 +81,7 @@ const PLANS = [
     name: "Custom",
     tagline: "E-commerce, booking systems, brands, and more",
     price: 6500,
-    priceRange: "$8,000 – $25,000+",
+    priceRange: "$4,500 – $25,000+",
     highlighted: false,
     specs: [
       "Online store or custom features",

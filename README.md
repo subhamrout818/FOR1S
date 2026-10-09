@@ -272,7 +272,7 @@ assets/       README artwork and section screenshots
 
 <br>
 
-[Website](https://for1s.com) · [X](https://x.com/for1s) · [YouTube](https://youtube.com/@for1s) · [Instagram](https://instagram.com/btwitssubu)
+[Website](https://for1s.com) · [X](https://x.com/for1s) · [YouTube](https://youtube.com/@for1s) · [Instagram](https://instagram.com/for1s.social)
 
 </div>
 

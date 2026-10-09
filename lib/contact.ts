@@ -15,10 +15,10 @@ export const CONTACT = {
 } as const;
 
 export const SOCIAL = {
-  instagramPersonal: {
+  instagram: {
     label: "Instagram",
-    handle: "@btwitssubu",
-    url: "https://instagram.com/btwitssubu",
+    handle: "@for1s.social",
+    url: "https://instagram.com/for1s.social",
   },
   x: {
     label: "X",

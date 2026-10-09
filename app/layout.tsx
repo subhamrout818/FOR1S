@@ -109,7 +109,7 @@ const jsonLd = {
       logo: "https://www.for1s.com/favicon.svg",
       sameAs: [
         "https://x.com/for1s",
-        "https://instagram.com/btwitssubu",
+        "https://instagram.com/for1s.social",
         "https://youtube.com/@for1s",
       ],
     },
