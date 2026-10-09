@@ -82,7 +82,7 @@ Launch is not the finish line. Updates, fixes, and improvements keep the site wo
 
 ## Selected work
 
-Three sites built and documented in this repository. Each runs as a live demo.
+Three fictional concept sites built as interactive demos. They demonstrate design direction and frontend implementation; they are not presented as completed client engagements.
 
 <table>
 <tr>
@@ -93,7 +93,7 @@ Three sites built and documented in this repository. Each runs as a live demo.
 ### Brew & Co.
 *Café & restaurant · 2026*
 
-A neighbourhood café whose site answers three questions: what's on the menu, when are you open, and how do I book. Custom design with real photography and a booking flow short enough to finish on a phone.
+A café website concept exploring menu, opening hours, location, and a proposed mobile-friendly booking journey.
 
 `Design` `Build` `Booking flow` `SEO`
 [**View demo →**](https://for1s.com/demo/brew-and-co/index.html) · [Case study](https://for1s.com/work/brew-and-co)
@@ -106,7 +106,7 @@ A neighbourhood café whose site answers three questions: what's on the menu, wh
 ### Studio Arun
 *Photographer · 2026*
 
-A portrait and wedding photographer's portfolio. A full-screen cinematic gallery, separate galleries for weddings, portraits, and commercial work, and a single enquiry flow.
+A fictional photographer portfolio concept with a cinematic gallery, work categories, and a proposed enquiry flow.
 
 `Design` `Build` `Branding` `Gallery`
 [**View demo →**](https://for1s.com/demo/studio-arun/index.html) · [Case study](https://for1s.com/work/studio-arun)
@@ -121,7 +121,7 @@ A portrait and wedding photographer's portfolio. A full-screen cinematic gallery
 ### Glow & Co.
 *Salon & spa · 2026*
 
-An elegant, editorial site for a salon, with clear services and pricing, online booking with automatic confirmations, and a tightened brand — logo, typography, and colour used consistently.
+A fictional salon concept exploring an editorial visual identity, service information, and a proposed booking journey.
 
 `Design` `Build` `Online booking` `Brand`
 [**View demo →**](https://for1s.com/demo/glow-and-co/index.html) · [Case study](https://for1s.com/work/glow-and-co)
@@ -202,9 +202,9 @@ The platform in this repo also ships:
 
 | | | |
 | :-- | :-- | :-- |
-| **Subham Rout** | Founder & Frontend | [@subhamrout818](https://github.com/subhamrout818) |
-| **Sidhi** | Co-founder & Marketing | |
-| **Tanuj Joshi** | Marketing | |
+| **Subham Rout** | Founder & Full-stack | [@subhamrout818](https://github.com/subhamrout818) |
+| **Sidhi Samantaray** | Co-founder & Marketing | |
+| **Tanuj Joshi** | Co-founder & IT | |
 
 <img src="./assets/readme/divider.svg" alt="" width="100%">
 
