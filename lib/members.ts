@@ -12,7 +12,7 @@ export const MEMBERS: Member[] = [
   {
     slug: "subham-rout",
     name: "Subham Rout",
-    role: "Founder & Frontend",
+    role: "Founder & Full-stack",
     image: "/blurred.png",
    story: [
   "I'm a student. I'm still learning code. Still learning design. Still learning business. Still making mistakes that someone with ten years of experience probably wouldn't make. But I've never really liked waiting until I was ready.",
@@ -25,7 +25,7 @@ export const MEMBERS: Member[] = [
   {
     slug: "tanuj-joshi",
     name: "Tanuj Joshi",
-    role: "Marketing",
+    role: "Co-founder & IT",
     image: "/tanuj.jpg",
     story: [
       "I've always been the person who noticed how businesses present themselves — the sign that's crooked, the menu that's hard to read, the website that makes a great café look forgettable. Most small businesses have one thing working against them: they're busy running the business, so nobody tells their story online.",
@@ -35,7 +35,7 @@ export const MEMBERS: Member[] = [
   },
   {
     slug: "sidhi",
-    name: "Sidhi",
+    name: "Sidhi Samantaray",
     role: "Co-founder & Marketing",
     image: "/Sidhi.jpeg",
     // story: [ ... ], // add her bio when available
