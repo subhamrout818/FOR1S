@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     );
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
-    const body = await req.json();
+    const body = await req.json().catch(() => null);
     const result = signupSchema.safeParse(body);
 
     if (!result.success) {
