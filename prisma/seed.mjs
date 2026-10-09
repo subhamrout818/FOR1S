@@ -814,7 +814,7 @@ async function main() {
     }
 
     const admin = await upsertUser({
-      email: "for1s.contact@gmail.com",
+      email: "for1s.contacts@gmail.com",
       name: "Subham Rout",
       role: "admin",
       password: adminPassword,
