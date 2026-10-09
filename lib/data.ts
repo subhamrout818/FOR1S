@@ -173,7 +173,7 @@ export const PRICING_TIERS = [
     name: "Custom",
     tagline: "E-commerce, booking systems, brands, and more",
     price: "$6,500",
-    priceRange: "$8,000 – $25,000+",
+    priceRange: "$4,500 – $25,000+",
     highlighted: false,
     specs: [
       "Online store or custom features",
@@ -203,7 +203,7 @@ export const FAQ_ITEMS = [
     id: "q3",
     question: "How much does it cost?",
     answer:
-      "It depends on what you need. Personal websites start around $499, business websites from $1,900, and custom builds are quoted individually. Every project starts with a free call, so you know exactly what it'll cost before we begin — no surprises.",
+      "It depends on what you need. Personal websites start around $699, business websites from $1,900, and custom builds from $4,500 and are quoted individually. Every project starts with a free call, so you know exactly what it'll cost before we begin — no surprises.",
   },
   {
     id: "q4",
@@ -244,7 +244,7 @@ export const FOOTER_LINKS = {
     { label: "Terms", href: "/terms" },
   ],
   social: [
-    { label: SOCIAL.instagramPersonal.label, href: SOCIAL.instagramPersonal.url },
+    { label: SOCIAL.instagram.label, href: SOCIAL.instagram.url },
     { label: SOCIAL.x.label, href: SOCIAL.x.url },
     { label: SOCIAL.youtube.label, href: SOCIAL.youtube.url },
   ],

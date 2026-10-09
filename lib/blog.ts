@@ -41,7 +41,7 @@ export const POSTS: Post[] = [
     author: "Subham Rout",
     body: [
       "'How much does a website cost?' is the question every business owner asks, and the honest answer is: it depends — but you deserve a real range, not a sales pitch.",
-      "For a personal website — a portfolio, a freelancer's page, a creator's home base — expect roughly $500 to $1,500. One to three pages, custom design, a contact form, mobile-friendly, launched in about a week.",
+      "For a personal website — a portfolio, a freelancer's page, a creator's home base — expect roughly $700 to $1,500. One to three pages, custom design, a contact form, mobile-friendly, launched in about a week.",
       "For a business website — a café, salon, clinic, or shop with several pages, booking or contact options, and SEO that gets you found on Google — the realistic range is $1,900 to $4,500. This is the sweet spot for most local businesses, and where most of our work sits.",
       "For custom builds — online stores, booking systems, brand identity work, or video — prices start around $4,500 and can go much higher. These aren't 'more expensive websites'; they're genuinely bigger projects with more moving parts.",
       "What actually drives the price? Page count, custom features (booking, payments, membership), whether you need copywriting or brand design, and how much care you want after launch. Templates are cheaper because they're reused; custom design costs more because it's built for you alone.",
