@@ -1,10 +1,10 @@
 /**
- * Sample builds — real websites FOR1S has designed and built.
- * Presented as portfolio work: what was built, how, and why.
+ * Concept projects and interactive demos showcasing FOR1S design and development.
+ * These are not claims of completed client engagements.
  *
- * Note on outcomes: we deliberately avoid fabricating client quotes or
- * invented ROI metrics. Outcomes that are hard numbers should only be added
- * once they're true (ask real clients, or add analytics data we actually have).
+ * Replace concept copy with verified project details only when real client work
+ * and outcomes can be substantiated. Do not imply unmeasured business results.
+
  */
 
 export interface CaseStudy {
@@ -34,7 +34,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     year: "2026",
     tags: ["Website", "Booking"],
     summary:
-      "A café that needed to feel as good online as its coffee tastes. Custom site with menu, hours, and a booking flow that works from a phone.",
+      "A café website concept exploring menu, hours, location, and a mobile-friendly booking journey.",
     monogram: "B",
     hue: ["#C9A06B", "#2C1D12"],
     thumbnail: "/demo/brew-and-co/hero.png",
@@ -59,7 +59,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     year: "2026",
     tags: ["Portfolio", "Brand"],
     summary:
-      "A personal portfolio for a photographer — cinematic gallery, fast, and made to send to clients instead of a link in the description.",
+      "A photographer portfolio concept with a cinematic gallery and focused enquiry experience.",
     monogram: "A",
     hue: ["#C9A06B", "#0E0D0B"],
     thumbnail: "/demo/studio-arun/hero.png",
@@ -84,7 +84,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     year: "2026",
     tags: ["Website", "Booking", "Brand"],
     summary:
-      "A salon that needed to look as polished as its chairs. Custom design, online booking, and a site that keeps new clients on schedule.",
+      "A salon website concept exploring brand presentation, service information, and a booking journey.",
     monogram: "G",
     hue: ["#C2879B", "#5A2A3D"],
     thumbnail: "/demo/glow-and-co/hero.png",

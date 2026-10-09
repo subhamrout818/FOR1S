@@ -18,7 +18,7 @@ export default function Work() {
               type="words"
               className="max-w-2xl font-display text-fluid-xl font-semibold uppercase leading-[0.98] tracking-tightest text-foreground"
             >
-              Real builds, made to win.
+              Concepts built to explore.
             </SplitReveal>
           </div>
           <RevealMask blur={false} y={16} className="max-w-sm">
