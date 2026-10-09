@@ -105,7 +105,7 @@ const jsonLd = {
       name: "FOR1S",
       url: "https://www.for1s.com/",
       description: DESCRIPTION,
-      email: "for1s.contact@gmail.com",
+      email: "for1s.contacts@gmail.com",
       logo: "https://www.for1s.com/favicon.svg",
       sameAs: [
         "https://x.com/for1s",

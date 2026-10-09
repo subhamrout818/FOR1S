@@ -9,7 +9,7 @@ export const CONTACT = {
   /** Primary business email */
   email: "hello@for1s.com",
   /** Contact / CC email (shown in footer) */
-  contactEmail: "for1s.contact@gmail.com",
+  contactEmail: "for1s.contacts@gmail.com",
   /** Booking / calendar link */
   calendar: "https://cal.com/for1s/consultation",
 } as const;
