@@ -77,8 +77,18 @@ export const metadata: Metadata = {
     },
   },
 
+  // Google Search needs a crawlable, square icon whose size is a multiple of
+  // 48px, and it reads /favicon.ico as a fallback — so declare them all
+  // explicitly rather than relying on the SVG alone.
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
