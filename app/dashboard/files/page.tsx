@@ -25,6 +25,21 @@ function fileIcon(file: FileItem) {
   return <File size={16} className="text-foreground/60" />;
 }
 
+async function readApiResponse(response: Response): Promise<Record<string, unknown> | null> {
+  try {
+    const payload: unknown = await response.json();
+    return payload && typeof payload === "object" ? payload as Record<string, unknown> : null;
+  } catch {
+    return null;
+  }
+}
+
+function apiErrorMessage(payload: Record<string, unknown> | null, fallback: string) {
+  return typeof payload?.message === "string" && payload.message.trim()
+    ? payload.message
+    : fallback;
+}
+
 export default function FilesPage() {
   const { isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<WorkspaceData>("/api/portal");
@@ -56,19 +71,48 @@ export default function FilesPage() {
     setUploading(true);
     setUploadMessage({ text: "Preparing secure upload…", error: false });
     try {
-      const intentResponse = await fetch("/api/portal/files/upload-url", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectId: selectedProjectId, name: file.name, mimeType, size: file.size }) });
-      const intent = await intentResponse.json();
-      if (!intentResponse.ok || !intent.success) throw new Error(intent.message || "Could not prepare upload.");
+      let intentResponse: Response;
+      let intent: Record<string, unknown> | null;
+      try {
+        intentResponse = await fetch("/api/portal/files/upload-url", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectId: selectedProjectId, name: file.name, mimeType, size: file.size }) });
+        intent = await readApiResponse(intentResponse);
+      } catch {
+        throw new Error("Could not request an upload URL. Check your connection and try again.");
+      }
+      if (!intentResponse.ok || !intent?.success) {
+        throw new Error(apiErrorMessage(intent, "Could not request an upload URL. The server returned an unexpected response."));
+      }
+      if (typeof intent.uploadUrl !== "string" || typeof intent.projectId !== "string" || typeof intent.folderId !== "string" || typeof intent.objectKey !== "string") {
+        throw new Error("Could not request an upload URL. The server response was incomplete.");
+      }
+
       setUploadMessage({ text: "Uploading image…", error: false });
-      const putResponse = await fetch(intent.uploadUrl, { method: "PUT", headers: { "Content-Type": mimeType }, body: file });
-      if (!putResponse.ok) throw new Error("R2 rejected the upload. Check the bucket CORS policy.");
+      let putResponse: Response;
+      try {
+        putResponse = await fetch(intent.uploadUrl, { method: "PUT", headers: { "Content-Type": mimeType }, body: file });
+      } catch {
+        throw new Error("Could not upload the image directly to storage. A network or bucket CORS issue may have blocked the request.");
+      }
+      if (!putResponse.ok) {
+        throw new Error("Storage rejected the direct image upload. Check the bucket CORS policy and try again.");
+      }
+
       setUploadMessage({ text: "Verifying image…", error: false });
-      const completeResponse = await fetch("/api/portal/files/complete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectId: intent.projectId, folderId: intent.folderId, objectKey: intent.objectKey, name: intent.name, mimeType: intent.mimeType, size: intent.size }) });
-      const complete = await completeResponse.json();
-      if (!completeResponse.ok || !complete.success) throw new Error(complete.message || "Could not save the image.");
+      let completeResponse: Response;
+      let complete: Record<string, unknown> | null;
+      try {
+        completeResponse = await fetch("/api/portal/files/complete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ projectId: intent.projectId, folderId: intent.folderId, objectKey: intent.objectKey, name: intent.name, mimeType: intent.mimeType, size: intent.size }) });
+        complete = await readApiResponse(completeResponse);
+      } catch {
+        throw new Error("The image uploaded, but the server could not complete or save its metadata. Check your connection and try again.");
+      }
+      if (!completeResponse.ok || !complete?.success) {
+        throw new Error(apiErrorMessage(complete, "The image uploaded, but the server could not complete or save its metadata."));
+      }
       setUploadMessage({ text: "Image uploaded successfully.", error: false });
       await reload();
     } catch (err) {
+      // Use only fixed stage messages or server-provided message fields; never show raw exceptions or response bodies.
       setUploadMessage({ text: err instanceof Error ? err.message : "Upload failed. Try again.", error: true });
     } finally {
       setUploading(false);
