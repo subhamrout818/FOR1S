@@ -18,7 +18,7 @@ function fileIcon(file: FileItem) {
   const name = file.name.toLowerCase();
   if (name.endsWith(".mp4") || name.endsWith(".mov") || name.endsWith(".webm"))
     return <Film size={16} className="text-blue-400" />;
-  if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".webp"))
+  if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".webp") || name.endsWith(".gif"))
     return <ImageIcon size={16} className="text-violet-400" />;
   if (name.endsWith(".zip") || name.endsWith(".rar"))
     return <FileArchive size={16} className="text-amber-400" />;
