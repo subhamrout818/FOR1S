@@ -55,6 +55,18 @@ describe("authentication and portal authorization structure", () => {
     }
   });
 
+  it("uses atomic reservations for password-confirmed account mutations", () => {
+    for (const relative of [
+      "app/api/account/password/route.ts",
+      "app/api/account/email/route.ts",
+    ]) {
+      const source = read(relative);
+      assert.match(source, /consumeRateLimit\\(/, relative + " must reserve quota atomically");
+      assert.match(source, /releaseRateLimit\\(/, relative + " must release quota after valid credentials");
+      assert.doesNotMatch(source, /checkRateLimit\\(/, relative + " must not use check-then-record");
+    }
+  });
+
   it("keeps email failure responses generic and leaves resend recovery available", () => {
     const signup = read("app/api/auth/signup/route.ts");
     const reset = read("app/api/auth/forgot-password/route.ts");
