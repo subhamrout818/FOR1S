@@ -50,7 +50,6 @@ export interface RateLimitStatus {
 }
 
 /* ---- in-memory fallback (per instance) ---------------------------- */
-// Login reservations are released after successful authentication.
 
 function memCheck(
   key: string,
@@ -328,6 +327,19 @@ export async function consumeRateLimit(
     remaining: Math.max(0, limit - row.count),
     resetAt: Date.now() + Math.max(0, row.msLeft),
   };
+}
+
+/** Release one reserved hit after a valid password, so successful logins do not burn quota. */
+export async function releaseRateLimit(key: string): Promise<void> {
+  const result = await withStore(() =>
+    prisma.$executeRawUnsafe(
+      `UPDATE "RateLimit"
+       SET "count" = GREATEST("count" - 1, 0)
+       WHERE "key" = $1 AND "resetAt" > ${DB_NOW}`,
+      storeKey(key)
+    )
+  );
+  if (result === null) memRelease(key);
 }
 
 /**
