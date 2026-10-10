@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const projectId = typeof body.projectId === "string" ? body.projectId : "";
-    const name = typeof body.name === "string" ? body.name.trim().replace(/[\\/\\0-\\x1f\\x7f]/g, "_").slice(0, 160) : "";
+    const name = typeof body.name === "string" ? body.name.trim().replace(/[^a-zA-Z0-9._ -]/g, "_").slice(0, 160) : "";
     const mimeType = typeof body.mimeType === "string" ? body.mimeType.toLowerCase() : "";
     const size = Number(body.size);
     if (!projectId || !name || !Number.isSafeInteger(size) || !isAllowedImageMetadata(name, mimeType, size)) {
