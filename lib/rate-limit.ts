@@ -14,6 +14,12 @@ import { prisma } from "@/lib/prisma";
 /*  per-instance in-memory counter. A limiter outage never takes the   */
 /*  site down, and never blocks a legitimate user.                     */
 /*                                                                     */
+/*  Security trade-off of the fallback: limits are still enforced, but */
+/*  only per serverless instance, so while the store is down an        */
+/*  attacker spread across many instances gets more attempts than the  */
+/*  shared limit allows. The fallback is therefore kept short: one     */
+/*  failure pauses the store for DB_RETRY_AFTER_FAILURE_MS, not longer. */
+/*                                                                     */
 /*  Keys are SHA-256 hashed before storage so no IPs or emails land in */
 /*  the table.                                                         */
 /* ------------------------------------------------------------------ */
@@ -89,8 +95,30 @@ function memConsume(
 // All time maths happens on the database clock, in UTC, so instances with
 // skewed clocks (or a non-UTC session time zone) agree with each other.
 const DB_NOW = `(now() AT TIME ZONE 'UTC')`;
-const DB_TIMEOUT_MS = 1500;
-const DB_RETRY_AFTER_FAILURE_MS = 30_000;
+
+/**
+ * Total time budget for ONE limiter operation, covering connection set-up,
+ * a Neon compute wake-up and (if needed) creating the table.
+ *
+ * Why 4 s and not 1.5 s: the first query after the database has been idle has
+ * to wake the Neon compute. Neon's operation log for this project shows
+ * start_compute taking ~0.35-0.6 s normally and ~1.7-1.9 s when the branch had
+ * been archived (the first, and so far only, logged timeout coincided with
+ * exactly that). The connection itself also crosses regions (Vercel functions
+ * run in iad1, the database is in ap-southeast-1), so TLS + auth take several
+ * round trips. 1.5 s is shorter than that wake-up path, so the limiter gave up
+ * on a database that was about to answer. A genuinely dead database still
+ * degrades to the in-memory fallback, just after 4 s instead of 1.5 s.
+ */
+const DB_TIMEOUT_MS = 4000;
+
+/**
+ * After a failure, skip the store for this long (per instance) so an outage
+ * costs each instance at most one slow probe per interval. Kept short: while
+ * paused, limits are enforced per instance only (see the header comment), and
+ * after a cold-start timeout the database is usually reachable moments later.
+ */
+const DB_RETRY_AFTER_FAILURE_MS = 10_000;
 
 interface DbRow {
   count: number;
@@ -104,11 +132,19 @@ function storeKey(key: string): string {
   return createHash("sha256").update(key).digest("hex");
 }
 
-function withTimeout<T>(promise: Promise<T>): Promise<T> {
+class StoreTimeoutError extends Error {
+  constructor() {
+    super("rate-limit store timed out");
+    this.name = "StoreTimeoutError";
+  }
+}
+
+/** Reject after `ms` (at least 1). The underlying promise is left to finish. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(
-      () => reject(new Error("rate-limit store timed out")),
-      DB_TIMEOUT_MS
+      () => reject(new StoreTimeoutError()),
+      Math.max(1, ms)
     );
     promise.then(
       (v) => {
@@ -137,29 +173,61 @@ async function ensureTable(): Promise<void> {
   );
 }
 
+let ensuring: Promise<void> | null = null;
+
+/** Share one in-flight CREATE between concurrent requests (DDL races can error). */
+function ensureTableOnce(): Promise<void> {
+  if (!ensuring) {
+    ensuring = ensureTable().finally(() => {
+      ensuring = null;
+    });
+  }
+  return ensuring;
+}
+
 function isMissingTable(error: unknown): boolean {
   const text = error instanceof Error ? error.message : String(error);
   return /42P01|relation "?RateLimit"? does not exist/i.test(text);
 }
 
+/** Short, secret-free description of a store failure for the logs. */
+function describeFailure(error: unknown, elapsedMs: number): string {
+  if (error instanceof StoreTimeoutError) return `timeout after ${elapsedMs}ms`;
+  const kind = isMissingTable(error) ? "missing-table" : "error";
+  const name = error instanceof Error ? error.name : "unknown";
+  const message = (error instanceof Error ? error.message : String(error))
+    .replace(/postgres(?:ql)?:\/\/\S+/gi, "[redacted-url]")
+    .slice(0, 200);
+  return `${kind} after ${elapsedMs}ms (${name}: ${message})`;
+}
+
 /**
  * Run a store operation. Returns null (caller falls back to memory) when the
  * store is unavailable. Creates the table once if it doesn't exist yet.
+ *
+ * The whole sequence (try, create table, retry) shares ONE DB_TIMEOUT_MS
+ * budget, so a failing store can never hold a request for longer than that.
  */
 async function withStore<T>(operation: () => Promise<T>): Promise<T | null> {
   if (Date.now() < dbPausedUntil) return null;
+  const startedAt = Date.now();
+  const remaining = () => DB_TIMEOUT_MS - (Date.now() - startedAt);
   try {
-    return await withTimeout(operation());
+    return await withTimeout(operation(), remaining());
   } catch (error) {
+    let failure = error;
     if (isMissingTable(error)) {
       try {
-        await withTimeout(ensureTable());
-        return await withTimeout(operation());
+        await withTimeout(ensureTableOnce(), remaining());
+        return await withTimeout(operation(), remaining());
       } catch (retryError) {
-        error = retryError;
+        failure = retryError;
       }
     }
-    console.error("rate-limit store unavailable, using in-memory fallback:", error);
+    console.error(
+      "rate-limit store unavailable, using in-memory fallback:",
+      describeFailure(failure, Date.now() - startedAt)
+    );
     dbPausedUntil = Date.now() + DB_RETRY_AFTER_FAILURE_MS;
     return null;
   }
