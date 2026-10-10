@@ -22,4 +22,4 @@ describe("R2 image upload validation", () => {
     assert.equal(matchesImageSignature(Uint8Array.from([0x52,0x49,0x46,0x46,0,0,0,0,0x57,0x45,0x42,0x50]), "image/webp"), true);
     assert.equal(matchesImageSignature(Uint8Array.from([0x3c,0x73,0x76,0x67]), "image/png"), false);
   });
-}
+});
