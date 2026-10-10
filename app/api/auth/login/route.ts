@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { comparePassword, signToken, normalizeEmail, setSessionCookie } from "@/lib/auth";
 import {
   consumeRateLimit,
+  releaseRateLimit,
   clientIp,
   rateLimitedResponse,
   RATE_LIMITS,
@@ -22,9 +23,8 @@ const loginSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    // Atomically consume quota before credential verification. Unlike a
-    // check-then-record flow, concurrent requests cannot all pass the same
-    // remaining quota window. Successful attempts also count toward the cap.
+    // Atomically reserve quota before credential verification. Valid credentials
+    // release their reservations below; failed attempts retain their quota.
     const limitKey = `auth:login:${clientIp(req)}`;
     const check = await consumeRateLimit(
       limitKey,
@@ -82,6 +82,10 @@ export async function POST(req: Request) {
     // Verify password
     const isValid = await comparePassword(password, user.password);
     if (!isValid) return invalid();
+
+    // The credentials are valid, so do not charge this request against either
+    // brute-force quota. Failed guesses keep their reservations.
+    await Promise.all([releaseRateLimit(limitKey), releaseRateLimit(accountKey)]);
 
     // Gate unverified accounts — but only after the password validates, so the
     // response can't be used to probe which emails exist.
