@@ -41,8 +41,14 @@ export const prisma = {
   $executeRawUnsafe: (sql: string, ...params: unknown[]) => fakeDb.handle(sql, params),
   user: {
     findUnique: async ({ where }: { where: { email?: string; id?: string } }) => {
-      if (where.email) return fakeUsers.get(where.email) ?? null;
-      if (where.id) return [...fakeUsers.values()].find((user) => user.id === where.id) ?? null;
+      if (where.email) {
+        const user = fakeUsers.get(where.email);
+        return user ? { ...user, updatedAt: user.updatedAt ?? new Date(0) } : null;
+      }
+      if (where.id) {
+        const user = [...fakeUsers.values()].find((candidate) => candidate.id === where.id);
+        return user ? { ...user, updatedAt: user.updatedAt ?? new Date(0) } : null;
+      }
       return null;
     },
   },
