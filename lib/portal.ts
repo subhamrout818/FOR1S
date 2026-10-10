@@ -198,7 +198,7 @@ export async function getClientWorkspace(userId: string) {
         files: f.files.map((file) => ({
           id: file.id,
           name: file.name,
-          url: file.url,
+          url: file.storageKey ? `/api/portal/files/${file.id}` : file.url,
           mimeType: file.mimeType,
           size: file.size,
           kind: file.kind,
@@ -303,7 +303,7 @@ export async function getClientWorkspace(userId: string) {
     files: f.files.map((file) => ({
       id: file.id,
       name: file.name,
-      url: file.url,
+      url: file.storageKey ? `/api/portal/files/${file.id}` : file.url,
       mimeType: file.mimeType,
       size: file.size,
       kind: file.kind,
