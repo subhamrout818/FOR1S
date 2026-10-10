@@ -46,16 +46,20 @@ export async function POST(req: Request) {
     if (user && !user.emailVerified && emailEnabled()) {
       const token = signVerifyEmail(user.id, user.email, user.updatedAt);
       const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(token)}`);
-      await sendEmail({
+      const sent = await sendEmail({
         to: user.email,
         subject: "Verify your FOR1S email",
         text: `Hi ${user.name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
       });
+      if (!sent) {
+        // Keep the response identical for existing and unknown addresses.
+        console.error("Verification resend email delivery failed.");
+      }
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error("Verification resend request failed:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
