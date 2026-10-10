@@ -10,6 +10,7 @@ import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import SectionLabel from "@/components/ui/SectionLabel";
+import { MEMBERS } from "@/lib/members";
 
 /* ---------- Types ---------- */
 
@@ -23,29 +24,13 @@ interface TeamMember {
 
 /* ---------- Data ---------- */
 
-const TEAM: TeamMember[] = [
-  {
-    id: "01",
-    slug: "subham-rout",
-    name: "Subham Rout",
-    role: "Founder & Full-stack",
-    image: "/subham.jpg",
-  },
-  {
-    id: "02",
-    slug: "tanuj-joshi",
-    name: "Tanuj Joshi",
-    role: "Co-founder & IT",
-    image: "/tanuj.jpg",
-  },
-  {
-    id: "03",
-    slug: "sidhi",
-    name: "Sidhi Samantaray",
-    role: "Co-founder & Marketing",
-    image: "/Sidhi.jpeg",
-  },
-];
+const TEAM: TeamMember[] = MEMBERS.map((member, index) => ({
+  id: String(index + 1).padStart(2, "0"),
+  slug: member.slug,
+  name: member.name,
+  role: member.role,
+  image: member.image,
+}));
 
 /* ---------- Main Component ---------- */
 
@@ -97,14 +82,14 @@ export default function TeamSection() {
           className="mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <SectionLabel scene="06" title="Members" className="mb-6" />
+            <SectionLabel scene="06" title="Team" className="mb-6" />
             <h2 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
               Built <span className="text-neutral-600">By</span>
             </h2>
           </div>
           <div className="h-px flex-1 bg-neutral-900 mx-8 hidden md:block" />
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
-            Founding Team
+            FOR1S Team
           </p>
         </motion.header>
 

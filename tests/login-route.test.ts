@@ -56,7 +56,7 @@ describe("POST /api/auth/login", () => {
 
   it("successful logins release their IP and account quota reservations", async () => {
     await POST(loginRequest(nextIp(), PASSWORD));
-    assert.deepEqual(fakeDb.calls, ["consume", "consume", "release", "release"]);
+    assert.deepEqual(fakeDb.calls.filter((call) => call !== "sweep"), ["consume", "consume", "release", "release"]);
     assert.equal([...fakeDb.rows.values()].every((row) => row.count === 0), true);
   });
 
@@ -64,7 +64,7 @@ describe("POST /api/auth/login", () => {
     const res = await POST(loginRequest(nextIp(), "wrong-password"));
     assert.equal(res.status, 401);
     assert.deepEqual(await res.json(), { success: false, message: "Invalid email or password" });
-    assert.deepEqual(fakeDb.calls, ["consume", "consume"]);
+    assert.deepEqual(fakeDb.calls.filter((call) => call !== "sweep"), ["consume", "consume"]);
     assert.equal(fakeDb.rows.size, 2);
   });
 

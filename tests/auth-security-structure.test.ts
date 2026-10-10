@@ -112,4 +112,19 @@ describe("authentication and portal authorization structure", () => {
     assert.match(reset, /return NextResponse\.json\(\{ success: true \}\)/);
     assert.match(resend, /return NextResponse\.json\(\{ success: true \}\)/);
   });
+
+  it("caps signup, password-reset and verification email flows per recipient", () => {
+    for (const relative of [
+      "app/api/auth/signup/route.ts",
+      "app/api/auth/forgot-password/route.ts",
+      "app/api/auth/resend-verification/route.ts",
+    ]) {
+      const source = read(relative);
+      const quota = source.indexOf("RATE_LIMITS.emailDelivery");
+      assert.ok(source.includes("`auth:email:${email}`"), relative);
+      assert.notEqual(quota, -1, relative + " must apply the shared recipient quota");
+      const lookup = source.indexOf("prisma.user.findUnique(");
+      assert.ok(lookup === -1 || quota < lookup, relative + " must consume before user lookup");
+    }
+  });
 });

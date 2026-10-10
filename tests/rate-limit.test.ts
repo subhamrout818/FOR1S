@@ -243,6 +243,7 @@ describe("limiter API used by the routes", () => {
     assert.deepEqual(RATE_LIMITS.login, { limit: 15, windowMs: 15 * MIN });
     assert.deepEqual(RATE_LIMITS.loginAccount, { limit: 30, windowMs: 60 * MIN });
     assert.deepEqual(RATE_LIMITS.signup, { limit: 5, windowMs: 60 * MIN });
+    assert.deepEqual(RATE_LIMITS.emailDelivery, { limit: 5, windowMs: 60 * MIN });
     assert.deepEqual(RATE_LIMITS.contact, { limit: 5, windowMs: 60 * MIN });
   });
 

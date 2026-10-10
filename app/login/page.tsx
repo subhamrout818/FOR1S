@@ -170,7 +170,7 @@ export default function LoginPage() {
               exit={{ opacity: 0, y: -8, height: 0 }}
               className="mb-4 overflow-hidden rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300"
             >
-              If an unverified account matches this address, a verification email may arrive shortly. Check your inbox and spam folder; if it doesn't arrive, try again later.
+              If an unverified account matches this address, a verification email may arrive shortly. Check your inbox and spam folder; if it doesn&apos;t arrive, try again later.
             </motion.p>
           )}
         </AnimatePresence>
