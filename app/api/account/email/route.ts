@@ -3,8 +3,8 @@ import { getAuthUserWithPassword } from "@/lib/authed-user";
 import { comparePassword, signToken, currentSessionLifetime, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
 import {
-  checkRateLimit,
   consumeRateLimit,
+  releaseRateLimit,
   rateLimitedResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
@@ -53,10 +53,10 @@ export async function POST(req: Request) {
 
     const { email, currentPassword } = result.data;
 
-    // Confirm it's really them before touching the login identifier.
-    // Only wrong guesses burn quota (see account/password).
+    // Confirm it's really them before touching the login identifier. Reserve
+    // quota atomically to prevent parallel password guesses from bypassing it.
     const limitKey = `account:email:${user.id}`;
-    const limit = await checkRateLimit(
+    const limit = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.emailChange.limit,
       RATE_LIMITS.emailChange.windowMs
@@ -65,16 +65,13 @@ export async function POST(req: Request) {
 
     const passwordOk = await comparePassword(currentPassword, user.password);
     if (!passwordOk) {
-      await consumeRateLimit(
-        limitKey,
-        RATE_LIMITS.emailChange.limit,
-        RATE_LIMITS.emailChange.windowMs
-      );
       return NextResponse.json(
         { success: false, message: "Current password is incorrect" },
         { status: 401 }
       );
     }
+
+    await releaseRateLimit(limitKey);
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing && existing.id !== user.id) {
