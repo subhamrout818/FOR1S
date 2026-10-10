@@ -22,10 +22,11 @@ describe("authentication and portal authorization structure", () => {
     const detail = read("lib/portal.ts");
     const comment = read("app/api/portal/deliverables/[id]/comment/route.ts");
     const review = read("app/api/portal/deliverables/[id]/review/route.ts");
-    const scope = /project:\s*\{\s*clientId:\s*user\.id\s*\}/;
-    assert.match(detail, scope, "detail query must scope by owning client");
-    assert.match(comment, scope, "comment mutation must scope by owning client");
-    assert.match(review, scope, "review mutation must scope by owning client");
+    const detailScope = /where:\s*\{\s*id:\s*deliverableId,\s*project:\s*\{\s*clientId:\s*userId\s*\}\s*\}/;
+    const mutationScope = /where:\s*\{\s*id,\s*project:\s*\{\s*clientId:\s*user\.id\s*\}\s*\}/;
+    assert.match(detail, detailScope, "detail query must scope by owning client");
+    assert.match(comment, mutationScope, "comment mutation must scope by owning client");
+    assert.match(review, mutationScope, "review mutation must scope by owning client");
   });
 
   it("requires an authenticated user before portal mutation routes", () => {
