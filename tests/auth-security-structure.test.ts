@@ -55,6 +55,41 @@ describe("authentication and portal authorization structure", () => {
     }
   });
 
+  it("guards every admin API route, including the read-only workspace", () => {
+    for (const relative of [
+      "app/api/admin/route.ts",
+      "app/api/admin/projects/route.ts",
+      "app/api/admin/projects/[id]/route.ts",
+      "app/api/admin/deliverables/[id]/route.ts",
+      "app/api/admin/leads/[id]/route.ts",
+      "app/api/admin/tickets/[id]/route.ts",
+    ]) {
+      const source = read(relative);
+      assert.match(source, /const user = await requireAuth\\(req\\)/, relative);
+      assert.match(source, /user\\.role !== ["']admin["']/, relative);
+    }
+  });
+
+  it("protects profile and portal workspace reads and binds profile writes to the session user", () => {
+    const account = read("app/api/account/route.ts");
+    const portal = read("app/api/portal/route.ts");
+    assert.match(account, /const user = await getAuthUser\\(req\\)/);
+    assert.match(account, /where: \\{ id: user\\.id \\}/);
+    assert.match(portal, /const user = await requireAuth\\(req\\)/);
+    assert.match(portal, /if \\(!user\\)/);
+  });
+
+  it("rejects unauthenticated account mutations", () => {
+    for (const relative of [
+      "app/api/account/route.ts",
+      "app/api/account/email/route.ts",
+      "app/api/account/password/route.ts",
+    ]) {
+      const source = read(relative);
+      assert.match(source, /if \\(!user\\)/, relative);
+    }
+  });
+
   it("uses atomic reservations for password-confirmed account mutations", () => {
     for (const relative of [
       "app/api/account/password/route.ts",
