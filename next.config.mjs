@@ -7,6 +7,12 @@
 // (connect-src 'self'), and base-uri/form-action locked down. Sessions are
 // also httpOnly-cookie-based now, so even a script injection can't lift the
 // token from localStorage.
+const r2AccountId = process.env.R2_ACCOUNT_ID;
+const r2ConnectSource =
+  r2AccountId && /^[a-f0-9]{32}$/.test(r2AccountId)
+    ? `https://${r2AccountId}.r2.cloudflarestorage.com`
+    : null;
+
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
@@ -14,7 +20,9 @@ const CSP = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "media-src 'self' https: blob:",
-  "connect-src 'self' https://challenges.cloudflare.com",
+  ["connect-src 'self' https://challenges.cloudflare.com", r2ConnectSource]
+    .filter(Boolean)
+    .join(" "),
   "frame-src https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
