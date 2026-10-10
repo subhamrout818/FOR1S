@@ -91,6 +91,13 @@ function memConsume(
   };
 }
 
+function memRelease(key: string): void {
+  const bucket = buckets.get(key);
+  if (!bucket || bucket.resetAt <= Date.now()) return;
+  bucket.count -= 1;
+  if (bucket.count <= 0) buckets.delete(key);
+}
+
 /* ---- shared Postgres store ----------------------------------------- */
 
 // All time maths happens on the database clock, in UTC, so instances with
