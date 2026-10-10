@@ -42,6 +42,14 @@ export async function POST(req: Request) {
     );
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
+    // Share a per-address cap across changing IPs and other auth email flows.
+    const emailRate = await consumeRateLimit(
+      `auth:email:${email}`,
+      RATE_LIMITS.emailDelivery.limit,
+      RATE_LIMITS.emailDelivery.windowMs
+    );
+    if (!emailRate.ok) return rateLimitedResponse(emailRate.resetAt);
+
     const user = await prisma.user.findUnique({ where: { email } });
     if (user && !user.emailVerified && emailEnabled()) {
       const token = signVerifyEmail(user.id, user.email, user.updatedAt);

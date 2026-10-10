@@ -55,6 +55,15 @@ export async function POST(req: Request) {
     const { name, password } = result.data;
     const email = normalizeEmail(result.data.email);
 
+    // Signup and duplicate-account notices send mail too. Share the same
+    // per-address cap as password recovery and verification resend.
+    const emailRate = await consumeRateLimit(
+      `auth:email:${email}`,
+      RATE_LIMITS.emailDelivery.limit,
+      RATE_LIMITS.emailDelivery.windowMs
+    );
+    if (!emailRate.ok) return rateLimitedResponse(emailRate.resetAt);
+
     // Fail closed: without email configured, don't silently create verified
     // accounts that anyone can mass-register. Dev keeps the old behavior.
     if (!emailEnabled() && process.env.NODE_ENV === "production") {

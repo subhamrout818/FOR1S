@@ -414,6 +414,7 @@ export const RATE_LIMITS = {
   contact: { limit: 5, windowMs: 60 * 60_000 }, // 5 messages / hour / IP
   oauth: { limit: 20, windowMs: 15 * 60_000 }, // 20 OAuth starts / 15 min / IP
   forgotPassword: { limit: 5, windowMs: 60 * 60_000 }, // per email+IP
+  emailDelivery: { limit: 5, windowMs: 60 * 60_000 }, // per email across auth email flows
   resetPassword: { limit: 10, windowMs: 15 * 60_000 }, // per IP
   resendVerification: { limit: 5, windowMs: 60 * 60_000 }, // per email+IP
   verifyEmail: { limit: 20, windowMs: 15 * 60_000 }, // per IP

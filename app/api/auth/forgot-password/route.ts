@@ -53,6 +53,15 @@ export async function POST(req: Request) {
     );
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
+    // Also cap messages to one address across different source IPs. Consume
+    // before looking up the user so the quota does not reveal account status.
+    const emailRate = await consumeRateLimit(
+      `auth:email:${email}`,
+      RATE_LIMITS.emailDelivery.limit,
+      RATE_LIMITS.emailDelivery.windowMs
+    );
+    if (!emailRate.ok) return rateLimitedResponse(emailRate.resetAt);
+
     const user = await prisma.user.findUnique({ where: { email } });
 
     // Only verified accounts may reset — otherwise "forgot password" becomes
