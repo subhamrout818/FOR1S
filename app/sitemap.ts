@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/privacy",
     "/terms",
   ].map((path) => ({
-    url: `${SITE_URL}${path}`,
+    url: path === "" ? `${SITE_URL}/` : `${SITE_URL}${path}`,
     priority: path === "" ? 1 : 0.8,
   }));
 
