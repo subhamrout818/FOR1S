@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { comparePassword, signToken, normalizeEmail, setSessionCookie } from "@/lib/auth";
 import {
-  checkRateLimit,
   consumeRateLimit,
+  releaseRateLimit,
   clientIp,
   rateLimitedResponse,
   RATE_LIMITS,
@@ -23,9 +23,10 @@ const loginSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    // Only *failed* attempts burn quota, so rate limit before validating.
+    // Atomically reserve quota before credential verification. Valid credentials
+    // release their reservations below; failed attempts retain their quota.
     const limitKey = `auth:login:${clientIp(req)}`;
-    const check = await checkRateLimit(
+    const check = await consumeRateLimit(
       limitKey,
       RATE_LIMITS.login.limit,
       RATE_LIMITS.login.windowMs
@@ -48,9 +49,10 @@ export async function POST(req: Request) {
     const { password, rememberMe = true } = result.data;
     const email = normalizeEmail(result.data.email);
 
-    // Per-account failure cap, so guessing from many IPs still hits a wall.
+    // Per-account cap is also consumed atomically before the password check,
+    // limiting parallel guesses distributed across different IP addresses.
     const accountKey = `auth:login:acct:${email}`;
-    const accountCheck = await checkRateLimit(
+    const accountCheck = await consumeRateLimit(
       accountKey,
       RATE_LIMITS.loginAccount.limit,
       RATE_LIMITS.loginAccount.windowMs
@@ -64,18 +66,11 @@ export async function POST(req: Request) {
 
     // Same generic response for unknown email, wrong password, AND
     // passwordless (OAuth) accounts — so we never reveal which is which.
-    const invalid = async () => {
-      await consumeRateLimit(limitKey, RATE_LIMITS.login.limit, RATE_LIMITS.login.windowMs);
-      await consumeRateLimit(
-        accountKey,
-        RATE_LIMITS.loginAccount.limit,
-        RATE_LIMITS.loginAccount.windowMs
-      );
-      return NextResponse.json(
+    const invalid = () =>
+      NextResponse.json(
         { success: false, message: "Invalid email or password" },
         { status: 401 }
       );
-    };
 
     // Run a bcrypt compare even when there's nothing real to check, so the
     // response time doesn't reveal whether an email has a password account.
@@ -87,6 +82,10 @@ export async function POST(req: Request) {
     // Verify password
     const isValid = await comparePassword(password, user.password);
     if (!isValid) return invalid();
+
+    // The credentials are valid, so do not charge this request against either
+    // brute-force quota. Failed guesses keep their reservations.
+    await Promise.all([releaseRateLimit(limitKey), releaseRateLimit(accountKey)]);
 
     // Gate unverified accounts — but only after the password validates, so the
     // response can't be used to probe which emails exist.

@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       const token = signResetPassword(user.id, user.email, user.updatedAt);
       const link = absoluteUrl(req, `/reset-password?token=${encodeURIComponent(token)}`);
       const hasPassword = !!user.password;
-      await sendEmail({
+      const sent = await sendEmail({
         to: user.email,
         subject: hasPassword
           ? "Reset your FOR1S password"
@@ -70,11 +70,15 @@ export async function POST(req: Request) {
           ? `Hi ${user.name},\n\nClick this link to reset your FOR1S password (valid for 15 minutes):\n${link}\n\nIf you didn't request this, you can ignore this email.`
           : `Hi ${user.name},\n\nYou signed up with ${user.provider}. Click this link to create a password so you can also log in with email (valid for 15 minutes):\n${link}\n\nIf you didn't request this, you can ignore this email.`,
       });
+      if (!sent) {
+        // Keep the response identical for existing and unknown addresses.
+        console.error("Password reset email delivery failed.");
+      }
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error("Forgot-password request failed:", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

@@ -5,7 +5,7 @@
 // so the limiter's own logic can be tested with injected latency, hangs and
 // failures. It does NOT test Postgres itself; the SQL is unchanged by the fix.
 
-export type Kind = "peek" | "consume" | "create-table" | "create-index" | "sweep";
+export type Kind = "peek" | "consume" | "release" | "create-table" | "create-index" | "sweep";
 export type Mode = "ok" | "hang" | "error";
 
 interface Row {
@@ -15,6 +15,7 @@ interface Row {
 
 function classify(sql: string): Kind {
   if (sql.includes("INSERT INTO")) return "consume";
+  if (sql.includes("UPDATE \"RateLimit\"")) return "release";
   if (sql.includes("CREATE TABLE")) return "create-table";
   if (sql.includes("CREATE INDEX")) return "create-index";
   if (sql.includes("DELETE FROM")) return "sweep";
@@ -85,6 +86,10 @@ export class FakeRateLimitDb {
     }
 
     const row = this.rows.get(key);
+    if (kind === "release") {
+      if (row && row.resetAt > now) row.count = Math.max(0, row.count - 1);
+      return 1;
+    }
     const live = row && row.resetAt > now ? row : undefined;
 
     if (kind === "peek") {

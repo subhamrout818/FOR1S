@@ -54,17 +54,17 @@ describe("POST /api/auth/login", () => {
     assert.match(res.headers.get("set-cookie") ?? "", /^for1s_session=/);
   });
 
-  it("successful logins only peek at the limiter (2 queries); they never burn quota", async () => {
+  it("successful logins release their IP and account quota reservations", async () => {
     await POST(loginRequest(nextIp(), PASSWORD));
-    assert.deepEqual(fakeDb.calls, ["peek", "peek"]);
-    assert.equal(fakeDb.rows.size, 0);
+    assert.deepEqual(fakeDb.calls, ["consume", "consume", "release", "release"]);
+    assert.equal([...fakeDb.rows.values()].every((row) => row.count === 0), true);
   });
 
   it("a wrong password gets the generic 401 and burns one hit on the IP and one on the account", async () => {
     const res = await POST(loginRequest(nextIp(), "wrong-password"));
     assert.equal(res.status, 401);
     assert.deepEqual(await res.json(), { success: false, message: "Invalid email or password" });
-    assert.deepEqual(fakeDb.calls, ["peek", "peek", "consume", "consume"]);
+    assert.deepEqual(fakeDb.calls, ["consume", "consume"]);
     assert.equal(fakeDb.rows.size, 2);
   });
 
@@ -91,22 +91,14 @@ describe("POST /api/auth/login", () => {
     assert.equal(res.status, 400);
   });
 
-  // KNOWN GAP (not introduced by the cold-start fix, tracked separately): the route
-  // peeks at the counter first and only records a hit AFTER the password check
-  // fails, so a burst of parallel guesses all pass the peek before any hit lands.
-  // Measured before the fix: 100 parallel wrong guesses -> 100 x 401, 0 x 429.
-  // Marked `todo` so it runs and reports but does not fail the suite; remove the
-  // flag once the route reserves its slot before verifying the password.
-  it(
-    "a burst of parallel wrong guesses cannot exceed the 15-attempt limit",
-    { todo: "known gap: peek-then-consume lets a parallel burst through" },
-    async () => {
-      const ip = nextIp();
-      const burst = await Promise.all(Array.from({ length: 100 }, () => POST(loginRequest(ip, "wrong"))));
-      const answered = burst.filter((r) => r.status === 401).length;
-      assert.ok(answered <= 15, `${answered} guesses were answered; the limit is 15`);
-    }
-  );
+  it("a burst of parallel wrong guesses cannot exceed the 15-attempt IP limit", async () => {
+    const ip = nextIp();
+    const burst = await Promise.all(Array.from({ length: 100 }, () => POST(loginRequest(ip, "wrong"))));
+    const answered = burst.filter((r) => r.status === 401).length;
+    const blocked = burst.filter((r) => r.status === 429).length;
+    assert.equal(answered, 15, `${answered} guesses were answered; expected exactly the 15 permitted attempts`);
+    assert.equal(blocked, 85, `${blocked} guesses were blocked; expected 85 rate-limited responses`);
+  });
 
   it("when the limiter store hangs, login still answers (after the 4 s budget) and the limit still bites", async () => {
     fakeDb.mode = "hang";

@@ -90,6 +90,13 @@ function memConsume(
   };
 }
 
+function memRelease(key: string): void {
+  const bucket = buckets.get(key);
+  if (!bucket || bucket.resetAt <= Date.now()) return;
+  bucket.count -= 1;
+  if (bucket.count <= 0) buckets.delete(key);
+}
+
 /* ---- shared Postgres store ----------------------------------------- */
 
 // All time maths happens on the database clock, in UTC, so instances with
@@ -320,6 +327,19 @@ export async function consumeRateLimit(
     remaining: Math.max(0, limit - row.count),
     resetAt: Date.now() + Math.max(0, row.msLeft),
   };
+}
+
+/** Release one reserved hit after a valid password, so successful logins do not burn quota. */
+export async function releaseRateLimit(key: string): Promise<void> {
+  const result = await withStore(() =>
+    prisma.$executeRawUnsafe(
+      `UPDATE "RateLimit"
+       SET "count" = GREATEST("count" - 1, 0)
+       WHERE "key" = $1 AND "resetAt" > ${DB_NOW}`,
+      storeKey(key)
+    )
+  );
+  if (result === null) memRelease(key);
 }
 
 /**
