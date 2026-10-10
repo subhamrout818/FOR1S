@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { comparePassword, signToken, normalizeEmail, setSessionCookie } from "@/lib/auth";
 import {
-  checkRateLimit,
   consumeRateLimit,
+  releaseRateLimit,
   clientIp,
   rateLimitedResponse,
   RATE_LIMITS,
