@@ -54,10 +54,10 @@ describe("POST /api/auth/login", () => {
     assert.match(res.headers.get("set-cookie") ?? "", /^for1s_session=/);
   });
 
-  it("successful logins consume one IP quota and one account quota", async () => {
+  it("successful logins release their IP and account quota reservations", async () => {
     await POST(loginRequest(nextIp(), PASSWORD));
-    assert.deepEqual(fakeDb.calls, ["consume", "consume"]);
-    assert.equal(fakeDb.rows.size, 2);
+    assert.deepEqual(fakeDb.calls, ["consume", "consume", "release", "release"]);
+    assert.equal([...fakeDb.rows.values()].every((row) => row.count === 0), true);
   });
 
   it("a wrong password gets the generic 401 and burns one hit on the IP and one on the account", async () => {
