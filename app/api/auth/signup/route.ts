@@ -71,15 +71,15 @@ export async function POST(req: Request) {
 
     if (existingUser) {
       // Don't reveal whether the email is registered. When email is configured,
-      // respond as if signup succeeded (the client shows the "check your inbox"
-      // screen) and notify the existing holder instead. In local dev (no email)
-      // the account is known to exist, so return a helpful message.
+      // respond as if signup succeeded and notify the existing holder instead.
       if (emailEnabled()) {
-        await sendEmail({
+        const sent = await sendEmail({
           to: existingUser.email,
           subject: "A FOR1S account already exists",
-          text: `Someone tried to sign up with this email address. If that was you, log in instead. If it wasn't you, you can ignore this message.`,
-        }).catch(() => {});
+          text: "Someone tried to sign up with this email address. If that was you, log in instead. If it wasn't you, you can ignore this message.",
+        });
+        if (!sent) console.error("Existing-account notification email delivery failed.");
+
         return NextResponse.json(
           {
             success: true,
@@ -121,19 +121,18 @@ export async function POST(req: Request) {
       // Dev convenience — no email to confirm, so sign straight in.
       token = signToken(user.id, user.email);
     } else {
-      // Email the verification link (best-effort; signup still succeeds).
+      // Keep the response generic; the verification resend endpoint remains
+      // available if the provider is temporarily unavailable.
       const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
       const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
       const sent = await sendEmail({
         to: user.email,
         subject: "Verify your FOR1S email",
         text: `Hi ${name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
-      })
+      });
       if (!sent) {
-        // Keep the response generic to avoid account enumeration. The account
-        // remains unverified; the login screen offers a verification resend.
         console.error("Signup verification email delivery failed; resend is available.");
-      };
+      }
     }
 
     const response = NextResponse.json(
