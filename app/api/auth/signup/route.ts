@@ -124,11 +124,16 @@ export async function POST(req: Request) {
       // Email the verification link (best-effort; signup still succeeds).
       const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
       const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
-      await sendEmail({
+      const sent = await sendEmail({
         to: user.email,
         subject: "Verify your FOR1S email",
         text: `Hi ${name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
-      });
+      })
+      if (!sent) {
+        // Keep the response generic to avoid account enumeration. The account
+        // remains unverified; the login screen offers a verification resend.
+        console.error("Signup verification email delivery failed; resend is available.");
+      };
     }
 
     const response = NextResponse.json(
