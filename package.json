@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "test": "node --disable-warning=ExperimentalWarning --import ./tests/register.mjs --test tests/*.test.ts",
     "shot:brew": "node scripts/capture-brew-demo.mjs",
     "shot:arun": "node scripts/capture-studio-arun.mjs",
     "shot:glow": "node scripts/capture-glow-demo.mjs",
