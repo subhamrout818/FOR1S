@@ -61,9 +61,9 @@ describe("authentication and portal authorization structure", () => {
       "app/api/account/email/route.ts",
     ]) {
       const source = read(relative);
-      assert.match(source, /consumeRateLimit\\(/, relative + " must reserve quota atomically");
-      assert.match(source, /releaseRateLimit\\(/, relative + " must release quota after valid credentials");
-      assert.doesNotMatch(source, /checkRateLimit\\(/, relative + " must not use check-then-record");
+      assert.match(source, /consumeRateLimit\(/, relative + " must reserve quota atomically");
+      assert.match(source, /releaseRateLimit\(/, relative + " must release quota after valid credentials");
+      assert.doesNotMatch(source, /checkRateLimit\(/, relative + " must not use check-then-record");
     }
   });
 
