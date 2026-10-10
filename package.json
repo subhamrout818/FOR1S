@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@aws-sdk/client-s3": "^3.922.0",
+    "@aws-sdk/s3-request-presigner": "^3.922.0",
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
     "clsx": "^2.1.1",

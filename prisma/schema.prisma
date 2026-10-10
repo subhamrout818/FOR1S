@@ -244,6 +244,7 @@ model FileAsset {
   folderId     String?
   name         String
   url          String
+  storageKey   String?  @unique
   mimeType     String?
   size         Int?
   kind         String   @default("asset")
