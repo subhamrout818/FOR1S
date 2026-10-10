@@ -36,8 +36,8 @@ describe("authentication and portal authorization structure", () => {
       "app/api/portal/tickets/route.ts",
     ]) {
       const source = read(relative);
-      assert.match(source, /const user = await requireAuth\(req\)/, relative);
-      assert.match(source, /if \(!user\)/, relative);
+      assert.ok(source.includes("const user = await requireAuth(req)"), relative);
+      assert.ok(source.includes("if (!user)"), relative);
     }
   });
 
@@ -50,7 +50,7 @@ describe("authentication and portal authorization structure", () => {
       "app/api/admin/tickets/[id]/route.ts",
     ]) {
       const source = read(relative);
-      assert.match(source, /const user = await requireAuth\(req\)/, relative);
+      assert.ok(source.includes("const user = await requireAuth(req)"), relative);
       assert.match(source, /user\.role !== ["']admin["']/, relative);
     }
   });
@@ -65,18 +65,18 @@ describe("authentication and portal authorization structure", () => {
       "app/api/admin/tickets/[id]/route.ts",
     ]) {
       const source = read(relative);
-      assert.match(source, /const user = await requireAuth\\(req\\)/, relative);
-      assert.match(source, /user\\.role !== ["']admin["']/, relative);
+      assert.ok(source.includes("const user = await requireAuth(req)"), relative);
+      assert.ok(source.includes('user.role !== "admin"'), relative);
     }
   });
 
   it("protects profile and portal workspace reads and binds profile writes to the session user", () => {
     const account = read("app/api/account/route.ts");
     const portal = read("app/api/portal/route.ts");
-    assert.match(account, /const user = await getAuthUser\\(req\\)/);
-    assert.match(account, /where: \\{ id: user\\.id \\}/);
-    assert.match(portal, /const user = await requireAuth\\(req\\)/);
-    assert.match(portal, /if \\(!user\\)/);
+    assert.ok(account.includes("const user = await getAuthUser(req)"));
+    assert.ok(account.includes("where: { id: user.id }"));
+    assert.ok(portal.includes("const user = await requireAuth(req)"));
+    assert.ok(portal.includes("if (!user)"));
   });
 
   it("rejects unauthenticated account mutations", () => {
@@ -86,7 +86,7 @@ describe("authentication and portal authorization structure", () => {
       "app/api/account/password/route.ts",
     ]) {
       const source = read(relative);
-      assert.match(source, /if \\(!user\\)/, relative);
+      assert.ok(source.includes("if (!user)"), relative);
     }
   });
 
