@@ -50,6 +50,7 @@ export interface RateLimitStatus {
 }
 
 /* ---- in-memory fallback (per instance) ---------------------------- */
+// Login reservations are released after successful authentication.
 
 function memCheck(
   key: string,
