@@ -36,7 +36,7 @@ export default function FilesPage() {
 
   async function handleUpload(file?: globalThis.File) {
     if (!file || !data) return;
-    const extension = file.name.toLowerCase().match(/\\.[^.]+$/)?.[0] ?? "";
+    const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? "";
     const types: Record<string, string> = { ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif" };
     const mimeType = types[extension];
     if (!mimeType || (file.type && file.type !== mimeType)) {
