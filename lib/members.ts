@@ -12,19 +12,19 @@ export const MEMBERS: Member[] = [
   {
     slug: "subham-rout",
     name: "Subham Rout",
-    role: "CEO",
+    role: "Founder · Full-Stack Development",
     image: "/blurred.png",
   },
   {
     slug: "tanuj-joshi",
     name: "Tanuj Joshi",
-    role: "Video Editor",
+    role: "Co-Founder · IT",
     image: "/tanuj.jpg",
   },
   {
     slug: "sidhi",
     name: "Sidhi Samantaray",
-    role: "Video Editor",
+    role: "Co-Founder · Marketing",
     image: "/Sidhi.jpeg",
   },
 ];
