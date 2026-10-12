@@ -204,7 +204,7 @@ function TeamRow({
 
         {/* Role & Icon Section */}
         <div className="mt-4 flex items-center justify-between pl-12 pr-4 md:mt-0 md:justify-end md:gap-12 md:pl-0 md:pr-0">
-          <span className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-600 transition-colors group-hover:text-neutral-400">
+          <span className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-400 transition-colors group-hover:text-neutral-300">
             {data.role}
           </span>
 
