@@ -75,7 +75,7 @@ export const PREVIEW_TABS = [
     id: "design",
     label: "Design",
     description:
-      "Wireframes first, then design. Every page is built around one goal — turning a visitor into a customer — with a look that's unmistakably yours. You review, we refine, until you love it.",
+      "Wireframes first, then design. Every page is built around one goal — turning a visitor into a customer — with a look that's unmistakably yours. You review, and we refine within the agreed scope and revision rounds.",
     specs: [
       { label: "Design", value: "Tailored to your brand" },
       { label: "Preview", value: "Clickable mockup" },
@@ -117,7 +117,7 @@ export const BENEFITS = [
     id: "b2",
     title: "Your business can't wait months",
     description:
-      "Most sites ship in 1–3 weeks — not because we cut corners, but because we've done this many times before. Your website goes live when it can start winning you customers.",
+      "We aim for 1–3 weeks on straightforward sites by keeping the scope focused and the work organized. Timelines depend on the pages, integrations, content, and feedback your project needs.",
   },
   {
     id: "b3",
@@ -215,7 +215,7 @@ export const FAQ_ITEMS = [
     id: "q5",
     question: "What happens after launch?",
     answer:
-      "We offer care plans — updates, tweaks, backups, and support — so your site stays fast, secure, and fresh. Most clients keep us on a small monthly plan because it's cheaper than fixing things later.",
+      "Optional care plans can cover updates, tweaks, backups, and support after launch. We'll agree on the scope and monthly cost up front, so you know what's covered and what would be quoted separately.",
   },
   {
     id: "q6",
