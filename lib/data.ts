@@ -22,7 +22,7 @@ export const FEATURES = [
     scene: "01",
     title: "End to end, one team",
     description:
-      "Design, copy, build, and launch — handled by the same small team. One person to talk to, one timeline, one price. No agencies juggling, no handoff gaps.",
+      "Design, development, and launch — coordinated by the same small team. One person to talk to, one agreed scope, one timeline, and one price.",
     span: "large",
   },
   {
@@ -97,11 +97,11 @@ export const PREVIEW_TABS = [
     id: "launch",
     label: "Launch & care",
     description:
-      "We handle the domain, hosting, and going live — then we stay. Updates, SEO tweaks, and support so your website keeps earning for months and years, not just launch week.",
+      "We guide domain and hosting setup, deploy the agreed site, and include three months of defined post-launch maintenance. New features and third-party fees are separate unless the proposal explicitly includes them.",
     specs: [
-      { label: "Domain + hosting", value: "Handled for you" },
-      { label: "Going live", value: "1–3 weeks typical" },
-      { label: "Support", value: "Care plans included" },
+      { label: "Domain + hosting", value: "Setup guidance; fees separate" },
+      { label: "Going live", value: "Timeline agreed after scoping" },
+      { label: "Support", value: "3 months of defined maintenance" },
     ],
   },
 ] as const;
@@ -111,7 +111,7 @@ export const BENEFITS = [
     id: "b1",
     title: "One team, zero chaos",
     description:
-      "Design, copy, build, and launch from the same small team. One person to talk to, one timeline, one price. No juggling freelancers who blame each other.",
+      "Design, development, and launch from the same small team. One person to talk to, one agreed scope, one timeline, and one price.",
   },
   {
     id: "b2",
@@ -123,7 +123,7 @@ export const BENEFITS = [
     id: "b3",
     title: "Grows with your business",
     description:
-      "Start with a site that gets you customers today. Add booking, an online store, or new pages whenever you're ready — without paying for a rebuild.",
+      "Start with a site that explains your business clearly and helps visitors take the next step. Add booking, an online store, or new pages later when the requirements and budget are clear.",
   },
   {
     id: "b4",
