@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     siteName: "FOR1S",
     title: TITLE,
     description: DESCRIPTION,
-    locale: "en_US",
+    locale: "en_IN",
   },
 
   twitter: {
