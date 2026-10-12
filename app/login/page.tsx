@@ -128,7 +128,7 @@ export default function LoginPage() {
           className="my-6 flex items-center gap-4"
         >
           <span className="h-px flex-1 bg-hairline" />
-          <span className="text-xs uppercase tracking-widest text-muted">
+          <span className="text-xs uppercase tracking-widest text-foreground/70">
             or continue with email
           </span>
           <span className="h-px flex-1 bg-hairline" />
@@ -214,7 +214,9 @@ export default function LoginPage() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
+              autoComplete="username"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -251,7 +253,9 @@ export default function LoginPage() {
             </div>
             <input
               id="password"
+              name="password"
               type="password"
+              autoComplete="current-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
