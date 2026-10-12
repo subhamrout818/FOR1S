@@ -32,20 +32,20 @@ export const POSTS: Post[] = [
   {
     slug: "how-much-does-a-website-cost",
     index: "02",
-    title: "How much does a website cost in India? A plain-English guide",
+    title: "How much does a website cost? A plain-English guide",
     excerpt:
-      "Indicative FOR1S price ranges for personal, small-business, and custom websites in India — plus what drives the final quote.",
-    date: "Oct 2026",
+      "The honest range for personal, business, and custom websites in 2026 — and what actually drives the price up or down.",
+    date: "Jun 2026",
     tag: "Pricing",
     readTime: "6 min",
     author: "Subham Rout",
     body: [
-      "'How much does a website cost?' depends on scope, content, integrations, and support. These are FOR1S's indicative starting ranges for India-based projects, not a universal market survey or a fixed quote.",
-      "For a personal website — a portfolio, freelancer page, or personal brand — our current indicative range is ₹12,000–₹18,000 for a focused 1–3 page build with responsive layouts and a contact form.",
-      "For a small-business website — such as a café, salon, clinic, or shop — our indicative range is ₹18,000–₹25,000 for a scoped multi-page site with contact/location information and SEO fundamentals. Booking or ordering integrations may cost extra.",
-      "Custom builds start around ₹25,000 and are quoted after discovery. E-commerce, online payments, account systems, complex booking/order flows, brand identity, and photo/video production can change the cost substantially.",
-      "What drives the price? Page count, custom features, content preparation, integrations, accessibility needs, testing, and ongoing support. A clear scope makes quotes easier to compare; don't compare prices without comparing deliverables.",
-      "Before committing, ask what's included, how many revision rounds you get, who pays for domain/hosting and other third-party services, and what maintenance covers. FOR1S includes three months of defined post-launch maintenance in its packages; exact coverage is written into the proposal. Domain, hosting, paid tools, and third-party fees are separate unless the proposal says otherwise.",
+      "'How much does a website cost?' is the question every business owner asks, and the honest answer is: it depends — but you deserve a real range, not a sales pitch.",
+      "For a personal website — a portfolio, a freelancer's page, a creator's home base — expect roughly $700 to $1,500. One to three pages, custom design, a contact form, mobile-friendly, launched in about a week.",
+      "For a business website — a café, salon, clinic, or shop with several pages, booking or contact options, and SEO foundations — a custom build can cost roughly $1,900 to $4,500 in this illustrative pricing range. The right quote depends on the market, scope, content, integrations, and ongoing support.",
+      "For custom builds — online stores, booking systems, brand identity work, or video — prices start around $4,500 and can go much higher. These aren't 'more expensive websites'; they're genuinely bigger projects with more moving parts.",
+      "What actually drives the price? Page count, custom features (booking, payments, membership), whether you need copywriting or brand design, and how much care you want after launch. Templates are cheaper because they're reused; custom design costs more because it's built for you alone.",
+      "Two things worth asking any designer before you commit: what's included (domain, hosting, setup, revisions), and what happens after launch. A low upfront price that disappears after launch is the most expensive option in the long run.",
     ],
   },
   {
@@ -61,7 +61,7 @@ export const POSTS: Post[] = [
     body: [
       "When someone near you searches 'best coffee near me' or 'salon open Sunday', Google shows a short list. Being on that list is the difference between a steady stream of new customers and being invisible. The good news: for local businesses, the fundamentals are simple and honest.",
       "First, the free stuff that matters most: a Google Business Profile. Claim it, keep your hours and address accurate, add real photos, and respond to reviews. A complete, accurate profile helps customers find key details and may improve your visibility in relevant local searches; results depend on your market and competitors.",
-      "Second, your website needs to say what you do and where you are — clearly. For example, clear copy such as 'a bakery in Chandrasekharpur, Bhubaneswar, open from 7 AM' tells visitors where the business is and what to expect. Use only accurate opening hours, location, and service information.",
+      "Second, your website needs to say what you do and where you are — clearly. A page that says 'We're a family bakery in Westport, open 7am daily, here's our menu' tells Google exactly who you are and who to show you to. Vague, generic homepage copy does the opposite.",
       "Third, speed and mobile. Most local searches happen on a phone, often on a patchy connection. Slow pages and difficult mobile interactions can frustrate visitors. Performance and usability matter, but search rankings depend on many factors, so avoid treating any single metric as a guarantee.",
       "Fourth, real reviews and real content. Encourage happy customers to leave reviews (a QR code at the counter works wonders), and update your site as your menu or services change. Accurate, useful information helps customers and search engines understand your business; reviews and content are only part of local visibility.",
       "You don't need to become an SEO expert to start. Keep your business profile accurate, make your site useful and accessible, and monitor how people find you. These are sensible foundations, not a guarantee of outranking competitors.",
