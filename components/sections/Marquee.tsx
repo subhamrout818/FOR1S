@@ -36,7 +36,7 @@ export default function Marquee() {
               className="flex items-center gap-8 px-6 text-sm uppercase tracking-widest text-muted lg:px-8"
             >
               {item}
-              <span className="text-accent">✦</span>
+              <span aria-hidden="true" className="text-accent">✦</span>
             </span>
           ))}
         </div>

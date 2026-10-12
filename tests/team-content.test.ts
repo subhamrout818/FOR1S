@@ -3,19 +3,19 @@ import { describe, it } from "node:test";
 import { MEMBERS } from "../lib/members";
 import { PRICING_TIERS } from "../lib/data";
 
-describe("confirmed public team and pricing content", () => {
-  it("lists only the three confirmed team members and their confirmed roles", () => {
+describe("public team and pricing content", () => {
+  it("lists the current founders and their responsibilities", () => {
     assert.deepEqual(
       MEMBERS.map(({ name, role }) => ({ name, role })),
       [
-        { name: "Subham Rout", role: "CEO" },
-        { name: "Tanuj Joshi", role: "Video Editor" },
-        { name: "Sidhi Samantaray", role: "Video Editor" },
+        { name: "Subham Rout", role: "Founder · Full-Stack Development" },
+        { name: "Tanuj Joshi", role: "Co-Founder · IT" },
+        { name: "Sidhi Samantaray", role: "Co-Founder · Marketing" },
       ]
     );
   });
 
-  it("keeps public price display in dollars", () => {
+  it("keeps public price display in dollars until pricing strategy is deliberately changed", () => {
     assert.ok(PRICING_TIERS.length > 0);
     for (const plan of PRICING_TIERS) {
       assert.match(plan.price, /^\$/);

@@ -38,7 +38,7 @@ export const FEATURES = [
     scene: "03",
     title: "Found on Google",
     description:
-      "A beautiful site nobody finds is just a poster. SEO is built in from day one — so your business shows up when people search for what you do.",
+      "A beautiful site nobody finds is just a poster. We build in SEO fundamentals from day one to give search engines a clearer understanding of your business; rankings depend on competition, relevance, and ongoing work.",
     span: "small",
   },
   {
@@ -75,11 +75,11 @@ export const PREVIEW_TABS = [
     id: "design",
     label: "Design",
     description:
-      "Wireframes first, then design. Every page is built around one goal — turning a visitor into a customer — with a look that's unmistakably yours. You review, we refine, until you love it.",
+      "Wireframes first, then design. Every page is built around one goal — helping a visitor take the next useful step — with a look that's unmistakably yours. You review, and we refine within the agreed scope and revision rounds.",
     specs: [
       { label: "Design", value: "Tailored to your brand" },
       { label: "Preview", value: "Clickable mockup" },
-      { label: "Revisions", value: "Until you love it" },
+      { label: "Revisions", value: "Defined in the proposal" },
     ],
   },
   {
@@ -89,8 +89,8 @@ export const PREVIEW_TABS = [
       "Clean, modern code on a platform that's fast, secure, and easy to update. Mobile-first, SEO-ready, and tested on real phones — so it looks premium everywhere it loads.",
     specs: [
       { label: "Stack", value: "Modern web platform" },
-      { label: "Mobile", value: "Perfect on every phone" },
-      { label: "SEO", value: "Built in from day one" },
+      { label: "Mobile", value: "Responsive layouts" },
+      { label: "SEO", value: "Technical foundations included" },
     ],
   },
   {
@@ -117,7 +117,7 @@ export const BENEFITS = [
     id: "b2",
     title: "Your business can't wait months",
     description:
-      "Most sites ship in 1–3 weeks — not because we cut corners, but because we've done this many times before. Your website goes live when it can start winning you customers.",
+      "We aim for 1–3 weeks on straightforward sites by keeping the scope focused and the work organized. Timelines depend on the pages, integrations, content, and feedback your project needs.",
   },
   {
     id: "b3",
@@ -146,9 +146,9 @@ export const PRICING_TIERS = [
       "Mobile-first, loads fast",
       "Contact form",
       "SEO basics",
-      "Domain + hosting set up",
+      "Domain and hosting setup guidance",
       "Optional care plan — $39/mo",
-      "Launch in ~1 week",
+      "Timeline agreed after scoping",
     ],
   },
   {
@@ -164,8 +164,8 @@ export const PRICING_TIERS = [
       "Copy polish that sells",
       "Google-ready SEO",
       "Speed + mobile optimization",
-      "Care plan — first month included",
-      "Launch in 2–3 weeks",
+      "Optional post-launch care, scoped separately",
+      "Timeline agreed after scoping",
     ],
   },
   {
@@ -203,7 +203,7 @@ export const FAQ_ITEMS = [
     id: "q3",
     question: "How much does it cost?",
     answer:
-      "It depends on what you need. Personal websites start around $699, business websites from $1,900, and custom builds from $4,500 and are quoted individually. Every project starts with a free call, so you know exactly what it'll cost before we begin — no surprises.",
+      "It depends on what you need. Personal websites start around $699, business websites from $1,900, and custom builds from $4,500 and are quoted individually. Every project starts with a free call. We’ll confirm the agreed scope, price, timeline, and any third-party costs before work begins.",
   },
   {
     id: "q4",
@@ -215,13 +215,13 @@ export const FAQ_ITEMS = [
     id: "q5",
     question: "What happens after launch?",
     answer:
-      "We offer care plans — updates, tweaks, backups, and support — so your site stays fast, secure, and fresh. Most clients keep us on a small monthly plan because it's cheaper than fixing things later.",
+      "Optional care plans can cover updates, tweaks, backups, and support after launch. We'll agree on the scope and monthly cost up front, so you know what's covered and what would be quoted separately.",
   },
   {
     id: "q6",
     question: "Do you also make videos and content?",
     answer:
-      "Yes. We produce short commercials and brand videos for our website clients. Ask about bundled web + video deals — a video on your homepage is one of the fastest ways to build trust.",
+      "Photo or video can be scoped as an add-on when it supports the project. We’ll agree on the deliverables, production needs, and cost before work begins.",
   },
 ] as const;
 

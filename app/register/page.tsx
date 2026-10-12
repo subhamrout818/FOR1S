@@ -132,7 +132,7 @@ export default function RegisterPage() {
               className="my-6 flex items-center gap-4"
             >
               <span className="h-px flex-1 bg-hairline" />
-              <span className="text-xs uppercase tracking-widest text-muted">
+              <span className="text-xs uppercase tracking-widest text-foreground/70">
                 or sign up with email
               </span>
               <span className="h-px flex-1 bg-hairline" />
@@ -167,7 +167,9 @@ export default function RegisterPage() {
                 </label>
                 <input
                   id="name"
+                  name="name"
                   type="text"
+                  autoComplete="name"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -196,7 +198,9 @@ export default function RegisterPage() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -225,7 +229,9 @@ export default function RegisterPage() {
                 </label>
                 <input
                   id="password"
+                  name="password"
                   type="password"
+                  autoComplete="new-password"
                   required
                   minLength={8}
                   value={password}

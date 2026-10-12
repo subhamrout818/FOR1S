@@ -49,6 +49,7 @@ function BenefitRow({
     >
       <span
         ref={numberRef}
+        aria-hidden="true"
         className="block select-none font-display text-[clamp(3rem,8vw,6rem)] font-bold leading-none text-[#606060]"
       >
         {index}
