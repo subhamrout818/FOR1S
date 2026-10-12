@@ -41,7 +41,7 @@ export default function TermsPage() {
       <h1 className="font-display text-fluid-lg font-bold uppercase tracking-tightest text-foreground">
         Terms of Service
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: August 11, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 12, 2026</p>
 
       <div className="mt-12 space-y-8 text-sm leading-relaxed text-foreground/80">
         <p>
@@ -56,13 +56,16 @@ export default function TermsPage() {
         <section>
           <H2>1. About FOR1S</H2>
           <p>
-            FOR1S provides website design, website development, digital experiences, and
-            related digital services.
+            FOR1S is a trade name used by Subham Rout, an individual operating from India
+            (referred to in these Terms as “FOR1S,” “we,” “us,” or “our”). FOR1S is not a
+            separate incorporated company. FOR1S provides website design, website development,
+            digital experiences, and related digital services.
           </p>
           <p className="mt-3">
-            Specific project requirements, deliverables, timelines, pricing, revisions,
-            ownership, and other commercial terms may be agreed upon separately between FOR1S
-            and the client.
+            Project-specific requirements, deliverables, timelines, pricing, revisions,
+            ownership, support, and other commercial terms will be set out in a written
+            proposal, quotation, statement of work, or project agreement accepted by both
+            parties. Contact details for FOR1S appear at the end of these Terms.
           </p>
         </section>
 
@@ -152,8 +155,9 @@ export default function TermsPage() {
             ]}
           />
           <p className="mt-3">
-            FOR1S will communicate significant scope changes with the client where reasonably
-            possible.
+            A change that affects price, deliverables, or timeline should be approved in
+            writing by both parties before the additional work begins. If the parties do not
+            agree on a proposed change, the existing agreed scope will continue to apply.
           </p>
         </section>
 
@@ -168,8 +172,12 @@ export default function TermsPage() {
             reasonable period.
           </p>
           <p className="mt-3">
-            Once a deliverable has been approved, additional changes may be treated as new
-            work depending on the project agreement.
+            The project agreement should state the included revision rounds, what counts as a
+            revision, the approval method, and any review deadlines. Unless the agreement says
+            otherwise, approval of a deliverable confirms that stage is accepted; later
+            requests that change an approved direction or add functionality may be treated as
+            additional paid work. Client delays in providing feedback, content, or approvals
+            may move the delivery date.
           </p>
         </section>
 
@@ -187,8 +195,24 @@ export default function TermsPage() {
             client through an agreed method.
           </p>
           <p className="mt-3">
-            Specific payment, deposit, cancellation, or refund terms may be included in an
-            individual project agreement.
+            Before work begins, the written project agreement should identify the project
+            price and currency, deposit and milestone amounts, invoice due dates, applicable
+            taxes, what happens if a payment is late, and any third-party or recurring charges.
+            Work may be paused after reasonable notice if an undisputed payment remains
+            overdue.
+          </p>
+          <p className="mt-3">
+            Cancellation, refunds, and payment for work completed or committed costs will be
+            governed by the written project agreement and applicable law. Do not assume that
+            a deposit is refundable or non-refundable unless the agreement clearly says so.
+            Any mandatory consumer rights remain unaffected.
+          </p>
+          <p className="mt-3">
+            Unless the project agreement expressly provides otherwise, delivery or transfer
+            of rights in bespoke final deliverables may be withheld until all amounts due for
+            that project have been paid. The agreement should also identify responsibility
+            for domain registration, hosting, third-party subscriptions, renewals, handover,
+            and any post-launch maintenance.
           </p>
         </section>
 
@@ -200,7 +224,7 @@ export default function TermsPage() {
               "Client-provided materials remain the property of the client or their respective owners.",
               "FOR1S retains ownership of its pre-existing code, frameworks, templates, reusable components, tools, methods, and other proprietary materials.",
               "Third-party software, libraries, fonts, images, icons, and other assets remain subject to their respective licenses.",
-              "Ownership or licensing of final project-specific deliverables will be determined by the applicable project agreement.",
+              "Unless the project agreement expressly provides otherwise, rights in bespoke final deliverables transfer or are licensed to the client only after full payment, as specified in that agreement.",
             ]}
           />
           <p className="mt-3">
@@ -212,14 +236,16 @@ export default function TermsPage() {
         <section>
           <H2>9. Portfolio and Showcase Rights</H2>
           <p>
-            Unless otherwise agreed with the client, FOR1S may display completed work,
-            screenshots, designs, or project descriptions in its portfolio, website, social
-            media, presentations, or other promotional materials for the purpose of
-            demonstrating its services.
+            FOR1S will seek the client's written permission before displaying client work,
+            project screenshots, designs, name, logo, or project details in a portfolio,
+            case study, website, social media, presentation, or other promotional material.
+            Permission may specify what may be shown and when it may be published.
           </p>
           <p className="mt-3">
-            If a project contains confidential information or the client requests that
-            specific work remain private, FOR1S will reasonably consider such requests.
+            FOR1S will not intentionally publish confidential information, unreleased work,
+            credentials, private business data, or non-public project materials without
+            written authorization. A client may request confidentiality or a delayed
+            showcase in the project agreement.
           </p>
         </section>
 
@@ -340,8 +366,23 @@ export default function TermsPage() {
             related to the use of our website or services.
           </p>
           <p className="mt-3">
-            Nothing in these Terms is intended to exclude or limit liability that cannot
-            legally be excluded or limited under applicable law.
+            To the maximum extent permitted by applicable law, the aggregate liability of
+            FOR1S arising out of a particular project or service will not exceed the fees
+            paid or payable to FOR1S for that project or service under the applicable written
+            agreement. This proposed limit does not apply to liability that cannot legally
+            be excluded or limited, and does not override any non-waivable statutory rights.
+            The project agreement may set out a different lawful allocation of risk.
+          </p>
+          <p className="mt-3">
+            Clients remain responsible for maintaining their own copies of materials and
+            credentials they control, and for third-party charges or services contracted in
+            their own name. Nothing here guarantees a particular business result, search
+            ranking, revenue outcome, or uninterrupted third-party service.
+          </p>
+          <p className="mt-3">
+            These limitations should be read subject to applicable law and do not exclude
+            liability for fraud, wilful misconduct, or other liability that cannot lawfully
+            be limited.
           </p>
         </section>
 
@@ -399,21 +440,32 @@ export default function TermsPage() {
             top of this page.
           </p>
           <p className="mt-3">
-            Your continued use of FOR1S after updated Terms are published constitutes
-            acceptance of the updated Terms to the extent permitted by applicable law.
+            Changes to these website Terms apply prospectively from the stated effective
+            date, subject to applicable law. Where a change materially affects users, we will
+            take reasonable steps to provide notice. If a change requires consent, we will
+            seek that consent where required by law.
+          </p>
+          <p className="mt-3">
+            An existing signed project agreement or accepted proposal will continue to govern
+            that project if it conflicts with these general website Terms, unless the parties
+            expressly agree in writing to change it. Publishing an updated version of these
+            Terms alone does not amend an existing project agreement.
           </p>
         </section>
 
         <section>
           <H2>21. Governing Law</H2>
           <p>
-            These Terms shall be governed by and interpreted in accordance with the
-            applicable laws of India.
+            These Terms are governed by the laws of India, subject to any mandatory
+            protections or rules that apply to a client under the law of their place of
+            residence.
           </p>
           <p className="mt-3">
-            Any disputes arising from these Terms or the use of FOR1S shall be subject to the
-            jurisdiction of the appropriate courts in India, unless otherwise agreed in
-            writing.
+            Subject to applicable law, disputes may be brought before courts of competent
+            jurisdiction in India. Nothing in this section removes a mandatory right to bring
+            a claim in another forum where the law requires that right to be available.
+            Project agreements should address dispute escalation and any lawful dispute
+            resolution process for the specific engagement.
           </p>
         </section>
 
@@ -421,7 +473,7 @@ export default function TermsPage() {
           <H2>22. Contact and Support</H2>
           <p>For questions regarding these Terms, projects, accounts, or services:</p>
           <p className="mt-3">
-            FOR1S
+            Operated by Subham Rout, an individual based in India, under the trade name FOR1S.
             <br />
             Email: <EmailLink />
           </p>
