@@ -1,10 +1,9 @@
 /**
- * Concept projects and interactive demos showcasing FOR1S design and development.
- * These are not claims of completed client engagements.
+ * Fictional concept projects and interactive demos showcasing FOR1S design
+ * and development. These are not completed client engagements.
  *
- * Replace concept copy with verified project details only when real client work
- * and outcomes can be substantiated. Do not imply unmeasured business results.
-
+ * Keep claims about client work, launches, timelines, and business outcomes out
+ * of these entries until they can be supported by real project evidence.
  */
 
 export interface CaseStudy {
@@ -32,24 +31,24 @@ export const CASE_STUDIES: CaseStudy[] = [
     name: "Brew & Co.",
     industry: "Café & Restaurant",
     year: "2026",
-    tags: ["Website", "Booking"],
+    tags: ["Website concept", "Menu & location"],
     summary:
-      "A café website concept exploring menu, hours, location, and a mobile-friendly booking journey.",
+      "A fictional café website concept exploring menu discovery, opening hours, location, and a mobile-friendly booking journey.",
     monogram: "B",
     hue: ["#C9A06B", "#2C1D12"],
     thumbnail: "/demo/brew-and-co/hero.png",
     demoUrl: "/demo/brew-and-co/index.html",
-    services: ["Design", "Build", "Booking flow", "SEO"],
+    services: ["Visual design", "Responsive page structure", "Booking journey concept", "Local SEO structure"],
     overview: [
-      "Brew & Co. is a neighborhood café whose storefront was great but whose online presence didn't match it. They needed a site that answered the three questions customers actually ask: what's on the menu, when are you open, and how do I book a table.",
-      "We designed a warm, editorial site around real photography and a simple, honest layout. One page for the story, one for the menu, one for hours and location, and a booking flow short enough to finish on a phone between customers.",
-      "The site is built to load fast on mobile data, ranks for local searches like 'coffee near me', and is easy for the owners to update themselves — new menu items, holiday hours, and events in minutes, no developer needed.",
+      "This fictional café concept starts with a familiar customer need: finding the menu, checking opening hours, getting directions, and understanding how to enquire about a table.",
+      "The design direction uses a warm editorial style and a clear page structure for the café story, menu, and practical visit information. The booking journey is presented as a design concept, not a claim that a real café uses an automated reservation system.",
+      "The build is a portfolio demonstration of how FOR1S could approach a café website. Search visibility, performance, owner-editable content, and business outcomes would need to be tested and agreed as part of a real client engagement.",
     ],
     highlights: [
-      { label: "Pages", value: "4" },
-      { label: "Booking flow", value: "3 taps" },
-      { label: "Mobile-first", value: "Yes" },
-      { label: "Launched", value: "2.5 weeks" },
+      { label: "Illustrative scope", value: "4-page concept" },
+      { label: "Primary goal", value: "Menu & visit info" },
+      { label: "Layout", value: "Mobile-first" },
+      { label: "Project status", value: "Concept demo" },
     ],
   },
   {
@@ -57,24 +56,24 @@ export const CASE_STUDIES: CaseStudy[] = [
     name: "Studio Arun",
     industry: "Photographer",
     year: "2026",
-    tags: ["Portfolio", "Brand"],
+    tags: ["Portfolio concept", "Gallery"],
     summary:
-      "A photographer portfolio concept with a cinematic gallery and focused enquiry experience.",
+      "A fictional photographer portfolio concept with an editorial gallery and a focused enquiry experience.",
     monogram: "A",
     hue: ["#C9A06B", "#0E0D0B"],
     thumbnail: "/demo/studio-arun/hero.png",
     demoUrl: "/demo/studio-arun/index.html",
-    services: ["Design", "Build", "Branding", "Gallery"],
+    services: ["Visual design", "Gallery direction", "Portfolio information architecture", "Enquiry journey concept"],
     overview: [
-      "Studio Arun is a portrait and wedding photographer who was sharing work through social pages and messaging apps. Every enquiry started with 'send me your work', and every answer was a link to someone else's platform.",
-      "We built a portfolio site that does the talking: a full-screen gallery that feels like the work, a clean structure that lets clients see weddings, portraits, and commercial work separately, and a simple enquiry form that lands bookings in one place.",
-      "The design is minimal on purpose — the photography is the product. The site loads fast, looks premium on a phone when a potential client opens it mid-conversation, and gives the studio a home that isn't rented from anyone.",
+      "This fictional photographer concept explores how a portfolio can make work easy to browse without relying on a social feed as the only showcase.",
+      "The proposed structure separates different photography categories, gives imagery room to lead, and makes the next enquiry step easy to find. It demonstrates a possible direction rather than documenting a real photographer's business or customer journey.",
+      "A production portfolio would be tailored to the photographer's actual work, image rights, preferred enquiry process, accessibility needs, and performance requirements.",
     ],
     highlights: [
-      { label: "Galleries", value: "3" },
-      { label: "Portfolio site", value: "Yes" },
-      { label: "Enquiry flow", value: "Included" },
-      { label: "Launched", value: "2 weeks" },
+      { label: "Illustrative scope", value: "3 gallery categories" },
+      { label: "Visual direction", value: "Editorial" },
+      { label: "Enquiry path", value: "Concept" },
+      { label: "Project status", value: "Concept demo" },
     ],
   },
   {
@@ -82,32 +81,31 @@ export const CASE_STUDIES: CaseStudy[] = [
     name: "Glow & Co.",
     industry: "Salon & Spa",
     year: "2026",
-    tags: ["Website", "Booking", "Brand"],
+    tags: ["Website concept", "Brand direction"],
     summary:
-      "A salon website concept exploring brand presentation, service information, and a booking journey.",
+      "A fictional salon website concept exploring service presentation, brand consistency, and a proposed booking journey.",
     monogram: "G",
     hue: ["#C2879B", "#5A2A3D"],
     thumbnail: "/demo/glow-and-co/hero.png",
     demoUrl: "/demo/glow-and-co/index.html",
-    services: ["Design", "Build", "Online booking", "Brand"],
+    services: ["Visual design", "Service information architecture", "Brand direction", "Booking journey concept"],
     overview: [
-      "Glow & Co. is a salon where every detail is deliberate — except its website, which said nothing about the experience inside. They needed to match the premium feel of the space online and make booking painless.",
-      "We designed an elegant, editorial site with the salon's own photography, clear services and pricing, and an online booking flow that sends confirmations and reminders automatically.",
-      "Beyond the website, we tightened the brand — logo, typography, and color used consistently across the site. The result is a site that feels like the salon, gets found on Google, and turns a search into an appointment.",
+      "This fictional salon concept explores a polished online presence where visitors can understand the service offering and find a clear next step.",
+      "The proposed direction pairs editorial styling with a structured service and pricing presentation. Any booking integration, confirmation messages, or reminders would require a real provider, implementation, and end-to-end testing; they are not represented as live business functionality here.",
+      "The concept shows how typography, color, page structure, and a considered booking journey could work together. A real engagement would be based on the salon's actual brand, services, booking process, and requirements.",
     ],
     highlights: [
-      { label: "Pages", value: "5" },
-      { label: "Online booking", value: "Yes" },
-      { label: "Brand refresh", value: "Included" },
-      { label: "Launched", value: "3 weeks" },
+      { label: "Illustrative scope", value: "5-page concept" },
+      { label: "Service presentation", value: "Structured" },
+      { label: "Brand direction", value: "Included in concept" },
+      { label: "Project status", value: "Concept demo" },
     ],
   },
 ];
 
 /**
- * Real client testimonials. Empty until the first real quotes exist —
- * the section only renders when there are entries. Add real words from
- * real clients here; never invent them.
+ * Real client testimonials. Empty until the first real quotes exist — the
+ * section only renders when there are entries. Never invent testimonials.
  *
  * shape: { name, business, quote }
  */

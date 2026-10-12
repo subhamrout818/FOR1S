@@ -23,9 +23,9 @@ export default function Work() {
           </div>
           <RevealMask blur={false} y={16} className="max-w-sm">
             <p className="text-sm leading-relaxed text-muted md:text-base">
-              A few of the websites we&apos;ve designed and built — for cafés,
-              salons, studios, and personal brands. Every one designed from
-              scratch, mobile-first, and built to get found.
+              These fictional concept sites explore how we could approach
+              different businesses. They are design studies — not paid client
+              projects or claims of measured business results.
             </p>
           </RevealMask>
         </div>
@@ -56,7 +56,7 @@ export default function Work() {
                     />
                   </div>
                   <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted">
-                    {project.industry} · {project.year}
+                    {project.industry} · {project.year} · Concept
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-muted">
                     {project.summary}
