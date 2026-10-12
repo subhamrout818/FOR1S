@@ -22,7 +22,7 @@ export const FEATURES = [
     scene: "01",
     title: "End to end, one team",
     description:
-      "Design, copy, build, and launch — handled by the same small team. One person to talk to, one timeline, one price. No agencies juggling, no handoff gaps.",
+      "Design, development, and launch — coordinated by the same small team. One person to talk to, one agreed scope, one timeline, and one price.",
     span: "large",
   },
   {
@@ -97,11 +97,11 @@ export const PREVIEW_TABS = [
     id: "launch",
     label: "Launch & care",
     description:
-      "We handle the domain, hosting, and going live — then we stay. Updates, SEO tweaks, and support so your website keeps earning for months and years, not just launch week.",
+      "We guide domain and hosting setup, deploy the agreed site, and include three months of defined post-launch maintenance. New features and third-party fees are separate unless the proposal explicitly includes them.",
     specs: [
-      { label: "Domain + hosting", value: "Handled for you" },
-      { label: "Going live", value: "1–3 weeks typical" },
-      { label: "Support", value: "Care plans included" },
+      { label: "Domain + hosting", value: "Setup guidance; fees separate" },
+      { label: "Going live", value: "Timeline agreed after scoping" },
+      { label: "Support", value: "3 months of defined maintenance" },
     ],
   },
 ] as const;
@@ -111,7 +111,7 @@ export const BENEFITS = [
     id: "b1",
     title: "One team, zero chaos",
     description:
-      "Design, copy, build, and launch from the same small team. One person to talk to, one timeline, one price. No juggling freelancers who blame each other.",
+      "Design, development, and launch from the same small team. One person to talk to, one agreed scope, one timeline, and one price.",
   },
   {
     id: "b2",
@@ -123,7 +123,7 @@ export const BENEFITS = [
     id: "b3",
     title: "Grows with your business",
     description:
-      "Start with a site that gets you customers today. Add booking, an online store, or new pages whenever you're ready — without paying for a rebuild.",
+      "Start with a site that explains your business clearly and helps visitors take the next step. Add booking, an online store, or new pages later when the requirements and budget are clear.",
   },
   {
     id: "b4",
@@ -138,16 +138,16 @@ export const PRICING_TIERS = [
     id: "personal",
     name: "Personal",
     tagline: "For portfolios, freelancers, and personal brands",
-    price: "$899",
-    priceRange: "$699 – $1,499",
+    price: "₹15,000",
+    priceRange: "₹12,000–₹18,000",
     highlighted: false,
     specs: [
       "1–3 pages, custom designed",
-      "Mobile-first, loads fast",
+      "Responsive mobile-first layouts",
       "Contact form",
-      "SEO basics",
+      "SEO fundamentals and page metadata",
       "Domain and hosting setup guidance",
-      "Optional care plan — $39/mo",
+      "3 months of defined post-launch maintenance",
       "Timeline agreed after scoping",
     ],
   },
@@ -155,33 +155,33 @@ export const PRICING_TIERS = [
     id: "business",
     name: "Business",
     tagline: "For local businesses that want to win online",
-    price: "$2,900",
-    priceRange: "$1,900 – $4,500",
+    price: "₹22,000",
+    priceRange: "₹18,000–₹25,000",
     highlighted: true,
     specs: [
       "Up to 7 pages, custom designed",
-      "Booking, contact, and map",
-      "Copy polish that sells",
-      "Google-ready SEO",
-      "Speed + mobile optimization",
-      "Optional post-launch care, scoped separately",
+      "Contact, map, and booking links",
+      "Content structure and copy polish within agreed scope",
+      "SEO fundamentals and page metadata",
+      "Speed and responsive-layout checks",
+      "3 months of defined post-launch maintenance",
       "Timeline agreed after scoping",
     ],
   },
   {
     id: "custom",
     name: "Custom",
-    tagline: "E-commerce, booking systems, brands, and more",
-    price: "$6,500",
-    priceRange: "$4,500 – $25,000+",
+    tagline: "E-commerce, booking systems, and custom requirements",
+    price: "Custom quote",
+    priceRange: "₹25,000+",
     highlighted: false,
     specs: [
-      "Online store or custom features",
-      "Brand identity & logo (add-on)",
-      "Photo or video add-ons",
-      "Priority support",
-      "Monthly care plan",
-      "Custom timeline",
+      "Online store or custom features, defined in the proposal",
+      "Booking/order integrations scoped and quoted separately",
+      "Brand identity, logo, photo, or video add-ons if required",
+      "3 months of defined post-launch maintenance",
+      "Custom timeline based on requirements",
+      "Ongoing care after the included period quoted separately",
     ],
   },
 ] as const;
@@ -191,31 +191,31 @@ export const FAQ_ITEMS = [
     id: "q1",
     question: "Do I need to know anything technical?",
     answer:
-      "No. You don't write code, buy hosting, or touch servers — we handle everything from domain to launch. You provide your photos, your services or menu, and your story; we do the rest.",
+      "No. You don't need to manage servers. We'll guide you through setup and make clear which domain, hosting, paid tools, or third-party fees are separate. You provide approved photos, service or menu details, and business information; we'll agree who handles the remaining content.",
   },
   {
     id: "q2",
     question: "How long does a website take?",
     answer:
-      "Most sites go live in 1–3 weeks. Personal sites take about a week, business sites 2–3 weeks, and bigger builds like online stores or booking systems a little longer. You see progress the whole way — never a black box.",
+      "A straightforward personal site may take around a week and a small business site around 2–3 weeks, depending on scope, content, integrations, and feedback. We confirm the timeline in the proposal and keep you updated as work progresses.",
   },
   {
     id: "q3",
     question: "How much does it cost?",
     answer:
-      "It depends on what you need. Personal websites start around $699, business websites from $1,900, and custom builds from $4,500 and are quoted individually. Every project starts with a free call. We’ll confirm the agreed scope, price, timeline, and any third-party costs before work begins.",
+      "Our indicative India pricing is ₹12,000–₹18,000 for a personal website, ₹18,000–₹25,000 for a small business website, and ₹25,000+ for custom requirements. These are starting ranges, not a fixed quote. Domain, hosting, paid tools, and third-party costs are separate unless the proposal explicitly includes them.",
   },
   {
     id: "q4",
     question: "What do I need to provide?",
     answer:
-      "Photos of your business, your services or menu, your story, and any branding you already have. No professional photos? We'll guide you on taking great ones with your phone — or we can shoot it for you.",
+      "Photos of your business, your services or menu, your story, and any branding you already have. If you need professional photography or video, we can discuss whether a separately scoped add-on is suitable for your project.",
   },
   {
     id: "q5",
     question: "What happens after launch?",
     answer:
-      "Optional care plans can cover updates, tweaks, backups, and support after launch. We'll agree on the scope and monthly cost up front, so you know what's covered and what would be quoted separately.",
+      "Our packages include three months of defined post-launch maintenance, with the exact coverage written into your proposal. New features, redesigns, third-party fees, and support after that period are quoted separately unless agreed otherwise.",
   },
   {
     id: "q6",
