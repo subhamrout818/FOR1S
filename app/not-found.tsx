@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 text-center">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 text-center">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 h-[42vw] max-h-[440px] w-[42vw] max-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/[0.14] blur-[110px]"
@@ -37,6 +37,6 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
