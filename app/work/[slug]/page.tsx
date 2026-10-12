@@ -24,10 +24,10 @@ export async function generateMetadata({
     return { title: "Work — FOR1S" };
   }
   return {
-    title: `${project.name} — ${project.industry} website by FOR1S`,
+    title: `${project.name} concept website — FOR1S`,
     description: project.summary,
     openGraph: {
-      title: `${project.name} — FOR1S`,
+      title: `${project.name} concept — FOR1S`,
       description: project.summary,
     },
     alternates: { canonical: `/work/${project.slug}` },
@@ -59,6 +59,10 @@ export default async function WorkDetailPage({
       <h1 className="font-display text-fluid-xl font-bold uppercase leading-[0.98] tracking-tightest text-foreground">
         {project.name}
       </h1>
+
+      <p className="mt-4 inline-flex rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-accent">
+        Concept project · illustrative scope
+      </p>
 
       <p className="mt-5 flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-widest text-muted">
         <span>{project.year}</span>
@@ -114,7 +118,7 @@ export default async function WorkDetailPage({
       <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="rounded-2xl border border-hairline bg-surface/60 p-7">
           <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            Services
+            Capabilities explored
           </p>
           <ul className="mt-4 flex flex-col gap-3">
             {project.services.map((service) => (
@@ -130,18 +134,18 @@ export default async function WorkDetailPage({
         </div>
         <div className="rounded-2xl border border-hairline bg-surface/60 p-7">
           <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            At a glance
+            Concept scope
           </p>
           <dl className="mt-4 flex flex-col gap-4">
             {project.highlights.map((h) => (
               <div
                 key={h.label}
-                className="flex items-center justify-between border-b border-hairline pb-3"
+                className="flex items-center justify-between gap-4 border-b border-hairline pb-3"
               >
                 <dt className="text-xs uppercase tracking-widest text-muted">
                   {h.label}
                 </dt>
-                <dd className="font-mono text-sm text-foreground">
+                <dd className="text-right font-mono text-sm text-foreground">
                   {h.value}
                 </dd>
               </div>
