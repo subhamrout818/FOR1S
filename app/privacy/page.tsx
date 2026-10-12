@@ -45,19 +45,20 @@ export default function PrivacyPage() {
       <h1 className="font-display text-fluid-lg font-bold uppercase tracking-tightest text-foreground">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-muted">Last updated: August 11, 2026</p>
+      <p className="mt-2 text-sm text-muted">Last updated: October 12, 2026</p>
 
       <div className="mt-12 space-y-8 text-sm leading-relaxed text-foreground/80">
         <p>
-          FOR1S (&ldquo;FOR1S&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or
-          &ldquo;our&rdquo;) respects your privacy and is committed to protecting the personal
-          information you provide to us. This Privacy Policy explains what information we
-          collect, how we use it, how we protect it, and your choices when using the FOR1S
-          website, client portal, and services.
+          FOR1S is a trade name used by Subham Rout, an individual operating from India
+          (“FOR1S,” “we,” “us,” or “our”). This Privacy Policy explains how the individual
+          operating FOR1S collects, uses, stores, shares, and protects personal information
+          through the FOR1S website, client portal, and services.
         </p>
         <p>
-          By using FOR1S, you acknowledge that you have read and understood this Privacy
-          Policy.
+          This policy describes our general practices; the information actually processed
+          depends on the features you use and the third-party services enabled at the time.
+          Where applicable law requires a specific legal basis, notice, or consent, we will
+          rely on the applicable basis and provide any required notice or choice.
         </p>
 
         <section>
@@ -136,7 +137,13 @@ export default function PrivacyPage() {
               "Comply with applicable laws and legal obligations.",
             ]}
           />
-          <p className="mt-3">We do not sell your personal information.</p>
+          <p className="mt-3">
+            We do not sell personal information. We use information only for the purposes
+            described here or purposes otherwise disclosed to you and permitted by applicable
+            law. Where applicable, processing may be necessary to provide a requested
+            service, meet a legal obligation, protect security, or pursue a legitimate
+            operational purpose; where consent is required, we will request it.
+          </p>
         </section>
 
         <section>
@@ -156,8 +163,13 @@ export default function PrivacyPage() {
             ]}
           />
           <p className="mt-3">
-            Some cookies are essential to the operation of the website and may not be
-            disabled without affecting certain functionality.
+            Essential cookies may be required for login, security, and core site functions.
+            Browser settings may let you block some cookies, but doing so can break features.
+            If non-essential analytics, advertising, or embedded third-party technologies are
+            enabled, this policy should be updated to identify them and explain the available
+            consent or preference controls. We will obtain consent where applicable law
+            requires it. We do not intend this section to imply that any optional tracking
+            technology is active unless it is actually enabled.
           </p>
         </section>
 
@@ -181,8 +193,18 @@ export default function PrivacyPage() {
             ]}
           />
           <p className="mt-3">
-            We only provide information to third parties where reasonably necessary for the
-            relevant service or purpose.
+            Depending on the features in use, service providers may process information on
+            our behalf for hosting and deployment, database and storage, authentication,
+            email delivery, security, error monitoring, or analytics. These providers are
+            permitted to use information as needed to deliver their services and subject to
+            applicable contractual and legal restrictions. The specific providers and their
+            data locations can change; you may contact us to ask which providers are used for
+            a particular feature.
+          </p>
+          <p className="mt-3">
+            We do not knowingly enable a provider to use personal information for its own
+            unrelated advertising purposes. We may disclose information where required by law
+            or where reasonably necessary to protect rights, safety, and security.
           </p>
           <p className="mt-3">
             We may also disclose information where required by law, legal process, court
@@ -198,8 +220,12 @@ export default function PrivacyPage() {
             providers and infrastructure providers.
           </p>
           <p className="mt-3">
-            These third parties may have their own privacy policies and terms. FOR1S is not
-            responsible for the independent privacy practices of third-party services.
+            Third-party services may process information in countries other than your own and
+            are governed by their own terms and privacy notices. We remain responsible for
+            describing our own collection and use accurately and will take steps required by
+            applicable law when engaging service providers or arranging international
+            transfers. Links or details for a provider may be supplied on request where
+            appropriate.
           </p>
         </section>
 
@@ -216,28 +242,36 @@ export default function PrivacyPage() {
             input validation, and other reasonable security controls.
           </p>
           <p className="mt-3">
-            However, no internet service or electronic storage system can be guaranteed to be
-            completely secure.
+            Security controls are reviewed and applied according to the systems and features
+            actually in use; no internet service or electronic storage system can be
+            guaranteed to be completely secure. If a personal-data incident occurs, we will
+            assess it and notify affected people or authorities where and when required by
+            applicable law.
           </p>
         </section>
 
         <section>
           <H2>7. Data Retention</H2>
-          <p>We retain personal information only for as long as reasonably necessary to:</p>
+          <p>
+            We retain personal information only for as long as reasonably necessary for the
+            purpose for which it was collected, taking account of legal requirements,
+            security, dispute resolution, and legitimate business records. Our retention
+            criteria are:
+          </p>
           <List
             items={[
-              "Provide our services.",
-              "Maintain user accounts.",
-              "Manage projects.",
-              "Respond to support requests.",
-              "Prevent fraud and abuse.",
-              "Resolve disputes.",
-              "Comply with legal obligations.",
+              "Account and profile data: while the account remains active and for a reasonable period after closure to handle security, recovery, disputes, or legal obligations.",
+              "Project records, briefs, approvals, invoices, and business correspondence: for the period needed to perform the engagement and maintain appropriate tax, accounting, contractual, and dispute records.",
+              "Support tickets and communications: while needed to resolve the request and maintain a reasonable support and security history.",
+              "Security, access, and error logs: for the period needed to investigate abuse, maintain service security, and diagnose reliability issues.",
+              "Backups: until overwritten or deleted through the normal backup lifecycle, subject to security and recovery requirements.",
             ]}
           />
           <p className="mt-3">
-            When information is no longer reasonably required, we may delete or anonymize it,
-            subject to applicable legal and operational requirements.
+            These are retention criteria, not a promise that every record is deleted on the
+            same day. Where practicable, we will delete or anonymize information when it is
+            no longer needed, and restrict access to records retained for legal, security, or
+            backup purposes.
           </p>
         </section>
 
@@ -257,10 +291,20 @@ export default function PrivacyPage() {
             ]}
           />
           <p className="mt-3">
-            To make a privacy request, contact us using the details below.
+            To submit a request, email us from the address associated with your account where
+            possible and describe the information or action you are requesting. We may ask
+            for reasonable information to verify your identity and clarify the scope of the
+            request. We aim to respond within the period required by applicable law; if no
+            specific period applies, we will respond within a reasonable time.
           </p>
           <p className="mt-3">
-            We may need to verify your identity before fulfilling certain requests.
+            You may also request account closure or deletion. We will delete or de-identify
+            eligible personal information, subject to information we must retain for legal,
+            accounting, security, dispute-resolution, or backup purposes. Closing an account
+            does not automatically remove records we are legally required or otherwise
+            permitted to retain. If you believe your request has not been handled properly,
+            you may raise a complaint with the competent data-protection or other authority
+            available under the law that applies to you.
           </p>
         </section>
 
@@ -284,8 +328,10 @@ export default function PrivacyPage() {
             residence.
           </p>
           <p className="mt-3">
-            Where applicable, we will take reasonable steps to ensure such processing is
-            carried out in accordance with applicable data protection requirements.
+            Where a transfer is subject to legal safeguards, we will take the steps required
+            by applicable law. You may contact us for information about relevant processing
+            locations or transfer safeguards, to the extent that information is available
+            and may lawfully be disclosed.
           </p>
         </section>
 
@@ -303,9 +349,9 @@ export default function PrivacyPage() {
 
         <section>
           <H2>12. Contact and Support</H2>
-          <p>For privacy questions, concerns, or requests:</p>
+          <p>For privacy questions, concerns, access, correction, or deletion requests:</p>
           <p className="mt-3">
-            FOR1S
+            Operated by Subham Rout, an individual based in India, under the trade name FOR1S.
             <br />
             Email: <EmailLink />
           </p>
