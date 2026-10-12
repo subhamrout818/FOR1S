@@ -143,9 +143,7 @@ export default function RootLayout({
             <Preloader />
             <GrainOverlay />
             <ScrollSpine />
-            <RouteChrome>
-              <main>{children}</main>
-            </RouteChrome>
+            <RouteChrome>{children}</RouteChrome>
           </Providers>
         </AuthProvider>
 
