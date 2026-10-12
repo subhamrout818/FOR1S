@@ -32,7 +32,7 @@ export default function Pricing() {
             Three ways to work with us.
           </SplitReveal>
           <p className="mt-4 text-sm text-muted">
-            Indicative pricing for India-based projects.
+            Founding client pricing — limited time.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function Pricing() {
                       className="pointer-events-none absolute -inset-x-6 -top-24 h-40 rotate-6 bg-gradient-to-b from-white/[0.08] to-transparent"
                     />
                     <span className="absolute right-6 top-6 rounded-full border border-accent/40 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-accent">
-                      Best fit for local businesses
+                      Most recommended
                     </span>
                   </>
                 )}
@@ -107,7 +107,7 @@ export default function Pricing() {
         </div>
 
         <p className="mt-10 text-center text-xs text-muted">
-          Indicative INR ranges. Domain, hosting, paid tools, and third-party fees are separate unless the proposal says otherwise. Every project starts with a free discovery call.
+          Custom scope available. Every project starts with a free discovery call.
         </p>
       </div>
     </section>
