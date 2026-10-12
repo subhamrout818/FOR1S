@@ -41,7 +41,7 @@ function List({ items }: { items: string[] }) {
 
 export default function PrivacyPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-28 lg:py-36">
+    <div className="mx-auto max-w-3xl px-6 py-28 lg:py-36">
       <h1 className="font-display text-fluid-lg font-bold uppercase tracking-tightest text-foreground">
         Privacy Policy
       </h1>
@@ -319,6 +319,6 @@ export default function PrivacyPage() {
           </p>
         </section>
       </div>
-    </main>
+    </div>
   );
 }
