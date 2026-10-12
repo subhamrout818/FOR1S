@@ -100,10 +100,10 @@ export default function TeamSection() {
               key={member.id}
               data={member}
               index={index}
-              isActive={false}
+              isActive={activeId === member.id}
               setActiveId={setActiveId}
               isMobile={isMobile}
-              isAnyActive={false}
+              isAnyActive={activeId !== null}
             />
           ))}
         </div>
@@ -187,7 +187,8 @@ function TeamRow({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: isDimmed ? 0.3 : 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      onMouseEnter={() => !isMobile && setActiveId(data.id)}
+      // Photo hover is disabled until professional portraits are ready.
+      onMouseEnter={() => !isMobile && setActiveId(null)}
       onMouseLeave={() => !isMobile && setActiveId(null)}
       onClick={() => router.push(`/team/${data.slug}`)}
       data-cursor="view"
