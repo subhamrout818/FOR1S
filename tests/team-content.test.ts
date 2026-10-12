@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { MEMBERS, } from "../lib/members";
+import { MEMBERS } from "../lib/members";
 import { PRICING_TIERS } from "../lib/data";
 
 describe("public team and pricing content", () => {
