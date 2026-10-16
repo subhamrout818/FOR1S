@@ -54,6 +54,9 @@ export default function AdminOverviewPage() {
         <p className="mt-2 text-sm text-muted">
           Revenue, deadlines and everything that needs you today.
         </p>
+        <Link href="/admin/analytics" className="mt-4 inline-flex text-xs uppercase tracking-widest text-accent transition-colors hover:text-foreground">
+          View site conversion analytics →
+        </Link>
       </div>
 
       {loading && !data && (
