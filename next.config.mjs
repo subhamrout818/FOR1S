@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-// Pragmatic CSP: Next.js hydration + GSAP/framer-motion rely on inline
-// scripts/styles, so 'unsafe-inline' stays for now. The meaningful wins over
+// Pragmatic CSP: Next.js hydration still needs inline scripts/styles, so
+// 'unsafe-inline' remains until nonce-based CSP is tested with the motion stack.
+// 'unsafe-eval' is limited to development tooling; production omits it. The meaningful wins over
 // no CSP: only one external script origin (Cloudflare Turnstile, for the
 // CAPTCHA), no framing, restricted exfiltration
 // (connect-src 'self'), and base-uri/form-action locked down. Sessions are
@@ -15,7 +16,7 @@ const r2ConnectSource =
 
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+  "script-src 'self' 'unsafe-inline'" + (process.env.NODE_ENV !== "production" ? " 'unsafe-eval'" : "") + " https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
