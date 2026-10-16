@@ -24,7 +24,7 @@ let tableReady: Promise<void> | null = null;
 function ensureAnalyticsTable(): Promise<void> {
   if (!tableReady) {
     tableReady = (async () => {
-      await prisma.$executeRawUnsafe(\`
+      await prisma.$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS "SiteAnalyticsEvent" (
           "id" TEXT PRIMARY KEY,
           "name" TEXT NOT NULL,
@@ -32,7 +32,7 @@ function ensureAnalyticsTable(): Promise<void> {
           "metadata" JSONB NOT NULL DEFAULT '{}'::jsonb,
           "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
         )
-      \`);
+      `);
       await prisma.$executeRawUnsafe(
         'CREATE INDEX IF NOT EXISTS "SiteAnalyticsEvent_createdAt_idx" ON "SiteAnalyticsEvent" ("createdAt")'
       );
@@ -57,18 +57,18 @@ export async function GET(req: Request) {
   try {
     await ensureAnalyticsTable();
     const counts = await prisma.$queryRawUnsafe<Array<{ name: string; count: number }>>(
-      \`SELECT "name", COUNT(*)::int AS "count"
+      `SELECT "name", COUNT(*)::int AS "count"
        FROM "SiteAnalyticsEvent"
        WHERE "createdAt" >= CURRENT_TIMESTAMP - INTERVAL '30 days'
-       GROUP BY "name" ORDER BY "name"\`
+       GROUP BY "name" ORDER BY "name"`
     );
     const recentEvents = await prisma.$queryRawUnsafe<Array<{
       id: string; name: string; path: string; metadata: Record<string, string>; createdAt: Date;
     }>>(
-      \`SELECT "id", "name", "path", "metadata", "createdAt"
+      `SELECT "id", "name", "path", "metadata", "createdAt"
        FROM "SiteAnalyticsEvent"
        WHERE "createdAt" >= CURRENT_TIMESTAMP - INTERVAL '30 days'
-       ORDER BY "createdAt" DESC LIMIT 50\`
+       ORDER BY "createdAt" DESC LIMIT 50`
     );
     return NextResponse.json({ success: true, windowDays: 30, counts, recentEvents });
   } catch {
@@ -80,7 +80,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const rate = await consumeRateLimit(
-      \`analytics:\${clientIp(req)}\`,
+      `analytics:${clientIp(req)}`,
       120,
       60_000
     );
