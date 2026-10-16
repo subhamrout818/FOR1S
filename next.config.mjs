@@ -6,8 +6,8 @@
 // no CSP: only one external script origin (Cloudflare Turnstile, for the
 // CAPTCHA), no framing, restricted exfiltration
 // (connect-src 'self'), and base-uri/form-action locked down. Sessions are
-// also httpOnly-cookie-based now, so even a script injection can't lift the
-// token from localStorage.
+// also httpOnly-cookie-based now, so client-side JavaScript cannot read the
+// session token directly.
 const r2AccountId = process.env.R2_ACCOUNT_ID;
 const r2ConnectSource =
   r2AccountId && /^[a-f0-9]{32}$/.test(r2AccountId)
