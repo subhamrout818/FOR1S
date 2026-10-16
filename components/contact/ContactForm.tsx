@@ -178,7 +178,8 @@ export default function ContactForm() {
       const json = await res.json();
 
       if (json.success) {
-        trackAnalyticsEvent("contact_form_success");
+        // The honeypot intentionally returns a fake success to bots; do not count it as a lead.
+        if (json.id !== "ok") trackAnalyticsEvent("contact_form_success");
         setStatus("success");
       } else if (json.errors) {
         const flat: Record<string, string> = {};
