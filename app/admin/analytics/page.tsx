@@ -87,7 +87,7 @@ export default function SiteAnalyticsPage() {
                   <div key={event.id} className="grid gap-2 px-5 py-4 sm:grid-cols-[1fr_1fr_auto] sm:items-center">
                     <div>
                       <p className="text-sm font-medium text-foreground">{event.name.replaceAll("_", " ")}</p>
-                      <p className="mt-1 text-xs text-muted">{event.path}{event.metadata?.project ? \` · \${event.metadata.project}\` : ""}{event.metadata?.tier ? \` · \${event.metadata.tier}\` : ""}</p>
+                      <p className="mt-1 text-xs text-muted">{event.path}{event.metadata?.project ? ` · ${event.metadata.project}` : ""}{event.metadata?.tier ? ` · ${event.metadata.tier}` : ""}</p>
                     </div>
                     <span className="text-xs text-muted">{new Date(event.createdAt).toLocaleString()}</span>
                     <span className="font-mono text-[10px] uppercase tracking-widest text-muted">Recorded</span>
