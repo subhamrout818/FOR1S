@@ -1,8 +1,7 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   motion,
-  useMotionValue,
   // useSpring, // Restore when professional team portraits are ready.
   // AnimatePresence, // Restore when professional team portraits are ready.
 } from 'framer-motion';
@@ -37,11 +36,6 @@ const TEAM: TeamMember[] = MEMBERS.map((member, index) => ({
 export default function TeamSection() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Mouse position resources (Global for the floating card)
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
 
   // Photo-hover animation kept for later restoration:
   // const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
@@ -56,18 +50,9 @@ export default function TeamSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isMobile) return;
-    // Offset the cursor card so it doesn't block the text
-    mouseX.set(e.clientX + 20);
-    mouseY.set(e.clientY + 20);
-  };
-
   return (
     <div
       id="members"
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
       className="relative min-h-screen w-full cursor-default bg-neutral-950 px-6 py-24 text-neutral-200 md:px-12"
     >
       {/* Background Ambience */}
