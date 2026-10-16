@@ -11,6 +11,7 @@ import ActionPanel from "@/components/ui/ActionPanel";
 import { CONTACT } from "@/lib/contact";
 import { PRICING_TIERS } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 export default function Pricing() {
   const [activeCard, setActiveCard] = useState<string | null>(null);
@@ -86,9 +87,10 @@ export default function Pricing() {
                   size="md"
                   cursorText="Go"
                   className="mt-10 w-full"
-                  onClick={() =>
-                    setActiveCard(activeCard === tier.id ? null : tier.id)
-                  }
+                  onClick={() => {
+                    trackAnalyticsEvent("pricing_tier_select", { tier: tier.id });
+                    setActiveCard(activeCard === tier.id ? null : tier.id);
+                  }}
                 >
                   Get started
                 </MagneticButton>

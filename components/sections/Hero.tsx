@@ -7,6 +7,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { scrollToHash } from "@/lib/utils";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -224,13 +225,19 @@ export default function Hero() {
             <MagneticButton
               size="lg"
               cursorText="Go"
-              onClick={() => scrollToHash("#final-cta")}
+              onClick={() => {
+                trackAnalyticsEvent("hero_cta_click");
+                scrollToHash("#final-cta");
+              }}
             >
               Book a call
             </MagneticButton>
             <button
               data-cursor="hover"
-              onClick={() => scrollToHash("#work")}
+              onClick={() => {
+                trackAnalyticsEvent("hero_cta_click");
+                scrollToHash("#work");
+              }}
               className="text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground"
             >
               See our work ↓

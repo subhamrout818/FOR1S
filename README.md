@@ -202,9 +202,9 @@ The platform in this repo also ships:
 
 | | | |
 | :-- | :-- | :-- |
-| **Subham Rout** | Founder & Full-stack | [@subhamrout818](https://github.com/subhamrout818) |
-| **Sidhi Samantaray** | Co-founder & Marketing | |
-| **Tanuj Joshi** | Co-founder & IT | |
+| **Subham Rout** | Founder · Full-Stack Development | [@subhamrout818](https://github.com/subhamrout818) |
+| **Tanuj Joshi** | Co-Founder · IT | |
+| **Sidhi Samantaray** | Co-Founder · Marketing | |
 
 <img src="./assets/readme/divider.svg" alt="" width="100%">
 

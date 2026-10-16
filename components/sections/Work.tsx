@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import SectionLabel from "@/components/ui/SectionLabel";
@@ -5,6 +7,7 @@ import SplitReveal from "@/components/ui/SplitReveal";
 import RevealMask from "@/components/ui/RevealMask";
 import BrowserMock from "@/components/ui/BrowserMock";
 import { CASE_STUDIES } from "@/lib/work";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 export default function Work() {
   return (
@@ -35,6 +38,7 @@ export default function Work() {
             <RevealMask key={project.slug} delay={i * 0.08} y={28}>
               <Link
                 href={`/work/${project.slug}`}
+                onClick={() => trackAnalyticsEvent("portfolio_project_open", { project: project.slug })}
                 data-cursor="view"
                 data-cursor-text="Open"
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-hairline bg-surface/60 transition-colors duration-500 hover:border-accent/40"
