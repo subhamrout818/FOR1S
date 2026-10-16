@@ -2,12 +2,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
+  // useMotionValue,
+  // useSpring,
+  // AnimatePresence,
 } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import Image from 'next/image';
+// import Image from 'next/image'; // Re-enable when professional portraits are ready.
 import { useRouter } from 'next/navigation';
 import SectionLabel from "@/components/ui/SectionLabel";
 import { MEMBERS } from "@/lib/members";
@@ -39,14 +39,13 @@ export default function TeamSection() {
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Mouse position resources (Global for the floating card)
+  /* Photo-preview motion values retained for later re-enable when professional portraits are ready:
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-
-  // Smooth physics for the floating card
   const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
   const cursorX = useSpring(mouseX, springConfig);
   const cursorY = useSpring(mouseY, springConfig);
+  */
 
   // Detect mobile for conditional rendering logic
   useEffect(() => {
@@ -56,18 +55,18 @@ export default function TeamSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  /* Photo-preview pointer handler retained for later re-enable:
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isMobile) return;
-    // Offset the cursor card so it doesn't block the text
     mouseX.set(e.clientX + 20);
     mouseY.set(e.clientY + 20);
   };
+  */
 
   return (
     <div
       id="members"
       ref={containerRef}
-      onMouseMove={handleMouseMove}
       className="relative min-h-screen w-full cursor-default bg-neutral-950 px-6 py-24 text-neutral-200 md:px-12"
     >
       {/* Background Ambience */}
@@ -109,7 +108,8 @@ export default function TeamSection() {
         </div>
       </div>
 
-      {/* DESKTOP ONLY: Global Floating Cursor Image */}
+      {/* Disabled until professional team portraits are available. Original preview implementation retained:
+      {/* DESKTOP ONLY: Global Floating Cursor Image * /}
       {!isMobile && (
         <motion.div
           style={{ x: cursorX, y: cursorY }}
@@ -155,6 +155,7 @@ export default function TeamSection() {
           </AnimatePresence>
         </motion.div>
       )}
+      */}
     </div>
   );
 }
