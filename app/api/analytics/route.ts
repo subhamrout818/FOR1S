@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAuth } from "@/lib/portal";
 import {
   consumeRateLimit,
   clientIp,
@@ -44,6 +45,36 @@ function ensureAnalyticsTable(): Promise<void> {
     });
   }
   return tableReady;
+}
+
+
+export async function GET(req: Request) {
+  const user = await requireAuth(req);
+  if (!user || user.role !== "admin") {
+    return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    await ensureAnalyticsTable();
+    const counts = await prisma.$queryRawUnsafe<Array<{ name: string; count: number }>>(
+      \`SELECT "name", COUNT(*)::int AS "count"
+       FROM "SiteAnalyticsEvent"
+       WHERE "createdAt" >= CURRENT_TIMESTAMP - INTERVAL '30 days'
+       GROUP BY "name" ORDER BY "name"\`
+    );
+    const recentEvents = await prisma.$queryRawUnsafe<Array<{
+      id: string; name: string; path: string; metadata: Record<string, string>; createdAt: Date;
+    }>>(
+      \`SELECT "id", "name", "path", "metadata", "createdAt"
+       FROM "SiteAnalyticsEvent"
+       WHERE "createdAt" >= CURRENT_TIMESTAMP - INTERVAL '30 days'
+       ORDER BY "createdAt" DESC LIMIT 50\`
+    );
+    return NextResponse.json({ success: true, windowDays: 30, counts, recentEvents });
+  } catch {
+    console.error("site analytics report could not be loaded");
+    return NextResponse.json({ success: false, message: "Analytics unavailable" }, { status: 503 });
+  }
 }
 
 export async function POST(req: Request) {
