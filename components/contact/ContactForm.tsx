@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { Check, ChevronDown, Loader2, Send } from "lucide-react";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 
 /* ------------------------------------------------------------------ */
 /*  Form field primitives (labels programmatically tied to controls)   */
@@ -139,6 +140,13 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [general, setGeneral] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [formStarted, setFormStarted] = useState(false);
+
+  const handleFormFocus = () => {
+    if (formStarted) return;
+    setFormStarted(true);
+    trackAnalyticsEvent("contact_form_start");
+  };
 
   const set = (key: keyof typeof form) => (value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -150,11 +158,13 @@ export default function ContactForm() {
 
     if (form.message.trim().length < 10) {
       setErrors({ message: "Message must be at least 10 characters." });
+      trackAnalyticsEvent("contact_form_error");
       return;
     }
 
     if (TURNSTILE_ON && !captcha) {
       setGeneral("Please wait a moment while we finish a quick security check, then send again.");
+      trackAnalyticsEvent("contact_form_error");
       return;
     }
 
@@ -168,19 +178,23 @@ export default function ContactForm() {
       const json = await res.json();
 
       if (json.success) {
+        trackAnalyticsEvent("contact_form_success");
         setStatus("success");
       } else if (json.errors) {
         const flat: Record<string, string> = {};
         for (const [k, v] of Object.entries(json.errors)) {
           flat[k] = Array.isArray(v) ? (v[0] as string) : String(v);
         }
+        trackAnalyticsEvent("contact_form_error");
         setErrors(flat);
         setStatus("idle");
       } else {
+        trackAnalyticsEvent("contact_form_error");
         setGeneral(json.message || "Something went wrong. Please try again.");
         setStatus("idle");
       }
     } catch {
+      trackAnalyticsEvent("contact_form_error");
       setGeneral("Network error. Please try again.");
       setStatus("idle");
     } finally {
@@ -222,6 +236,7 @@ export default function ContactForm() {
               data-cursor="hover"
               onClick={() => {
                 setStatus("idle");
+                setFormStarted(false);
                 setForm({
                   name: "",
                   email: "",
@@ -243,6 +258,7 @@ export default function ContactForm() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onSubmit={handleSubmit}
+            onFocusCapture={handleFormFocus}
             className="flex flex-col gap-5 rounded-2xl border border-hairline bg-background/60 p-7 lg:p-9"
           >
             <p className="text-xs font-medium uppercase tracking-widest text-muted">
