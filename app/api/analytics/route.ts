@@ -93,6 +93,9 @@ export async function POST(req: Request) {
       !EVENT_NAMES.has(body.name) ||
       typeof body.path !== "string" ||
       !body.path.startsWith("/") ||
+      body.path.startsWith("//") ||
+      body.path.includes("?") ||
+      body.path.includes("#") ||
       body.path.length > 160
     ) {
       return NextResponse.json({ success: false }, { status: 400 });
