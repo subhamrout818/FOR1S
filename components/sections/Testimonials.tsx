@@ -35,7 +35,7 @@ export default function Testimonials() {
           {CASE_STUDIES.map((project, index) => (
             <RevealMask key={project.slug} delay={index * 0.06} y={18}>
               <Link
-                href={\`/work/\${project.slug}\`}
+                href={`/work/${project.slug}`}
                 className="group flex h-full flex-col rounded-2xl border border-hairline bg-surface/50 p-6 transition-colors hover:border-accent/40"
               >
                 <div className="flex items-center justify-between gap-4">
