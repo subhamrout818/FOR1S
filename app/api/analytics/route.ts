@@ -118,7 +118,7 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ success: true }, { status: 202 });
-  } catch (error) {
+  } catch {
     // Analytics is best-effort; never return internal DB details to clients.
     console.error("site analytics event could not be stored");
     return NextResponse.json({ success: false }, { status: 503 });
