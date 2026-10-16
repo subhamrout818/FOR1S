@@ -3,11 +3,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   motion,
   useMotionValue,
-  useSpring,
-  AnimatePresence,
+  // useSpring, // Restore when professional team portraits are ready.
+  // AnimatePresence, // Restore when professional team portraits are ready.
 } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import Image from 'next/image';
+// import Image from 'next/image'; // Preserved for the future team-photo hover preview.
 import { useRouter } from 'next/navigation';
 import SectionLabel from "@/components/ui/SectionLabel";
 import { MEMBERS } from "@/lib/members";
@@ -43,10 +43,10 @@ export default function TeamSection() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth physics for the floating card
-  const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  // Photo-hover animation kept for later restoration:
+  // const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
+  // const cursorX = useSpring(mouseX, springConfig);
+  // const cursorY = useSpring(mouseY, springConfig);
 
   // Detect mobile for conditional rendering logic
   useEffect(() => {
@@ -109,52 +109,55 @@ export default function TeamSection() {
         </div>
       </div>
 
-      {/* DESKTOP ONLY: Global Floating Cursor Image */}
-      {!isMobile && (
-        <motion.div
-          style={{ x: cursorX, y: cursorY }}
-          className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block"
-        >
-          <AnimatePresence mode="wait">
-            {activeId &&
-              (() => {
-                const member = TEAM.find((t) => t.id === activeId)!;
-                return (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="relative h-64 w-80 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
-                  >
-                    {member.image ? (
-                      <Image
-                        src={member.image}
-                        alt="Preview"
-                        fill
-                        sizes="(max-width: 768px) 100vw, 320px"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <span className="text-6xl font-light tracking-tight text-neutral-700">
-                          {member.name.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-[10px] uppercase tracking-widest text-white/80">Active</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })()}
-          </AnimatePresence>
-        </motion.div>
-      )}
+      {/* TEMPORARILY DISABLED: floating team-photo hover preview.
+          Restore this block once professional team portraits are ready.
+            DESKTOP ONLY: Global Floating Cursor Image
+            {!isMobile && (
+              <motion.div
+                style={{ x: cursorX, y: cursorY }}
+                className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block"
+              >
+                <AnimatePresence mode="wait">
+                  {activeId &&
+                    (() => {
+                      const member = TEAM.find((t) => t.id === activeId)!;
+                      return (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
+                          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                          exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
+                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                          className="relative h-64 w-80 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
+                        >
+                          {member.image ? (
+                            <Image
+                              src={member.image}
+                              alt="Preview"
+                              fill
+                              sizes="(max-width: 768px) 100vw, 320px"
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center">
+                              <span className="text-6xl font-light tracking-tight text-neutral-700">
+                                {member.name.charAt(0)}
+                              </span>
+                            </div>
+                          )}
+      
+                          <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                              <span className="text-[10px] uppercase tracking-widest text-white/80">Active</span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })()}
+                </AnimatePresence>
+              </motion.div>
+            )}
+      */}
     </div>
   );
 }
@@ -184,7 +187,8 @@ function TeamRow({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: isDimmed ? 0.3 : 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      onMouseEnter={() => !isMobile && setActiveId(data.id)}
+      // Photo hover is disabled until professional portraits are ready.
+      onMouseEnter={() => !isMobile && setActiveId(null)}
       onMouseLeave={() => !isMobile && setActiveId(null)}
       onClick={() => router.push(`/team/${data.slug}`)}
       data-cursor="view"
