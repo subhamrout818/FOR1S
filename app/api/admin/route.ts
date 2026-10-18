@@ -10,18 +10,21 @@ export async function GET(req: Request) {
 
   try {
     const workspace = await getAdminWorkspace();
-    // Keep the admin's project editor in sync with the same persisted end date
-    // that the client portal displays.
-    const endDates = await prisma.project.findMany({
-      select: { id: true, endsAt: true },
+    // Preserve nullable project value so the admin form can distinguish an
+    // unset price from an intentionally configured zero value.
+    const commercialFields = await prisma.project.findMany({
+      select: { id: true, value: true, endsAt: true },
     });
-    const endsAtById = new Map(endDates.map((project) => [project.id, project.endsAt]));
+    const commercialById = new Map(commercialFields.map((project) => [
+      project.id,
+      { value: project.value === null ? null : Number(project.value.toString()), endsAt: project.endsAt },
+    ]));
     return NextResponse.json({
       success: true,
       ...workspace,
       projects: workspace.projects.map((project) => ({
         ...project,
-        endsAt: endsAtById.get(project.id) ?? null,
+        ...commercialById.get(project.id),
       })),
     });
   } catch (error) {
