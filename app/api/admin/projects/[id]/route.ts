@@ -30,6 +30,10 @@ function parseDateInput(value: string | null | undefined): Date | null | undefin
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function validDateInput(value: string | null | undefined, parsed: Date | null | undefined): boolean {
+  return value == null || value === "" || (!!parsed && !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value);
+}
+
 function dateLabel(value: Date | null | undefined): string {
   return value ? value.toISOString().slice(0, 10) : "not set";
 }
@@ -67,10 +71,10 @@ export async function POST(
   const effectiveDeadline = nextDeadline !== undefined ? parsedNextDeadline : existing.nextDeadline;
   const effectiveEnd = endsAt !== undefined ? parsedEndsAt : existing.endsAt;
 
-  if (nextDeadline && !parsedNextDeadline) {
+  if (!validDateInput(nextDeadline, parsedNextDeadline)) {
     return NextResponse.json({ success: false, message: "Invalid next deadline." }, { status: 400 });
   }
-  if (endsAt && !parsedEndsAt) {
+  if (!validDateInput(endsAt, parsedEndsAt)) {
     return NextResponse.json({ success: false, message: "Invalid target end date." }, { status: 400 });
   }
   if (effectiveDeadline && effectiveEnd && effectiveEnd.getTime() < effectiveDeadline.getTime()) {
