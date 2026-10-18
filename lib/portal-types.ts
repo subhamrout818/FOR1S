@@ -197,6 +197,7 @@ export interface AdminWorkspace {
     progress: number;
     value: number;
     nextDeadline: string | null;
+    endsAt: string | null;
     client: { id: string; name: string; email: string };
     deliverablesCount: number;
     approvedCount: number;
