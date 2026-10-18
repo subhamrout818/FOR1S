@@ -8,7 +8,7 @@ import Badge from "@/components/portal/Badge";
 import PageHeader from "@/components/portal/PageHeader";
 import StatCard from "@/components/portal/StatCard";
 import Reveal from "@/components/portal/Reveal";
-import { formatMoney, formatDate, metaFor, PROJECT_STATUS } from "@/lib/portal-format";
+import { formatMoney, metaFor, PROJECT_STATUS } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 type ProjectDraft = {
