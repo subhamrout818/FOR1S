@@ -195,7 +195,7 @@ export interface AdminWorkspace {
     slug: string;
     status: string;
     progress: number;
-    value: number;
+    value: number | null;
     nextDeadline: string | null;
     endsAt: string | null;
     client: { id: string; name: string; email: string };
