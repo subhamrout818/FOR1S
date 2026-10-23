@@ -29,7 +29,7 @@ export default function TeamSection() {
   return (
     <section
       id="members"
-      className="relative min-h-screen w-full cursor-default bg-neutral-950 px-6 py-24 text-neutral-200 md:px-12"
+      className="relative w-full cursor-default bg-neutral-950 px-6 py-14 text-neutral-200 md:px-12 md:py-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[url('/noise.svg')] opacity-[0.05] mix-blend-overlay" />
@@ -40,10 +40,10 @@ export default function TeamSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+          className="mb-10 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between"
         >
           <div>
-            <SectionLabel scene="06" title="Team" className="mb-6" />
+            <SectionLabel scene="06" title="Team" className="mb-4" />
             <h2 className="text-4xl font-light tracking-tighter text-white sm:text-6xl md:text-8xl">
               Built <span className="text-neutral-600">By</span>
             </h2>
@@ -55,9 +55,9 @@ export default function TeamSection() {
         </motion.header>
 
         <div className="flex flex-col">
-          <TeamRow data={TEAM[0]!} index={0} />
+          <TeamRow data={TEAM[0]!} index={0} primary />
 
-          <div className="flex justify-end border-t border-neutral-900 py-5">
+          <div className="flex justify-end border-t border-neutral-900 py-3">
             <button
               type="button"
               aria-expanded={showOtherMembers}
@@ -87,9 +87,14 @@ export default function TeamSection() {
                 transition={{ duration: 0.35, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
-                {TEAM.slice(1).map((member, index) => (
-                  <TeamRow key={member.id} data={member} index={index + 1} />
-                ))}
+                <div className="pb-1 pt-1">
+                  <p className="mb-2 pl-4 font-mono text-[10px] uppercase tracking-[0.24em] text-neutral-600 md:pl-0">
+                    Team
+                  </p>
+                  {TEAM.slice(1).map((member, index) => (
+                    <TeamRow key={member.id} data={member} index={index + 1} />
+                  ))}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -99,37 +104,45 @@ export default function TeamSection() {
   );
 }
 
-function TeamRow({ data, index }: { data: TeamMember; index: number }) {
+function TeamRow({
+  data,
+  index,
+  primary = false,
+}: {
+  data: TeamMember;
+  index: number;
+  primary?: boolean;
+}) {
   const router = useRouter();
 
   return (
     <motion.button
       type="button"
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: 0.35, delay: index * 0.04 }}
       onClick={() => router.push(`/team/${data.slug}`)}
       data-cursor="view"
       data-cursor-text="View"
-      className="group relative w-full cursor-pointer border-t border-neutral-900 text-left transition-colors duration-500 last:border-b"
+      className={`group relative w-full cursor-pointer border-t border-neutral-900 text-left transition-colors duration-500 last:border-b ${primary ? "bg-white/[0.015]" : ""}`}
     >
-      <span className="relative z-10 flex flex-col py-8 md:flex-row md:items-center md:justify-between md:py-12">
-        <span className="flex items-baseline gap-6 pl-4 transition-transform duration-500 group-hover:translate-x-4 md:gap-12 md:pl-0">
-          <span className="font-mono text-xs text-neutral-600">
+      <span className={`relative z-10 flex flex-col md:flex-row md:items-center md:justify-between ${primary ? "py-6 md:py-9" : "py-4 md:py-5"}`}>
+        <span className={`flex items-baseline gap-4 pl-4 transition-transform duration-500 group-hover:translate-x-2 md:gap-8 md:pl-0 ${primary ? "" : "md:pl-3"}`}>
+          <span className={`font-mono ${primary ? "text-xs text-red-500/80" : "text-[10px] text-neutral-600"}`}>
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
+          <span className={`font-medium tracking-tight transition-colors duration-300 group-hover:text-white ${primary ? "text-3xl text-neutral-100 sm:text-4xl md:text-6xl" : "text-xl text-neutral-400 sm:text-2xl md:text-3xl"}`}>
             {data.name}
           </span>
         </span>
 
-        <span className="mt-4 flex items-center justify-between pl-12 pr-4 md:mt-0 md:justify-end md:gap-12 md:pl-0 md:pr-0">
-          <span className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-400 transition-colors group-hover:text-neutral-300">
+        <span className={`mt-2 flex items-center justify-between pl-10 pr-4 md:mt-0 md:justify-end md:gap-8 md:pl-0 md:pr-1 ${primary ? "md:pr-0" : "md:pr-1"}`}>
+          <span className={`font-medium uppercase tracking-[0.18em] transition-colors group-hover:text-neutral-200 ${primary ? "text-xs text-neutral-300 sm:text-sm" : "text-[10px] text-neutral-500 sm:text-xs"}`}>
             {data.role}
           </span>
-          <span className="text-white transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
-            <ArrowUpRight size={24} strokeWidth={1.5} />
+          <span className={`text-white/80 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 ${primary ? "" : "opacity-60"}`}>
+            <ArrowUpRight size={primary ? 24 : 18} strokeWidth={1.5} />
           </span>
         </span>
       </span>
