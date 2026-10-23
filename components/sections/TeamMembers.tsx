@@ -55,7 +55,7 @@ export default function TeamSection() {
         </motion.header>
 
         <div className="flex flex-col">
-          <TeamRow data={TEAM[0]} index={0} />
+          <TeamRow data={TEAM[0]!} index={0} />
 
           <div className="flex justify-end border-t border-neutral-900 py-5">
             <button
