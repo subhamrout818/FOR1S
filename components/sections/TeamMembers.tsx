@@ -1,17 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
-import {
-  motion,
-  // useSpring, // Restore when professional team portraits are ready.
-  // AnimatePresence, // Restore when professional team portraits are ready.
-} from 'framer-motion';
+
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-// import Image from 'next/image'; // Preserved for the future team-photo hover preview.
 import { useRouter } from 'next/navigation';
 import SectionLabel from "@/components/ui/SectionLabel";
 import { MEMBERS } from "@/lib/members";
-
-/* ---------- Types ---------- */
 
 interface TeamMember {
   id: string;
@@ -21,8 +15,6 @@ interface TeamMember {
   image?: string;
 }
 
-/* ---------- Data ---------- */
-
 const TEAM: TeamMember[] = MEMBERS.map((member, index) => ({
   id: String(index + 1).padStart(2, "0"),
   slug: member.slug,
@@ -31,38 +23,22 @@ const TEAM: TeamMember[] = MEMBERS.map((member, index) => ({
   image: member.image,
 }));
 
-/* ---------- Main Component ---------- */
-
 export default function TeamSection() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Photo-hover animation kept for later restoration:
-  // const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
-  // const cursorX = useSpring(mouseX, springConfig);
-  // const cursorY = useSpring(mouseY, springConfig);
-
-  // Detect mobile for conditional rendering logic
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const [showOtherMembers, setShowOtherMembers] = useState(false);
 
   return (
-    <div
+    <section
       id="members"
       className="relative min-h-screen w-full cursor-default bg-neutral-950 px-6 py-24 text-neutral-200 md:px-12"
     >
-      {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[url('/noise.svg')] opacity-[0.05] mix-blend-overlay" />
 
-      <div className="mx-auto max-w-6xl">
+      <div className="relative mx-auto max-w-6xl">
         <motion.header
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
@@ -72,140 +48,91 @@ export default function TeamSection() {
               Built <span className="text-neutral-600">By</span>
             </h2>
           </div>
-          <div className="h-px flex-1 bg-neutral-900 mx-8 hidden md:block" />
+          <div className="mx-8 hidden h-px flex-1 bg-neutral-900 md:block" />
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
             FOR1S Team
           </p>
         </motion.header>
 
-        {/* The List — each bar is a clickable link to the member's page */}
         <div className="flex flex-col">
-          {TEAM.map((member, index) => (
-            <TeamRow
-              key={member.id}
-              data={member}
-              index={index}
-              isActive={activeId === member.id}
-              setActiveId={setActiveId}
-              isMobile={isMobile}
-              isAnyActive={activeId !== null}
-            />
-          ))}
-        </div>
-      </div>
+          <TeamRow data={TEAM[0]} index={0} />
 
-      {/* TEMPORARILY DISABLED: floating team-photo hover preview.
-          Restore this block once professional team portraits are ready.
-            DESKTOP ONLY: Global Floating Cursor Image
-            {!isMobile && (
-              <motion.div
-                style={{ x: cursorX, y: cursorY }}
-                className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block"
+          <div className="flex justify-end border-t border-neutral-900 py-5">
+            <button
+              type="button"
+              aria-expanded={showOtherMembers}
+              aria-controls="other-team-members"
+              onClick={() => setShowOtherMembers((visible) => !visible)}
+              className="group inline-flex items-center gap-3 px-2 py-2 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 transition-colors hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-neutral-400"
+            >
+              <span>{showOtherMembers ? "Hide other members" : "Other members"}</span>
+              <motion.span
+                animate={{ rotate: showOtherMembers ? 45 : 0 }}
+                transition={{ duration: 0.25 }}
+                className="inline-flex"
               >
-                <AnimatePresence mode="wait">
-                  {activeId &&
-                    (() => {
-                      const member = TEAM.find((t) => t.id === activeId)!;
-                      return (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                          exit={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                          className="relative h-64 w-80 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 shadow-2xl"
-                        >
-                          {member.image ? (
-                            <Image
-                              src={member.image}
-                              alt="Preview"
-                              fill
-                              sizes="(max-width: 768px) 100vw, 320px"
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center">
-                              <span className="text-6xl font-light tracking-tight text-neutral-700">
-                                {member.name.charAt(0)}
-                              </span>
-                            </div>
-                          )}
-      
-                          <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
-                            <div className="flex items-center gap-2">
-                              <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                              <span className="text-[10px] uppercase tracking-widest text-white/80">Active</span>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })()}
-                </AnimatePresence>
+                <ArrowUpRight size={17} strokeWidth={1.5} />
+              </motion.span>
+            </button>
+          </div>
+
+          <AnimatePresence initial={false}>
+            {showOtherMembers && (
+              <motion.div
+                id="other-team-members"
+                key="other-team-members"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                {TEAM.slice(1).map((member, index) => (
+                  <TeamRow key={member.id} data={member} index={index + 1} />
+                ))}
               </motion.div>
             )}
-      */}
-    </div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
   );
 }
 
-/* ---------- Row Component (whole bar is clickable) ---------- */
-
-function TeamRow({
-  data,
-  index,
-  isActive,
-  setActiveId,
-  isMobile,
-  isAnyActive,
-}: {
-  data: TeamMember;
-  index: number;
-  isActive: boolean;
-  setActiveId: (id: string | null) => void;
-  isMobile: boolean;
-  isAnyActive: boolean;
-}) {
-  const isDimmed = isAnyActive && !isActive;
+function TeamRow({ data, index }: { data: TeamMember; index: number }) {
   const router = useRouter();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: isDimmed ? 0.3 : 1, y: 0 }}
+    <motion.button
+      type="button"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      // Photo hover is disabled until professional portraits are ready.
-      onMouseEnter={() => !isMobile && setActiveId(null)}
-      onMouseLeave={() => !isMobile && setActiveId(null)}
       onClick={() => router.push(`/team/${data.slug}`)}
       data-cursor="view"
       data-cursor-text="View"
-      className="group relative cursor-pointer border-t border-neutral-900 transition-colors duration-500 last:border-b"
+      className="group relative w-full cursor-pointer border-t border-neutral-900 text-left transition-colors duration-500 last:border-b"
     >
-      <div className="relative z-10 flex flex-col py-8 md:flex-row md:items-center md:justify-between md:py-12">
-        {/* Name & Index Section */}
-        <div className="flex items-baseline gap-6 pl-4 md:gap-12 md:pl-0 transition-transform duration-500 group-hover:translate-x-4">
+      <span className="relative z-10 flex flex-col py-8 md:flex-row md:items-center md:justify-between md:py-12">
+        <span className="flex items-baseline gap-6 pl-4 transition-transform duration-500 group-hover:translate-x-4 md:gap-12 md:pl-0">
           <span className="font-mono text-xs text-neutral-600">
-            0{index + 1}
+            {String(index + 1).padStart(2, "0")}
           </span>
-          <h2 className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
+          <span className="text-3xl font-medium tracking-tight text-neutral-400 transition-colors duration-300 group-hover:text-white md:text-6xl">
             {data.name}
-          </h2>
-        </div>
+          </span>
+        </span>
 
-        {/* Role & Icon Section */}
-        <div className="mt-4 flex items-center justify-between pl-12 pr-4 md:mt-0 md:justify-end md:gap-12 md:pl-0 md:pr-0">
+        <span className="mt-4 flex items-center justify-between pl-12 pr-4 md:mt-0 md:justify-end md:gap-12 md:pl-0 md:pr-0">
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-400 transition-colors group-hover:text-neutral-300">
             {data.role}
           </span>
-
-          {/* Desktop Arrow */}
-          <motion.div
-            animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
-            className="hidden text-white md:block"
-          >
-            <ArrowUpRight size={28} strokeWidth={1.5} />
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
+          <span className="text-white transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
+            <ArrowUpRight size={24} strokeWidth={1.5} />
+          </span>
+        </span>
+      </span>
+    </motion.button>
   );
 }
