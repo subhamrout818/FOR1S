@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/portal";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: Request) {
+export async function GET() {
   const user = await requireAuth(req);
   if (!user || user.role !== "admin") {
     return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
