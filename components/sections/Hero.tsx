@@ -14,7 +14,7 @@ const fadeUp: Variants = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.9 + i * 0.12, duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+    transition: { delay: 0.12 + i * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] },
   }),
 };
 
@@ -26,14 +26,9 @@ export default function Hero() {
   const scrollGroupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handler = () => setReady(true);
-    window.addEventListener("FOR1S:loaded", handler);
-    // Safety net in case the preloader event never fires for any reason.
-    const fallback = setTimeout(() => setReady(true), 4000);
-    return () => {
-      window.removeEventListener("FOR1S:loaded", handler);
-      clearTimeout(fallback);
-    };
+    // The homepage no longer waits behind a preloader. Reveal the headline
+    // immediately so visitors can understand the offer as soon as it renders.
+    setReady(true);
   }, []);
 
   /* Scroll-out — as the user scrolls away the whole hero group drifts up and
