@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import PageHeader from "@/components/portal/PageHeader";
 
 const EVENTS = [
   "hero_cta_click",
@@ -53,12 +54,7 @@ export default function SiteAnalyticsPage() {
 
   return (
     <div>
-      <div className="mb-10">
-        <Link href="/admin" className="text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent">← Admin overview</Link>
-        <p className="mt-6 font-mono text-xs uppercase tracking-widest text-accent">FOR1S STUDIO</p>
-        <h1 className="mt-2 font-display text-3xl font-semibold uppercase tracking-tightest text-foreground md:text-5xl">Site analytics</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted">Conversion events from the last 30 days. No names, email addresses, form contents, or raw IP addresses are collected here.</p>
-      </div>
+      <PageHeader eyebrow="Analytics" title="Site analytics" sub="Conversion events from the last 30 days. No names, email addresses, form contents, or raw IP addresses are collected here." actions={<Link href="/admin" className="inline-flex items-center rounded-xl border border-hairline px-4 py-2.5 text-sm text-foreground/75 transition-colors hover:border-white/20 hover:text-foreground">Admin overview</Link>} />
 
       {loading && <p className="py-10 text-sm text-muted">Loading events…</p>}
       {error && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">{error}</p>}
@@ -67,7 +63,7 @@ export default function SiteAnalyticsPage() {
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {EVENTS.map((name) => (
-              <div key={name} className="rounded-2xl border border-hairline bg-surface/50 p-6">
+              <div key={name} className="rounded-2xl border border-hairline/80 bg-white/[0.025] p-6 transition-colors hover:bg-white/[0.04] sm:p-7">
                 <p className="font-mono text-[11px] uppercase tracking-widest text-muted">{name.replaceAll("_", " ")}</p>
                 <p className="mt-4 font-display text-4xl font-semibold text-foreground">{countFor(name).toLocaleString()}</p>
                 <p className="mt-1 text-xs text-muted">events · last 30 days</p>

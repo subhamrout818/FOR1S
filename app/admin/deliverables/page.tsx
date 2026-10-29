@@ -22,13 +22,16 @@ export default function AdminDeliverablesPage() {
   const { isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState("");
 
   const changeStatus = useCallback(
     async (id: string, status: string) => {
       setSavingId(id);
+      setActionError("");
       const res = await portalAction(`/api/admin/deliverables/${id}`, { status });
       setSavingId(null);
       if (res.ok) reload();
+      else setActionError(res.message || "Couldn't update this deliverable. Try again.");
     },
     [reload]
   );
@@ -73,6 +76,8 @@ export default function AdminDeliverablesPage() {
         />
       </div>
 
+      {actionError && <p role="alert" className="mb-5 rounded-xl border border-red-500/25 bg-red-500/[0.06] px-4 py-3 text-sm text-red-300">{actionError}</p>}
+
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
           <Loader2 size={28} className="animate-spin text-accent" />
@@ -101,9 +106,9 @@ export default function AdminDeliverablesPage() {
 
       {data && deliverables.length > 0 && (
         <Reveal delay={0.08}>
-          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px] text-left text-sm">
+          <div className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.02] transition-colors duration-300 hover:border-white/15">
+            <div className="overflow-x-auto p-2 sm:p-3">
+              <table className="w-full min-w-[760px] text-left text-sm [&_td]:py-4 [&_td]:px-4 [&_th]:px-4 [&_th]:py-4">
                 <thead>
                   <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
                     <th className="px-6 py-3 font-medium">Deliverable</th>

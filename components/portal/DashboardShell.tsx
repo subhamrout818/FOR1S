@@ -114,7 +114,7 @@ export default function DashboardShell({
       {/* Brand */}
       <Link
         href="/"
-        className="flex items-center gap-2.5 px-6 py-6"
+        className="flex items-center gap-3 px-6 py-7"
         data-cursor="hover"
       >
         <Logo width={22} height={22} />
@@ -124,7 +124,7 @@ export default function DashboardShell({
       </Link>
 
       {/* Nav */}
-      <nav className="mt-2 flex-1 space-y-1 overflow-y-auto px-3">
+      <nav className="mt-4 flex-1 space-y-1.5 overflow-y-auto px-4">
         {nav.map((item) => {
           const active = isActive(pathname, item.href);
           return (
@@ -133,9 +133,9 @@ export default function DashboardShell({
               href={item.href}
               data-cursor="hover"
               className={cn(
-                "group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm transition-all duration-300",
+                "group flex items-center gap-3.5 rounded-xl px-4 py-3 text-[13px] transition-all duration-200",
                 active
-                  ? "bg-white/6 text-foreground"
+                  ? "bg-white/[0.07] text-foreground ring-1 ring-inset ring-white/[0.04]"
                   : "text-muted hover:bg-white/[0.03] hover:text-foreground"
               )}
             >
@@ -157,7 +157,7 @@ export default function DashboardShell({
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-hairline p-4">
+      <div className="border-t border-hairline p-5">
         <Link
           href="/"
           data-cursor="hover"
@@ -203,7 +203,7 @@ export default function DashboardShell({
       </header>
 
       {/* ============ Sidebar (desktop) ============ */}
-      <aside className="fixed bottom-0 left-0 top-16 z-30 hidden w-60 border-r border-hairline bg-background/40 lg:block">
+      <aside className="fixed bottom-0 left-0 top-16 z-30 hidden w-[272px] border-r border-hairline/80 bg-background/70 backdrop-blur-xl lg:block">
         {sidebar}
       </aside>
 
@@ -224,7 +224,7 @@ export default function DashboardShell({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 380, damping: 34 }}
-              className="fixed bottom-0 left-0 top-16 z-40 w-72 border-r border-hairline bg-background lg:hidden"
+              className="fixed bottom-0 left-0 top-16 z-40 w-[288px] border-r border-hairline bg-background lg:hidden"
             >
               {sidebar}
             </motion.aside>
@@ -233,8 +233,8 @@ export default function DashboardShell({
       </AnimatePresence>
 
       {/* ============ Main ============ */}
-      <main className="pt-16 lg:pl-60">
-        <div className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-8">{children}</div>
+      <main className={cn("pt-16", variant === "admin" ? "lg:pl-[272px]" : "lg:pl-60")}>
+        <div className="mx-auto w-full max-w-[1600px] px-4 pb-24 pt-8 sm:px-8 sm:pt-10 xl:px-12">{children}</div>
       </main>
     </div>
   );

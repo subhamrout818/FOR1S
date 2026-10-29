@@ -57,10 +57,10 @@ export default function AdminClientsPage() {
       )}
 
       {data && clients.length > 0 && (
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {clients.map((c, i) => (
             <Reveal key={c.id} delay={(i % 6) * 0.05}>
-              <div className="flex h-full flex-col rounded-2xl border border-hairline bg-background/60 p-5 transition-colors hover:border-accent/30">
+              <div className="flex h-full flex-col rounded-2xl border border-hairline/80 bg-white/[0.025] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/15 hover:bg-white/[0.04] sm:p-7">
                 <div className="flex items-center gap-3">
                   <Avatar src={c.profileImage} size={44} className="border border-hairline" />
                   <div className="min-w-0">
@@ -73,8 +73,8 @@ export default function AdminClientsPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                  <div className="rounded-xl bg-white/[0.03] px-2 py-2">
+                <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+                  <div className="rounded-xl bg-black/15 px-3 py-3">
                     <p className="font-display text-sm font-semibold text-foreground">
                       {c.projectsCount}
                     </p>
@@ -94,7 +94,7 @@ export default function AdminClientsPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-hairline pt-4 text-xs">
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-hairline/80 pt-5 text-xs">
                   <span className="text-muted">
                     Value {formatMoney(c.totalValue)} · Outstanding{" "}
                     <span className={c.outstanding > 0 ? "text-accent" : "text-muted"}>

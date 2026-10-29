@@ -28,7 +28,7 @@ export default function AdminPaymentsPage() {
         sub="Revenue from completed invoices."
       />
 
-      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           label="Payments"
           value={payments.length}
@@ -84,8 +84,8 @@ export default function AdminPaymentsPage() {
 
       {data && payments.length > 0 && (
         <Reveal delay={0.08}>
-          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
-            <div className="overflow-x-auto">
+          <div className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.02] transition-colors duration-300 hover:border-white/15">
+            <div className="overflow-x-auto p-2 sm:p-3">
               <table className="w-full min-w-[640px] text-left text-sm">
                 <thead>
                   <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
