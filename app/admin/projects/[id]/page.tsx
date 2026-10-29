@@ -48,7 +48,7 @@ export default function AdminProjectDetailPage() {
           <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted">Project overview</p>
-              <div className="mt-3 flex flex-wrap items-center gap-3"><Badge meta={metaFor(PROJECT_STATUS, project.status)} /><span className="text-xs text-muted">Created {formatDate(project.createdAt)}</span></div>
+              <div className="mt-3 flex flex-wrap items-center gap-3"><Badge meta={metaFor(PROJECT_STATUS, project.status)} /></div>
               <div className="mt-5 flex items-end gap-3"><span className="text-4xl font-semibold tracking-tight text-foreground">{project.progress}%</span><span className="pb-1 text-xs text-muted">complete</span></div>
               <div className="mt-3 h-1.5 w-full max-w-md overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-accent transition-all duration-700" style={{ width: `${Math.min(100, Math.max(0, project.progress))}%` }} /></div>
             </div>
