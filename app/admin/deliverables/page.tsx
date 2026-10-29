@@ -102,8 +102,8 @@ export default function AdminDeliverablesPage() {
       {data && deliverables.length > 0 && (
         <Reveal delay={0.08}>
           <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px] text-left text-sm">
+            <div className="overflow-x-auto p-2 sm:p-3">
+              <table className="w-full min-w-[760px] text-left text-sm [&_td]:py-4 [&_td]:px-4 [&_th]:px-4 [&_th]:py-4">
                 <thead>
                   <tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
                     <th className="px-6 py-3 font-medium">Deliverable</th>
