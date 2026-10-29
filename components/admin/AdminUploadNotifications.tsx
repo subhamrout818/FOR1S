@@ -35,8 +35,9 @@ export default function AdminUploadNotifications() {
           return;
         }
         const fresh = payload.events.filter((event) => !seen.current?.has(event.id) && event.actor?.role !== "admin");
-        if (fresh.length) {
-          setNotice(fresh[0]);
+        const newest = fresh[0];
+        if (newest) {
+          setNotice(newest);
           setUnread((count) => Math.min(count + fresh.length, 99));
         }
         seen.current = new Set([...seen.current, ...ids]);
