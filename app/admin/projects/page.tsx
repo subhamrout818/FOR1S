@@ -111,13 +111,13 @@ export default function AdminProjectsPage() {
       <PageHeader eyebrow="Projects" title="All projects" sub="Manage project value, delivery dates, progress and status." />
       <AdminUploadNotifications />
 
-      <div className="mb-6">
+      <div className="mb-2">
         {!showNew ? (
           <button data-cursor="hover" onClick={() => setShowNew(true)} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-dim">
             <Plus size={15} /> New project
           </button>
         ) : (
-          <div className="rounded-2xl border border-hairline bg-background/60 p-5">
+          <div className="rounded-2xl border border-hairline/80 bg-white/[0.025] p-6 sm:p-8">
             <p className="text-xs font-medium uppercase tracking-widest text-foreground">New project</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               <label className="text-xs text-muted">Client
@@ -150,7 +150,7 @@ export default function AdminProjectsPage() {
         )}
       </div>
 
-      <div className="mb-8 grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Total projects" value={projects.length} icon={<FolderKanban size={16} />} delay={0} />
         <StatCard label="Active" value={active} icon={<Rocket size={16} />} delay={0.06} />
         <StatCard label="In delivery" value={inDelivery} icon={<Layers size={16} />} accent delay={0.12} />
@@ -172,7 +172,7 @@ export default function AdminProjectsPage() {
                   {projects.map((p) => {
                     const draft = drafts[p.id] ?? {};
                     const dirty = !!drafts[p.id] && Object.keys(draft).length > 0;
-                    return <Fragment key={p.id}><tr className="group border-b border-hairline/60 align-top transition-colors hover:bg-accent/[0.04]">
+                    return <Fragment key={p.id}><section className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.025] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]">\n                      <div className="flex flex-col gap-5 border-b border-hairline/70 p-5 sm:p-6 xl:flex-row xl:items-start xl:justify-between">\n                        <div className="min-w-0 flex-1">
                       <td className="px-4 py-4"><Link href={`/admin/projects/${p.id}`} className="group/project inline-flex items-center gap-2 font-medium text-foreground transition-colors hover:text-accent"><span>{p.name}</span><span className="text-[10px] text-accent opacity-0 transition-all group-hover/project:translate-x-0.5 group-hover/project:opacity-100">↗</span></Link><p className="mt-1 text-xs text-muted">{p.client.name}</p><Link href={`/admin/projects/${p.id}`} className="mt-2 inline-flex items-center gap-1 rounded-full border border-hairline px-2.5 py-1 text-[10px] text-muted transition-colors hover:border-accent/40 hover:text-foreground">Open project <span aria-hidden="true">→</span></Link></td>
                       <td className="px-4 py-4"><div className="flex flex-col items-start gap-2"><Badge meta={metaFor(PROJECT_STATUS, p.status)} /><select aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></div></td>
                       <td className="px-4 py-4"><div className="flex items-center gap-2"><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={draft.progress ?? p.progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="w-24 accent-[#AA1515]" /><span className="w-10 font-mono text-xs text-muted">{draft.progress ?? p.progress}%</span></div></td>
