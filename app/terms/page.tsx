@@ -236,7 +236,7 @@ export default function TermsPage() {
         <section>
           <H2>9. Portfolio and Showcase Rights</H2>
           <p>
-            FOR1S will seek the client's written permission before displaying client work,
+            FOR1S will seek the client&apos;s written permission before displaying client work,
             project screenshots, designs, name, logo, or project details in a portfolio,
             case study, website, social media, presentation, or other promotional material.
             Permission may specify what may be shown and when it may be published.

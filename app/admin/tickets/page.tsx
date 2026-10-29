@@ -15,13 +15,16 @@ export default function AdminTicketsPage() {
   const { isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState("");
 
   const setStatus = useCallback(
     async (id: string, status: string) => {
       setSavingId(id);
+      setActionError("");
       const res = await portalAction(`/api/admin/tickets/${id}`, { status });
       setSavingId(null);
       if (res.ok) reload();
+      else setActionError(res.message || "Couldn't update this ticket. Try again.");
     },
     [reload]
   );
@@ -62,6 +65,8 @@ export default function AdminTicketsPage() {
         />
       </div>
 
+      {actionError && <p role="alert" className="mb-5 rounded-xl border border-red-500/25 bg-red-500/[0.06] px-4 py-3 text-sm text-red-300">{actionError}</p>}
+
       {loading && !data && (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
           <Loader2 size={28} className="animate-spin text-accent" />
@@ -98,7 +103,7 @@ export default function AdminTicketsPage() {
             {tickets.map((t, i) => (
               <div
                 key={t.id}
-                className={`flex flex-col gap-4 p-6 transition-colors duration-300 hover:bg-accent/[0.03] ${
+                className={`flex flex-col gap-4 p-6 transition-colors duration-300 hover:bg-accent/[0.03] sm:p-7 ${
                   i > 0 ? "border-t border-hairline/60" : ""
                 }`}
               >

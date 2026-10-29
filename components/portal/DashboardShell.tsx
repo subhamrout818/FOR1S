@@ -233,8 +233,8 @@ export default function DashboardShell({
       </AnimatePresence>
 
       {/* ============ Main ============ */}
-      <main className="pt-16 lg:pl-60">
-        <div className="mx-auto max-w-6xl px-4 pb-24 pt-10 sm:px-8">{children}</div>
+      <main className={cn("pt-16", variant === "admin" ? "lg:pl-[272px]" : "lg:pl-60")}>
+        <div className="mx-auto w-full max-w-[1600px] px-4 pb-24 pt-8 sm:px-8 sm:pt-10 xl:px-12">{children}</div>
       </main>
     </div>
   );

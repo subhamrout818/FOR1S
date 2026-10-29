@@ -54,9 +54,9 @@ export default function StatCard({
   return (
     <Reveal delay={delay} className={cn("h-full", className)}>
       <div ref={ref} className="h-full">
-        <GlowCard className="flex h-full flex-col justify-between gap-4 p-5">
+        <GlowCard className="flex h-full min-h-[142px] flex-col justify-between gap-5 border-white/[0.07] bg-white/[0.025] p-6 transition-colors hover:bg-white/[0.04] sm:p-7">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[10px] font-medium uppercase tracking-widest text-muted">
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
               {label}
             </p>
             {icon && (
