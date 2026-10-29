@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, ArrowDownToLine, Check, ChevronDown, Eye, ImagePlus, Images, Loader2, RefreshCw, Trash2, X } from "lucide-react";
+import { AlertTriangle, ArrowDownToLine, ChevronDown, Eye, ImagePlus, Images, Loader2, RefreshCw, Trash2, X } from "lucide-react";
 
 type UploadFile = {
   id: string;
@@ -138,7 +139,7 @@ export default function AdminProjectUploads({ projectId, projectName }: { projec
                   >
                     <button type="button" onClick={() => setPreview(file)} className="relative block aspect-[4/3] w-full overflow-hidden bg-white/[0.025] text-left" aria-label={`Preview ${file.name}`}>
                       {/* Authenticated endpoint keeps the private R2 object out of public URLs. */}
-                      <img src={`/api/admin/files/${encodeURIComponent(file.id)}`} alt={file.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.045]" />
+                      <Image src={`/api/admin/files/${encodeURIComponent(file.id)}`} alt={file.name} width={640} height={480} unoptimized className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.045]" />
                       <span className="absolute inset-0 flex items-center justify-center bg-black/0 text-white opacity-0 transition-all duration-300 group-hover:bg-black/30 group-hover:opacity-100"><Eye size={20} /></span>
                     </button>
                     <div className="p-3">
@@ -185,7 +186,7 @@ export default function AdminProjectUploads({ projectId, projectName }: { projec
                 </div>
               </div>
               <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto p-3 sm:p-6">
-                <img src={`/api/admin/files/${encodeURIComponent(preview.id)}`} alt={preview.name} className="max-h-[72vh] max-w-full rounded-lg object-contain" />
+                <Image src={`/api/admin/files/${encodeURIComponent(preview.id)}`} alt={preview.name} width={1600} height={1200} unoptimized className="max-h-[72vh] max-w-full rounded-lg object-contain" />
               </div>
             </motion.div>
           </motion.div>
