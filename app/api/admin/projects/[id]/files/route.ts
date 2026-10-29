@@ -20,7 +20,7 @@ export async function GET(req: Request, context: { params: Promise<{ id: string 
     if (!project) return NextResponse.json({ success: false, message: "Project not found" }, { status: 404 });
 
     const files = await prisma.fileAsset.findMany({
-      where: { projectId, OR: [{ mimeType: { startsWith: "image/" } }, { kind: "image" }] },
+      where: { projectId, url: { startsWith: "r2://" }, OR: [{ mimeType: { startsWith: "image/" } }, { kind: "image" }] },
       orderBy: { createdAt: "desc" },
       select: {
         id: true, name: true, mimeType: true, size: true, kind: true, createdAt: true,
@@ -48,7 +48,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
   try {
     const file = await prisma.fileAsset.findFirst({
       where: { id: fileId, projectId },
-      select: { id: true, name: true, url: true, uploadedById: true },
+      select: { id: true, name: true, url: true },
     });
     if (!file) return NextResponse.json({ success: false, message: "File not found in this project" }, { status: 404 });
     if (!file.url.startsWith("r2://")) {
