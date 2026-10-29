@@ -8,9 +8,9 @@ describe("public team and pricing content", () => {
     assert.deepEqual(
       MEMBERS.map(({ name, role }) => ({ name, role })),
       [
-        { name: "Subham Rout", role: "Founder · Full-Stack Development" },
-        { name: "Tanuj Joshi", role: "Co-Founder · IT" },
-        { name: "Sidhi Samantaray", role: "Co-Founder · Marketing" },
+        { name: "Subham Rout", role: "CEO" },
+        { name: "Tanuj Joshi", role: "Co-Founder · Video Editor" },
+        { name: "Sidhi Samantaray", role: "Video Editor" },
       ]
     );
   });

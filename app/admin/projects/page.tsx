@@ -1,7 +1,10 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
+import Link from "next/link";
 import { Check, FolderKanban, Layers, Loader2, Plus, Rocket } from "lucide-react";
+import AdminProjectUploads from "@/components/admin/AdminProjectUploads";
+import AdminUploadNotifications from "@/components/admin/AdminUploadNotifications";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
@@ -106,6 +109,7 @@ export default function AdminProjectsPage() {
   return (
     <div>
       <PageHeader eyebrow="Projects" title="All projects" sub="Manage project value, delivery dates, progress and status." />
+      <AdminUploadNotifications />
 
       <div className="mb-6">
         {!showNew ? (
@@ -168,8 +172,8 @@ export default function AdminProjectsPage() {
                   {projects.map((p) => {
                     const draft = drafts[p.id] ?? {};
                     const dirty = !!drafts[p.id] && Object.keys(draft).length > 0;
-                    return <tr key={p.id} className="group border-b border-hairline/60 align-top transition-colors hover:bg-accent/[0.04]">
-                      <td className="px-4 py-4"><p className="font-medium text-foreground">{p.name}</p><p className="mt-1 text-xs text-muted">{p.client.name}</p></td>
+                    return <Fragment key={p.id}><tr className="group border-b border-hairline/60 align-top transition-colors hover:bg-accent/[0.04]">
+                      <td className="px-4 py-4"><Link href={`/admin/projects/${p.id}`} className="group/project inline-flex items-center gap-2 font-medium text-foreground transition-colors hover:text-accent"><span>{p.name}</span><span className="text-[10px] text-accent opacity-0 transition-all group-hover/project:translate-x-0.5 group-hover/project:opacity-100">↗</span></Link><p className="mt-1 text-xs text-muted">{p.client.name}</p><Link href={`/admin/projects/${p.id}`} className="mt-2 inline-flex items-center gap-1 rounded-full border border-hairline px-2.5 py-1 text-[10px] text-muted transition-colors hover:border-accent/40 hover:text-foreground">Open project <span aria-hidden="true">→</span></Link></td>
                       <td className="px-4 py-4"><div className="flex flex-col items-start gap-2"><Badge meta={metaFor(PROJECT_STATUS, p.status)} /><select aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></div></td>
                       <td className="px-4 py-4"><div className="flex items-center gap-2"><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={draft.progress ?? p.progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="w-24 accent-[#AA1515]" /><span className="w-10 font-mono text-xs text-muted">{draft.progress ?? p.progress}%</span></div></td>
                       <td className="px-4 py-4"><label className="sr-only" htmlFor={`value-${p.id}`}>Value for {p.name}</label><input id={`value-${p.id}`} type="number" min="0" max="9999999999" step="0.01" value={draft.value ?? String(p.value ?? "")} onChange={(e) => setDraft(p.id, { value: e.target.value })} placeholder="Not set" className={fieldClass} /><p className="mt-1 text-[10px] text-muted">{p.value ? formatMoney(p.value) : "Leave blank to unset"}</p></td>
@@ -177,7 +181,9 @@ export default function AdminProjectsPage() {
                       <td className="px-4 py-4"><label className="sr-only" htmlFor={`ends-${p.id}`}>Target end date for {p.name}</label><input id={`ends-${p.id}`} type="date" value={draft.endsAt ?? dateInputValue(p.endsAt)} min={(draft.nextDeadline ?? dateInputValue(p.nextDeadline)) || undefined} onChange={(e) => setDraft(p.id, { endsAt: e.target.value })} className={fieldClass} /><p className="mt-1 text-[10px] text-muted">Blank clears date</p></td>
                       <td className="px-4 py-4 font-mono text-xs text-muted">{p.approvedCount}/{p.deliverablesCount} approved</td>
                       <td className="px-4 py-4"><button data-cursor="hover" onClick={() => save(p.id)} disabled={!dirty || savingId === p.id} className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-dim disabled:cursor-not-allowed disabled:opacity-40">{savingId === p.id ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />} Save</button>{rowError?.id === p.id && <p className="mt-2 max-w-40 text-xs text-red-400">{rowError.message}</p>}</td>
-                    </tr>;
+                    </tr>
+                    <tr className="border-b border-hairline/60"><td colSpan={8} className="px-4 pb-4 pt-0"><AdminProjectUploads projectId={p.id} projectName={p.name} /></td></tr>
+                    </Fragment>;
                   })}
                 </tbody>
               </table>

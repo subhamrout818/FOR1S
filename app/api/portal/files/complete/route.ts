@@ -25,7 +25,11 @@ export async function POST(req: Request) {
   if (!response.ok) return NextResponse.json({success:false,message:"Uploaded image could not be verified"},{status:400});
   const bytes = new Uint8Array(await response.arrayBuffer());
   if (bytes.byteLength !== size || bytes.byteLength > MAX_IMAGE_BYTES || !matchesImageSignature(bytes,mimeType)) return NextResponse.json({success:false,message:"Image content or size is invalid"},{status:400});
-  const file = await prisma.fileAsset.create({data:{projectId,folderId,name,url:`r2://${key}`,mimeType,size:bytes.byteLength,kind:"image",uploadedById:user.id},select:{id:true,name:true,size:true,mimeType:true,createdAt:true}});
+  const file = await prisma.$transaction(async (tx) => {
+   const created = await tx.fileAsset.create({data:{projectId,folderId,name,url:`r2://${key}`,mimeType,size:bytes.byteLength,kind:"image",uploadedById:user.id},select:{id:true,name:true,size:true,mimeType:true,createdAt:true}});
+   await tx.activityEvent.create({data:{projectId,actorId:user.id,type:"upload",title:`New client upload: ${name}`,detail:`${name} · ${(bytes.byteLength / (1024 * 1024)).toFixed(1)} MB`}});
+   return created;
+  });
   return NextResponse.json({success:true,file});
  } catch (error) { console.error("R2 upload completion error:",error); return NextResponse.json({success:false,message:"Unable to finish upload"},{status:500}); }
 }
