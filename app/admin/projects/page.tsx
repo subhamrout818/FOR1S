@@ -36,7 +36,7 @@ function commercialPayload(draft: ProjectDraft) {
 }
 
 const fieldClass =
-  "w-full min-w-28 rounded-lg border border-hairline bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:border-accent focus:outline-none";
+  "w-full min-w-0 rounded-xl border border-hairline bg-background/70 px-3.5 py-3 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10";
 
 export default function AdminProjectsPage() {
   const { isLoading } = useAuth();
@@ -162,33 +162,31 @@ export default function AdminProjectsPage() {
 
       {data && projects.length > 0 && (
         <Reveal delay={0.08}>
-          <div className="overflow-hidden rounded-2xl border border-hairline bg-background/60 transition-colors duration-500 hover:border-accent/25">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[1180px] text-left text-sm">
-                <thead><tr className="border-b border-hairline text-xs uppercase tracking-widest text-muted">
-                  <th className="px-4 py-3 font-medium">Project / Client</th><th className="px-4 py-3 font-medium">Status</th><th className="px-4 py-3 font-medium">Progress</th><th className="px-4 py-3 font-medium">Value (USD)</th><th className="px-4 py-3 font-medium">Next deadline</th><th className="px-4 py-3 font-medium">Target end</th><th className="px-4 py-3 font-medium">Deliverables</th><th className="px-4 py-3 font-medium">Save</th>
-                </tr></thead>
-                <tbody>
-                  {projects.map((p) => {
-                    const draft = drafts[p.id] ?? {};
-                    const dirty = !!drafts[p.id] && Object.keys(draft).length > 0;
-                    return <Fragment key={p.id}><section className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.025] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]">\n                      <div className="flex flex-col gap-5 border-b border-hairline/70 p-5 sm:p-6 xl:flex-row xl:items-start xl:justify-between">\n                        <div className="min-w-0 flex-1">
-                      <td className="px-4 py-4"><Link href={`/admin/projects/${p.id}`} className="group/project inline-flex items-center gap-2 font-medium text-foreground transition-colors hover:text-accent"><span>{p.name}</span><span className="text-[10px] text-accent opacity-0 transition-all group-hover/project:translate-x-0.5 group-hover/project:opacity-100">↗</span></Link><p className="mt-1 text-xs text-muted">{p.client.name}</p><Link href={`/admin/projects/${p.id}`} className="mt-2 inline-flex items-center gap-1 rounded-full border border-hairline px-2.5 py-1 text-[10px] text-muted transition-colors hover:border-accent/40 hover:text-foreground">Open project <span aria-hidden="true">→</span></Link></td>
-                      <td className="px-4 py-4"><div className="flex flex-col items-start gap-2"><Badge meta={metaFor(PROJECT_STATUS, p.status)} /><select aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></div></td>
-                      <td className="px-4 py-4"><div className="flex items-center gap-2"><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={draft.progress ?? p.progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="w-24 accent-[#AA1515]" /><span className="w-10 font-mono text-xs text-muted">{draft.progress ?? p.progress}%</span></div></td>
-                      <td className="px-4 py-4"><label className="sr-only" htmlFor={`value-${p.id}`}>Value for {p.name}</label><input id={`value-${p.id}`} type="number" min="0" max="9999999999" step="0.01" value={draft.value ?? String(p.value ?? "")} onChange={(e) => setDraft(p.id, { value: e.target.value })} placeholder="Not set" className={fieldClass} /><p className="mt-1 text-[10px] text-muted">{p.value ? formatMoney(p.value) : "Leave blank to unset"}</p></td>
-                      <td className="px-4 py-4"><label className="sr-only" htmlFor={`deadline-${p.id}`}>Next deadline for {p.name}</label><input id={`deadline-${p.id}`} type="date" value={draft.nextDeadline ?? dateInputValue(p.nextDeadline)} onChange={(e) => setDraft(p.id, { nextDeadline: e.target.value })} className={fieldClass} /><p className="mt-1 text-[10px] text-muted">Blank clears date</p></td>
-                      <td className="px-4 py-4"><label className="sr-only" htmlFor={`ends-${p.id}`}>Target end date for {p.name}</label><input id={`ends-${p.id}`} type="date" value={draft.endsAt ?? dateInputValue(p.endsAt)} min={(draft.nextDeadline ?? dateInputValue(p.nextDeadline)) || undefined} onChange={(e) => setDraft(p.id, { endsAt: e.target.value })} className={fieldClass} /><p className="mt-1 text-[10px] text-muted">Blank clears date</p></td>
-                      <td className="px-4 py-4 font-mono text-xs text-muted">{p.approvedCount}/{p.deliverablesCount} approved</td>
-                      <td className="px-4 py-4"><button data-cursor="hover" onClick={() => save(p.id)} disabled={!dirty || savingId === p.id} className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-dim disabled:cursor-not-allowed disabled:opacity-40">{savingId === p.id ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />} Save</button>{rowError?.id === p.id && <p className="mt-2 max-w-40 text-xs text-red-400">{rowError.message}</p>}</td>
-                    </tr>
-                    <tr className="border-b border-hairline/60"><td colSpan={8} className="px-4 pb-4 pt-0"><AdminProjectUploads projectId={p.id} projectName={p.name} /></td></tr>
-                    </Fragment>;
-                  })}
-                </tbody>
-              </table>
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div><h2 className="text-base font-semibold tracking-tight text-foreground">Your projects</h2><p className="mt-1 text-sm text-muted">Select a project to open its full workspace.</p></div>
+              <span className="rounded-full border border-hairline px-3 py-1.5 text-xs text-muted">{projects.length} engagements</span>
             </div>
-            <p className="border-t border-hairline px-4 py-3 text-xs text-muted">Changes are saved to the database and reflected in the client dashboard. Clear a date or value to remove it.</p>
+            <div className="grid gap-5">
+              {projects.map((p) => {
+                const draft = drafts[p.id] ?? {};
+                const dirty = !!drafts[p.id] && Object.keys(draft).length > 0;
+                const progress = draft.progress ?? p.progress;
+                return <article key={p.id} className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.025] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]">
+                  <div className="flex flex-col gap-5 border-b border-hairline/70 p-5 sm:p-7 xl:flex-row xl:items-start xl:justify-between">
+                    <div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-3"><Link href={`/admin/projects/${p.id}`} className="text-xl font-semibold tracking-tight text-foreground transition-colors hover:text-accent">{p.name}<span className="ml-2 text-sm text-accent">↗</span></Link><Badge meta={metaFor(PROJECT_STATUS, p.status)} /></div><p className="mt-2 text-sm text-muted">{p.client.name}</p><Link href={`/admin/projects/${p.id}`} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-hairline px-4 py-2.5 text-xs font-medium text-foreground/80 transition-colors hover:border-accent/40 hover:text-foreground">Open project workspace <span aria-hidden="true">→</span></Link></div>
+                    <div className="grid gap-4 sm:grid-cols-2 xl:w-[48%]"><label className="text-xs text-muted">Status<select aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass + " mt-2"}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></label><div><div className="flex items-center justify-between text-xs text-muted"><span>Progress</span><span className="font-mono text-foreground">{progress}%</span></div><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="mt-4 w-full accent-[#AA1515]" /><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-accent transition-all" style={{ width: `${progress}%` }} /></div></div></div>
+                  </div>
+                  <div className="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4 sm:p-7">
+                    <div className="rounded-xl bg-black/15 p-4"><p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Project value</p><p className="mt-2 text-lg font-semibold tracking-tight text-foreground">{p.value ? formatMoney(p.value) : "Not set"}</p><label className="mt-4 block text-xs text-muted" htmlFor={`value-${p.id}`}>Edit value (USD)</label><input id={`value-${p.id}`} type="number" min="0" max="9999999999" step="0.01" value={draft.value ?? String(p.value ?? "")} onChange={(e) => setDraft(p.id, { value: e.target.value })} placeholder="Not set" className={fieldClass + " mt-2"} /></div>
+                    <div className="rounded-xl bg-black/15 p-4"><p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Next deadline</p><p className="mt-2 text-sm font-medium text-foreground">{p.nextDeadline ? new Date(p.nextDeadline).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}) : "Not scheduled"}</p><label className="mt-4 block text-xs text-muted" htmlFor={`deadline-${p.id}`}>Edit deadline</label><input id={`deadline-${p.id}`} type="date" value={draft.nextDeadline ?? dateInputValue(p.nextDeadline)} onChange={(e) => setDraft(p.id, { nextDeadline: e.target.value })} className={fieldClass + " mt-2"} /></div>
+                    <div className="rounded-xl bg-black/15 p-4"><p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Target end</p><p className="mt-2 text-sm font-medium text-foreground">{p.endsAt ? new Date(p.endsAt).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}) : "Not scheduled"}</p><label className="mt-4 block text-xs text-muted" htmlFor={`ends-${p.id}`}>Edit target end</label><input id={`ends-${p.id}`} type="date" value={draft.endsAt ?? dateInputValue(p.endsAt)} min={(draft.nextDeadline ?? dateInputValue(p.nextDeadline)) || undefined} onChange={(e) => setDraft(p.id, { endsAt: e.target.value })} className={fieldClass + " mt-2"} /></div>
+                    <div className="rounded-xl bg-black/15 p-4"><p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Deliverables</p><p className="mt-2 text-lg font-semibold tracking-tight text-foreground">{p.approvedCount}<span className="text-sm font-normal text-muted"> / {p.deliverablesCount} approved</span></p><div className="mt-5 flex items-center justify-between gap-3"><span className="text-xs text-muted">{dirty ? "Unsaved changes" : "All changes saved"}</span><button data-cursor="hover" onClick={() => save(p.id)} disabled={!dirty || savingId === p.id} className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-accent-dim disabled:cursor-not-allowed disabled:opacity-40">{savingId === p.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />} Save</button></div>{rowError?.id === p.id && <p className="mt-2 text-xs text-red-400">{rowError.message}</p>}</div>
+                  </div>
+                  <div className="border-t border-hairline/70 px-5 py-4 sm:px-7"><AdminProjectUploads projectId={p.id} projectName={p.name} /></div>
+                </article>;
+              })}
+            </div><p className="px-1 py-2 text-xs text-muted">Changes save to the database and appear in the client dashboard. Clear a date or value to remove it.</p>
           </div>
         </Reveal>
       )}
