@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/privacy",
     "/terms",
+    "/dmca",
   ].map((path) => ({
     url: path === "" ? `${SITE_URL}/` : `${SITE_URL}${path}`,
     priority: path === "" ? 1 : 0.8,

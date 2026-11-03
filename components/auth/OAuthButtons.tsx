@@ -45,7 +45,14 @@ const buttonBase = cn(
 );
 
 /** Continue-with-Google / Continue-with-GitHub buttons (login + register). */
-export default function OAuthButtons({ mode }: { mode: "login" | "signup" }) {
+export default function OAuthButtons({
+  mode,
+  disabled = false,
+}: {
+  mode: "login" | "signup";
+  /** Blocks both buttons (e.g. until the age confirmation is ticked). */
+  disabled?: boolean;
+}) {
   const [pending, setPending] = useState<"google" | "github" | null>(null);
 
   const start = (provider: "google" | "github") => {
@@ -63,7 +70,7 @@ export default function OAuthButtons({ mode }: { mode: "login" | "signup" }) {
         type="button"
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
-        disabled={pending !== null}
+        disabled={disabled || pending !== null}
         onClick={() => start("google")}
         className={buttonBase}
       >
@@ -84,7 +91,7 @@ export default function OAuthButtons({ mode }: { mode: "login" | "signup" }) {
         type="button"
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
-        disabled={pending !== null}
+        disabled={disabled || pending !== null}
         onClick={() => start("github")}
         className={buttonBase}
       >

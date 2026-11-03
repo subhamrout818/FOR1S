@@ -242,6 +242,7 @@ export const FOOTER_LINKS = {
   legal: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
+    { label: "DMCA", href: "/dmca" },
   ],
   social: [
     { label: SOCIAL.instagram.label, href: SOCIAL.instagram.url },

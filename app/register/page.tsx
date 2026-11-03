@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
 import OAuthButtons from "@/components/auth/OAuthButtons";
+import { MIN_SIGNUP_AGE } from "@/lib/legal";
 import Turnstile, { TURNSTILE_ON } from "@/components/ui/Turnstile";
 
 const stagger = {
@@ -34,10 +35,16 @@ export default function RegisterPage() {
   const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
   const [captcha, setCaptcha] = useState<string | null>(null);
   const [captchaReset, setCaptchaReset] = useState(0);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!ageConfirmed) {
+      setError(`Please confirm you are ${MIN_SIGNUP_AGE} or older to create an account.`);
+      return;
+    }
 
     if (TURNSTILE_ON && !captcha) {
       setError("Please wait a moment while we finish a quick security check, then try again.");
@@ -45,7 +52,7 @@ export default function RegisterPage() {
     }
     setLoading(true);
 
-    const result = await signup(name, email, password, captcha ?? "");
+    const result = await signup(name, email, password, captcha ?? "", ageConfirmed);
     // Tokens are single-use — get a fresh one for any retry.
     setCaptcha(null);
     setCaptchaReset((n) => n + 1);
@@ -113,6 +120,46 @@ export default function RegisterPage() {
               </p>
             </motion.div>
 
+            {/* Age confirmation — gates both social and email signup */}
+            <motion.div
+              custom={1}
+              variants={stagger}
+              initial="initial"
+              animate="animate"
+              className="mb-5"
+            >
+              <label
+                htmlFor="age-confirm"
+                className="flex cursor-pointer items-start gap-3 text-sm text-foreground/80"
+              >
+                <input
+                  id="age-confirm"
+                  name="ageConfirmed"
+                  type="checkbox"
+                  checked={ageConfirmed}
+                  onChange={(e) => setAgeConfirmed(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#e63946]"
+                />
+                <span>
+                  I am {MIN_SIGNUP_AGE} or older and agree to the{" "}
+                  <Link
+                    href="/terms"
+                    className="text-foreground underline underline-offset-2 hover:text-accent"
+                  >
+                    Terms
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="text-foreground underline underline-offset-2 hover:text-accent"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </span>
+              </label>
+            </motion.div>
+
             {/* Social signup */}
             <motion.div
               custom={1}
@@ -120,7 +167,7 @@ export default function RegisterPage() {
               initial="initial"
               animate="animate"
             >
-              <OAuthButtons mode="signup" />
+              <OAuthButtons mode="signup" disabled={!ageConfirmed} />
             </motion.div>
 
             {/* Divider */}

@@ -44,7 +44,8 @@ interface AuthContextValue {
     name: string,
     email: string,
     password: string,
-    turnstileToken?: string
+    turnstileToken?: string,
+    ageConfirmed?: boolean
   ) => Promise<AuthResult>;
   logout: () => void;
   refreshUser: () => Promise<void>;
@@ -112,13 +113,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       name: string,
       email: string,
       password: string,
-      turnstileToken?: string
+      turnstileToken?: string,
+      ageConfirmed?: boolean
     ): Promise<AuthResult> => {
       try {
         const res = await fetch("/api/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password, turnstileToken: turnstileToken ?? "" }),
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            turnstileToken: turnstileToken ?? "",
+            ageConfirmed: ageConfirmed === true,
+          }),
         });
 
         const data = await res.json();

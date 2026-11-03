@@ -8,10 +8,15 @@ import {
 import { hashPassword, normalizeEmail, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
 import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
+import { MIN_SIGNUP_AGE } from "@/lib/legal";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const signupSchema = z.object({
+  // Age gate: the account holder must explicitly confirm the minimum age.
+  ageConfirmed: z.literal(true, {
+    error: `You must confirm you are ${MIN_SIGNUP_AGE} or older to create an account`,
+  }),
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.email("Invalid email address"),
   password: z
