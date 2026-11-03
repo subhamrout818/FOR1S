@@ -51,8 +51,12 @@ export async function proxy(req: NextRequest) {
 
 async function isTokenValid(token: string, secret: string): Promise<boolean> {
   try {
-    await jwtVerify(token, new TextEncoder().encode(secret));
-    return true;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret), {
+      algorithms: ["HS256"],
+    });
+    // Must mirror lib/auth.ts verifyToken: purpose-scoped tokens (verify,
+    // reset, oauth-state) share the secret but are never valid sessions.
+    return payload.purpose === undefined && typeof payload.userId === "string";
   } catch {
     return false;
   }

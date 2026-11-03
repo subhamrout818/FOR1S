@@ -48,7 +48,16 @@ export function signToken(
  */
 export function verifyToken(token: string): JwtPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as JwtPayload;
+    const payload = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as
+      | (JwtPayload & { purpose?: unknown })
+      | string;
+    // Session tokens never carry a `purpose` claim. Purpose-scoped tokens
+    // (email verify, password reset, OAuth state) are signed with the same
+    // secret, so without this check one could be replayed as a login session.
+    if (typeof payload !== "object" || payload === null) return null;
+    if (payload.purpose !== undefined) return null;
+    if (typeof payload.userId !== "string") return null;
+    return payload;
   } catch {
     return null;
   }
