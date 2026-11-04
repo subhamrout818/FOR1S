@@ -202,8 +202,6 @@ The platform in this repo also ships:
 
 | | | |
 | :-- | :-- | :-- |
-| | | |
-| :-- | :-- | :-- |
 | **Subham Rout** | CEO · Full-Stack Development | [@subhamrout818](https://github.com/subhamrout818) |
 | **Tanuj Joshi** | Co-Founder · Video Editor | |
 | **Haze** | Co-Founder | |
