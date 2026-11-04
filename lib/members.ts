@@ -22,9 +22,8 @@ export const MEMBERS: Member[] = [
     image: "/tanuj.jpg",
   },
   {
-    slug: "sidhi",
-    name: "Sidhi Samantaray",
-    role: "Video Editor",
-    image: "/Sidhi.jpeg",
+    slug: "haze",
+    name: "Haze",
+    role: "Co-Founder",
   },
 ];
