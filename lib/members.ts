@@ -13,7 +13,7 @@ export const MEMBERS: Member[] = [
     slug: "subham-rout",
     name: "Subham Rout",
     role: "CEO",
-    image: "/team/subham-rout.svg",
+    image: "/blurred.png",
   },
   {
     slug: "tanuj-joshi",
