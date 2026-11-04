@@ -13,7 +13,7 @@ export const MEMBERS: Member[] = [
     slug: "subham-rout",
     name: "Subham Rout",
     role: "CEO",
-    image: "/blurred.png",
+    image: "/team/subham-rout.svg",
   },
   {
     slug: "tanuj-joshi",
@@ -22,9 +22,9 @@ export const MEMBERS: Member[] = [
     image: "/tanuj.jpg",
   },
   {
-    slug: "sidhi",
-    name: "Sidhi Samantaray",
-    role: "Video Editor",
-    image: "/Sidhi.jpeg",
+    slug: "haze",
+    name: "Haze",
+    role: "Co-Founder",
+    image: "/team/haze.svg",
   },
 ];

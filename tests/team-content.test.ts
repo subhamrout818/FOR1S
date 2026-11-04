@@ -10,9 +10,15 @@ describe("public team and pricing content", () => {
       [
         { name: "Subham Rout", role: "CEO" },
         { name: "Tanuj Joshi", role: "Co-Founder · Video Editor" },
-        { name: "Sidhi Samantaray", role: "Video Editor" },
+        { name: "Haze", role: "Co-Founder" },
       ]
     );
+  });
+
+  it("does not require a team photo before one is provided", () => {
+    const haze = MEMBERS.find(({ slug }) => slug === "haze");
+    assert.ok(haze);
+    assert.equal(haze.image, undefined);
   });
 
   it("keeps public price display in dollars until pricing strategy is deliberately changed", () => {
