@@ -24,7 +24,7 @@ export default function AdminPaymentsPage() {
       <PageHeader
         eyebrow="Payments"
         title="Payments"
-        sub="All recorded completed payments. The table below shows the latest 50 records."
+        sub="The summary counts every completed payment. The table lists the latest 50 payment records, including non-completed statuses."
       />
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -92,6 +92,7 @@ export default function AdminPaymentsPage() {
                     <th className="px-6 py-3 font-medium">Client</th>
                     <th className="px-6 py-3 font-medium">Invoice</th>
                     <th className="px-6 py-3 font-medium">Method</th>
+                    <th className="px-6 py-3 font-medium">Status</th>
                     <th className="px-6 py-3 font-medium">Reference</th>
                     <th className="px-6 py-3 text-right font-medium">Amount</th>
                   </tr>
@@ -114,6 +115,9 @@ export default function AdminPaymentsPage() {
                       </td>
                       <td className="px-6 py-4 font-mono text-[11px] uppercase text-muted">
                         {p.method}
+                      </td>
+                      <td className="px-6 py-4 font-mono text-[10px] uppercase text-muted">
+                        {p.status}
                       </td>
                       <td className="px-6 py-4 font-mono text-xs text-muted">
                         {p.reference ?? "—"}
