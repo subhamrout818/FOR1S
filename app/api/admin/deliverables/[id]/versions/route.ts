@@ -50,6 +50,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           status: "in-review",
           mediaUrl: null,
           posterUrl: null,
+          mimeType: null,
           externalUrl: parsed.data.externalUrl,
           deliveredAt: null,
         },
