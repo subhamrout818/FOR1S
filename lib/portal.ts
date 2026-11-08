@@ -381,7 +381,8 @@ export async function getDeliverableDetail(deliverableId: string, userId: string
     kind: deliverable.kind,
     status: deliverable.status,
     description: deliverable.description,
-    mediaUrl: deliverable.mediaUrl,
+    mediaUrl: deliverable.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${deliverable.version}` : deliverable.mediaUrl,
+    mimeType: deliverable.mimeType,
     posterUrl: deliverable.posterUrl,
     externalUrl: deliverable.externalUrl,
     version: deliverable.version,
@@ -389,7 +390,10 @@ export async function getDeliverableDetail(deliverableId: string, userId: string
     deliveredAt: deliverable.deliveredAt,
     createdAt: deliverable.createdAt,
     project: deliverable.project,
-    versions: deliverable.versions,
+    versions: deliverable.versions.map((version) => ({
+      ...version,
+      mediaUrl: version.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${version.version}` : version.mediaUrl,
+    })),
     comments: deliverable.comments.map((c) => ({
       id: c.id,
       body: c.body,
