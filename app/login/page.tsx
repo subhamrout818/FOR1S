@@ -27,6 +27,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
   const [errorCode, setErrorCode] = useState<string | null>(null);
@@ -251,23 +252,46 @@ export default function LoginPage() {
                 Forgot password?
               </Link>
             </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className={cn(
-                "w-full rounded-xl border border-hairline bg-background px-4 py-3",
-                "text-sm text-foreground placeholder:text-muted",
-                "transition-all duration-300",
-                "focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50",
-                "hover:border-foreground/20"
-              )}
-            />
+            <div className="relative">
+                          <input
+                            id="password"
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            autoComplete="current-password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter your password"
+                            className={cn(
+                              "w-full rounded-xl border border-hairline bg-background py-3 pl-4 pr-12",
+                              "text-sm text-foreground placeholder:text-muted",
+                              "transition-all duration-300",
+                              "focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50",
+                              "hover:border-foreground/20"
+                            )}
+                          />
+              <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                aria-pressed={showPassword}
+                                className="absolute inset-y-0 right-0 flex items-center px-4 text-muted transition-colors hover:text-foreground focus:outline-none focus-visible:text-accent"
+                              >
+                                {showPassword ? (
+                                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                                    <path d="M3 3l18 18" />
+                                    <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                                    <path d="M9.9 5.2A10.8 10.8 0 0112 5c5 0 8.5 4.5 9 7-.2 1.2-1.1 2.7-2.5 4" />
+                                    <path d="M6.2 6.2C3.8 7.7 2.3 10 2 12c.5 2.5 4 7 10 7 1.1 0 2.1-.2 3-.5" />
+                                  </svg>
+                                ) : (
+                                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                  </svg>
+                                )}
+                              </button>
+            </div>
           </motion.div>
 
           {/* Remember me */}
