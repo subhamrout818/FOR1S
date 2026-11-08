@@ -162,17 +162,27 @@ export default function DeliverableDetailPage({
         <Badge meta={metaFor(DELIVERABLE_STATUS, deliverable.status)} />
       </div>
 
-      {/* Player */}
-      <div className="mt-8 overflow-hidden rounded-2xl border border-hairline bg-black">
-        <div className="aspect-video w-full">
-          <VideoPlayer
-            src={src}
-            poster={selectedVersion?.posterUrl ?? deliverable.posterUrl}
-            title={deliverable.title}
-            kind={deliverable.kind}
-          />
+      {/* Submitted file preview */}
+      {src && (selectedVersion?.mimeType ?? deliverable.mimeType)?.startsWith("image/") ? (
+        <div className="mt-8 overflow-hidden rounded-2xl border border-hairline bg-black">
+          <img src={src} alt={deliverable.title} className="mx-auto max-h-[75vh] w-full object-contain" />
         </div>
-      </div>
+      ) : src && (selectedVersion?.mimeType ?? deliverable.mimeType) === "application/pdf" ? (
+        <div className="mt-8 h-[75vh] overflow-hidden rounded-2xl border border-hairline bg-black">
+          <iframe title={`${deliverable.title} PDF preview`} src={src} className="h-full w-full bg-white" />
+        </div>
+      ) : (
+        <div className="mt-8 overflow-hidden rounded-2xl border border-hairline bg-black">
+          <div className="aspect-video w-full">
+            <VideoPlayer
+              src={src}
+              poster={selectedVersion?.posterUrl ?? deliverable.posterUrl}
+              title={deliverable.title}
+              kind={deliverable.kind}
+            />
+          </div>
+        </div>
+      )}
 
       {deliverable.externalUrl && (
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline bg-background/50 px-4 py-3">
