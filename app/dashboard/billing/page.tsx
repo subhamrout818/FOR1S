@@ -130,7 +130,7 @@ export default function BillingPage() {
             <StatTile
               label="Remaining"
               value={formatMoney(billing?.remaining ?? 0)}
-              sub="Open invoices"
+              sub={`Project balance · open invoices ${formatMoney(billing?.openInvoiceBalance ?? 0)}`}
               icon={Receipt}
               accent="border-l-blue-500"
               glow="rgba(59,130,246,0.15)"
