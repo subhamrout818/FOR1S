@@ -36,6 +36,7 @@ export default function AdminDeliverablesPage() {
   const [revisionId, setRevisionId] = useState<string | null>(null);
   const [revisionUrl, setRevisionUrl] = useState("");
   const [revisionNote, setRevisionNote] = useState("");
+  const [revisionFile, setRevisionFile] = useState<File | null>(null);
   const [revisionBusy, setRevisionBusy] = useState(false);
 
   const changeStatus = useCallback(
@@ -52,13 +53,40 @@ export default function AdminDeliverablesPage() {
 
   const submitRevision = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!revisionId || !revisionUrl.trim()) return;
+    if (!revisionId || (!revisionUrl.trim() && !revisionFile)) return;
     setRevisionBusy(true);
     setActionError("");
-    const res = await portalAction(`/api/admin/deliverables/${revisionId}/versions`, { externalUrl: revisionUrl.trim(), note: revisionNote.trim() });
-    setRevisionBusy(false);
-    if (!res.ok) { setActionError(res.message || "Could not submit this version."); return; }
-    setRevisionId(null); setRevisionUrl(""); setRevisionNote(""); reload();
+    try {
+      if (revisionFile) {
+        const signed = await fetch(`/api/admin/deliverables/${revisionId}/upload-url`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: revisionFile.name, mimeType: revisionFile.type, size: revisionFile.size }),
+        });
+        const signedPayload = await signed.json();
+        if (!signed.ok || !signedPayload.success) throw new Error(signedPayload.message || "Could not prepare upload.");
+        const uploaded = await fetch(signedPayload.uploadUrl, {
+          method: "PUT", headers: { "Content-Type": revisionFile.type }, body: revisionFile,
+        });
+        if (!uploaded.ok) throw new Error("Cloud storage rejected the upload. Try again.");
+        const completed = await fetch(`/api/admin/deliverables/${revisionId}/upload-complete`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            objectKey: signedPayload.objectKey, name: revisionFile.name,
+            mimeType: revisionFile.type, size: revisionFile.size, note: revisionNote.trim(),
+          }),
+        });
+        const payload = await completed.json();
+        if (!completed.ok || !payload.success) throw new Error(payload.message || "Could not submit uploaded file.");
+      } else {
+        const res = await portalAction(`/api/admin/deliverables/${revisionId}/versions`, { externalUrl: revisionUrl.trim(), note: revisionNote.trim() });
+        if (!res.ok) throw new Error(res.message || "Could not submit this version.");
+      }
+      setRevisionId(null); setRevisionUrl(""); setRevisionNote(""); setRevisionFile(null); reload();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Could not submit this version.");
+    } finally {
+      setRevisionBusy(false);
+    }
   };
 
   const createDeliverable = async (event: FormEvent<HTMLFormElement>) => {
@@ -169,10 +197,11 @@ export default function AdminDeliverablesPage() {
           <h2 className="text-sm font-semibold text-foreground">Submit a new version for client review</h2>
           <p className="mt-1 text-xs text-muted">This creates the next version and moves the deliverable to In review.</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <label className="text-xs text-muted sm:col-span-2">External preview link *<input required type="url" value={revisionUrl} onChange={(e) => setRevisionUrl(e.target.value)} placeholder="https://staging… / Figma…" className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Upload file (image ≤10 MB, video ≤200 MB, PDF ≤25 MB)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,application/pdf" onChange={(e) => { setRevisionFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setRevisionUrl(""); }} className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Or external preview link<input type="url" value={revisionUrl} onChange={(e) => { setRevisionUrl(e.target.value); if (e.target.value) setRevisionFile(null); }} placeholder="https://staging… / Figma…" className={fieldClass} /></label>
             <label className="text-xs text-muted sm:col-span-2">Version note<textarea rows={2} maxLength={2000} value={revisionNote} onChange={(e) => setRevisionNote(e.target.value)} placeholder="What changed in this version?" className={fieldClass} /></label>
           </div>
-          <div className="mt-4 flex gap-2"><button type="submit" disabled={revisionBusy || !revisionUrl.trim()} className="rounded-full bg-accent px-4 py-2 text-sm text-white disabled:opacity-50">{revisionBusy ? "Submitting…" : "Submit for review"}</button><button type="button" onClick={() => setRevisionId(null)} className="rounded-full border border-hairline px-4 py-2 text-sm text-muted">Cancel</button></div>
+          <div className="mt-4 flex gap-2"><button type="submit" disabled={revisionBusy || (!revisionUrl.trim() && !revisionFile)} className="rounded-full bg-accent px-4 py-2 text-sm text-white disabled:opacity-50">{revisionBusy ? (revisionFile ? "Uploading…" : "Submitting…") : "Submit for review"}</button><button type="button" onClick={() => { setRevisionId(null); setRevisionFile(null); }} className="rounded-full border border-hairline px-4 py-2 text-sm text-muted">Cancel</button></div>
         </form>
       )}
 
@@ -230,7 +259,7 @@ export default function AdminDeliverablesPage() {
                           </select>
                         </div>
                       </td>
-                      <td className="px-6 py-4"><button type="button" onClick={() => { setRevisionId(d.id); setRevisionUrl(""); setRevisionNote(""); }} className="rounded-lg border border-hairline px-3 py-2 text-xs text-foreground hover:border-accent/50">Submit version</button></td>
+                      <td className="px-6 py-4"><button type="button" onClick={() => { setRevisionId(d.id); setRevisionUrl(""); setRevisionNote(""); setRevisionFile(null); }} className="rounded-lg border border-hairline px-3 py-2 text-xs text-foreground hover:border-accent/50">Submit version</button></td>
                     </tr>
                   ))}
                 </tbody>
