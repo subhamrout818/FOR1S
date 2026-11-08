@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { projectId, title, kind, description, dueAt } = parsed.data;
+  const { projectId, title, kind, description, dueAt, externalUrl } = parsed.data;\n  if (externalUrl) {\n    const url = new URL(externalUrl);\n    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {\n      return NextResponse.json({ success: false, message: "Only public http(s) links are allowed." }, { status: 400 });\n    }\n  }
   const dueDate = parseDate(dueAt);
   if (dueAt && !dueDate) {
     return NextResponse.json({ success: false, message: "Enter a valid due date." }, { status: 400 });
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
           deliverableId: created.id,
           version: 1,
           status: "draft",
-          note: "Initial draft",
+          note: "Initial draft",\n          externalUrl: externalUrl || null,
         },
       });
       await tx.activityEvent.create({
