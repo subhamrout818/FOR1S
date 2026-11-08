@@ -112,7 +112,7 @@ export default function BillingPage() {
             <StatTile
               label="Project value"
               value={formatMoney(billing?.totalValue ?? 0)}
-              sub="Total across all projects"
+              sub="Agreed contract value across all projects"
               icon={Wallet}
               accent="border-l-accent"
               glow="rgba(230,57,70,0.15)"
@@ -121,7 +121,7 @@ export default function BillingPage() {
             <StatTile
               label="Paid"
               value={formatMoney(billing?.paid ?? 0)}
-              sub="Received to date"
+              sub="Completed payments recorded"
               icon={Check}
               accent="border-l-emerald-500"
               glow="rgba(16,185,129,0.15)"
@@ -130,7 +130,7 @@ export default function BillingPage() {
             <StatTile
               label="Remaining"
               value={formatMoney(billing?.remaining ?? 0)}
-              sub={`Project balance · open invoices ${formatMoney(billing?.openInvoiceBalance ?? 0)}`}
+              sub={`Unpaid contract balance · open invoices ${formatMoney(billing?.openInvoiceBalance ?? 0)}`}
               icon={Receipt}
               accent="border-l-blue-500"
               glow="rgba(59,130,246,0.15)"
@@ -179,8 +179,11 @@ export default function BillingPage() {
                         <td className="px-6 py-4 text-foreground/85">
                           {invoice.description}
                         </td>
-                        <td className="px-6 py-4 text-right font-display font-semibold text-foreground">
-                          {formatMoney(invoice.amount)}
+                        <td className="px-6 py-4 text-right">
+                          <p className="font-display font-semibold text-foreground">{formatMoney(invoice.amount)}</p>
+                          <p className="mt-1 text-[10px] text-muted">
+                            {formatMoney(invoice.paid ?? 0)} paid · {formatMoney(invoice.remaining ?? invoice.amount)} due
+                          </p>
                         </td>
                         <td className="px-6 py-4">
                           <Badge meta={metaFor(INVOICE_STATUS, invoice.status)} />
