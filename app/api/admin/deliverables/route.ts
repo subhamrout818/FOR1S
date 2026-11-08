@@ -9,6 +9,7 @@ const createDeliverableSchema = z.object({
   kind: z.enum(["reel", "photo", "design", "video", "website", "document", "other"]),
   description: z.string().trim().max(5000).optional().or(z.literal("")),
   dueAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
+  externalUrl: z.string().trim().url().max(2048).optional().or(z.literal("")),
 });
 
 function parseDate(value: string | undefined): Date | null {
@@ -32,7 +33,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const { projectId, title, kind, description, dueAt, externalUrl } = parsed.data;\n  if (externalUrl) {\n    const url = new URL(externalUrl);\n    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {\n      return NextResponse.json({ success: false, message: "Only public http(s) links are allowed." }, { status: 400 });\n    }\n  }
+  const { projectId, title, kind, description, dueAt, externalUrl } = parsed.data;
+  if (externalUrl) {
+    const url = new URL(externalUrl);
+    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {
+      return NextResponse.json({ success: false, message: "Only public http(s) links are allowed." }, { status: 400 });
+    }
+  }
   const dueDate = parseDate(dueAt);
   if (dueAt && !dueDate) {
     return NextResponse.json({ success: false, message: "Enter a valid due date." }, { status: 400 });
@@ -65,7 +72,8 @@ export async function POST(req: Request) {
           deliverableId: created.id,
           version: 1,
           status: "draft",
-          note: "Initial draft",\n          externalUrl: externalUrl || null,
+          note: "Initial draft",
+          externalUrl: externalUrl || null,
         },
       });
       await tx.activityEvent.create({
