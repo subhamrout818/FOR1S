@@ -48,11 +48,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           status: "in-review",
           note: typeof body.note === "string" ? body.note.trim().slice(0, 2000) : `Version ${nextVersion} submitted`,
           mediaUrl: `r2://${key}`,
+          mimeType,
         },
       });
       await tx.deliverable.update({
         where: { id },
-        data: { version: nextVersion, status: "in-review", mediaUrl: `r2://${key}`, posterUrl: null, externalUrl: null, deliveredAt: null },
+        data: { version: nextVersion, status: "in-review", mediaUrl: `r2://${key}`, posterUrl: null, externalUrl: null, mimeType, deliveredAt: null },
       });
       await tx.activityEvent.create({
         data: { projectId: deliverable.project.id, actorId: user.id, type: "upload", title: `New file submitted: ${deliverable.title} (v${nextVersion})`, detail: `${name} · ${(size / (1024 * 1024)).toFixed(1)} MB` },
