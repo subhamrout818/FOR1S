@@ -62,6 +62,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
     return NextResponse.json({ success: true, version }, { status: 201 });
   } catch (error) {
+    await r2Request("DELETE", key).catch(() => undefined);
     console.error("Deliverable upload completion error:", error);
     return NextResponse.json({ success: false, message: "Unable to complete the upload. Check storage and retry." }, { status: 500 });
   }
