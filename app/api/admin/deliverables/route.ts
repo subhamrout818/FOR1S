@@ -47,10 +47,13 @@ export async function POST(req: Request) {
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },
-    select: { id: true, name: true },
+    select: { id: true, name: true, archivedAt: true },
   });
   if (!project) {
     return NextResponse.json({ success: false, message: "Project not found." }, { status: 404 });
+  }
+  if (project.archivedAt) {
+    return NextResponse.json({ success: false, message: "Archived projects cannot receive new deliverables." }, { status: 409 });
   }
 
   try {
