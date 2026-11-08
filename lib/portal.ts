@@ -232,7 +232,7 @@ export async function getClientWorkspace(userId: string) {
     ),
   }));
 
-  const totalValue = projectsSerialized.reduce((a, p) => a + (p.value || 0), 0);
+  const totalValue = invoicesSerialized.reduce((a, invoice) => a + invoice.amount, 0);
   const paid = invoicesSerialized.reduce(
     (a, i) => (i.status === "paid" ? a + i.amount : a),
     0
@@ -527,6 +527,7 @@ export async function getAdminWorkspace() {
     ])
   );
   for (const p of projects) {
+    if (p.archivedAt) continue;
     const row = clientMap.get(p.clientId);
     if (!row) continue;
     row.projectsCount += 1;
