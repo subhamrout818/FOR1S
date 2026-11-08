@@ -152,7 +152,7 @@ export default function FilesPage() {
             {uploading ? "Uploading…" : "Upload image"}
           </button>
         </div>
-        <p className="mt-3 text-xs text-muted">JPEG, PNG, WebP or GIF · 10 MB maximum per image · private project storage.</p>
+        <p className="mt-3 text-xs text-muted">New client uploads: JPEG, PNG, WebP or GIF · 10 MiB maximum per image · private project storage. Existing project files may be larger or use other formats.</p>
         {uploadMessage && <p role="status" aria-live="polite" className={cn("mt-3 text-sm", uploadMessage.error ? "text-red-300" : "text-emerald-300")}>{uploadMessage.text}</p>}
       </section>
 
