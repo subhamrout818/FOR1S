@@ -70,16 +70,21 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
 
       // Keep deliverable metadata for the client's historical record, but
       // remove dead R2 references so the portal never presents broken media.
-      await tx.deliverable.updateMany({
-        where: { projectId: id },
-        data: { mediaUrl: null, posterUrl: null },
-      });
-      const deliverableIds = project.deliverables.map((d) => d.id);
-      if (deliverableIds.length) {
-        await tx.deliverableVersion.updateMany({
-          where: { deliverableId: { in: deliverableIds } },
-          data: { mediaUrl: null, posterUrl: null },
-        });
+      for (const deliverable of project.deliverables) {
+        const deliverableMedia: { mediaUrl?: null; posterUrl?: null } = {};
+        if (deliverable.mediaUrl?.startsWith("r2://") && keys.has(deliverable.mediaUrl.slice(5))) deliverableMedia.mediaUrl = null;
+        if (deliverable.posterUrl?.startsWith("r2://") && keys.has(deliverable.posterUrl.slice(5))) deliverableMedia.posterUrl = null;
+        if (Object.keys(deliverableMedia).length) {
+          await tx.deliverable.update({ where: { id: deliverable.id }, data: deliverableMedia });
+        }
+        for (const version of deliverable.versions) {
+          const versionMedia: { mediaUrl?: null; posterUrl?: null } = {};
+          if (version.mediaUrl?.startsWith("r2://") && keys.has(version.mediaUrl.slice(5))) versionMedia.mediaUrl = null;
+          if (version.posterUrl?.startsWith("r2://") && keys.has(version.posterUrl.slice(5))) versionMedia.posterUrl = null;
+          if (Object.keys(versionMedia).length) {
+            await tx.deliverableVersion.update({ where: { id: version.id }, data: versionMedia });
+          }
+        }
       }
       // Remove only file records whose R2 objects were actually selected for
       // deletion inside this project's namespace.
