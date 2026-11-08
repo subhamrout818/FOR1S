@@ -25,17 +25,29 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (deliverable.project.archivedAt) return NextResponse.json({ success: false, message: "Archived projects are read-only." }, { status: 409 });
   if (!kind || !key.startsWith(prefix) || key.includes("..")) return NextResponse.json({ success: false, message: "Invalid upload details." }, { status: 400 });
 
+  // The key is now proven to belong to this deliverable. Remove its object on
+  // every verification failure so failed submissions do not leak R2 storage.
+  const discardUpload = async () => {
+    await r2Request("DELETE", key).catch((error) => {
+      console.error("Failed to clean up rejected deliverable upload:", error);
+    });
+  };
+
   try {
     const head = await r2Request("HEAD", key);
     const storedSize = Number(head.headers.get("content-length"));
     if (!head.ok || !Number.isSafeInteger(storedSize) || storedSize !== size) {
+      await discardUpload();
       return NextResponse.json({ success: false, message: "Uploaded file size could not be verified." }, { status: 400 });
     }
     const sample = await r2Request("GET", key, "bytes=0-31");
-    if (!sample.ok) return NextResponse.json({ success: false, message: "Uploaded file could not be verified." }, { status: 400 });
+    if (!sample.ok) {
+      await discardUpload();
+      return NextResponse.json({ success: false, message: "Uploaded file could not be verified." }, { status: 400 });
+    }
     const bytes = new Uint8Array(await sample.arrayBuffer());
     if (!matchesDeliverableSignature(bytes, mimeType)) {
-      await r2Request("DELETE", key).catch(() => undefined);
+      await discardUpload();
       return NextResponse.json({ success: false, message: "File content does not match its declared type." }, { status: 400 });
     }
 
@@ -62,7 +74,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
     return NextResponse.json({ success: true, version }, { status: 201 });
   } catch (error) {
-    await r2Request("DELETE", key).catch(() => undefined);
+    await discardUpload();
     console.error("Deliverable upload completion error:", error);
     return NextResponse.json({ success: false, message: "Unable to complete the upload. Check storage and retry." }, { status: 500 });
   }
