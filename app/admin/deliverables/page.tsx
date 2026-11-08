@@ -31,7 +31,7 @@ export default function AdminDeliverablesPage() {
   const [title, setTitle] = useState("");
   const [kind, setKind] = useState("website");
   const [description, setDescription] = useState("");
-  const [dueAt, setDueAt] = useState("");
+  const [dueAt, setDueAt] = useState("");\n  const [externalUrl, setExternalUrl] = useState("");\n  const [revisionId, setRevisionId] = useState<string | null>(null);\n  const [revisionUrl, setRevisionUrl] = useState("");\n  const [revisionNote, setRevisionNote] = useState("");\n  const [revisionBusy, setRevisionBusy] = useState(false);
 
   const changeStatus = useCallback(
     async (id: string, status: string) => {
@@ -45,14 +45,14 @@ export default function AdminDeliverablesPage() {
     [reload]
   );
 
-  const createDeliverable = async (event: FormEvent<HTMLFormElement>) => {
+  const submitRevision = async (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!revisionId || !revisionUrl.trim()) return;\n    setRevisionBusy(true);\n    setActionError("");\n    const res = await portalAction(`/api/admin/deliverables/${revisionId}/versions`, { externalUrl: revisionUrl.trim(), note: revisionNote.trim() });\n    setRevisionBusy(false);\n    if (!res.ok) { setActionError(res.message || "Could not submit this version."); return; }\n    setRevisionId(null); setRevisionUrl(""); setRevisionNote(""); reload();\n  };\n\n  const createDeliverable = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setCreating(true);
     setCreateError("");
-    const res = await portalAction("/api/admin/deliverables", { projectId, title: title.trim(), kind, description, dueAt });
+    const res = await portalAction("/api/admin/deliverables", { projectId, title: title.trim(), kind, description, dueAt, externalUrl });
     setCreating(false);
     if (!res.ok) { setCreateError(res.message || "Could not create this deliverable."); return; }
-    setProjectId(""); setTitle(""); setKind("website"); setDescription(""); setDueAt("");
+    setProjectId(""); setTitle(""); setKind("website"); setDescription(""); setDueAt(""); setExternalUrl("");
     setShowNew(false);
     reload();
   };
@@ -85,7 +85,7 @@ export default function AdminDeliverablesPage() {
             <label className="text-xs text-muted">Project *<select required value={projectId} onChange={(e) => setProjectId(e.target.value)} className={fieldClass}><option value="">Select a project…</option>{(data?.projects ?? []).map((p) => <option key={p.id} value={p.id}>{p.name} — {p.client.name}</option>)}</select></label>
             <label className="text-xs text-muted">Deliverable title *<input required minLength={2} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Homepage design" className={fieldClass} /></label>
             <label className="text-xs text-muted">Type<select value={kind} onChange={(e) => setKind(e.target.value)} className={fieldClass}><option value="website">Website</option><option value="design">Design</option><option value="video">Video</option><option value="reel">Reel</option><option value="photo">Photo</option><option value="document">Document</option><option value="other">Other</option></select></label>
-            <label className="text-xs text-muted">Due date<input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className={fieldClass} /></label>
+            <label className="text-xs text-muted">Due date<input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className={fieldClass} /></label>\n            <label className="text-xs text-muted sm:col-span-2">Preview / staging / Figma link<input type="url" value={externalUrl} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://…" className={fieldClass} /></label>
             <label className="text-xs text-muted sm:col-span-2">Description<textarea rows={3} maxLength={5000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Briefly describe what will be delivered…" className={fieldClass + " resize-y"} /></label>
           </div>
           {createError && <p role="alert" className="mt-4 text-sm text-red-400">{createError}</p>}
@@ -147,7 +147,7 @@ export default function AdminDeliverablesPage() {
         </p>
       )}
 
-      {data && deliverables.length > 0 && (
+      {revisionId && (\n        <form onSubmit={submitRevision} className="mb-6 rounded-2xl border border-accent/30 bg-accent/[0.04] p-5">\n          <h2 className="text-sm font-semibold text-foreground">Submit a new version for client review</h2>\n          <p className="mt-1 text-xs text-muted">This creates the next version and moves the deliverable to In review.</p>\n          <div className="mt-4 grid gap-3 sm:grid-cols-2">\n            <label className="text-xs text-muted sm:col-span-2">External preview link *<input required type="url" value={revisionUrl} onChange={(e) => setRevisionUrl(e.target.value)} placeholder="https://staging… / Figma…" className={fieldClass} /></label>\n            <label className="text-xs text-muted sm:col-span-2">Version note<textarea rows={2} maxLength={2000} value={revisionNote} onChange={(e) => setRevisionNote(e.target.value)} placeholder="What changed in this version?" className={fieldClass} /></label>\n          </div>\n          <div className="mt-4 flex gap-2"><button type="submit" disabled={revisionBusy || !revisionUrl.trim()} className="rounded-full bg-accent px-4 py-2 text-sm text-white disabled:opacity-50">{revisionBusy ? "Submitting…" : "Submit for review"}</button><button type="button" onClick={() => setRevisionId(null)} className="rounded-full border border-hairline px-4 py-2 text-sm text-muted">Cancel</button></div>\n        </form>\n      )}\n\n      {data && deliverables.length > 0 && (
         <Reveal delay={0.08}>
           <div className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.02] transition-colors duration-300 hover:border-white/15">
             <div className="overflow-x-auto p-2 sm:p-3">
@@ -159,7 +159,7 @@ export default function AdminDeliverablesPage() {
                     <th className="px-6 py-3 font-medium">Kind</th>
                     <th className="px-6 py-3 font-medium">Version</th>
                     <th className="px-6 py-3 font-medium">Due</th>
-                    <th className="px-6 py-3 font-medium">Status</th>
+                    <th className="px-6 py-3 font-medium">Status</th>\n                    <th className="px-6 py-3 font-medium">Submission</th>
                   </tr>
                 </thead>
                 <tbody>
