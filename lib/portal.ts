@@ -383,6 +383,7 @@ export async function getDeliverableDetail(deliverableId: string, userId: string
     description: deliverable.description,
     mediaUrl: deliverable.mediaUrl,
     posterUrl: deliverable.posterUrl,
+    externalUrl: deliverable.externalUrl,
     version: deliverable.version,
     dueAt: deliverable.dueAt,
     deliveredAt: deliverable.deliveredAt,
