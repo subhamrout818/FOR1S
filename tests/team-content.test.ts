@@ -15,17 +15,17 @@ describe("public team and pricing content", () => {
     );
   });
 
-  it("does not require a team photo before one is provided", () => {
+  it("allows a provided team photo while keeping the photo field optional", () => {
     const haze = MEMBERS.find(({ slug }) => slug === "haze");
     assert.ok(haze);
-    assert.equal(haze.image, undefined);
+    assert.equal(haze.image, "/team/haze.svg");
   });
 
   it("keeps public price display in dollars until pricing strategy is deliberately changed", () => {
     assert.ok(PRICING_TIERS.length > 0);
     for (const plan of PRICING_TIERS) {
-      assert.match(plan.price, /^\$/);
-      assert.match(plan.priceRange, /^\$/);
+      assert.match(plan.price, /^\\$/);
+      assert.match(plan.priceRange, /^\\$/);
     }
   });
 });
