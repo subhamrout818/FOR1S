@@ -3,6 +3,7 @@ import { verifyToken, getSessionToken } from "@/lib/auth";
 import {
   remainingInvoiceBalance,
   remainingProjectBalance,
+  reconciledInvoiceStatus,
   sumCompletedPayments,
 } from "@/lib/portal-billing";
 
@@ -225,7 +226,7 @@ export async function getClientWorkspace(userId: string) {
       projectId: i.projectId,
       description: i.description,
       amount: money(i.amount),
-      status: invoiceStatus(i),
+      status: reconciledInvoiceStatus(i.status, i.dueDate, i.amount, paid),
       dueDate: i.dueDate,
       issuedAt: i.issuedAt,
       paid,
@@ -502,7 +503,9 @@ export async function getAdminWorkspace() {
   const revenueThisMonth = money(revenueAgg._sum.amount);
 
   const outstanding = invoices
-    .filter((invoice) => ["pending", "overdue"].includes(invoiceStatus(invoice)))
+    .filter((invoice) => ["pending", "overdue"].includes(
+      reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, sumCompletedPayments(invoice.payments))
+    ))
     .reduce(
       (total, invoice) =>
         total + remainingInvoiceBalance(
@@ -551,7 +554,9 @@ export async function getAdminWorkspace() {
     if (!row) continue;
     const invoicePaid = sumCompletedPayments(invoice.payments);
     row.paid += invoicePaid;
-    if (["pending", "overdue"].includes(invoiceStatus(invoice))) {
+    if (["pending", "overdue"].includes(
+      reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, invoicePaid)
+    )) {
       row.outstanding += remainingInvoiceBalance(invoice.amount, invoicePaid);
     }
   }
@@ -653,7 +658,7 @@ export async function getAdminWorkspace() {
         amount: money(invoice.amount),
         paid,
         remaining: remainingInvoiceBalance(invoice.amount, paid),
-        status: invoiceStatus(invoice),
+        status: reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, paid),
         dueDate: invoice.dueDate,
         issuedAt: invoice.issuedAt,
         client: { id: invoice.userId, name: invoice.user.name, email: invoice.user.email },
