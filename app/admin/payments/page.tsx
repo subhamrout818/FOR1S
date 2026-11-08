@@ -16,22 +16,21 @@ export default function AdminPaymentsPage() {
   if (isLoading) return null;
 
   const payments = data?.payments ?? [];
-  const totalReceived = payments.reduce((a, p) => a + p.amount, 0);
-  const average =
-    payments.length > 0 ? Math.round(totalReceived / payments.length) : 0;
+  const totalReceived = data?.paymentsSummary.totalReceived ?? 0;
+  const average = data?.paymentsSummary.average ?? 0;
 
   return (
     <div>
       <PageHeader
         eyebrow="Payments"
         title="Payments"
-        sub="Revenue from completed invoices."
+        sub="All recorded completed payments. The table below shows the latest 50 records."
       />
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           label="Payments"
-          value={payments.length}
+          value={data?.paymentsSummary.completedCount ?? 0}
           icon={<CreditCard size={16} />}
           delay={0}
         />
