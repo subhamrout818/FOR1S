@@ -185,6 +185,7 @@ model Deliverable {
   description String?
   mediaUrl    String?
   posterUrl   String?
+  externalUrl String?
   version     Int      @default(1)
   dueAt       DateTime?
   deliveredAt DateTime?
@@ -206,6 +207,7 @@ model DeliverableVersion {
   note          String?
   mediaUrl      String?
   posterUrl     String?
+  externalUrl   String?
   createdAt     DateTime @default(now())
 
   deliverable Deliverable @relation(fields: [deliverableId], references: [id], onDelete: Cascade)
