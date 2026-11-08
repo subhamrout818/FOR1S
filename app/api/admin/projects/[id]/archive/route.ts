@@ -81,21 +81,39 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
           data: { mediaUrl: null, posterUrl: null },
         });
       }
-      if (project.files.length) {
-        await tx.fileAsset.deleteMany({ where: { projectId: id, url: { startsWith: "r2://" } } });
+      // Remove only file records whose R2 objects were actually selected for
+      // deletion inside this project's namespace.
+      if (keys.size) {
+        await tx.fileAsset.deleteMany({
+          where: { projectId: id, url: { in: [...keys].map((key) => `r2://${key}`) } },
+        });
       }
 
-      // Reconcile only an unpaid invoice linked to this project. Never rewrite
-      // paid invoices or payment rows; the issued/settled financial record stays auditable.
-      const reduction = Number(project.value ?? 0);
-      if (reduction > 0) {
-        let remainingReduction = reduction;
+      // Reconcile excess outstanding billing against the agreed project value.
+      // Paid invoices and payment rows are immutable. Project value is the total
+      // contract value, so only the amount billed above (contract value - paid)
+      // is eligible for reduction; never subtract the full contract value.
+      const contractValue = Number(project.value ?? 0);
+      if (contractValue > 0) {
+        const paidTotal = project.invoices.reduce(
+          (sum, invoice) => sum + invoice.payments.reduce((paid, payment) => paid + Number(payment.amount), 0),
+          0
+        );
+        const outstandingTotal = project.invoices
+          .filter((invoice) => invoice.status !== "paid" && invoice.status !== "cancelled")
+          .reduce((sum, invoice) => {
+            const paid = invoice.payments.reduce((paidSum, payment) => paidSum + Number(payment.amount), 0);
+            return sum + Math.max(0, Number(invoice.amount) - paid);
+          }, 0);
+        const allowedOutstanding = Math.max(0, contractValue - paidTotal);
+        let excess = Math.max(0, outstandingTotal - allowedOutstanding);
         for (const invoice of project.invoices) {
-          if (remainingReduction <= 0 || invoice.status === "paid" || invoice.status === "cancelled") continue;
+          if (excess <= 0) break;
+          if (invoice.status === "paid" || invoice.status === "cancelled") continue;
           const paid = invoice.payments.reduce((sum, payment) => sum + Number(payment.amount), 0);
           const currentAmount = Number(invoice.amount);
           const reducible = Math.max(0, currentAmount - paid);
-          const applied = Math.min(reducible, remainingReduction);
+          const applied = Math.min(reducible, excess);
           if (applied <= 0) continue;
           const nextAmount = Math.max(paid, currentAmount - applied);
           await tx.invoice.update({
@@ -103,10 +121,10 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
             data: {
               amount: nextAmount,
               ...(nextAmount <= paid ? { status: "paid" } : {}),
-              description: `${invoice.description} (project archived; ${applied.toFixed(2)} credited)`,
+              description: `${invoice.description} (archive reconciliation: ${applied.toFixed(2)} removed from outstanding)`,
             },
           });
-          remainingReduction -= applied;
+          excess -= applied;
         }
       }
 
