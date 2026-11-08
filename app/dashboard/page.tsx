@@ -617,7 +617,7 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2 px-6 pt-6">
                     <FileCheck2 size={16} className="text-accent" />
                     <p className="text-xs font-medium uppercase tracking-widest text-foreground">
-                      Deliverables
+                      Active project deliverables{active ? ` · ${active.name}` : ""}
                     </p>
                   </div>
                   <div className="px-6 pb-6 pt-5">
@@ -634,7 +634,7 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2 px-6 pt-6">
                     <Sparkles size={16} className="text-accent" />
                     <p className="text-xs font-medium uppercase tracking-widest text-foreground">
-                      Deliverables by status
+                      Deliverables across all projects
                     </p>
                   </div>
                   <div className="px-6 pb-6 pt-5">
