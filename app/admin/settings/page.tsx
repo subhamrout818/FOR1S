@@ -16,7 +16,7 @@ export default function AdminSettingsPage() {
       <PageHeader
         eyebrow="Settings"
         title="Studio settings"
-        sub="Business details, owner access and workspace management."
+        sub="Business details, owner account access and workspace management."
       />
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -75,6 +75,25 @@ export default function AdminSettingsPage() {
           </div>
         </Reveal>
 
+        {/* Account and security */}
+        <Reveal delay={0.08} className="lg:col-span-2">
+          <div className="rounded-2xl border border-hairline bg-background/60 p-6">
+            <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-foreground">
+              <ShieldCheck size={14} className="text-accent" /> Account &amp; security
+            </p>
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+              Your account page supports profile photo and name updates, email changes with your current password, and password changes. OAuth accounts can set a password from the password recovery flow. Two-factor authentication and active-session management are not currently available in this portal.
+            </p>
+            <Link
+              href="/dashboard/account"
+              data-cursor="hover"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent-dim"
+            >
+              Open account settings <ArrowUpRight size={15} />
+            </Link>
+          </div>
+        </Reveal>
+
         {/* Quick management */}
         <Reveal delay={0.1} className="lg:col-span-2">
           <div className="rounded-2xl border border-hairline bg-background/60 p-6">
@@ -88,6 +107,7 @@ export default function AdminSettingsPage() {
                 { label: "Leads", href: "/admin/leads" },
                 { label: "Tickets", href: "/admin/tickets" },
                 { label: "Payments", href: "/admin/payments" },
+                { label: "Files", href: "/admin/files" },
                 { label: "Team", href: "/admin/team" },
               ].map((item) => (
                 <Link
