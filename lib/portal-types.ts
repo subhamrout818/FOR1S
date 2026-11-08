@@ -141,6 +141,7 @@ export interface DeliverableDetail {
   status: string;
   description: string | null;
   mediaUrl: string | null;
+  mimeType: string | null;
   posterUrl: string | null;
   externalUrl: string | null;
   version: number;
@@ -154,6 +155,7 @@ export interface DeliverableDetail {
     status: string;
     note: string | null;
     mediaUrl: string | null;
+    mimeType: string | null;
     posterUrl: string | null;
     externalUrl: string | null;
     createdAt: string;
