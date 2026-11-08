@@ -230,6 +230,7 @@ export default function AdminDeliverablesPage() {
                           </select>
                         </div>
                       </td>
+                      <td className="px-6 py-4"><button type="button" onClick={() => { setRevisionId(d.id); setRevisionUrl(""); setRevisionNote(""); }} className="rounded-lg border border-hairline px-3 py-2 text-xs text-foreground hover:border-accent/50">Submit version</button></td>
                     </tr>
                   ))}
                 </tbody>
