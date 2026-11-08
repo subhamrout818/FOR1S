@@ -2,7 +2,7 @@
 
 import { Fragment, useCallback, useState } from "react";
 import Link from "next/link";
-import { Check, FolderKanban, Layers, Loader2, Plus, Rocket } from "lucide-react";
+import { Archive, Check, FolderKanban, Layers, Loader2, Plus, Rocket } from "lucide-react";
 import AdminProjectUploads from "@/components/admin/AdminProjectUploads";
 import AdminUploadNotifications from "@/components/admin/AdminUploadNotifications";
 import { useAuth } from "@/lib/auth-context";
@@ -52,6 +52,8 @@ export default function AdminProjectsPage() {
   const [newEndsAt, setNewEndsAt] = useState("");
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
+  const [archivingId, setArchivingId] = useState<string | null>(null);
+  const [archiveError, setArchiveError] = useState("");
 
   const setDraft = (id: string, patch: ProjectDraft) =>
     setDrafts((current) => ({ ...current, [id]: { ...current[id], ...patch } }));
@@ -74,6 +76,19 @@ export default function AdminProjectsPage() {
     });
     reload();
   }, [drafts, reload]);
+
+  const archiveProject = useCallback(async (id: string, name: string) => {
+    if (!window.confirm(`Archive "${name}"? The client will retain its project history, but uploaded R2 media will be removed and unpaid project billing reconciled.`)) return;
+    setArchivingId(id);
+    setArchiveError("");
+    const res = await portalAction(`/api/admin/projects/${id}/archive`, {});
+    setArchivingId(null);
+    if (!res.ok) {
+      setArchiveError(res.message || "Couldn't archive this project.");
+      return;
+    }
+    reload();
+  }, [reload]);
 
   const createProject = useCallback(async () => {
     setCreating(true);
@@ -158,6 +173,7 @@ export default function AdminProjectsPage() {
 
       {loading && !data && <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4"><Loader2 size={28} className="animate-spin text-accent" /><p className="text-sm text-muted">Loading projects…</p></div>}
       {error && !data && <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 rounded-2xl border border-accent/30 bg-accent/10 p-8 text-center"><p className="text-sm text-red-300">{error}</p><button data-cursor="hover" onClick={reload} className="text-xs uppercase tracking-widest text-foreground/70 underline underline-offset-2 hover:text-accent">Retry</button></div>}
+      {archiveError && <p role="alert" className="mt-4 text-sm text-red-400">{archiveError}</p>}
       {data && projects.length === 0 && <p className="rounded-2xl border border-dashed border-hairline bg-background/40 p-8 text-center text-sm text-muted">No projects yet.</p>}
 
       {data && projects.length > 0 && (
@@ -174,8 +190,8 @@ export default function AdminProjectsPage() {
                 const progress = draft.progress ?? p.progress;
                 return <article key={p.id} className="overflow-hidden rounded-2xl border border-hairline/80 bg-white/[0.025] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.035]">
                   <div className="flex flex-col gap-5 border-b border-hairline/70 p-5 sm:p-7 xl:flex-row xl:items-start xl:justify-between">
-                    <div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-3"><Link href={`/admin/projects/${p.id}`} className="text-xl font-semibold tracking-tight text-foreground transition-colors hover:text-accent">{p.name}<span className="ml-2 text-sm text-accent">↗</span></Link><Badge meta={metaFor(PROJECT_STATUS, p.status)} /></div><p className="mt-2 text-sm text-muted">{p.client.name}</p><Link href={`/admin/projects/${p.id}`} className="mt-5 inline-flex items-center gap-2 rounded-xl border border-hairline px-4 py-2.5 text-xs font-medium text-foreground/80 transition-colors hover:border-accent/40 hover:text-foreground">Open project workspace <span aria-hidden="true">→</span></Link></div>
-                    <div className="grid gap-4 sm:grid-cols-2 xl:w-[48%]"><label className="text-xs text-muted">Status<select aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass + " mt-2"}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></label><div><div className="flex items-center justify-between text-xs text-muted"><span>Progress</span><span className="font-mono text-foreground">{progress}%</span></div><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="mt-4 w-full accent-[#AA1515]" /><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-accent transition-all" style={{ width: `${progress}%` }} /></div></div></div>
+                    <div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-3"><Link href={`/admin/projects/${p.id}`} className="text-xl font-semibold tracking-tight text-foreground transition-colors hover:text-accent">{p.name}<span className="ml-2 text-sm text-accent">↗</span></Link>{p.status === "archived" ? <span className="rounded-full border border-white/15 px-3 py-1 text-xs text-muted">Archived</span> : <Badge meta={metaFor(PROJECT_STATUS, p.status)} />}</div><p className="mt-2 text-sm text-muted">{p.client.name}</p><div className="mt-5 flex flex-wrap items-center gap-2"><Link href={`/admin/projects/${p.id}`} className="inline-flex items-center gap-2 rounded-xl border border-hairline px-4 py-2.5 text-xs font-medium text-foreground/80 transition-colors hover:border-accent/40 hover:text-foreground">Open project workspace <span aria-hidden="true">→</span></Link>{p.status !== "archived" && <button type="button" onClick={() => archiveProject(p.id, p.name)} disabled={archivingId === p.id} className="inline-flex items-center gap-2 rounded-xl border border-red-500/25 px-4 py-2.5 text-xs font-medium text-red-300 transition-colors hover:border-red-500/50 hover:bg-red-500/5 disabled:opacity-50">{archivingId === p.id ? <Loader2 size={13} className="animate-spin" /> : <Archive size={13} />} Archive</button>}</div></div>
+                    <div className="grid gap-4 sm:grid-cols-2 xl:w-[48%]"><label className="text-xs text-muted">Status<select disabled={p.status === "archived"} aria-label={`Status for ${p.name}`} value={draft.status ?? p.status} onChange={(e) => setDraft(p.id, { status: e.target.value })} className={fieldClass + " mt-2"}><option value="active">In progress</option><option value="paused">Paused</option><option value="completed">Completed</option></select></label><div><div className="flex items-center justify-between text-xs text-muted"><span>Progress</span><span className="font-mono text-foreground">{progress}%</span></div><input type="range" min={0} max={100} step={5} aria-label={`Progress for ${p.name}`} value={progress} onChange={(e) => setDraft(p.id, { progress: Number(e.target.value) })} className="mt-4 w-full accent-[#AA1515]" /><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-accent transition-all" style={{ width: `${progress}%` }} /></div></div></div>
                   </div>
                   <div className="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-4 sm:p-7">
                     <div className="rounded-xl border border-white/[0.05] bg-black/15 p-4 sm:p-5"><p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Project value</p><p className="mt-2 text-lg font-semibold tracking-tight text-foreground">{p.value ? formatMoney(p.value) : "Not set"}</p><label className="mt-5 block text-xs text-muted" htmlFor={`value-${p.id}`}>Edit value (USD)</label><input id={`value-${p.id}`} type="number" min="0" max="9999999999" step="0.01" value={draft.value ?? String(p.value ?? "")} onChange={(e) => setDraft(p.id, { value: e.target.value })} placeholder="Not set" className={fieldClass + " mt-2"} /></div>
