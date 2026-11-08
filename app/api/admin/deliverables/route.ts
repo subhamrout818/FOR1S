@@ -62,6 +62,7 @@ export async function POST(req: Request) {
           kind,
           description: description || null,
           dueAt: dueDate,
+          externalUrl: externalUrl || null,
           status: "draft",
           version: 1,
         },
