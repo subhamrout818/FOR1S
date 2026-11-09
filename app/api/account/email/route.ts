@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
-import { comparePassword, signToken, currentSessionLifetime, signVerifyEmail, setSessionCookie } from "@/lib/auth";
+import { comparePassword, signToken, currentSessionLifetime, signVerifyEmail, setSessionCookie, normalizeEmail } from "@/lib/auth";
 import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
 import {
   consumeRateLimit,
@@ -51,7 +51,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, currentPassword } = result.data;
+    const email = normalizeEmail(result.data.email);
+    const { currentPassword } = result.data;
 
     // Confirm it's really them before touching the login identifier. Reserve
     // quota atomically to prevent parallel password guesses from bypassing it.
@@ -91,25 +92,37 @@ export async function POST(req: Request) {
       select: { id: true, name: true, email: true, profileImage: true, updatedAt: true },
     });
 
-    // Best-effort verification to the NEW address so the account is usable
-    // again. When email is unconfigured (local dev) the account stays
-    // unverified — fine, since dev has no login gate anyway.
+    // Send verification to the NEW address. Keep the account reachable so the
+    // user can retry through /api/auth/resend-verification if delivery fails.
+    let verificationEmailSent = false;
     if (emailEnabled()) {
       const verify = signVerifyEmail(user.id, updated.email, updated.updatedAt);
       const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}`);
-      await sendEmail({
+      verificationEmailSent = await sendEmail({
         to: updated.email,
         subject: "Verify your new FOR1S email",
         text: `Hi ${updated.name},\n\nConfirm your new email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't change your email, you can ignore this message.`,
-      }).catch(() => {});
+      });
+      if (!verificationEmailSent) {
+        console.error("Account email-change verification delivery failed.");
+      }
+    } else if (process.env.NODE_ENV === "production") {
+      console.error("Account email changed but verification email service is unavailable.");
     }
 
-    // Re-issue the session (see account/route.ts) so the change doesn't log
-    // the user out mid-session; the old token is dead server-side.
+    // Re-issue the session so the user can reach account settings and retry.
     const life = await currentSessionLifetime();
     const token = signToken(updated.id, updated.email, life.expiresIn);
     return setSessionCookie(
-      NextResponse.json({ success: true, user: updated }),
+      NextResponse.json({
+        success: true,
+        user: updated,
+        needsVerification: true,
+        verificationEmailSent,
+        message: verificationEmailSent
+          ? "Email changed. Check your new inbox to verify it."
+          : "Email changed, but we couldn't send the verification email. Use resend verification to try again.",
+      }),
       token,
       life.remember
     );
