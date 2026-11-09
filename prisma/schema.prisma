@@ -21,6 +21,8 @@ model User {
   provider          String   @default("credentials") // "credentials" | "google" | "github"
   providerAccountId String?
   emailVerified     Boolean  @default(false)
+  pendingEmail      String?  @unique
+  pendingEmailUpdatedAt DateTime?
   role              String   @default("client") // "client" | "admin"
   company           String? // client business / company name
 
