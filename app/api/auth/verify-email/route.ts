@@ -5,7 +5,7 @@ import {
   rateLimitedResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
-import { verifyVerifyEmail } from "@/lib/auth";
+import { verifyVerifyEmail, verifyPendingEmailChange } from "@/lib/auth";
 import { allowedOrigin, fallbackOrigin } from "@/lib/email";
 import { NextResponse } from "next/server";
 
@@ -30,6 +30,31 @@ export async function GET(req: Request) {
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
     const token = new URL(req.url).searchParams.get("token") ?? "";
+    const pendingClaims = verifyPendingEmailChange(token);
+    if (pendingClaims) {
+      const user = await prisma.user.findUnique({ where: { id: pendingClaims.userId } });
+      if (!user || user.pendingEmail !== pendingClaims.email ||
+          user.pendingEmailUpdatedAt?.getTime() !== pendingClaims.pendingEmailUpdatedAt) {
+        return to("/login?email-change=invalid");
+      }
+      try {
+        // Atomic compare-and-swap makes the link single-use and prevents an older
+        // link from promoting an address replaced by a newer request.
+        const promoted = await prisma.user.updateMany({
+          where: { id: user.id, pendingEmail: pendingClaims.email, pendingEmailUpdatedAt: new Date(pendingClaims.pendingEmailUpdatedAt) },
+          data: { email: pendingClaims.email, emailVerified: true, pendingEmail: null, pendingEmailUpdatedAt: null },
+        });
+        if (promoted.count !== 1) return to("/login?email-change=invalid");
+        // updatedAt changes, invalidating every previously issued session.
+        return to("/login?email-changed=1");
+      } catch (error) {
+        // Unique email collision means another account owns the requested address.
+        if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
+          return to("/login?email-change=conflict");
+        }
+        throw error;
+      }
+    }
     const claims = verifyVerifyEmail(token);
     if (!claims) return to("/login?verify=invalid");
 
