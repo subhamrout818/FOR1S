@@ -166,7 +166,8 @@ export async function getClientWorkspace(userId: string) {
       slug: p.slug,
       tagline: p.tagline,
       description: p.description,
-      status: p.status,
+      status: p.archivedAt ? "archived" : p.status,
+      archivedAt: p.archivedAt,
       progress: p.progress,
       value: money(p.value),
       currency: p.currency,
@@ -231,7 +232,7 @@ export async function getClientWorkspace(userId: string) {
     ),
   }));
 
-  const totalValue = projectsSerialized.reduce((a, p) => a + (p.value || 0), 0);
+  const totalValue = invoicesSerialized.reduce((a, invoice) => a + invoice.amount, 0);
   const paid = invoicesSerialized.reduce(
     (a, i) => (i.status === "paid" ? a + i.amount : a),
     0
@@ -380,14 +381,19 @@ export async function getDeliverableDetail(deliverableId: string, userId: string
     kind: deliverable.kind,
     status: deliverable.status,
     description: deliverable.description,
-    mediaUrl: deliverable.mediaUrl,
+    mediaUrl: deliverable.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${deliverable.version}` : deliverable.mediaUrl,
+    mimeType: deliverable.mimeType,
     posterUrl: deliverable.posterUrl,
+    externalUrl: deliverable.externalUrl,
     version: deliverable.version,
     dueAt: deliverable.dueAt,
     deliveredAt: deliverable.deliveredAt,
     createdAt: deliverable.createdAt,
     project: deliverable.project,
-    versions: deliverable.versions,
+    versions: deliverable.versions.map((version) => ({
+      ...version,
+      mediaUrl: version.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${version.version}` : version.mediaUrl,
+    })),
     comments: deliverable.comments.map((c) => ({
       id: c.id,
       body: c.body,
@@ -526,6 +532,7 @@ export async function getAdminWorkspace() {
     ])
   );
   for (const p of projects) {
+    if (p.archivedAt) continue;
     const row = clientMap.get(p.clientId);
     if (!row) continue;
     row.projectsCount += 1;
@@ -569,7 +576,8 @@ export async function getAdminWorkspace() {
       id: p.id,
       name: p.name,
       slug: p.slug,
-      status: p.status,
+      status: p.archivedAt ? "archived" : p.status,
+      archivedAt: p.archivedAt,
       progress: p.progress,
       value: money(p.value),
       nextDeadline: p.nextDeadline,

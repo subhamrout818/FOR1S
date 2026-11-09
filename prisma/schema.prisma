@@ -147,6 +147,7 @@ model Project {
   endsAt        DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  archivedAt    DateTime?
 
   client       User             @relation(fields: [clientId], references: [id], onDelete: Cascade)
   milestones   Milestone[]
@@ -184,6 +185,8 @@ model Deliverable {
   description String?
   mediaUrl    String?
   posterUrl   String?
+  externalUrl String?
+  mimeType    String?
   version     Int      @default(1)
   dueAt       DateTime?
   deliveredAt DateTime?
@@ -205,6 +208,8 @@ model DeliverableVersion {
   note          String?
   mediaUrl      String?
   posterUrl     String?
+  externalUrl   String?
+  mimeType      String?
   createdAt     DateTime @default(now())
 
   deliverable Deliverable @relation(fields: [deliverableId], references: [id], onDelete: Cascade)

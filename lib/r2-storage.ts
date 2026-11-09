@@ -44,7 +44,7 @@ export function createR2UploadUrl(key: string, contentType: string, expiresSecon
   const signature = createHmac("sha256", signingKey(cfg.secretAccessKey, day)).update(stringToSign).digest("hex");
   return `https://${cfg.host}${uri}?${canonicalQuery}&X-Amz-Signature=${signature}`;
 }
-export async function r2Request(method: "GET" | "HEAD" | "DELETE", key: string) {
+export async function r2Request(method: "GET" | "HEAD" | "DELETE", key: string, range?: string) {
   const cfg = config();
   const date = amzDate();
   const day = date.slice(0, 8);
@@ -57,6 +57,6 @@ export async function r2Request(method: "GET" | "HEAD" | "DELETE", key: string) 
   const signature = createHmac("sha256", signingKey(cfg.secretAccessKey, day)).update(stringToSign).digest("hex");
   const authorization = `AWS4-HMAC-SHA256 Credential=${cfg.accessKeyId}/${scope(day)}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
   return fetch(`https://${cfg.host}${uri}`, {
-    method, headers: { Authorization: authorization, "x-amz-content-sha256": payloadHash, "x-amz-date": date }, cache: "no-store",
+    method, headers: { Authorization: authorization, "x-amz-content-sha256": payloadHash, "x-amz-date": date, ...(range ? { Range: range } : {}) }, cache: "no-store",
   });
 }

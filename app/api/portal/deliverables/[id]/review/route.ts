@@ -64,6 +64,10 @@ export async function POST(
       where: { id: deliverable.id },
       data: { status },
     });
+    await tx.deliverableVersion.updateMany({
+      where: { deliverableId: deliverable.id, version: deliverable.version },
+      data: { status },
+    });
     if (note) {
       await tx.comment.create({
         data: { deliverableId: deliverable.id, authorId: user.id, body: note },
