@@ -156,10 +156,10 @@ export default function LoginPage() {
             >
               That verification link is invalid or expired.{" "}
               <Link
-                href="/forgot-password"
+                href="/resend-verification"
                 className="underline underline-offset-2"
               >
-                Request a new one
+                Resend verification email
               </Link>
               .
             </motion.p>
