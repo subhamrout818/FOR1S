@@ -112,9 +112,9 @@ describe("authentication and portal authorization structure", () => {
     assert.match(reset, /Password reset email delivery failed/);
     assert.match(resend, /couldn't send the verification email/);
     // Forgot-password remains generic to prevent account enumeration.
-    assert.match(reset, /return NextResponse.json\\(\\{ success: true \\}\\)/);
+    assert.ok(reset.includes("return NextResponse.json({ success: true })"));
     // Account email changes normalize the new identifier and expose retry state.
-    assert.match(emailChange, /normalizeEmail\\(result\\.data\\.email\\)/);
+    assert.ok(emailChange.includes("normalizeEmail(result.data.email)"));
     assert.ok(emailChange.includes("verificationEmailSent"));
     assert.ok(emailChange.includes("resend-verification"));
   });
