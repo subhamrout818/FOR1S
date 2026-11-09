@@ -115,8 +115,8 @@ describe("authentication and portal authorization structure", () => {
     assert.match(reset, /return NextResponse.json\\(\\{ success: true \\}\\)/);
     // Account email changes normalize the new identifier and expose retry state.
     assert.match(emailChange, /normalizeEmail\\(result\\.data\\.email\\)/);
-    assert.match(emailChange, /verificationEmailSent/);
-    assert.match(emailChange, /resend-verification/);
+    assert.ok(emailChange.includes("verificationEmailSent"));
+    assert.ok(emailChange.includes("resend-verification"));
   });
 
   it("caps signup, password-reset and verification email flows per recipient", () => {
