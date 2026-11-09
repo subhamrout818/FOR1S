@@ -165,6 +165,8 @@ export default function AccountPage() {
   const [emailBusy, setEmailBusy] = useState(false);
   const [emailMsg, setEmailMsg] = useState("");
   const [emailErr, setEmailErr] = useState("");
+  const [emailNeedsVerification, setEmailNeedsVerification] = useState(false);
+  const [emailResending, setEmailResending] = useState(false);
 
   const [pw, setPw] = useState("");
   const [pwNew, setPwNew] = useState("");
@@ -283,7 +285,8 @@ export default function AccountPage() {
       if (json.success) {
         await refreshUser();
         setEmailPw("");
-        setEmailMsg("Email updated");
+        setEmailNeedsVerification(!!json.needsVerification);
+        setEmailMsg(json.message || "Email updated");
       } else {
         setEmailErr(json.message || "Could not update email");
       }
@@ -291,6 +294,29 @@ export default function AccountPage() {
       setEmailErr("Network error. Please try again.");
     } finally {
       setEmailBusy(false);
+    }
+  };
+
+  const handleResendEmailVerification = async () => {
+    setEmailResending(true);
+    setEmailMsg("");
+    setEmailErr("");
+    try {
+      const res = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setEmailMsg("If this address needs verification, a fresh email is on its way. Check your inbox and spam folder.");
+      } else {
+        setEmailErr(json.message || "Could not resend the verification email. Please try again.");
+      }
+    } catch {
+      setEmailErr("Network error. Please try again.");
+    } finally {
+      setEmailResending(false);
     }
   };
 
@@ -519,8 +545,19 @@ export default function AccountPage() {
                   className={inputClasses}
                 />
               </Field>
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-4">
                 <StatusLine message={emailMsg} error={emailErr} />
+                <div className="flex flex-wrap items-center gap-3">
+                  {emailNeedsVerification && (
+                    <button
+                      type="button"
+                      onClick={handleResendEmailVerification}
+                      disabled={emailResending}
+                      className="text-sm text-foreground underline underline-offset-4 transition-colors hover:text-accent disabled:opacity-50"
+                    >
+                      {emailResending ? "Sending…" : "Resend verification email"}
+                    </button>
+                  )}
                 <MagneticButton
                   type="submit"
                   variant="solid"
@@ -533,6 +570,7 @@ export default function AccountPage() {
                     "Update email"
                   )}
                 </MagneticButton>
+                </div>
               </div>
             </form>
           ) : (
