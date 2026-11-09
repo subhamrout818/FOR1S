@@ -109,6 +109,13 @@ export default function ResetPasswordPage() {
                   className="overflow-hidden rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-400"
                 >
                   {error}
+                {(error.toLowerCase().includes("invalid") || error.toLowerCase().includes("expired") || error.toLowerCase().includes("missing")) && (
+                  <span className="mt-2 block">
+                    <Link href="/forgot-password" className="font-medium text-foreground underline underline-offset-4 hover:text-accent">
+                      Request a new reset link
+                    </Link>
+                  </span>
+                )}
                 </motion.p>
               )}
             </AnimatePresence>
