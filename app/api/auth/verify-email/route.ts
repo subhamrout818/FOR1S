@@ -71,10 +71,14 @@ export async function GET(req: Request) {
     }
 
     if (!user.emailVerified) {
-      await prisma.user.update({
-        where: { id: user.id },
+      const verified = await prisma.user.updateMany({
+        where: { id: user.id, email: claims.email, updatedAt: new Date(claims.updatedAt), emailVerified: false },
         data: { emailVerified: true },
       });
+      if (verified.count !== 1) {
+        const latest = await prisma.user.findUnique({ where: { id: user.id }, select: { emailVerified: true } });
+        return to(latest?.emailVerified ? "/login?verified=1" : "/login?verify=invalid");
+      }
     }
 
     return to("/login?verified=1");
