@@ -26,7 +26,7 @@ export interface JwtPayload {
 }
 
 export type OAuthProvider = "google" | "github";
-export type TokenPurpose = "verify" | "reset" | "oauth-state";
+export type TokenPurpose = "verify" | "reset" | "email-change" | "oauth-state";
 
 /**
  * Sign a JWT token for the given user.
@@ -226,6 +226,16 @@ export function signVerifyEmail(
   );
 }
 
+/** 24-hour token for confirming a staged email change. */
+export function signPendingEmailChange(userId: string, email: string, pendingEmailUpdatedAt: Date): string {
+  return signPurposeToken({ userId, email, pendingEmailUpdatedAt: pendingEmailUpdatedAt.getTime() }, "email-change", "24h");
+}
+
+export function verifyPendingEmailChange(token: string): { userId: string; email: string; pendingEmailUpdatedAt: number } | null {
+  const payload = verifyPurposeToken(token, "email-change");
+  if (!payload || typeof payload.userId !== "string" || typeof payload.email !== "string" || typeof payload.pendingEmailUpdatedAt !== "number") return null;
+  return { userId: payload.userId, email: payload.email, pendingEmailUpdatedAt: payload.pendingEmailUpdatedAt };
+}
 export function verifyVerifyEmail(token: string): { userId: string; email: string; updatedAt: number } | null {
   const payload = verifyPurposeToken(token, "verify");
   if (
