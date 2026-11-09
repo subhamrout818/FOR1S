@@ -119,6 +119,23 @@ describe("authentication and portal authorization structure", () => {
     assert.ok(emailChange.includes("resend-verification"));
   });
 
+  it("keeps auth recovery routes reachable and links each failure to the right recovery flow", () => {
+    const signupAlias = read("app/signup/page.tsx");
+    const resendPage = read("app/resend-verification/page.tsx");
+    const login = read("app/login/page.tsx");
+    const register = read("app/register/page.tsx");
+    const resetPage = read("app/reset-password/page.tsx");
+    const accountPage = read("app/dashboard/account/page.tsx");
+
+    assert.ok(signupAlias.includes('redirect("/register")'));
+    assert.ok(resendPage.includes("/api/auth/resend-verification"));
+    assert.ok(login.includes('href="/resend-verification"'));
+    assert.ok(register.includes("/resend-verification?email="));
+    assert.ok(resetPage.includes('href="/forgot-password"'));
+    assert.ok(accountPage.includes("handleResendEmailVerification"));
+    assert.ok(accountPage.includes("verificationEmailSent") || accountPage.includes("json.message"));
+  });
+
   it("caps signup, password-reset and verification email flows per recipient", () => {
     for (const relative of [
       "app/api/auth/signup/route.ts",
