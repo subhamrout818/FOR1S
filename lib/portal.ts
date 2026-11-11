@@ -1,4 +1,4 @@
-﻿import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { verifyToken, getSessionToken } from "@/lib/auth";
 
 /* ------------------------------------------------------------------ */
@@ -98,7 +98,8 @@ export async function getClientWorkspace(userId: string) {
           profileImage: true,
         },
       }),
-      prisma.project.findMany({`r`n        omit: { archivedAt: true },
+      prisma.project.findMany({
+        omit: { archivedAt: true },
         where: { clientId: userId },
         orderBy: { updatedAt: "desc" },
         include: {
@@ -441,7 +442,8 @@ export async function getAdminWorkspace() {
       orderBy: { issuedAt: "desc" },
       include: { user: { select: { id: true, name: true, email: true } } },
     }),
-    prisma.project.findMany({`r`n        omit: { archivedAt: true },
+    prisma.project.findMany({
+        omit: { archivedAt: true },
       orderBy: { updatedAt: "desc" },
       include: {
         client: { select: { id: true, name: true, email: true, company: true } },
