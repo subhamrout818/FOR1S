@@ -183,7 +183,8 @@ export default function AccountPage() {
   useEffect(() => {
     if (user) {
       setName(user.name);
-      setEmail(user.email);
+      setEmail(user.pendingEmail ?? "");
+      setEmailNeedsVerification(!!user.pendingEmail);
     }
     // Keyed on the values, not the object: refreshUser() makes a new object
     // after a photo save, which would otherwise wipe half-typed edits.
@@ -286,7 +287,8 @@ export default function AccountPage() {
         await refreshUser();
         setEmailPw("");
         setEmailNeedsVerification(!!json.needsVerification);
-        setEmailMsg(json.message || "Email updated");
+        setEmail(json.pendingEmail ?? "");
+        setEmailMsg(json.message || "Email update requested");
       } else {
         setEmailErr(json.message || "Could not update email");
       }
@@ -305,7 +307,7 @@ export default function AccountPage() {
       const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: user?.pendingEmail || email }),
       });
       const json = await res.json();
       if (res.ok && json.success) {
@@ -517,7 +519,7 @@ export default function AccountPage() {
 
         {/* Email */}
         <Reveal delay={0.12}>
-        <SectionCard title="Email" sub="Change the email you sign in with.">
+        <SectionCard title="Email" sub="Your current login remains active until the new address is verified.">
           {hasPassword ? (
             <form onSubmit={handleEmail} className="flex flex-col gap-4">
               <Field label="New email" htmlFor="email">
