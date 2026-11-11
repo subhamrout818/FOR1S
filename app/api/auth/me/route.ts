@@ -32,7 +32,8 @@ export async function GET(req: Request) {
       select: {
         id: true,
         name: true,
-        email: true,\n        pendingEmail: true,
+        email: true,
+        pendingEmail: true,
         profileImage: true,
         provider: true,
         emailVerified: true,
