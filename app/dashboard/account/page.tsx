@@ -165,7 +165,6 @@ export default function AccountPage() {
   const [emailBusy, setEmailBusy] = useState(false);
   const [emailMsg, setEmailMsg] = useState("");
   const [emailErr, setEmailErr] = useState("");
-  const [emailNeedsVerification, setEmailNeedsVerification] = useState(false);
   const [emailResending, setEmailResending] = useState(false);
 
   const [pw, setPw] = useState("");
@@ -184,7 +183,6 @@ export default function AccountPage() {
     if (user) {
       setName(user.name);
       setEmail(user.pendingEmail ?? "");
-      setEmailNeedsVerification(!!user.pendingEmail);
     }
     // Keyed on the values, not the object: refreshUser() makes a new object
     // after a photo save, which would otherwise wipe half-typed edits.
@@ -286,7 +284,6 @@ export default function AccountPage() {
       if (json.success) {
         await refreshUser();
         setEmailPw("");
-        setEmailNeedsVerification(!!json.needsVerification);
         setEmail(json.pendingEmail ?? "");
         setEmailMsg(json.message || "Email update requested");
       } else {
