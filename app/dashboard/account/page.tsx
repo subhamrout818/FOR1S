@@ -561,16 +561,7 @@ export default function AccountPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <StatusLine message={emailMsg} error={emailErr} />
                 <div className="flex flex-wrap items-center gap-3">
-                  {emailNeedsVerification && (
-                    <button
-                      type="button"
-                      onClick={handleResendEmailVerification}
-                      disabled={emailResending}
-                      className="text-sm text-foreground underline underline-offset-4 transition-colors hover:text-accent disabled:opacity-50"
-                    >
-                      {emailResending ? "Sending…" : "Resend verification email"}
-                    </button>
-                  )}
+
                 <MagneticButton
                   type="submit"
                   variant="solid"
