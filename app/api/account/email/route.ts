@@ -96,7 +96,7 @@ export async function POST(req: Request) {
     let verificationEmailSent = false;
     if (emailEnabled() && pending.pendingEmailUpdatedAt) {
       const verify = signPendingEmailChange(user.id, email, pending.pendingEmailUpdatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}`);
+      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}&type=email-change`);
       verificationEmailSent = await sendEmail({
         to: email,
         subject: "Verify your new FOR1S email",
@@ -111,6 +111,8 @@ export async function POST(req: Request) {
       pendingEmail: pending.pendingEmail,
       needsVerification: true,
       verificationEmailSent,
+      // Reference to resend-verification endpoint for client-side retry
+      resendEndpoint: "/api/auth/resend-verification",
       message: verificationEmailSent
         ? "Verification sent. Your current login email remains active until you confirm the new address."
         : "The new address is pending, but verification could not be sent. Your current login email remains active; use resend verification to retry.",

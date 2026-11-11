@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -165,7 +165,9 @@ export default function AccountPage() {
   const [emailBusy, setEmailBusy] = useState(false);
   const [emailMsg, setEmailMsg] = useState("");
   const [emailErr, setEmailErr] = useState("");
+  const [emailNeedsVerification, setEmailNeedsVerification] = useState(false);
   const [emailResending, setEmailResending] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   const [pw, setPw] = useState("");
   const [pwNew, setPwNew] = useState("");
@@ -182,12 +184,20 @@ export default function AccountPage() {
   useEffect(() => {
     if (user) {
       setName(user.name);
-      setEmail(user.pendingEmail ?? "");
+      setEmail(user.email);
+      // Sync pending email if present (user.pendingEmail comes from API response)
+      if (user.pendingEmail) {
+        setPendingEmail(user.pendingEmail);
+        setEmailNeedsVerification(true);
+      } else {
+        setPendingEmail("");
+        setEmailNeedsVerification(false);
+      }
     }
     // Keyed on the values, not the object: refreshUser() makes a new object
     // after a photo save, which would otherwise wipe half-typed edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.name, user?.email]);
+  }, [user?.id, user?.name, user?.email, user?.pendingEmail]);
 
   if (isLoading) return null;
 
@@ -284,8 +294,11 @@ export default function AccountPage() {
       if (json.success) {
         await refreshUser();
         setEmailPw("");
-        setEmail(json.pendingEmail ?? "");
-        setEmailMsg(json.message || "Email update requested");
+        setEmailNeedsVerification(!!json.needsVerification);
+        if (json.pendingEmail) {
+          setPendingEmail(json.pendingEmail);
+        }
+        setEmailMsg(json.message || "Email updated");
       } else {
         setEmailErr(json.message || "Could not update email");
       }
@@ -301,10 +314,12 @@ export default function AccountPage() {
     setEmailMsg("");
     setEmailErr("");
     try {
+      // Use pendingEmail if there's a pending change, otherwise use the current email
+      const targetEmail = pendingEmail || email;
       const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: user?.pendingEmail || email }),
+        body: JSON.stringify({ email: targetEmail }),
       });
       const json = await res.json();
       if (res.ok && json.success) {
@@ -516,21 +531,7 @@ export default function AccountPage() {
 
         {/* Email */}
         <Reveal delay={0.12}>
-        <SectionCard title="Email" sub="Your current login remains active until the new address is verified.">
-          <div className="mb-5 rounded-xl border border-hairline bg-background/50 p-4 text-sm">
-            <p className="text-muted">Current login email</p>
-            <p className="mt-1 font-medium text-foreground">{user?.email}</p>
-            {user?.pendingEmail && (
-              <div className="mt-3 border-t border-hairline pt-3">
-                <p className="text-muted">Pending email change</p>
-                <p className="mt-1 font-medium text-foreground">{user.pendingEmail}</p>
-                <p className="mt-1 text-xs text-amber-400">Not active yet — verify this address to complete the change.</p>
-                <button type="button" onClick={handleResendEmailVerification} disabled={emailResending} className="mt-2 text-sm underline underline-offset-4 hover:text-accent disabled:opacity-50">
-                  {emailResending ? "Sending…" : "Resend verification"}
-                </button>
-              </div>
-            )}
-          </div>
+        <SectionCard title="Email" sub="Change the email you sign in with.">
           {hasPassword ? (
             <form onSubmit={handleEmail} className="flex flex-col gap-4">
               <Field label="New email" htmlFor="email">
@@ -558,10 +559,29 @@ export default function AccountPage() {
                   className={inputClasses}
                 />
               </Field>
+              {emailNeedsVerification && pendingEmail && (
+                <div className="rounded-lg border border-accent/30 bg-accent/10 px-4 py-3">
+                  <p className="text-sm text-accent">
+                    <strong>Pending verification:</strong> {pendingEmail}
+                  </p>
+                  <p className="mt-1 text-xs text-muted">
+                    Your current login email ({user?.email}) remains active until you confirm the new address.
+                  </p>
+                </div>
+              )}
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <StatusLine message={emailMsg} error={emailErr} />
                 <div className="flex flex-wrap items-center gap-3">
-
+                  {emailNeedsVerification && (
+                    <button
+                      type="button"
+                      onClick={handleResendEmailVerification}
+                      disabled={emailResending}
+                      className="text-sm text-foreground underline underline-offset-4 transition-colors hover:text-accent disabled:opacity-50"
+                    >
+                      {emailResending ? "Sending…" : "Resend verification email"}
+                    </button>
+                  )}
                 <MagneticButton
                   type="submit"
                   variant="solid"
@@ -685,3 +705,4 @@ export default function AccountPage() {
     </div>
   );
 }
+

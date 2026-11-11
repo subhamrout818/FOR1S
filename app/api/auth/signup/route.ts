@@ -28,7 +28,7 @@ async function sendVerificationEmail(req: Request, user: {
   updatedAt: Date;
 }): Promise<boolean> {
   const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
-  const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
+  const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}&type=signup`);
   return sendEmail({
     to: user.email,
     subject: "Verify your FOR1S email",

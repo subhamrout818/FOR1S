@@ -15,13 +15,14 @@ interface User {
   id: string;
   name: string;
   email: string;
-  pendingEmail?: string | null;
   profileImage?: string | null;
   emailVerified?: boolean;
   provider?: string;
   hasPassword?: boolean;
   role?: string; // "client" | "admin"
   company?: string | null;
+  pendingEmail?: string | null;
+  pendingEmailUpdatedAt?: string | null;
 }
 
 interface AuthResult {
