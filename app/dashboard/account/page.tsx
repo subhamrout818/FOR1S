@@ -520,6 +520,20 @@ export default function AccountPage() {
         {/* Email */}
         <Reveal delay={0.12}>
         <SectionCard title="Email" sub="Your current login remains active until the new address is verified.">
+          <div className="mb-5 rounded-xl border border-hairline bg-background/50 p-4 text-sm">
+            <p className="text-muted">Current login email</p>
+            <p className="mt-1 font-medium text-foreground">{user?.email}</p>
+            {user?.pendingEmail && (
+              <div className="mt-3 border-t border-hairline pt-3">
+                <p className="text-muted">Pending email change</p>
+                <p className="mt-1 font-medium text-foreground">{user.pendingEmail}</p>
+                <p className="mt-1 text-xs text-amber-400">Not active yet — verify this address to complete the change.</p>
+                <button type="button" onClick={handleResendEmailVerification} disabled={emailResending} className="mt-2 text-sm underline underline-offset-4 hover:text-accent disabled:opacity-50">
+                  {emailResending ? "Sending…" : "Resend verification"}
+                </button>
+              </div>
+            )}
+          </div>
           {hasPassword ? (
             <form onSubmit={handleEmail} className="flex flex-col gap-4">
               <Field label="New email" htmlFor="email">
