@@ -65,7 +65,8 @@ export async function GET(req: Request) {
       user: {
         id: user.id,
         name: user.name,
-        email: user.email,\n        pendingEmail: user.pendingEmail,
+        email: user.email,
+        pendingEmail: user.pendingEmail,
         profileImage: user.profileImage,
         provider: user.provider,
         emailVerified: user.emailVerified,
