@@ -32,7 +32,7 @@ export async function GET(req: Request) {
       select: {
         id: true,
         name: true,
-        email: true,
+        email: true,\n        pendingEmail: true,
         profileImage: true,
         provider: true,
         emailVerified: true,
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
       user: {
         id: user.id,
         name: user.name,
-        email: user.email,
+        email: user.email,\n        pendingEmail: user.pendingEmail,
         profileImage: user.profileImage,
         provider: user.provider,
         emailVerified: user.emailVerified,
