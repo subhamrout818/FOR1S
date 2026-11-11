@@ -14,7 +14,7 @@ import { isSafeRelativePath } from "@/lib/utils";
 interface User {
   id: string;
   name: string;
-  email: string;
+  email: string;\n  pendingEmail?: string | null;
   profileImage?: string | null;
   emailVerified?: boolean;
   provider?: string;
