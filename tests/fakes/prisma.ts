@@ -15,6 +15,8 @@ export interface FakeUser {
   profileImage: string | null;
   provider: string;
   updatedAt?: Date;
+  pendingEmail?: string | null;
+  pendingEmailUpdatedAt?: Date | null;
 }
 
 export interface FakeDeliverable {
@@ -50,6 +52,38 @@ export const prisma = {
         return user ? { ...user, updatedAt: user.updatedAt ?? new Date(0) } : null;
       }
       return null;
+    },
+    findFirst: async ({ where }: { where: { OR?: Array<{ email?: string; pendingEmail?: string }> } }) => {
+      if (where.OR) {
+        for (const condition of where.OR) {
+          if (condition.email) {
+            const user = fakeUsers.get(condition.email);
+            if (user) return { ...user, updatedAt: user.updatedAt ?? new Date(0), pendingEmail: null, pendingEmailUpdatedAt: null };
+          }
+          if (condition.pendingEmail) {
+            const user = [...fakeUsers.values()].find((candidate) => candidate.email === condition.pendingEmail);
+            if (user) return { ...user, updatedAt: user.updatedAt ?? new Date(0), pendingEmail: user.email, pendingEmailUpdatedAt: user.updatedAt ?? new Date(0) };
+          }
+        }
+      }
+      return null;
+    },
+    updateMany: async ({ where, data }: { where: Record<string, unknown>; data: Record<string, unknown> }) => {
+      const user = [...fakeUsers.values()].find((candidate) => {
+        if (where.id && candidate.id !== where.id) return false;
+        if (where.email && candidate.email !== where.email) return false;
+        if (where.pendingEmail && candidate.pendingEmail !== where.pendingEmail) return false;
+        if (where.emailVerified !== undefined && candidate.emailVerified !== where.emailVerified) return false;
+        const expectedUpdated = where.updatedAt instanceof Date ? where.updatedAt.getTime() : undefined;
+        if (expectedUpdated !== undefined && (candidate.updatedAt ?? new Date(0)).getTime() !== expectedUpdated) return false;
+        const expectedPending = where.pendingEmailUpdatedAt instanceof Date ? where.pendingEmailUpdatedAt.getTime() : undefined;
+        if (expectedPending !== undefined && (candidate.pendingEmailUpdatedAt ?? null)?.getTime() !== expectedPending) return false;
+        return true;
+      });
+      if (!user) return { count: 0 };
+      Object.assign(user, data);
+      user.updatedAt = new Date((user.updatedAt ?? new Date()).getTime() + 1);
+      return { count: 1 };
     },
   },
   deliverable: {
