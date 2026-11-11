@@ -64,7 +64,7 @@ export async function requireAuth(req: Request): Promise<AuthUser | null> {
 /*  Serialization helpers                                              */
 /* ------------------------------------------------------------------ */
 
-/** Prisma Decimal → number (so responses stay JSON-safe). */
+/** Prisma Decimal â†’ number (so responses stay JSON-safe). */
 export function money(
   n: { toString(): string } | number | null | undefined
 ): number {
@@ -88,7 +88,7 @@ export function invoiceStatus(inv: {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Client workspace — the entire portal for one signed-in client      */
+/*  Client workspace â€” the entire portal for one signed-in client      */
 /* ------------------------------------------------------------------ */
 
 export async function getClientWorkspace(userId: string) {
@@ -105,6 +105,7 @@ export async function getClientWorkspace(userId: string) {
         },
       }),
       prisma.project.findMany({
+        omit: { archivedAt: true },
         where: { clientId: userId },
         orderBy: { updatedAt: "desc" },
         include: {
@@ -212,7 +213,7 @@ export async function getClientWorkspace(userId: string) {
     };
   });
 
-  // Only a genuinely active project is "active" — no fallback to a completed
+  // Only a genuinely active project is "active" â€” no fallback to a completed
   // or paused one, which would misrepresent the client's state.
   const activeProject =
     projectsSerialized.find((p) => p.status === "active") ?? null;
@@ -234,7 +235,7 @@ export async function getClientWorkspace(userId: string) {
     };
   });
 
-  const totalValue = projectsSerialized.reduce((a, p) => a + (p.value || 0), 0);
+  const totalValue = invoicesSerialized.reduce((a, invoice) => a + invoice.amount, 0);
   const paid = invoicesSerialized.reduce((total, invoice) => total + invoice.paid, 0);
 
   // ---- Needs attention ---------------------------------------------
@@ -381,14 +382,19 @@ export async function getDeliverableDetail(deliverableId: string, userId: string
     kind: deliverable.kind,
     status: deliverable.status,
     description: deliverable.description,
-    mediaUrl: deliverable.mediaUrl,
+    mediaUrl: deliverable.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${deliverable.version}` : deliverable.mediaUrl,
+    mimeType: deliverable.mimeType,
     posterUrl: deliverable.posterUrl,
+    externalUrl: deliverable.externalUrl,
     version: deliverable.version,
     dueAt: deliverable.dueAt,
     deliveredAt: deliverable.deliveredAt,
     createdAt: deliverable.createdAt,
     project: deliverable.project,
-    versions: deliverable.versions,
+    versions: deliverable.versions.map((version) => ({
+      ...version,
+      mediaUrl: version.mediaUrl?.startsWith("r2://") ? `/api/portal/deliverables/${deliverable.id}/media?version=${version.version}` : version.mediaUrl,
+    })),
     comments: deliverable.comments.map((c) => ({
       id: c.id,
       body: c.body,
@@ -442,6 +448,7 @@ export async function getAdminWorkspace() {
       },
     }),
     prisma.project.findMany({
+        omit: { archivedAt: true },
       orderBy: { updatedAt: "desc" },
       include: {
         client: { select: { id: true, name: true, email: true, company: true } },
@@ -685,3 +692,6 @@ export async function getAdminWorkspace() {
     })),
   };
 }
+
+
+

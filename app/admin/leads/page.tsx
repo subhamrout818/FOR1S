@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { ArrowUpRight, Loader2, Magnet, Target, Trophy, Users } from "lucide-react";
+import { useCallback, useState, type FormEvent } from "react";
+import { Loader2, Magnet, Plus, Target, Trophy, Users, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
@@ -12,12 +12,24 @@ import { timeAgo, metaFor, LEAD_STATUS } from "@/lib/portal-format";
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 const STATUS_ORDER = ["new", "contacted", "qualified", "won", "lost"];
+const fieldClass = "mt-1.5 w-full rounded-xl border border-hairline bg-background/70 px-3.5 py-3 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10";
 
 export default function AdminLeadsPage() {
   const { isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
   const [savingId, setSavingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState("");
+  const [service, setService] = useState("");
+  const [budget, setBudget] = useState("");
+  const [source, setSource] = useState("manual");
+  const [notes, setNotes] = useState("");
 
   const changeStatus = useCallback(
     async (id: string, status: string) => {
@@ -30,6 +42,18 @@ export default function AdminLeadsPage() {
     },
     [reload]
   );
+
+  const createLead = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCreating(true);
+    setCreateError("");
+    const res = await portalAction("/api/admin/leads", { name: name.trim(), email: email.trim(), company, phone, service, budget, source, notes });
+    setCreating(false);
+    if (!res.ok) { setCreateError(res.message || "Could not create this lead."); return; }
+    setName(""); setEmail(""); setCompany(""); setPhone(""); setService(""); setBudget(""); setSource("manual"); setNotes("");
+    setShowNew(false);
+    reload();
+  };
 
   if (isLoading) return null;
 
@@ -45,8 +69,31 @@ export default function AdminLeadsPage() {
         eyebrow="Leads"
         title="Pipeline"
         sub="Enquiries from the contact form, referrals and socials — move them through to won."
+        actions={<button data-cursor="hover" onClick={() => { setShowNew((v) => !v); setCreateError(""); }} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-white hover:bg-accent-dim">{showNew ? <X size={15} /> : <Plus size={15} />} {showNew ? "Close" : "New lead"}</button>}
       />
 
+
+      {showNew && (
+        <form onSubmit={createLead} className="mb-8 rounded-2xl border border-hairline/80 bg-white/[0.025] p-5 sm:p-7">
+          <h2 className="text-base font-semibold text-foreground">Create a lead</h2>
+          <p className="mt-1 mb-5 text-sm text-muted">Add a prospect from a call, referral or social channel.</p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <label className="text-xs text-muted">Name *<input required minLength={2} maxLength={100} value={name} onChange={(e) => setName(e.target.value)} placeholder="Contact name" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Email *<input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@company.com" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Company<input maxLength={100} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company name" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Phone<input maxLength={40} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Service<input maxLength={100} value={service} onChange={(e) => setService(e.target.value)} placeholder="Website, branding…" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Budget<input maxLength={100} value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="e.g. $2,500–$5,000" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Source<select value={source} onChange={(e) => setSource(e.target.value)} className={fieldClass}><option value="manual">Manual entry</option><option value="referral">Referral</option><option value="instagram">Instagram</option><option value="website">Website</option><option value="other">Other</option></select></label>
+            <label className="text-xs text-muted sm:col-span-2">Notes<textarea maxLength={2000} rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Context and follow-up notes…" className={fieldClass + " resize-y"} /></label>
+          </div>
+          {createError && <p role="alert" className="mt-4 text-sm text-red-400">{createError}</p>}
+          <div className="mt-5 flex gap-2">
+            <button type="submit" disabled={creating || name.trim().length < 2 || !email.trim()} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50">{creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Create lead</button>
+            <button type="button" onClick={() => setShowNew(false)} className="rounded-full border border-hairline px-4 py-2.5 text-sm text-muted">Cancel</button>
+          </div>
+        </form>
+      )}
       <div className="mb-8 grid gap-5 sm:grid-cols-3">
         <StatCard
           label="Total leads"
@@ -96,8 +143,9 @@ export default function AdminLeadsPage() {
           <Magnet size={28} className="text-muted" />
           <p className="font-display text-lg text-foreground">No leads yet</p>
           <p className="max-w-sm text-sm text-muted">
-            Enquiries from the contact form will land here.
+            Create a lead manually or wait for a contact-form enquiry.
           </p>
+          <button onClick={() => setShowNew(true)} className="mt-2 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white"><Plus size={15} /> Add your first lead</button>
         </div>
       )}
 

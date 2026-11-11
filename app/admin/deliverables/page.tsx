@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { CheckCircle2, FileCheck2, Loader2, RefreshCcw } from "lucide-react";
+import { useCallback, useState, type FormEvent } from "react";
+import { CheckCircle2, FileCheck2, Loader2, Plus, RefreshCcw, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { usePortalData, portalAction } from "@/components/portal/usePortal";
 import Badge from "@/components/portal/Badge";
@@ -17,12 +17,27 @@ import {
 import type { AdminWorkspace } from "@/lib/portal-types";
 
 const STATUS_ORDER = ["draft", "in-review", "changes-requested", "approved", "delivered"];
+const fieldClass = "mt-1.5 w-full rounded-xl border border-hairline bg-background/70 px-3.5 py-3 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/10";
 
 export default function AdminDeliverablesPage() {
   const { isLoading } = useAuth();
   const { data, loading, error, reload } = usePortalData<AdminWorkspace>("/api/admin");
   const [savingId, setSavingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState("");
+  const [showNew, setShowNew] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [title, setTitle] = useState("");
+  const [kind, setKind] = useState("website");
+  const [description, setDescription] = useState("");
+  const [dueAt, setDueAt] = useState("");
+  const [externalUrl, setExternalUrl] = useState("");
+  const [revisionId, setRevisionId] = useState<string | null>(null);
+  const [revisionUrl, setRevisionUrl] = useState("");
+  const [revisionNote, setRevisionNote] = useState("");
+  const [revisionFile, setRevisionFile] = useState<File | null>(null);
+  const [revisionBusy, setRevisionBusy] = useState(false);
 
   const changeStatus = useCallback(
     async (id: string, status: string) => {
@@ -35,6 +50,56 @@ export default function AdminDeliverablesPage() {
     },
     [reload]
   );
+
+  const submitRevision = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!revisionId || (!revisionUrl.trim() && !revisionFile)) return;
+    setRevisionBusy(true);
+    setActionError("");
+    try {
+      if (revisionFile) {
+        const signed = await fetch(`/api/admin/deliverables/${revisionId}/upload-url`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: revisionFile.name, mimeType: revisionFile.type, size: revisionFile.size }),
+        });
+        const signedPayload = await signed.json();
+        if (!signed.ok || !signedPayload.success) throw new Error(signedPayload.message || "Could not prepare upload.");
+        const uploaded = await fetch(signedPayload.uploadUrl, {
+          method: "PUT", headers: { "Content-Type": revisionFile.type }, body: revisionFile,
+        });
+        if (!uploaded.ok) throw new Error("Cloud storage rejected the upload. Try again.");
+        const completed = await fetch(`/api/admin/deliverables/${revisionId}/upload-complete`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            objectKey: signedPayload.objectKey, name: revisionFile.name,
+            mimeType: revisionFile.type, size: revisionFile.size, note: revisionNote.trim(),
+          }),
+        });
+        const payload = await completed.json();
+        if (!completed.ok || !payload.success) throw new Error(payload.message || "Could not submit uploaded file.");
+      } else {
+        const res = await portalAction(`/api/admin/deliverables/${revisionId}/versions`, { externalUrl: revisionUrl.trim(), note: revisionNote.trim() });
+        if (!res.ok) throw new Error(res.message || "Could not submit this version.");
+      }
+      setRevisionId(null); setRevisionUrl(""); setRevisionNote(""); setRevisionFile(null); reload();
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Could not submit this version.");
+    } finally {
+      setRevisionBusy(false);
+    }
+  };
+
+  const createDeliverable = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCreating(true);
+    setCreateError("");
+    const res = await portalAction("/api/admin/deliverables", { projectId, title: title.trim(), kind, description, dueAt, externalUrl });
+    setCreating(false);
+    if (!res.ok) { setCreateError(res.message || "Could not create this deliverable."); return; }
+    setProjectId(""); setTitle(""); setKind("website"); setDescription(""); setDueAt(""); setExternalUrl("");
+    setShowNew(false);
+    reload();
+  };
 
   if (isLoading) return null;
 
@@ -52,8 +117,30 @@ export default function AdminDeliverablesPage() {
         eyebrow="Deliverables"
         title="Review queue"
         sub="Move work through its lifecycle — from draft to delivered."
+        actions={<button data-cursor="hover" onClick={() => { setShowNew((v) => !v); setCreateError(""); }} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-white hover:bg-accent-dim">{showNew ? <X size={15} /> : <Plus size={15} />} {showNew ? "Close" : "New deliverable"}</button>}
       />
 
+
+      {showNew && (
+        <form onSubmit={createDeliverable} className="mb-8 rounded-2xl border border-hairline/80 bg-white/[0.025] p-5 sm:p-7">
+          <h2 className="text-base font-semibold text-foreground">Create a deliverable</h2>
+          <p className="mt-1 mb-5 text-sm text-muted">Add a draft item to a client&apos;s project workspace.</p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <label className="text-xs text-muted">Project *<select required value={projectId} onChange={(e) => setProjectId(e.target.value)} className={fieldClass}><option value="">Select a project…</option>{(data?.projects ?? []).map((p) => <option key={p.id} value={p.id}>{p.name} — {p.client.name}</option>)}</select></label>
+            <label className="text-xs text-muted">Deliverable title *<input required minLength={2} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Homepage design" className={fieldClass} /></label>
+            <label className="text-xs text-muted">Type<select value={kind} onChange={(e) => setKind(e.target.value)} className={fieldClass}><option value="website">Website</option><option value="design">Design</option><option value="video">Video</option><option value="reel">Reel</option><option value="photo">Photo</option><option value="document">Document</option><option value="other">Other</option></select></label>
+            <label className="text-xs text-muted">Due date<input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Preview / staging / Figma link<input type="url" value={externalUrl} onChange={(e) => setExternalUrl(e.target.value)} placeholder="https://…" className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Description<textarea rows={3} maxLength={5000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Briefly describe what will be delivered…" className={fieldClass + " resize-y"} /></label>
+          </div>
+          {createError && <p role="alert" className="mt-4 text-sm text-red-400">{createError}</p>}
+          <div className="mt-5 flex gap-2">
+            <button type="submit" disabled={creating || !projectId || title.trim().length < 2} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50">{creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Create deliverable</button>
+            <button type="button" onClick={() => setShowNew(false)} className="rounded-full border border-hairline px-4 py-2.5 text-sm text-muted">Cancel</button>
+          </div>
+          {(data?.projects ?? []).length === 0 && <p className="mt-3 text-xs text-amber-300">Create a client project first; deliverables must belong to a project.</p>}
+        </form>
+      )}
       <div className="mb-8 grid gap-5 sm:grid-cols-3">
         <StatCard
           label="Total"
@@ -100,8 +187,22 @@ export default function AdminDeliverablesPage() {
 
       {data && deliverables.length === 0 && (
         <p className="rounded-2xl border border-dashed border-hairline bg-background/40 p-8 text-center text-sm text-muted">
-          No deliverables yet.
+          No deliverables yet. Create one and assign it to a client project.
+          <button onClick={() => setShowNew(true)} disabled={(data?.projects ?? []).length === 0} className="mx-auto mt-3 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50"><Plus size={15} /> Add first deliverable</button>
         </p>
+      )}
+
+      {revisionId && (
+        <form onSubmit={submitRevision} className="mb-6 rounded-2xl border border-accent/30 bg-accent/[0.04] p-5">
+          <h2 className="text-sm font-semibold text-foreground">Submit a new version for client review</h2>
+          <p className="mt-1 text-xs text-muted">This creates the next version and moves the deliverable to In review.</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <label className="text-xs text-muted sm:col-span-2">Upload file (image ≤10 MB, video ≤200 MB, PDF ≤25 MB)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,application/pdf" onChange={(e) => { setRevisionFile(e.target.files?.[0] ?? null); if (e.target.files?.[0]) setRevisionUrl(""); }} className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Or external preview link<input type="url" value={revisionUrl} onChange={(e) => { setRevisionUrl(e.target.value); if (e.target.value) setRevisionFile(null); }} placeholder="https://staging… / Figma…" className={fieldClass} /></label>
+            <label className="text-xs text-muted sm:col-span-2">Version note<textarea rows={2} maxLength={2000} value={revisionNote} onChange={(e) => setRevisionNote(e.target.value)} placeholder="What changed in this version?" className={fieldClass} /></label>
+          </div>
+          <div className="mt-4 flex gap-2"><button type="submit" disabled={revisionBusy || (!revisionUrl.trim() && !revisionFile)} className="rounded-full bg-accent px-4 py-2 text-sm text-white disabled:opacity-50">{revisionBusy ? (revisionFile ? "Uploading…" : "Submitting…") : "Submit for review"}</button><button type="button" onClick={() => { setRevisionId(null); setRevisionFile(null); }} className="rounded-full border border-hairline px-4 py-2 text-sm text-muted">Cancel</button></div>
+        </form>
       )}
 
       {data && deliverables.length > 0 && (
@@ -117,6 +218,7 @@ export default function AdminDeliverablesPage() {
                     <th className="px-6 py-3 font-medium">Version</th>
                     <th className="px-6 py-3 font-medium">Due</th>
                     <th className="px-6 py-3 font-medium">Status</th>
+                    <th className="px-6 py-3 font-medium">Submission</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -157,6 +259,7 @@ export default function AdminDeliverablesPage() {
                           </select>
                         </div>
                       </td>
+                      <td className="px-6 py-4"><button type="button" onClick={() => { setRevisionId(d.id); setRevisionUrl(""); setRevisionNote(""); setRevisionFile(null); }} className="rounded-lg border border-hairline px-3 py-2 text-xs text-foreground hover:border-accent/50">Submit version</button></td>
                     </tr>
                   ))}
                 </tbody>
