@@ -150,4 +150,28 @@ describe("authentication and portal authorization structure", () => {
       assert.ok(lookup === -1 || quota < lookup, relative + " must consume before user lookup");
     }
   });
+
+  it("keeps the verified login email active while a new address is pending", () => {
+    const change = read("app/api/account/email/route.ts");
+    const me = read("app/api/auth/me/route.ts");
+    const context = read("lib/auth-context.tsx");
+    const page = read("app/dashboard/account/page.tsx");
+    assert.match(change, /pendingEmail:\s*email/);
+    assert.doesNotMatch(change, /data:\s*\{\s*email,\s*emailVerified:\s*false/);
+    assert.match(me, /pendingEmail:\s*true/);
+    assert.match(context, /pendingEmail\?:\s*string\s*\|\s*null/);
+    assert.match(page, /user\?\.pendingEmail/);
+    assert.match(page, /user\?\.pendingEmail\s*\|\|\s*email/);
+  });
+
+  it("uses compare-and-swap writes for verification, reset and email promotion", () => {
+    const verify = read("app/api/auth/verify-email/route.ts");
+    const reset = read("app/api/auth/reset-password/route.ts");
+    assert.match(verify, /pendingEmailUpdatedAt:\s*new Date\(pendingClaims\.pendingEmailUpdatedAt\)/);
+    assert.match(verify, /const promoted = await prisma\.user\.updateMany/);
+    assert.match(verify, /const verified = await prisma\.user\.updateMany/);
+    assert.match(reset, /const consumed = await prisma\.user\.updateMany/);
+    assert.match(reset, /updatedAt:\s*new Date\(claims\.updatedAt\)/);
+  });
+
 });
