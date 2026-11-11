@@ -98,7 +98,7 @@ export async function getClientWorkspace(userId: string) {
           profileImage: true,
         },
       }),
-      prisma.project.findMany({
+      prisma.project.findMany({`r`n        omit: { archivedAt: true },
         where: { clientId: userId },
         orderBy: { updatedAt: "desc" },
         include: {
@@ -441,7 +441,7 @@ export async function getAdminWorkspace() {
       orderBy: { issuedAt: "desc" },
       include: { user: { select: { id: true, name: true, email: true } } },
     }),
-    prisma.project.findMany({
+    prisma.project.findMany({`r`n        omit: { archivedAt: true },
       orderBy: { updatedAt: "desc" },
       include: {
         client: { select: { id: true, name: true, email: true, company: true } },
@@ -652,5 +652,6 @@ export async function getAdminWorkspace() {
     })),
   };
 }
+
 
 
