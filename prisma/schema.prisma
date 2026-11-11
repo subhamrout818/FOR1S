@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+﻿// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
@@ -16,7 +16,7 @@ model User {
   id                String   @id @default(cuid())
   name              String
   email             String   @unique
-  password          String? // nullable — OAuth users have no password
+  password          String? // nullable â€” OAuth users have no password
   profileImage      String?
   provider          String   @default("credentials") // "credentials" | "google" | "github"
   providerAccountId String?
@@ -129,7 +129,7 @@ model ContactMessage {
 }
 
 /* ============================================================ */
-/*  Client portal — projects, deliverables, files, billing      */
+/*  Client portal â€” projects, deliverables, files, billing      */
 /* ============================================================ */
 
 model Project {
@@ -140,14 +140,13 @@ model Project {
   tagline       String?
   description   String?
   status        String   @default("active") // "active" | "paused" | "completed"
-  progress      Int      @default(0) // 0–100
+  progress      Int      @default(0) // 0â€“100
   value         Decimal? @db.Decimal(12, 2)
   currency      String   @default("USD")
   nextDeadline  DateTime?
   endsAt        DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  archivedAt    DateTime?
 
   client       User             @relation(fields: [clientId], references: [id], onDelete: Cascade)
   milestones   Milestone[]

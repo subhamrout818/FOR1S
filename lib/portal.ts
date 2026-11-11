@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 import { verifyToken, getSessionToken } from "@/lib/auth";
 
 /* ------------------------------------------------------------------ */
@@ -58,7 +58,7 @@ export async function requireAuth(req: Request): Promise<AuthUser | null> {
 /*  Serialization helpers                                              */
 /* ------------------------------------------------------------------ */
 
-/** Prisma Decimal → number (so responses stay JSON-safe). */
+/** Prisma Decimal â†’ number (so responses stay JSON-safe). */
 export function money(
   n: { toString(): string } | number | null | undefined
 ): number {
@@ -82,7 +82,7 @@ export function invoiceStatus(inv: {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Client workspace — the entire portal for one signed-in client      */
+/*  Client workspace â€” the entire portal for one signed-in client      */
 /* ------------------------------------------------------------------ */
 
 export async function getClientWorkspace(userId: string) {
@@ -166,8 +166,7 @@ export async function getClientWorkspace(userId: string) {
       slug: p.slug,
       tagline: p.tagline,
       description: p.description,
-      status: p.archivedAt ? "archived" : p.status,
-      archivedAt: p.archivedAt,
+      status: p.status,
       progress: p.progress,
       value: money(p.value),
       currency: p.currency,
@@ -210,7 +209,7 @@ export async function getClientWorkspace(userId: string) {
     };
   });
 
-  // Only a genuinely active project is "active" — no fallback to a completed
+  // Only a genuinely active project is "active" â€” no fallback to a completed
   // or paused one, which would misrepresent the client's state.
   const activeProject =
     projectsSerialized.find((p) => p.status === "active") ?? null;
@@ -339,7 +338,7 @@ export async function getClientWorkspace(userId: string) {
       totalValue,
       paid,
       // "Remaining" is what's actually owed: the open invoices, not a
-      // (project value − paid) gap that can drift negative or hide unpaid bills.
+      // (project value âˆ’ paid) gap that can drift negative or hide unpaid bills.
       remaining: invoicesSerialized
         .filter((i) => ["pending", "overdue"].includes(i.status))
         .reduce((a, i) => a + i.amount, 0),
@@ -532,7 +531,6 @@ export async function getAdminWorkspace() {
     ])
   );
   for (const p of projects) {
-    if (p.archivedAt) continue;
     const row = clientMap.get(p.clientId);
     if (!row) continue;
     row.projectsCount += 1;
@@ -576,8 +574,7 @@ export async function getAdminWorkspace() {
       id: p.id,
       name: p.name,
       slug: p.slug,
-      status: p.archivedAt ? "archived" : p.status,
-      archivedAt: p.archivedAt,
+      status: p.status,
       progress: p.progress,
       value: money(p.value),
       nextDeadline: p.nextDeadline,
@@ -655,3 +652,5 @@ export async function getAdminWorkspace() {
     })),
   };
 }
+
+
