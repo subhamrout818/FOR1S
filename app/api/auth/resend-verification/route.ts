@@ -6,7 +6,7 @@ import {
   RATE_LIMITS,
 } from "@/lib/rate-limit";
 import { signVerifyEmail, signPendingEmailChange, normalizeEmail } from "@/lib/auth";
-import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { sendEmail, emailEnabled, absoluteVerificationUrl } from "@/lib/email";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -59,19 +59,19 @@ export async function POST(req: Request) {
     const user = await prisma.user.findFirst({ where: { OR: [{ email }, { pendingEmail: email }] } });
     if (user && user.pendingEmail === email && user.pendingEmailUpdatedAt && emailEnabled()) {
       const token = signPendingEmailChange(user.id, email, user.pendingEmailUpdatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(token)}&type=email-change`);
+      const link = absoluteVerificationUrl(req, token, "email-change");
       const sent = await sendEmail({ to: email, subject: "Verify your new FOR1S email", text: `Hi ${user.name},\n\nConfirm this email change by clicking this link (valid for 24 hours):\n${link}\n\nYour current login email remains active until confirmation.` });
       if (!sent) return NextResponse.json({ success: false, message: "We couldn't send the verification email. Please try again shortly." }, { status: 503 });
     } else if (user && user.email === email && !user.emailVerified && emailEnabled()) {
       const token = signVerifyEmail(user.id, user.email, user.updatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(token)}&type=signup`);
+      const link = absoluteVerificationUrl(req, token, "signup");
       const sent = await sendEmail({ to: user.email, subject: "Verify your FOR1S email", text: `Hi ${user.name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you did not create a FOR1S account, you can ignore this message.` });
       if (!sent) return NextResponse.json({ success: false, message: "We couldn't send the verification email. Please try again shortly." }, { status: 503 });
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Verification resend request failed:", error);
+    console.error("Verification resend request failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

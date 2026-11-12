@@ -11,9 +11,9 @@ const JWT_SECRET = (() => {
         "Generate one with: openssl rand -base64 48"
     );
   }
-  if (secret.length < 32) {
+  if (secret.length < 48) {
     throw new Error(
-      "JWT_SECRET must be at least 32 characters long for security. " +
+      "JWT_SECRET must be at least 48 characters long for security. " +
         "Generate one with: openssl rand -base64 48"
     );
   }
@@ -295,9 +295,10 @@ export function verifyResetPassword(
 
 /**
  * Hash a plaintext password.
+ * Cost factor 12 provides strong protection against brute-force attacks.
  */
 export function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 10);
+  return bcrypt.hash(password, 12);
 }
 
 /**

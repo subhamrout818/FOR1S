@@ -41,7 +41,7 @@ function request(method: string, body?: unknown): Request {
 
 describe("portal routes reject cross-client deliverable access", () => {
   before(async () => {
-    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-123";
+    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-test-secret-test-123456";
     const auth = await import("../lib/auth");
     signToken = auth.signToken;
     ({ GET: detailGET } = await import("../app/api/portal/deliverables/[id]/route"));

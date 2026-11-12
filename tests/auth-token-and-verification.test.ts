@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it, beforeEach } from "node:test";
 import { fakeDb, fakeUsers } from "./fakes/prisma";
 
-process.env.JWT_SECRET ??= "test-secret-that-is-at-least-32-characters-long";
+process.env.JWT_SECRET ??= "test-secret-that-is-at-least-48-characters-long-for-security";
 const auth = await import("../lib/auth");
 const { signVerifyEmail, verifyVerifyEmail, signResetPassword, verifyResetPassword,
   signPendingEmailChange, verifyPendingEmailChange, signPurposeToken } = auth;

@@ -4,12 +4,14 @@
 
 import { SITE_URL } from "@/lib/contact";
 
-const PRODUCTION_SENDER = /(?:<\s*)?[^<>\s]+@for1s\.com(?:\s*>)?$/i;
-
 function configuredSender(): string | null {
   const configured = process.env.RESEND_FROM?.trim();
   if (process.env.NODE_ENV === "production") {
-    return configured && PRODUCTION_SENDER.test(configured) ? configured : null;
+    // Exact domain match to prevent spoofing (for1s.com, not For1S.com or for1s.COM)
+    if (configured && configured.toLowerCase().endsWith("@for1s.com")) {
+      return configured;
+    }
+    return null;
   }
   return configured || "FOR1S <onboarding@resend.dev>";
 }
@@ -116,4 +118,10 @@ export function absoluteUrl(req: Request, path: string): string {
   const origin =
     (process.env.APP_URL || allowedOrigin(req) || fallbackOrigin()).replace(/\/$/, "");
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+/** Build a safe verification URL that points to the verify-email page (not API). */
+export function absoluteVerificationUrl(req: Request, token: string, type: "signup" | "email-change" = "signup"): string {
+  const origin = (process.env.APP_URL || allowedOrigin(req) || fallbackOrigin()).replace(/\/$/, "");
+  return `${origin}/verify-email?token=${encodeURIComponent(token)}&type=${type}`;
 }

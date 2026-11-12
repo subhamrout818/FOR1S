@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
 import { comparePassword, signPendingEmailChange, normalizeEmail } from "@/lib/auth";
-import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { sendEmail, emailEnabled, absoluteVerificationUrl } from "@/lib/email";
 import {
   consumeRateLimit,
   releaseRateLimit,
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
     let verificationEmailSent = false;
     if (emailEnabled() && pending.pendingEmailUpdatedAt) {
       const verify = signPendingEmailChange(user.id, email, pending.pendingEmailUpdatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}&type=email-change`);
+      const link = absoluteVerificationUrl(req, verify, "email-change");
       verificationEmailSent = await sendEmail({
         to: email,
         subject: "Verify your new FOR1S email",
@@ -118,7 +118,7 @@ export async function POST(req: Request) {
         : "The new address is pending, but verification could not be sent. Your current login email remains active; use resend verification to retry.",
     });
   } catch (error) {
-    console.error(error);
+    console.error("Account email change failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

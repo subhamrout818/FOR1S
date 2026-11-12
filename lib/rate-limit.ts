@@ -395,10 +395,12 @@ export function clientIp(req: Request): string {
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
-    // Chain must be one hop longer than the trusted-proxy count for the
-    // leftmost entries to include a genuine client IP.
-    if (hops.length > TRUSTED_PROXY_COUNT) {
-      return hops[hops.length - 1 - TRUSTED_PROXY_COUNT]!;
+    // Chain must be exactly one hop longer than the trusted-proxy count
+    // for the leftmost entries to include a genuine client IP.
+    // If the chain is shorter, it means a trusted proxy was skipped (or header forged).
+    // If the chain is longer, an untrusted proxy prepended extra IPs.
+    if (hops.length === TRUSTED_PROXY_COUNT + 1) {
+      return hops[0]!; // Leftmost = original client IP
     }
   }
 

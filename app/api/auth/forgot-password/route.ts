@@ -6,7 +6,7 @@ import {
   RATE_LIMITS,
 } from "@/lib/rate-limit";
 import { signResetPassword, normalizeEmail } from "@/lib/auth";
-import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { sendEmail, emailEnabled, absoluteVerificationUrl } from "@/lib/email";
 import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -87,7 +87,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Forgot-password request failed:", error);
+    console.error("Forgot-password request failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

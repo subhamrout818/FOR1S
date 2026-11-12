@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     const token = signToken(user.id, user.email, life.expiresIn);
     return setSessionCookie(NextResponse.json({ success: true }), token, life.remember);
   } catch (error) {
-    console.error(error);
+    console.error("Password change failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

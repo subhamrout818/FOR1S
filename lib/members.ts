@@ -25,6 +25,5 @@ export const MEMBERS: Member[] = [
     slug: "haze",
     name: "Haze",
     role: "Co-Founder",
-    image: "/team/haze.svg",
   },
 ];

@@ -25,7 +25,7 @@ function loginRequest(ip: string, password: string, email = EMAIL): Request {
 
 describe("POST /api/auth/login", () => {
   before(async () => {
-    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-123";
+    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-test-secret-test-123456";
     process.env.VERCEL = "1"; // makes clientIp() trust x-vercel-forwarded-for
     fakeUsers.set(EMAIL, {
       id: "user_1",

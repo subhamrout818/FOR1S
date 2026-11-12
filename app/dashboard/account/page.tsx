@@ -315,7 +315,7 @@ export default function AccountPage() {
     setEmailErr("");
     try {
       // Use pendingEmail if there's a pending change, otherwise use the current email
-      const targetEmail = pendingEmail || email;
+      const targetEmail = user?.pendingEmail || email;
       const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
