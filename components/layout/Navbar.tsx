@@ -36,7 +36,23 @@ export default function Navbar() {
   }, [menuOpen]);
 
   useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
   const handleNavClick = (href: string) => {
@@ -121,7 +137,9 @@ export default function Navbar() {
           </div>
 
           <button
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="for1s-mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
             className="flex flex-col gap-1.5 md:hidden"
           >
@@ -148,7 +166,11 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 flex flex-col justify-center gap-8 bg-background px-8 md:hidden"
+            id="for1s-mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            className="fixed inset-0 z-40 flex flex-col justify-center gap-6 overflow-y-auto bg-background px-8 py-24 md:hidden"
           >
             {NAV_LINKS.map((link, i) => (
               <motion.button

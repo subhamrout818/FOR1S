@@ -3,30 +3,25 @@ import Marquee from "@/components/sections/Marquee";
 import Vision from "@/components/sections/Vision";
 import Features from "@/components/sections/Features";
 import ProductPreview from "@/components/sections/ProductPreview";
-import Benefits from "@/components/sections/Benefits";
 import TeamMembers from "@/components/sections/TeamMembers";
 import Work from "@/components/sections/Work";
-import Testimonials from "@/components/sections/Testimonials";
 import Pricing from "@/components/sections/Pricing";
 import FAQ from "@/components/sections/FAQ";
 import FinalCTA from "@/components/sections/FinalCTA";
-import BlurReveal from "@/components/sections/BlurReveal";
 
 export default function Home() {
   return (
     <>
       <Hero />
       <Marquee />
-      <BlurReveal><Vision /></BlurReveal>
-      <BlurReveal><Features /></BlurReveal>
-      <BlurReveal><ProductPreview /></BlurReveal>
-      <BlurReveal><Benefits /></BlurReveal>
-      <BlurReveal><TeamMembers /></BlurReveal>
-      <BlurReveal><Work /></BlurReveal>
-      <Testimonials />
-      <BlurReveal><Pricing /></BlurReveal>
-      <BlurReveal><FAQ /></BlurReveal>
-      <BlurReveal><FinalCTA /></BlurReveal>
+      <Vision />
+      <Features />
+      <ProductPreview />
+      <Work />
+      <TeamMembers />
+      <Pricing />
+      <FAQ />
+      <FinalCTA />
     </>
   );
 }
