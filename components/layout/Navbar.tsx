@@ -12,7 +12,6 @@ import Logo from "@/components/ui/Logo";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const router = useRouter();
@@ -22,18 +21,14 @@ export default function Navbar() {
   const dashboardHref = isAdmin ? "/admin" : "/dashboard";
 
   useEffect(() => {
-    let lastY = window.scrollY;
-
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 40);
-      setHidden(y > lastY && y > 240 && !menuOpen);
-      lastY = y;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [menuOpen]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -54,8 +49,6 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        animate={{ y: hidden ? "-100%" : "0%" }}
-        transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b transition-colors duration-500",
           scrolled
