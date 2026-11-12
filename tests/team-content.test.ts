@@ -15,7 +15,7 @@ describe("public team and pricing content", () => {
     );
   });
 
-  it("allows a provided team photo while keeping the photo field optional", () => {
+  it("uses the supplied Haze portrait without making a portrait mandatory for every member", () => {
     const haze = MEMBERS.find(({ slug }) => slug === "haze");
     assert.ok(haze);
     assert.equal(haze.image, "/team/haze.svg");

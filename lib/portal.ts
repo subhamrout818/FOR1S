@@ -1,5 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { verifyToken, getSessionToken } from "@/lib/auth";
+import {
+  remainingInvoiceBalance,
+  remainingProjectBalance,
+  reconciledInvoiceStatus,
+  sumCompletedPayments,
+} from "@/lib/portal-billing";
 
 /* ------------------------------------------------------------------ */
 /*  Auth helper                                                        */
@@ -109,7 +115,7 @@ export async function getClientWorkspace(userId: string) {
             include: { _count: { select: { comments: true } } },
           },
           folders: { include: { files: { orderBy: { createdAt: "desc" } } } },
-          invoices: true,
+          invoices: { include: { payments: true } },
         },
       }),
       prisma.invoice.findMany({
@@ -153,13 +159,10 @@ export async function getClientWorkspace(userId: string) {
       ["in-review", "changes-requested"].includes(d.status)
     ).length;
     const totalPaid = p.invoices.reduce(
-      (acc, i) => (i.status === "paid" ? acc + money(i.amount) : acc),
+      (acc, invoice) => acc + sumCompletedPayments(invoice.payments),
       0
     );
-    const totalValue = p.invoices.reduce(
-      (acc, i) => acc + money(i.amount),
-      0
-    );
+    const totalValue = money(p.value);
 
     return {
       id: p.id,
@@ -216,27 +219,24 @@ export async function getClientWorkspace(userId: string) {
     projectsSerialized.find((p) => p.status === "active") ?? null;
 
   // ---- Invoices + billing ------------------------------------------
-  const invoicesSerialized = invoices.map((i) => ({
-    id: i.id,
-    number: i.number,
-    projectId: i.projectId,
-    description: i.description,
-    amount: money(i.amount),
-    status: invoiceStatus(i),
-    dueDate: i.dueDate,
-    issuedAt: i.issuedAt,
-    paid: money(
-      i.payments
-        .filter((p) => p.status === "completed")
-        .reduce((acc, p) => acc + money(p.amount), 0)
-    ),
-  }));
+  const invoicesSerialized = invoices.map((i) => {
+    const paid = sumCompletedPayments(i.payments);
+    return {
+      id: i.id,
+      number: i.number,
+      projectId: i.projectId,
+      description: i.description,
+      amount: money(i.amount),
+      status: reconciledInvoiceStatus(i.status, i.dueDate, i.amount, paid),
+      dueDate: i.dueDate,
+      issuedAt: i.issuedAt,
+      paid,
+      remaining: remainingInvoiceBalance(i.amount, paid),
+    };
+  });
 
   const totalValue = invoicesSerialized.reduce((a, invoice) => a + invoice.amount, 0);
-  const paid = invoicesSerialized.reduce(
-    (a, i) => (i.status === "paid" ? a + i.amount : a),
-    0
-  );
+  const paid = invoicesSerialized.reduce((total, invoice) => total + invoice.paid, 0);
 
   // ---- Needs attention ---------------------------------------------
   const reviews = projectsSerialized.flatMap((p) =>
@@ -338,11 +338,12 @@ export async function getClientWorkspace(userId: string) {
     billing: {
       totalValue,
       paid,
-      // "Remaining" is what's actually owed: the open invoices, not a
-      // (project value âˆ’ paid) gap that can drift negative or hide unpaid bills.
-      remaining: invoicesSerialized
-        .filter((i) => ["pending", "overdue"].includes(i.status))
-        .reduce((a, i) => a + i.amount, 0),
+      // Project balance includes both unbilled scope and the balance of open invoices.
+      remaining: remainingProjectBalance(totalValue, paid),
+      // Keep the invoiced-but-unpaid portion visible as a separate, auditable figure.
+      openInvoiceBalance: invoicesSerialized
+        .filter((invoice) => ["pending", "overdue"].includes(invoice.status))
+        .reduce((total, invoice) => total + invoice.remaining, 0),
     },
     folders: foldersSerialized,
     threads: commentThreads,
@@ -429,6 +430,7 @@ export async function getAdminWorkspace() {
     users,
     revenueAgg,
     pendingApprovals,
+    paymentSummaryAgg,
   ] = await Promise.all([
     prisma.payment.findMany({
       orderBy: { paidAt: "desc" },
@@ -440,7 +442,10 @@ export async function getAdminWorkspace() {
     }),
     prisma.invoice.findMany({
       orderBy: { issuedAt: "desc" },
-      include: { user: { select: { id: true, name: true, email: true } } },
+      include: {
+        user: { select: { id: true, name: true, email: true } },
+        payments: true,
+      },
     }),
     prisma.project.findMany({
         omit: { archivedAt: true },
@@ -469,7 +474,6 @@ export async function getAdminWorkspace() {
     }),
     prisma.deliverable.findMany({
       orderBy: { updatedAt: "desc" },
-      take: 100,
       include: {
         project: {
           select: { id: true, name: true, slug: true, client: { select: { id: true, name: true } } },
@@ -495,16 +499,28 @@ export async function getAdminWorkspace() {
     prisma.deliverable.count({
       where: { status: { in: ["in-review", "changes-requested"] } },
     }),
+    prisma.payment.aggregate({
+      where: { status: "completed" },
+      _sum: { amount: true },
+      _count: { _all: true },
+    }),
   ]);
 
   // Revenue this month = completed payments in the current calendar month.
   const revenueThisMonth = money(revenueAgg._sum.amount);
 
   const outstanding = invoices
-    .filter((i) =>
-      ["pending", "overdue"].includes(invoiceStatus(i))
-    )
-    .reduce((acc, i) => acc + money(i.amount), 0);
+    .filter((invoice) => ["pending", "overdue"].includes(
+      reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, sumCompletedPayments(invoice.payments))
+    ))
+    .reduce(
+      (total, invoice) =>
+        total + remainingInvoiceBalance(
+          invoice.amount,
+          sumCompletedPayments(invoice.payments)
+        ),
+      0
+    );
 
   const upcomingDeadlines = projects.filter((p) => {
     const d = p.nextDeadline ? new Date(p.nextDeadline).getTime() : 0;
@@ -529,6 +545,7 @@ export async function getAdminWorkspace() {
         totalValue: 0,
         paid: 0,
         outstanding: 0,
+        remaining: 0,
       },
     ])
   );
@@ -539,12 +556,19 @@ export async function getAdminWorkspace() {
     if (p.status === "active") row.activeProjectsCount += 1;
     row.totalValue += money(p.value);
   }
-  for (const i of invoices) {
-    const row = clientMap.get(i.userId);
+  for (const invoice of invoices) {
+    const row = clientMap.get(invoice.userId);
     if (!row) continue;
-    if (i.status === "paid") row.paid += money(i.amount);
-    else if (["pending", "overdue"].includes(invoiceStatus(i)))
-      row.outstanding += money(i.amount);
+    const invoicePaid = sumCompletedPayments(invoice.payments);
+    row.paid += invoicePaid;
+    if (["pending", "overdue"].includes(
+      reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, invoicePaid)
+    )) {
+      row.outstanding += remainingInvoiceBalance(invoice.amount, invoicePaid);
+    }
+  }
+  for (const row of clientMap.values()) {
+    row.remaining = remainingProjectBalance(row.totalValue, row.paid);
   }
 
   return {
@@ -571,6 +595,7 @@ export async function getAdminWorkspace() {
       totalValue: c.totalValue,
       paid: c.paid,
       outstanding: c.outstanding,
+      remaining: c.remaining,
     })),
     projects: projects.map((p) => ({
       id: p.id,
@@ -623,16 +648,29 @@ export async function getAdminWorkspace() {
       invoice: p.invoice,
       user: p.user,
     })),
-    invoices: invoices.map((i) => ({
-      id: i.id,
-      number: i.number,
-      description: i.description,
-      amount: money(i.amount),
-      status: invoiceStatus(i),
-      dueDate: i.dueDate,
-      issuedAt: i.issuedAt,
-      client: { id: i.userId, name: i.user.name, email: i.user.email },
-    })),
+    paymentsSummary: {
+      completedCount: paymentSummaryAgg._count._all,
+      totalReceived: money(paymentSummaryAgg._sum.amount),
+      average: paymentSummaryAgg._count._all > 0
+        ? money(paymentSummaryAgg._sum.amount) / paymentSummaryAgg._count._all
+        : 0,
+    },
+    invoices: invoices.map((invoice) => {
+      const paid = sumCompletedPayments(invoice.payments);
+      return {
+        id: invoice.id,
+        number: invoice.number,
+        projectId: invoice.projectId,
+        description: invoice.description,
+        amount: money(invoice.amount),
+        paid,
+        remaining: remainingInvoiceBalance(invoice.amount, paid),
+        status: reconciledInvoiceStatus(invoice.status, invoice.dueDate, invoice.amount, paid),
+        dueDate: invoice.dueDate,
+        issuedAt: invoice.issuedAt,
+        client: { id: invoice.userId, name: invoice.user.name, email: invoice.user.email },
+      };
+    }),
     tickets: tickets.map((t) => ({
       id: t.id,
       subject: t.subject,

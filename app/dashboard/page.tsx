@@ -122,11 +122,11 @@ function ProgressHero({ data }: { data: WorkspaceData }) {
                 Overall project progress
               </p>
               <h2 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tightest text-foreground md:text-3xl">
-                {active ? active.name : "No active project"}
+                {data.projects.length > 0 ? "All projects combined" : "No projects yet"}
               </h2>
               <p className="mt-1 text-sm text-muted">
-                {active
-                  ? "Here\u2019s exactly where your project stands — updated as the team ships."
+                {data.projects.length > 0
+                  ? `Value-weighted progress across ${data.projects.length} project${data.projects.length === 1 ? "" : "s"}. Individual progress is shown alongside.`
                   : "When FOR1S starts your build it will show up here."}
               </p>
             </div>
@@ -423,7 +423,7 @@ function NeedsAttention({ data }: { data: WorkspaceData }) {
               </div>
               <div className="flex shrink-0 items-center gap-3">
                 <span className="font-display text-sm font-semibold text-foreground">
-                  {inv.amount.toLocaleString("en-US", {
+                  {(inv.remaining ?? inv.amount).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0,
@@ -537,6 +537,9 @@ export default function DashboardPage() {
   const active = data?.activeProject ?? null;
   const milestones = active?.milestones ?? [];
   const deliverables = active?.deliverables ?? [];
+  const allDeliverables = data?.projects.flatMap((project) =>
+    project.deliverables.map((deliverable) => ({ ...deliverable, project: { id: project.id, name: project.name, slug: project.slug } }))
+  ) ?? [];
 
   return (
     <div>
@@ -614,7 +617,7 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2 px-6 pt-6">
                     <FileCheck2 size={16} className="text-accent" />
                     <p className="text-xs font-medium uppercase tracking-widest text-foreground">
-                      Deliverables
+                      Active project deliverables{active ? ` · ${active.name}` : ""}
                     </p>
                   </div>
                   <div className="px-6 pb-6 pt-5">
@@ -631,11 +634,11 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2 px-6 pt-6">
                     <Sparkles size={16} className="text-accent" />
                     <p className="text-xs font-medium uppercase tracking-widest text-foreground">
-                      Deliverables by status
+                      Deliverables across all projects
                     </p>
                   </div>
                   <div className="px-6 pb-6 pt-5">
-                    <DeliverableBars deliverables={deliverables} />
+                    <DeliverableBars deliverables={allDeliverables} />
                   </div>
                 </GlowCard>
               </Reveal>
