@@ -58,6 +58,8 @@ describe("authentication and portal authorization structure", () => {
   it("guards every admin API route, including the read-only workspace", () => {
     for (const relative of [
       "app/api/admin/route.ts",
+      "app/api/admin/files/route.ts",
+      "app/api/admin/files/[id]/route.ts",
       "app/api/admin/projects/route.ts",
       "app/api/admin/projects/[id]/route.ts",
       "app/api/admin/deliverables/[id]/route.ts",

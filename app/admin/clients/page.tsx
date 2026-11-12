@@ -96,7 +96,7 @@ export default function AdminClientsPage() {
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-hairline/80 pt-5 text-xs">
                   <span className="text-muted">
-                    Value {formatMoney(c.totalValue)} · Outstanding{" "}
+                    Value {formatMoney(c.totalValue)} · Project balance {formatMoney(c.remaining)} · Open invoices{" "}
                     <span className={c.outstanding > 0 ? "text-accent" : "text-muted"}>
                       {formatMoney(c.outstanding)}
                     </span>

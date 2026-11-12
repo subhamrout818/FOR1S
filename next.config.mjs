@@ -49,6 +49,9 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    agentUpgrade: "security",
+  },
   async headers() {
     return [
       { source: "/(.*)", headers: securityHeaders },

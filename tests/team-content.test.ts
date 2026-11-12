@@ -15,10 +15,10 @@ describe("public team and pricing content", () => {
     );
   });
 
-  it("does not require a team photo before one is provided", () => {
+  it("uses the supplied Haze portrait without making a portrait mandatory for every member", () => {
     const haze = MEMBERS.find(({ slug }) => slug === "haze");
     assert.ok(haze);
-    assert.equal(haze.image, undefined);
+    assert.equal(haze.image, "/team/haze.svg");
   });
 
   it("keeps public price display in dollars until pricing strategy is deliberately changed", () => {

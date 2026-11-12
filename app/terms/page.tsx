@@ -189,6 +189,8 @@ export default function TermsPage() {
           </p>
           <p className="mt-3">
             FOR1S does not currently process project payments directly through this website.
+            The client portal is for invoice and payment-record tracking only; it does not
+            provide online checkout or collect payment credentials.
           </p>
           <p className="mt-3">
             Payment arrangements may therefore be handled separately between FOR1S and the
