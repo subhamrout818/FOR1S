@@ -38,6 +38,8 @@ export async function GET(req: Request) {
         emailVerified: true,
         role: true,
         company: true,
+        pendingEmail: true,
+        pendingEmailUpdatedAt: true,
         // Not returned in response — only used for the hasPassword boolean.
         password: true,
         updatedAt: true,
@@ -70,6 +72,8 @@ export async function GET(req: Request) {
         emailVerified: user.emailVerified,
         role: user.role,
         company: user.company,
+        pendingEmail: user.pendingEmail,
+        pendingEmailUpdatedAt: user.pendingEmailUpdatedAt,
         hasPassword: !!user.password,
       },
     });

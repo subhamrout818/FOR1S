@@ -6,7 +6,7 @@ import {
   RATE_LIMITS,
 } from "@/lib/rate-limit";
 import { hashPassword, normalizeEmail, signToken, signVerifyEmail, setSessionCookie } from "@/lib/auth";
-import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { sendEmail, emailEnabled, absoluteVerificationUrl } from "@/lib/email";
 import { verifyTurnstile, TURNSTILE_FAILED_MESSAGE } from "@/lib/turnstile";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -28,7 +28,7 @@ async function sendVerificationEmail(req: Request, user: {
   updatedAt: Date;
 }): Promise<boolean> {
   const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
-  const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
+  const link = absoluteVerificationUrl(req, verifyToken, "signup");
   return sendEmail({
     to: user.email,
     subject: "Verify your FOR1S email",
@@ -170,7 +170,7 @@ export async function POST(req: Request) {
     if (token) setSessionCookie(response, token, true);
     return response;
   } catch (error) {
-    console.error("Signup request failed:", error);
+    console.error("Signup request failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

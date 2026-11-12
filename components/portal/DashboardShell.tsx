@@ -48,6 +48,7 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/clients", label: "Clients", icon: Users },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
   { href: "/admin/deliverables", label: "Deliverables", icon: Film },
+  { href: "/admin/files", label: "Files", icon: FileArchive },
   { href: "/admin/leads", label: "Leads", icon: Magnet },
   { href: "/admin/payments", label: "Payments", icon: Wallet },
   { href: "/admin/tickets", label: "Tickets", icon: LifeBuoy },

@@ -124,7 +124,7 @@ export async function POST(req: Request) {
       rememberMe
     );
   } catch (error) {
-    console.error(error);
+    console.error("Login request failed:", error instanceof Error ? error.message : "Unknown error");
 
     return NextResponse.json(
       {

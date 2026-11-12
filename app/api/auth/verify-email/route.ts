@@ -1,60 +1,162 @@
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 import {
   consumeRateLimit,
   clientIp,
   rateLimitedResponse,
   RATE_LIMITS,
 } from "@/lib/rate-limit";
-import { verifyVerifyEmail } from "@/lib/auth";
+import { verifyVerifyEmail, verifyPendingEmailChange } from "@/lib/auth";
 import { allowedOrigin, fallbackOrigin } from "@/lib/email";
 import { NextResponse } from "next/server";
 
 /**
- * GET /api/auth/verify-email?token=…
- *
- * The link inside the signup email. Idempotent — re-verifying within the
- * token's 24h lifetime is a no-op (email-client link prefetching can't break
- * it). Redirects to /login with a banner flag.
+ * Email security scanners routinely prefetch GET links. GET must therefore
+ * never consume a verification token or mutate account state.
  */
 export async function GET(req: Request) {
+  const token = new URL(req.url).searchParams.get("token") ?? "";
   const origin = allowedOrigin(req) ?? fallbackOrigin();
-  const to = (path: string) => NextResponse.redirect(new URL(path, origin));
+  const target = new URL("/verify-email", origin);
+  if (token) target.searchParams.set("token", token);
+  return NextResponse.redirect(target);
+}
 
+/** Explicit user confirmation: POST /api/auth/verify-email { token }. */
+export async function POST(req: Request) {
   try {
-    const limitKey = `auth:verify:${clientIp(req)}`;
     const rate = await consumeRateLimit(
-      limitKey,
+      `auth:verify:${clientIp(req)}`,
       RATE_LIMITS.verifyEmail.limit,
       RATE_LIMITS.verifyEmail.windowMs
     );
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
-    const token = new URL(req.url).searchParams.get("token") ?? "";
+    const body = await req.json().catch(() => null);
+    const token = typeof body?.token === "string" ? body.token : "";
+    if (!token)
+      return NextResponse.json(
+        { success: false, message: "Verification link is invalid or expired." },
+        { status: 400 }
+      );
+
+    const pendingClaims = verifyPendingEmailChange(token);
+    if (pendingClaims) {
+      const user = await prisma.user.findUnique({
+        where: { id: pendingClaims.userId },
+      });
+      if (
+        !user ||
+        user.pendingEmail !== pendingClaims.email ||
+        user.pendingEmailUpdatedAt?.getTime() !== pendingClaims.pendingEmailUpdatedAt
+      ) {
+        return NextResponse.json(
+          { success: false, message: "This email-change link is invalid or has expired." },
+          { status: 400 }
+        );
+      }
+      try {
+        // Atomic update: verify pendingEmailUpdatedAt matches to prevent IDOR
+        const promoted = await prisma.user.updateMany({
+          where: {
+            id: user.id,
+            pendingEmail: pendingClaims.email,
+            pendingEmailUpdatedAt: new Date(pendingClaims.pendingEmailUpdatedAt),
+          },
+          data: {
+            email: pendingClaims.email,
+            emailVerified: true,
+            pendingEmail: null,
+            pendingEmailUpdatedAt: null,
+          },
+        });
+        if (promoted.count !== 1)
+          return NextResponse.json(
+            { success: false, message: "This email-change link has already been used or replaced." },
+            { status: 409 }
+          );
+        return NextResponse.json({
+          success: true,
+          kind: "email-change",
+          message: "Your email address has been updated. Please sign in again with your new address.",
+        });
+      } catch (error) {
+        if (
+          error &&
+          typeof error === "object" &&
+          "code" in error &&
+          error.code === "P2002"
+        ) {
+          return NextResponse.json(
+            { success: false, message: "That email address is already associated with another account." },
+            { status: 409 }
+          );
+        }
+        throw error;
+      }
+    }
+
     const claims = verifyVerifyEmail(token);
-    if (!claims) return to("/login?verify=invalid");
+    if (!claims)
+      return NextResponse.json(
+        { success: false, message: "Verification link is invalid or expired." },
+        { status: 400 }
+      );
 
     const user = await prisma.user.findUnique({ where: { id: claims.userId } });
-    if (!user || user.email !== claims.email) return to("/login?verify=invalid");
+    if (!user || user.email !== claims.email)
+      return NextResponse.json(
+        { success: false, message: "Verification link is invalid or expired." },
+        { status: 400 }
+      );
 
-    // Single-use: reject tokens minted before the last updatedAt bump
-    // (e.g. a previous successful verification or email change).
     if (user.updatedAt.getTime() !== claims.updatedAt) {
-      // Already verified (e.g. a prefetched or re-clicked link): success.
-      // Otherwise the account changed since this link was issued (new link
-      // requested, signed out, profile edit) — don't claim success.
-      return to(user.emailVerified ? "/login?verified=1" : "/login?verify=invalid");
+      return user.emailVerified
+        ? NextResponse.json(
+            { success: true, kind: "signup", message: "Your email address is already verified. You can sign in." }
+          )
+        : NextResponse.json(
+            { success: false, message: "This verification link has expired. Request a new one." },
+            { status: 400 }
+          );
     }
 
     if (!user.emailVerified) {
-      await prisma.user.update({
-        where: { id: user.id },
+      // Atomic update with emailVerified: false condition to prevent race conditions
+      const verified = await prisma.user.updateMany({
+        where: {
+          id: user.id,
+          email: claims.email,
+          updatedAt: new Date(claims.updatedAt),
+          emailVerified: false,
+        },
         data: { emailVerified: true },
       });
+      if (verified.count !== 1) {
+        const latest = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { emailVerified: true },
+        });
+        return latest?.emailVerified
+          ? NextResponse.json(
+              { success: true, kind: "signup", message: "Your email address is verified. You can sign in." }
+            )
+          : NextResponse.json(
+              { success: false, message: "This verification link has expired. Request a new one." },
+              { status: 409 }
+            );
+      }
     }
 
-    return to("/login?verified=1");
+    return NextResponse.json({
+      success: true,
+      kind: "signup",
+      message: "Your email address is verified. You can sign in.",
+    });
   } catch (error) {
-    console.error(error);
-    return to("/login?verify=invalid");
+    console.error("Email verification failed:", error instanceof Error ? error.message : "Unknown error");
+    return NextResponse.json(
+      { success: false, message: "We couldn't verify this link. Please try again." },
+      { status: 500 }
+    );
   }
 }

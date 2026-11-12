@@ -20,7 +20,7 @@ function request(ip: string): Request {
 
 describe("auth email delivery quota", () => {
   before(async () => {
-    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-123";
+    process.env.JWT_SECRET = "test-secret-test-secret-test-secret-test-secret-test-123456";
     process.env.RESEND_API_KEY = "test-resend-key";
     process.env.APP_URL = "https://www.for1s.com";
     process.env.VERCEL = "1";

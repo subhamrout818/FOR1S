@@ -21,6 +21,8 @@ interface User {
   hasPassword?: boolean;
   role?: string; // "client" | "admin"
   company?: string | null;
+  pendingEmail?: string | null;
+  pendingEmailUpdatedAt?: string | null;
 }
 
 interface AuthResult {

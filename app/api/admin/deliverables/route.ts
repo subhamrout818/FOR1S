@@ -9,6 +9,7 @@ const createDeliverableSchema = z.object({
   kind: z.enum(["reel", "photo", "design", "video", "website", "document", "other"]),
   description: z.string().trim().max(5000).optional().or(z.literal("")),
   dueAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().or(z.literal("")),
+  externalUrl: z.string().trim().url().max(2048).optional().or(z.literal("")),
 });
 
 function parseDate(value: string | undefined): Date | null {
@@ -32,7 +33,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const { projectId, title, kind, description, dueAt } = parsed.data;
+  const { projectId, title, kind, description, dueAt, externalUrl } = parsed.data;
+  if (externalUrl) {
+    const url = new URL(externalUrl);
+    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {
+      return NextResponse.json({ success: false, message: "Only public http(s) links are allowed." }, { status: 400 });
+    }
+  }
   const dueDate = parseDate(dueAt);
   if (dueAt && !dueDate) {
     return NextResponse.json({ success: false, message: "Enter a valid due date." }, { status: 400 });
@@ -40,10 +47,13 @@ export async function POST(req: Request) {
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },
-    select: { id: true, name: true },
+    select: { id: true, name: true, archivedAt: true },
   });
   if (!project) {
     return NextResponse.json({ success: false, message: "Project not found." }, { status: 404 });
+  }
+  if (project.archivedAt) {
+    return NextResponse.json({ success: false, message: "Archived projects cannot receive new deliverables." }, { status: 409 });
   }
 
   try {
@@ -55,6 +65,7 @@ export async function POST(req: Request) {
           kind,
           description: description || null,
           dueAt: dueDate,
+          externalUrl: externalUrl || null,
           status: "draft",
           version: 1,
         },
@@ -66,6 +77,7 @@ export async function POST(req: Request) {
           version: 1,
           status: "draft",
           note: "Initial draft",
+          externalUrl: externalUrl || null,
         },
       });
       await tx.activityEvent.create({

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getAuthUserWithPassword } from "@/lib/authed-user";
-import { comparePassword, signToken, currentSessionLifetime, signVerifyEmail, setSessionCookie, normalizeEmail } from "@/lib/auth";
-import { sendEmail, emailEnabled, absoluteUrl } from "@/lib/email";
+import { comparePassword, signPendingEmailChange, normalizeEmail } from "@/lib/auth";
+import { sendEmail, emailEnabled, absoluteVerificationUrl } from "@/lib/email";
 import {
   consumeRateLimit,
   releaseRateLimit,
@@ -82,52 +82,43 @@ export async function POST(req: Request) {
       );
     }
 
-    // The new address is unverified until the owner confirms it. Without this,
-    // a typo or someone else's address becomes the account's login identifier
-    // while keeping the old "verified" state. Also revokes all prior sessions
-    // via the updatedAt check in requireAuth/getAuthUser.
-    const updated = await prisma.user.update({
-      where: { id: user.id },
-      data: { email, emailVerified: false },
-      select: { id: true, name: true, email: true, profileImage: true, updatedAt: true },
-    });
-
-    // Send verification to the NEW address. Keep the account reachable so the
-    // user can retry through /api/auth/resend-verification if delivery fails.
-    let verificationEmailSent = false;
-    if (emailEnabled()) {
-      const verify = signVerifyEmail(user.id, updated.email, updated.updatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verify)}`);
-      verificationEmailSent = await sendEmail({
-        to: updated.email,
-        subject: "Verify your new FOR1S email",
-        text: `Hi ${updated.name},\n\nConfirm your new email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't change your email, you can ignore this message.`,
-      });
-      if (!verificationEmailSent) {
-        console.error("Account email-change verification delivery failed.");
-      }
-    } else if (process.env.NODE_ENV === "production") {
-      console.error("Account email changed but verification email service is unavailable.");
+    if (email === user.email) {
+      return NextResponse.json({ success: true, needsVerification: false, message: "That is already your current email address." });
     }
 
-    // Re-issue the session so the user can reach account settings and retry.
-    const life = await currentSessionLifetime();
-    const token = signToken(updated.id, updated.email, life.expiresIn);
-    return setSessionCookie(
-      NextResponse.json({
-        success: true,
-        user: updated,
-        needsVerification: true,
-        verificationEmailSent,
-        message: verificationEmailSent
-          ? "Email changed. Check your new inbox to verify it."
-          : "Email changed, but we couldn't send the verification email. Use resend verification to try again.",
-      }),
-      token,
-      life.remember
-    );
+    // Stage the new address; the existing login identifier and sessions remain valid.
+    const pending = await prisma.user.update({
+      where: { id: user.id },
+      data: { pendingEmail: email, pendingEmailUpdatedAt: new Date() },
+      select: { id: true, name: true, email: true, pendingEmail: true, pendingEmailUpdatedAt: true },
+    });
+
+    let verificationEmailSent = false;
+    if (emailEnabled() && pending.pendingEmailUpdatedAt) {
+      const verify = signPendingEmailChange(user.id, email, pending.pendingEmailUpdatedAt);
+      const link = absoluteVerificationUrl(req, verify, "email-change");
+      verificationEmailSent = await sendEmail({
+        to: email,
+        subject: "Verify your new FOR1S email",
+        text: `Hi ${pending.name},\n\nConfirm this email change by clicking this link (valid for 24 hours):\n${link}\n\nYour current login email remains active until confirmation. If you did not request this, ignore this message.`,
+      });
+      if (!verificationEmailSent) console.error("Account email-change verification delivery failed.");
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: { id: pending.id, name: pending.name, email: pending.email },
+      pendingEmail: pending.pendingEmail,
+      needsVerification: true,
+      verificationEmailSent,
+      // Reference to resend-verification endpoint for client-side retry
+      resendEndpoint: "/api/auth/resend-verification",
+      message: verificationEmailSent
+        ? "Verification sent. Your current login email remains active until you confirm the new address."
+        : "The new address is pending, but verification could not be sent. Your current login email remains active; use resend verification to retry.",
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Account email change failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

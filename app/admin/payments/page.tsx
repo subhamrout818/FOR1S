@@ -16,22 +16,21 @@ export default function AdminPaymentsPage() {
   if (isLoading) return null;
 
   const payments = data?.payments ?? [];
-  const totalReceived = payments.reduce((a, p) => a + p.amount, 0);
-  const average =
-    payments.length > 0 ? Math.round(totalReceived / payments.length) : 0;
+  const totalReceived = data?.paymentsSummary.totalReceived ?? 0;
+  const average = data?.paymentsSummary.average ?? 0;
 
   return (
     <div>
       <PageHeader
         eyebrow="Payments"
         title="Payments"
-        sub="Revenue from completed invoices."
+        sub="The summary counts every completed payment. The table lists the latest 50 payment records, including non-completed statuses."
       />
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           label="Payments"
-          value={payments.length}
+          value={data?.paymentsSummary.completedCount ?? 0}
           icon={<CreditCard size={16} />}
           delay={0}
         />
@@ -93,6 +92,7 @@ export default function AdminPaymentsPage() {
                     <th className="px-6 py-3 font-medium">Client</th>
                     <th className="px-6 py-3 font-medium">Invoice</th>
                     <th className="px-6 py-3 font-medium">Method</th>
+                    <th className="px-6 py-3 font-medium">Status</th>
                     <th className="px-6 py-3 font-medium">Reference</th>
                     <th className="px-6 py-3 text-right font-medium">Amount</th>
                   </tr>
@@ -115,6 +115,9 @@ export default function AdminPaymentsPage() {
                       </td>
                       <td className="px-6 py-4 font-mono text-[11px] uppercase text-muted">
                         {p.method}
+                      </td>
+                      <td className="px-6 py-4 font-mono text-[10px] uppercase text-muted">
+                        {p.status}
                       </td>
                       <td className="px-6 py-4 font-mono text-xs text-muted">
                         {p.reference ?? "—"}

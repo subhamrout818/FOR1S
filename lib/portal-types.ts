@@ -76,6 +76,7 @@ export interface InvoiceItem {
   dueDate: string | null;
   issuedAt: string;
   paid?: number;
+  remaining?: number;
   client?: { id: string; name: string; email: string };
 }
 
@@ -128,7 +129,7 @@ export interface WorkspaceData {
   }>;
   activity: ActivityItem[];
   invoices: InvoiceItem[];
-  billing: { totalValue: number; paid: number; remaining: number };
+  billing: { totalValue: number; paid: number; remaining: number; openInvoiceBalance: number };
   folders: FolderWithFiles[];
   threads: ThreadItem[];
   tickets: TicketItem[];
@@ -141,7 +142,9 @@ export interface DeliverableDetail {
   status: string;
   description: string | null;
   mediaUrl: string | null;
+  mimeType: string | null;
   posterUrl: string | null;
+  externalUrl: string | null;
   version: number;
   dueAt: string | null;
   deliveredAt: string | null;
@@ -153,7 +156,9 @@ export interface DeliverableDetail {
     status: string;
     note: string | null;
     mediaUrl: string | null;
+    mimeType: string | null;
     posterUrl: string | null;
+    externalUrl: string | null;
     createdAt: string;
   }>;
   comments: Array<{
@@ -188,6 +193,7 @@ export interface AdminWorkspace {
     totalValue: number;
     paid: number;
     outstanding: number;
+    remaining: number;
   }>;
   projects: Array<{
     id: string;
@@ -236,6 +242,7 @@ export interface AdminWorkspace {
     user: { id: string; name: string; email: string };
   }>;
   invoices: InvoiceItem[];
+  paymentsSummary: { completedCount: number; totalReceived: number; average: number };
   tickets: TicketItem[];
   recentActivity: ActivityItem[];
 }

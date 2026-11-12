@@ -11,9 +11,9 @@ const JWT_SECRET = (() => {
         "Generate one with: openssl rand -base64 48"
     );
   }
-  if (secret.length < 32) {
+  if (secret.length < 48) {
     throw new Error(
-      "JWT_SECRET must be at least 32 characters long for security. " +
+      "JWT_SECRET must be at least 48 characters long for security. " +
         "Generate one with: openssl rand -base64 48"
     );
   }
@@ -26,7 +26,7 @@ export interface JwtPayload {
 }
 
 export type OAuthProvider = "google" | "github";
-export type TokenPurpose = "verify" | "reset" | "oauth-state";
+export type TokenPurpose = "verify" | "reset" | "email-change" | "oauth-state";
 
 /**
  * Sign a JWT token for the given user.
@@ -226,6 +226,16 @@ export function signVerifyEmail(
   );
 }
 
+/** 24-hour token for confirming a staged email change. */
+export function signPendingEmailChange(userId: string, email: string, pendingEmailUpdatedAt: Date): string {
+  return signPurposeToken({ userId, email, pendingEmailUpdatedAt: pendingEmailUpdatedAt.getTime() }, "email-change", "24h");
+}
+
+export function verifyPendingEmailChange(token: string): { userId: string; email: string; pendingEmailUpdatedAt: number } | null {
+  const payload = verifyPurposeToken(token, "email-change");
+  if (!payload || typeof payload.userId !== "string" || typeof payload.email !== "string" || typeof payload.pendingEmailUpdatedAt !== "number") return null;
+  return { userId: payload.userId, email: payload.email, pendingEmailUpdatedAt: payload.pendingEmailUpdatedAt };
+}
 export function verifyVerifyEmail(token: string): { userId: string; email: string; updatedAt: number } | null {
   const payload = verifyPurposeToken(token, "verify");
   if (
@@ -285,9 +295,10 @@ export function verifyResetPassword(
 
 /**
  * Hash a plaintext password.
+ * Cost factor 12 provides strong protection against brute-force attacks.
  */
 export function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 10);
+  return bcrypt.hash(password, 12);
 }
 
 /**

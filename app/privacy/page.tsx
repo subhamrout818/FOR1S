@@ -90,6 +90,16 @@ export default function PrivacyPage() {
             ]}
           />
 
+          <H3>Billing and Invoice Records</H3>
+          <p>
+            If you are a client, FOR1S may store invoice details and payment records
+            entered by FOR1S, such as invoice amounts, due dates, payment status, and
+            administrative payment references. The client portal is for invoice and
+            payment-record tracking only. FOR1S does not offer online checkout or process
+            payments through this website. Payments are arranged and completed separately
+            using a method agreed between FOR1S and the client.
+          </p>
+
           <H3>Communications</H3>
           <p>
             If you contact us through our contact form, email, support system, or ticket

@@ -52,31 +52,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const user = await prisma.user.findUnique({ where: { id: claims.userId } });
-    // Single-use: the token was minted against an earlier `updatedAt`, so any
-    // account change since (including a previous reset) invalidates it.
-    if (
-      !user ||
-      user.email !== claims.email ||
-      user.updatedAt.getTime() !== claims.updatedAt
-    ) {
+    const hashedPassword = await hashPassword(password);
+    // Atomic compare-and-swap closes the race where two simultaneous requests
+    // could both validate the same reset token before either update completed.
+    const consumed = await prisma.user.updateMany({
+      where: {
+        id: claims.userId,
+        email: claims.email,
+        updatedAt: new Date(claims.updatedAt),
+      },
+      data: { password: hashedPassword },
+    });
+    if (consumed.count !== 1) {
       return NextResponse.json(
         { success: false, message: "Invalid or expired reset link" },
         { status: 400 }
       );
     }
-
-    const hashedPassword = await hashPassword(password);
-    // Bumping updatedAt here revokes all prior sessions via the requireAuth /
-    // getAuthUser updatedAt check — a reset kills stolen tokens.
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { password: hashedPassword },
-    });
+    // The update bumps updatedAt, invalidating the token and all old sessions.
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error("Password reset failed:", error instanceof Error ? error.message : "Unknown error");
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
