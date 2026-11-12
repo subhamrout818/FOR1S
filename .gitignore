@@ -27,3 +27,5 @@ lighthouse-report*.json
 .copilot/
 CLAUDE.md
 .mcp.json
+.vercel
+.env*

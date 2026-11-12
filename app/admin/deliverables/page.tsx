@@ -80,7 +80,7 @@ export default function AdminDeliverablesPage() {
       {showNew && (
         <form onSubmit={createDeliverable} className="mb-8 rounded-2xl border border-hairline/80 bg-white/[0.025] p-5 sm:p-7">
           <h2 className="text-base font-semibold text-foreground">Create a deliverable</h2>
-          <p className="mt-1 mb-5 text-sm text-muted">Add a draft item to a client's project workspace.</p>
+          <p className="mt-1 mb-5 text-sm text-muted">Add a draft item to a client&apos;s project workspace.</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <label className="text-xs text-muted">Project *<select required value={projectId} onChange={(e) => setProjectId(e.target.value)} className={fieldClass}><option value="">Select a project…</option>{(data?.projects ?? []).map((p) => <option key={p.id} value={p.id}>{p.name} — {p.client.name}</option>)}</select></label>
             <label className="text-xs text-muted">Deliverable title *<input required minLength={2} maxLength={160} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Homepage design" className={fieldClass} /></label>
