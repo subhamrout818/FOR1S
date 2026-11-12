@@ -95,6 +95,15 @@ export default function RegisterPage() {
             >
               Go to login
             </Link>
+            <p className="mt-4 text-sm text-muted">
+              Didn&apos;t receive it?{" "}
+              <Link
+                href={`/resend-verification?email=${encodeURIComponent(registeredEmail)}`}
+                className="font-medium text-foreground underline underline-offset-4 hover:text-accent"
+              >
+                Resend verification email
+              </Link>
+            </p>
           </motion.div>
         ) : (
           <>

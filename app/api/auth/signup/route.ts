@@ -21,9 +21,23 @@ const signupSchema = z.object({
   turnstileToken: z.string().max(4096).optional().nullable(),
 });
 
+async function sendVerificationEmail(req: Request, user: {
+  id: string;
+  email: string;
+  name: string;
+  updatedAt: Date;
+}): Promise<boolean> {
+  const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
+  const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
+  return sendEmail({
+    to: user.email,
+    subject: "Verify your FOR1S email",
+    text: `Hi ${user.name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
+  });
+}
+
 export async function POST(req: Request) {
   try {
-    // Cap account creation per IP to slow mass-signup / abuse.
     const limitKey = `auth:signup:${clientIp(req)}`;
     const rate = await consumeRateLimit(
       limitKey,
@@ -34,13 +48,9 @@ export async function POST(req: Request) {
 
     const body = await req.json().catch(() => null);
     const result = signupSchema.safeParse(body);
-
     if (!result.success) {
       return NextResponse.json(
-        {
-          success: false,
-          errors: result.error.flatten().fieldErrors,
-        },
+        { success: false, errors: result.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
@@ -55,8 +65,6 @@ export async function POST(req: Request) {
     const { name, password } = result.data;
     const email = normalizeEmail(result.data.email);
 
-    // Signup and duplicate-account notices send mail too. Share the same
-    // per-address cap as password recovery and verification resend.
     const emailRate = await consumeRateLimit(
       `auth:email:${email}`,
       RATE_LIMITS.emailDelivery.limit,
@@ -64,23 +72,33 @@ export async function POST(req: Request) {
     );
     if (!emailRate.ok) return rateLimitedResponse(emailRate.resetAt);
 
-    // Fail closed: without email configured, don't silently create verified
-    // accounts that anyone can mass-register. Dev keeps the old behavior.
     if (!emailEnabled() && process.env.NODE_ENV === "production") {
       return NextResponse.json(
-        { success: false, message: "Signup is unavailable right now." },
+        { success: false, message: "Signup email service is unavailable right now. Please try again later." },
         { status: 503 }
       );
     }
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      // Don't reveal whether the email is registered. When email is configured,
-      // respond as if signup succeeded and notify the existing holder instead.
+      // A previous attempt may have created the account but failed to send its
+      // verification message. Retry verification instead of sending an
+      // unrelated "account already exists" notice and leaving the user stuck.
+      if (!existingUser.emailVerified && emailEnabled()) {
+        const sent = await sendVerificationEmail(req, existingUser);
+        if (!sent) {
+          return NextResponse.json(
+            { success: false, code: "EMAIL_DELIVERY_FAILED", message: "Your account already exists, but we couldn't send its verification email. Please try again shortly." },
+            { status: 503 }
+          );
+        }
+        return NextResponse.json(
+          { success: true, needsVerification: true, message: "A fresh verification link has been sent." },
+          { status: 200 }
+        );
+      }
+
       if (emailEnabled()) {
         const sent = await sendEmail({
           to: existingUser.email,
@@ -88,7 +106,6 @@ export async function POST(req: Request) {
           text: "Someone tried to sign up with this email address. If that was you, log in instead. If it wasn't you, you can ignore this message.",
         });
         if (!sent) console.error("Existing-account notification email delivery failed.");
-
         return NextResponse.json(
           {
             success: true,
@@ -100,21 +117,15 @@ export async function POST(req: Request) {
           { status: 200 }
         );
       }
+
       return NextResponse.json(
-        {
-          success: false,
-          message: "An account with this email already exists — try logging in.",
-        },
+        { success: false, message: "An account with this email already exists — try logging in." },
         { status: 409 }
       );
     }
 
-    // When email is configured the account starts unverified and the user must
-    // confirm before logging in. Without a provider (local dev) accounts are
-    // created verified so the old auto-login flow still works.
     const needsVerification = emailEnabled();
     const hashedPassword = await hashPassword(password);
-
     const user = await prisma.user.create({
       data: {
         name,
@@ -127,20 +138,16 @@ export async function POST(req: Request) {
 
     let token: string | null = null;
     if (!needsVerification) {
-      // Dev convenience — no email to confirm, so sign straight in.
       token = signToken(user.id, user.email);
     } else {
-      // Keep the response generic; the verification resend endpoint remains
-      // available if the provider is temporarily unavailable.
-      const verifyToken = signVerifyEmail(user.id, user.email, user.updatedAt);
-      const link = absoluteUrl(req, `/api/auth/verify-email?token=${encodeURIComponent(verifyToken)}`);
-      const sent = await sendEmail({
-        to: user.email,
-        subject: "Verify your FOR1S email",
-        text: `Hi ${name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
-      });
+      const sent = await sendVerificationEmail(req, user);
       if (!sent) {
-        console.error("Signup verification email delivery failed; resend is available.");
+        // Keep the newly-created account unverified. A second signup attempt
+        // now enters the retry branch above; it never creates a duplicate.
+        return NextResponse.json(
+          { success: false, code: "EMAIL_DELIVERY_FAILED", message: "Your account was created, but we couldn't send the verification email. Please submit again shortly to retry." },
+          { status: 503 }
+        );
       }
     }
 
@@ -160,19 +167,12 @@ export async function POST(req: Request) {
       { status: 201 }
     );
 
-    // Dev convenience: no email to confirm, so sign straight in — the session
-    // goes into an httpOnly cookie, not localStorage.
     if (token) setSessionCookie(response, token, true);
-
     return response;
   } catch (error) {
-    console.error(error);
-
+    console.error("Signup request failed:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Internal Server Error",
-      },
+      { success: false, message: "Internal Server Error" },
       { status: 500 }
     );
   }

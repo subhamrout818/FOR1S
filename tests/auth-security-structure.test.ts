@@ -104,15 +104,38 @@ describe("authentication and portal authorization structure", () => {
     }
   });
 
-  it("keeps email failure responses generic and leaves resend recovery available", () => {
+  it("keeps email failure responses safe and leaves recovery paths available", () => {
     const signup = read("app/api/auth/signup/route.ts");
     const reset = read("app/api/auth/forgot-password/route.ts");
     const resend = read("app/api/auth/resend-verification/route.ts");
-    assert.match(signup, /Signup verification email delivery failed/);
+    const emailChange = read("app/api/account/email/route.ts");
+    assert.match(signup, /EMAIL_DELIVERY_FAILED/);
+    assert.match(signup, /fresh verification link has been sent/);
     assert.match(reset, /Password reset email delivery failed/);
-    assert.match(resend, /Verification resend email delivery failed/);
-    assert.match(reset, /return NextResponse\.json\(\{ success: true \}\)/);
-    assert.match(resend, /return NextResponse\.json\(\{ success: true \}\)/);
+    assert.match(resend, /couldn't send the verification email/);
+    // Forgot-password remains generic to prevent account enumeration.
+    assert.ok(reset.includes("return NextResponse.json({ success: true })"));
+    // Account email changes normalize the new identifier and expose retry state.
+    assert.ok(emailChange.includes("normalizeEmail(result.data.email)"));
+    assert.ok(emailChange.includes("verificationEmailSent"));
+    assert.ok(emailChange.includes("resend-verification"));
+  });
+
+  it("keeps auth recovery routes reachable and links each failure to the right recovery flow", () => {
+    const signupAlias = read("app/signup/page.tsx");
+    const resendPage = read("app/resend-verification/page.tsx");
+    const login = read("app/login/page.tsx");
+    const register = read("app/register/page.tsx");
+    const resetPage = read("app/reset-password/page.tsx");
+    const accountPage = read("app/dashboard/account/page.tsx");
+
+    assert.ok(signupAlias.includes('redirect("/register")'));
+    assert.ok(resendPage.includes("/api/auth/resend-verification"));
+    assert.ok(login.includes('href="/resend-verification"'));
+    assert.ok(register.includes("/resend-verification?email="));
+    assert.ok(resetPage.includes('href="/forgot-password"'));
+    assert.ok(accountPage.includes("handleResendEmailVerification"));
+    assert.ok(accountPage.includes("verificationEmailSent") || accountPage.includes("json.message"));
   });
 
   it("caps signup, password-reset and verification email flows per recipient", () => {

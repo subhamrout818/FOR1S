@@ -81,7 +81,7 @@ export async function POST(req: Request) {
       });
       if (!sent) {
         // Keep the response identical for existing and unknown addresses.
-        console.error("Password reset email delivery failed.");
+        console.error("Password reset email delivery failed for an eligible account.");
       }
     }
 

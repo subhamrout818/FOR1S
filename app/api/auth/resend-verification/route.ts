@@ -17,9 +17,9 @@ const schema = z.object({
 /**
  * POST /api/auth/resend-verification
  *
- * Re-sends the signup verification email. Always returns the same success
- * response (no account enumeration); only actually sends when a matching,
- * unverified account exists.
+ * Re-sends the signup verification email. Unknown and already-verified
+ * addresses receive the same generic success response. A provider failure
+ * for a pending account is surfaced so the UI does not falsely claim success.
  */
 export async function POST(req: Request) {
   try {
@@ -42,13 +42,19 @@ export async function POST(req: Request) {
     );
     if (!rate.ok) return rateLimitedResponse(rate.resetAt);
 
-    // Share a per-address cap across changing IPs and other auth email flows.
     const emailRate = await consumeRateLimit(
       `auth:email:${email}`,
       RATE_LIMITS.emailDelivery.limit,
       RATE_LIMITS.emailDelivery.windowMs
     );
     if (!emailRate.ok) return rateLimitedResponse(emailRate.resetAt);
+
+    if (!emailEnabled() && process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { success: false, message: "Verification email service is unavailable right now." },
+        { status: 503 }
+      );
+    }
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (user && !user.emailVerified && emailEnabled()) {
@@ -60,8 +66,10 @@ export async function POST(req: Request) {
         text: `Hi ${user.name},\n\nPlease confirm your email by clicking this link (valid for 24 hours):\n${link}\n\nIf you didn't create a FOR1S account, you can ignore this email.`,
       });
       if (!sent) {
-        // Keep the response identical for existing and unknown addresses.
-        console.error("Verification resend email delivery failed.");
+        return NextResponse.json(
+          { success: false, message: "We couldn't send the verification email. Please try again shortly." },
+          { status: 503 }
+        );
       }
     }
 
