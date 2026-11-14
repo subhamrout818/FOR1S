@@ -26,9 +26,9 @@ export default function Work() {
           </div>
           <RevealMask blur={false} y={16} className="max-w-sm">
             <p className="text-sm leading-relaxed text-muted md:text-base">
-              These fictional concept sites explore how we could approach
-              different businesses. They are design studies — not paid client
-              projects or claims of measured business results.
+              These concept sites explore how we could approach different businesses.
+              They are independent design studies — not claims of paid client
+              work or measured business results.
             </p>
           </RevealMask>
         </div>
