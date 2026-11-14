@@ -257,6 +257,7 @@ export const FAQ_ITEMS = [
     answer:
       "For India, Launch websites start at ₹19,000, Business websites at ₹49,000, Signature 3D websites at ₹69,000, and custom platforms at ₹99,000+. The Signature 3D base includes one bespoke interactive 3D / WebGL hero scene. Add-ons such as CMS, reservations, ordering, extra pages, and content work are priced separately. International projects are quoted in USD. Every project starts with a free discovery call and a written scope.",
   },
+  {
     id: "q4",
     question: "What do I need to provide?",
     answer:
