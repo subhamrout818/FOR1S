@@ -31,5 +31,5 @@ describe("public team and pricing content", () => {
     assert.ok(signature);
     assert.equal(signature.price, "₹69,000");
     assert.ok(signature.specs.some((spec) => spec.includes("no 3D add-on fee")));
-  });;
+  });
 });
