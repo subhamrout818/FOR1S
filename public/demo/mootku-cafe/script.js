@@ -9,7 +9,7 @@ const MENU=[
 {id:"bbq-pizza",name:"BBQ Pizza",cat:"pizza",label:"PIZZA TIME",desc:"A crowd-pleasing pick for the whole table.",img:"https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=900&q=85"},
 {id:"chicken-dum-biryani",name:"Chicken Dum Biryani",cat:"biryani",label:"BESTSELLER",desc:"A proper meal, layered with fragrant flavour.",img:"https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=900&q=85"},
 {id:"alaska-mojito",name:"Alaska Mojito",cat:"drinks",label:"COOL DOWN",desc:"A refreshing sip for a slower moment.",img:"https://images.unsplash.com/photo-1513558161293-cdaf765edfd4?auto=format&fit=crop&w=900&q=85"},
-{id:"tawa-fish",name:"Tawa Fish",cat:"tandoor",label:"SEAFOOD FAVOURITE",desc:"A flavour-packed pick from the sea.",img:"https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=900&q=85"},
+{id:"tawa-fish",name:"Tawa Fish",cat:"indian",label:"SEAFOOD FAVOURITE",desc:"A flavour-packed pick from the sea.",img:"https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=900&q=85"},
 {id:"chicken-biryani",name:"Chicken Biryani",cat:"biryani",label:"A TABLE CLASSIC",desc:"A comforting classic for lunch or dinner.",img:"https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=900&q=85"},
 {id:"chilli-chicken",name:"Chilly Chicken",cat:"chinese",label:"CHINESE FAVOURITE",desc:"A spicy starter that brings everyone together.",img:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=85"},
 {id:"baby-corn",name:"Crispy Chilli Baby Corn",cat:"chinese",label:"VEG STARTER",desc:"Crisp, sweet and spicy — made for the middle of the table.",img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=85"},
@@ -95,11 +95,20 @@ function init3D(){
  const shadow=new THREE.Mesh(new THREE.CircleGeometry(2.15,48),new THREE.MeshBasicMaterial({color:0x8c300d,transparent:true,opacity:.12,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.y=-.22;scene.add(shadow);
  let yaw=-.35,pitch=0,drag=false,lastX=0,lastY=0,vx=0,vy=0,pointerX=0,pointerY=0,visible=true,raf=0,clock=0;
  const resize=()=>{const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.position.z=w<500?9.9:8.8;camera.updateProjectionMatrix();};
- new ResizeObserver(resize).observe(stage);resize();
+ if(window.ResizeObserver){new ResizeObserver(resize).observe(stage);}else{window.addEventListener("resize",resize,{passive:true});}resize();
  canvas.addEventListener("pointerdown",e=>{drag=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId);});
  canvas.addEventListener("pointermove",e=>{pointerX=(e.clientX/innerWidth-.5)*2;pointerY=(e.clientY/innerHeight-.5)*2;if(drag){const dx=e.clientX-lastX,dy=e.clientY-lastY;yaw+=dx*.009;pitch=Math.max(-.3,Math.min(.3,pitch+dy*.005));vx=dx*.001;lastX=e.clientX;lastY=e.clientY;}});
  canvas.addEventListener("pointerup",()=>drag=false);canvas.addEventListener("pointercancel",()=>drag=false);
  canvas.addEventListener("keydown",e=>{if(e.key==="ArrowLeft")yaw-=.2;if(e.key==="ArrowRight")yaw+=.2;});
+ const heroChips=$("#heroChips");
+ if(heroChips)heroChips.addEventListener("click",e=>{
+   const b=e.target.closest("button[data-title]");if(!b)return;
+   heroChips.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
+   $("#heroDish").textContent=b.dataset.title;$("#heroDishType").textContent=b.dataset.kind;
+   rimRing.material.color.set(b.dataset.color||"#ff6a13");
+   table.rotation.y+=Math.PI*.62;panda.rotation.z=.12;
+   if(!reduced)setTimeout(()=>{panda.rotation.z=0;},260);
+ });
  if("IntersectionObserver"in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible&&!raf)animate();}).observe(stage);
  function animate(){if(!visible||document.hidden){raf=0;return;}raf=requestAnimationFrame(animate);clock+=.016;if(!drag&&!reduced){yaw+=vx;vx*=.94;yaw+=.0025;}table.rotation.y=yaw;table.rotation.x=pitch*.5;table.position.y=-.45+(reduced?0:Math.sin(clock*1.4)*.035);panda.rotation.y=Math.sin(clock*.7)*.08+pointerX*.18;panda.rotation.x=pointerY*.06;panda.position.y=1.65+(reduced?0:Math.sin(clock*1.7)*.055);if(!reduced)floaters.forEach(o=>{o.rotation.y+=.006;o.position.y=o.userData.base+Math.sin(clock+o.userData.phase)*.12;});renderer.render(scene,camera);}
  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&visible&&!raf)animate();});animate();
