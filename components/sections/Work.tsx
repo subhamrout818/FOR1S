@@ -33,7 +33,7 @@ export default function Work() {
           </RevealMask>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {CASE_STUDIES.map((project, i) => (
             <RevealMask key={project.slug} delay={i * 0.08} y={28}>
               <Link
