@@ -9,7 +9,7 @@ import RevealMask from "@/components/ui/RevealMask";
 import MagneticButton from "@/components/ui/MagneticButton";
 import ActionPanel from "@/components/ui/ActionPanel";
 import { CONTACT } from "@/lib/contact";
-import { PRICING_TIERS } from "@/lib/data";
+import { PRICING_ADDONS, PRICING_TIERS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { trackAnalyticsEvent } from "@/lib/analytics";
 
@@ -30,14 +30,14 @@ export default function Pricing() {
             type="words"
             className="mx-auto max-w-2xl font-display text-fluid-xl font-semibold uppercase leading-[0.98] tracking-tightest text-foreground"
           >
-            Three ways to work with us.
+            Four ways to work with us.
           </SplitReveal>
           <p className="mt-4 text-sm text-muted">
-            Founding client pricing — limited time.
+            Indicative starting prices for India. Final scope and fee are confirmed after discovery.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:items-center">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 md:items-stretch">
           {PRICING_TIERS.map((tier, i) => (
             <RevealMask key={tier.id} delay={i * 0.08} y={28}>
               <div
