@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="t d">
+<title id="t">Mootku panda chef</title><desc id="d">A friendly panda mascot wearing an orange chef hat.</desc>
+<circle cx="160" cy="160" r="154" fill="#e90012" stroke="#fffaf4" stroke-width="10"/>
+<path d="M58 110 35 46q52 5 82 39M262 110l23-64q-52 5-82 39" fill="#17110e" stroke="#17110e" stroke-width="12" stroke-linejoin="round"/>
+<ellipse cx="160" cy="178" rx="112" ry="111" fill="#fffaf4" stroke="#17110e" stroke-width="8"/>
+<path d="M76 163q-5-40 28-48 32-8 42 30-10 48-44 48-23-3-26-30M244 163q5-40-28-48-32-8-42 30 10 48 44 48 23-3 26-30" fill="#17110e"/>
+<ellipse cx="119" cy="158" rx="11" ry="15" fill="#fff"/>
+<ellipse cx="201" cy="158" rx="11" ry="15" fill="#fff"/>
+<ellipse cx="160" cy="197" rx="18" ry="13" fill="#17110e"/>
+<path d="M143 217q17 18 34 0" fill="none" stroke="#17110e" stroke-width="7" stroke-linecap="round"/>
+<ellipse cx="92" cy="205" rx="15" ry="9" fill="#ffb2a2" opacity=".8"/>
+<ellipse cx="228" cy="205" rx="15" ry="9" fill="#ffb2a2" opacity=".8"/>
+<path d="M104 83h112" stroke="#17110e" stroke-width="8" stroke-linecap="round"/>
+<path d="M117 78q-2-38 43-42 45 4 43 42z" fill="#ff6a13" stroke="#17110e" stroke-width="8"/>
+<path d="M140 37q-8-20 8-28 16 8 12 27M168 36q-1-23 16-29 15 12 7 31" fill="#ffc857" stroke="#17110e" stroke-width="6" stroke-linejoin="round"/>
+</svg>
