@@ -127,7 +127,7 @@ export default function Pricing() {
           </div>
         </div>
         <p className="mt-8 text-center text-xs text-muted">
-          Domain, hosting, third-party subscriptions, paid assets, and applicable taxes are separate unless included in the written proposal. International projects are quoted in USD.
+          Signature 3D includes one bespoke interactive hero scene; additional 3D scenes, complex modelling, or configurators are scoped separately. Domain, hosting, third-party subscriptions, paid assets, and applicable taxes are separate unless included in the written proposal. International projects are quoted in USD.
         </p>
       </div>
     </section>
