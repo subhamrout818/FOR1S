@@ -27,6 +27,36 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
+    slug: "mootku-cafe",
+    name: "Mootku Café & Resto",
+    industry: "Café & Restaurant",
+    year: "2026",
+    tags: ["Hospitality concept", "Brand storytelling", "Menu discovery"],
+    summary:
+      "A warm, playful digital home for a café built around togetherness — pairing its personal story and panda-inspired character with a considered food, ambience, and visit experience.",
+    monogram: "M",
+    hue: ["#D76D45", "#1E392E"],
+    thumbnail: "/demo/mootku-cafe/cover.svg",
+    demoUrl: "/demo/mootku-cafe/index.html",
+    services: [
+      "Art direction & visual design",
+      "Responsive frontend experience",
+      "Menu discovery & featured dishes",
+      "Storytelling and visit journey",
+    ],
+    overview: [
+      "Mootku is more than a café name. Its story begins with a personal nickname — a small expression of affection that grew into a place for friends, families, and everyday celebrations. This concept brings that warmth forward instead of treating the website like a generic restaurant menu.",
+      "The visual direction balances a calm, editorial layout with a little playful character inspired by Mootku's panda identity. The experience moves from the story behind the name into featured food, the atmosphere, celebration enquiries, and practical visit details.",
+      "This is an independent frontend concept created by FOR1S for presentation and discussion. It is not an official launch or commissioned redesign. Food imagery is illustrative, and any production version would be refined with approved brand assets, current menu data, photography, and owner feedback.",
+    ],
+    highlights: [
+      { label: "Illustrative scope", value: "Hospitality website" },
+      { label: "Experience focus", value: "Story, menu & visits" },
+      { label: "Visual direction", value: "Warm editorial / playful" },
+      { label: "Project status", value: "Concept demo" },
+    ],
+  },
+  {
     slug: "brew-and-co",
     name: "Brew & Co.",
     industry: "Café & Restaurant",
