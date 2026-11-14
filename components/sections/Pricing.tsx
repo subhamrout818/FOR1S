@@ -9,7 +9,7 @@ import RevealMask from "@/components/ui/RevealMask";
 import MagneticButton from "@/components/ui/MagneticButton";
 import ActionPanel from "@/components/ui/ActionPanel";
 import { CONTACT } from "@/lib/contact";
-import { PRICING_TIERS } from "@/lib/data";
+import { PRICING_ADDONS, PRICING_TIERS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { trackAnalyticsEvent } from "@/lib/analytics";
 
@@ -30,14 +30,14 @@ export default function Pricing() {
             type="words"
             className="mx-auto max-w-2xl font-display text-fluid-xl font-semibold uppercase leading-[0.98] tracking-tightest text-foreground"
           >
-            Three ways to work with us.
+            Four ways to work with us.
           </SplitReveal>
           <p className="mt-4 text-sm text-muted">
-            Founding client pricing — limited time.
+            Indicative starting prices for India. Final scope and fee are confirmed after discovery.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:items-center">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 md:items-stretch">
           {PRICING_TIERS.map((tier, i) => (
             <RevealMask key={tier.id} delay={i * 0.08} y={28}>
               <div
@@ -108,8 +108,26 @@ export default function Pricing() {
           ))}
         </div>
 
-        <p className="mt-10 text-center text-xs text-muted">
-          Custom scope available. Every project starts with a free discovery call.
+        <div className="mt-14 border-t border-hairline pt-10">
+          <div className="mb-8 text-center">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">Optional additions</p>
+            <h3 className="mt-3 font-display text-2xl font-semibold uppercase tracking-tightest text-foreground">Add only what you need.</h3>
+            <p className="mt-3 text-sm text-muted">Keep the base website focused. Extend it with separately scoped features when your business needs them.</p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {PRICING_ADDONS.map((addon) => (
+              <div key={addon.name} className="rounded-xl border border-hairline bg-surface/50 p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <h4 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">{addon.name}</h4>
+                  <span className="shrink-0 font-mono text-xs text-accent">{addon.price}</span>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted">{addon.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p className="mt-8 text-center text-xs text-muted">
+          Signature 3D includes one bespoke interactive hero scene; additional 3D scenes, complex modelling, or configurators are scoped separately. Domain, hosting, third-party subscriptions, paid assets, and applicable taxes are separate unless included in the written proposal. International projects are quoted in USD.
         </p>
       </div>
     </section>

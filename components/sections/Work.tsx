@@ -26,14 +26,14 @@ export default function Work() {
           </div>
           <RevealMask blur={false} y={16} className="max-w-sm">
             <p className="text-sm leading-relaxed text-muted md:text-base">
-              These fictional concept sites explore how we could approach
-              different businesses. They are design studies — not paid client
-              projects or claims of measured business results.
+              These concept sites explore how we could approach different businesses.
+              They are independent design studies — not claims of paid client
+              work or measured business results.
             </p>
           </RevealMask>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {CASE_STUDIES.map((project, i) => (
             <RevealMask key={project.slug} delay={i * 0.08} y={28}>
               <Link

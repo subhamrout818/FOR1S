@@ -76,13 +76,26 @@ Launch is not the finish line. Updates, fixes, and improvements keep the site wo
 
 </td>
 </tr>
+<tr>
+<td colspan="2" valign="top">
+
+### Beyond the marketing site
+
+The platform in this repo also ships:
+
+- **Client portal** — projects, milestones, deliverables with versioned review and comments, files, billing, messages, and support tickets
+- **Admin workspace** — clients, leads, projects, deliverables, payments, tickets, and team
+- **Blog** and a **contact flow** with email notifications
+
+</td>
+</tr>
 </table>
 
 <img src="./assets/readme/divider.svg" alt="" width="100%">
 
 ## Selected work
 
-Three fictional concept sites built as interactive demos. They demonstrate design direction and frontend implementation; they are not presented as completed client engagements.
+Four concept sites built as interactive demos. They demonstrate design direction and frontend implementation; they are not presented as completed client engagements.
 
 <table>
 <tr>
@@ -129,13 +142,15 @@ A fictional salon concept exploring an editorial visual identity, service inform
 </td>
 <td width="50%" valign="top">
 
-### Beyond the marketing site
+<a href="https://for1s.com/demo/mootku-cafe/index.html"><img src="./public/demo/mootku-cafe/cover.svg" alt="Mootku Cafe 3D panda-led restaurant concept" width="100%"></a>
 
-The platform in this repo also ships:
+### Mootku Café & Resto
+*Cafe & restaurant · 2026*
 
-- **Client portal** — projects, milestones, deliverables with versioned review and comments, files, billing, messages, and support tickets
-- **Admin workspace** — clients, leads, projects, deliverables, payments, tickets, and team
-- **Blog** and a **contact flow** with email notifications
+A panda-led restaurant concept with an interactive 3D hero, real menu categories, featured favourites, mood picker, and visit journey.
+
+`3D / WebGL` `Menu discovery` `Motion` `Hospitality`
+[**View demo →**](https://for1s.com/demo/mootku-cafe/index.html) · [Case study](https://for1s.com/work/mootku-cafe)
 
 </td>
 </tr>

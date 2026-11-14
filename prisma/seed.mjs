@@ -38,7 +38,8 @@ async function upsertUser({ email, name, role, company, password }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Plans — mirrored from the marketing pricing (lib/data.ts)          */
+/*  Client-portal subscription plans. These are separate from the      */
+/*  one-off public website project packages in lib/data.ts.             */
 /* ------------------------------------------------------------------ */
 
 const PLANS = [

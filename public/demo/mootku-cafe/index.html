@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#ff6a13"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>MOOTKU Café & Resto — Food for Every Mood</title>
+  <meta name="description" content="A playful, panda-led digital concept for Mootku Café & Resto in Bhubaneswar. Food for every mood."/>
+  <meta property="og:title" content="MOOTKU Café & Resto — Food for Every Mood"/>
+  <meta property="og:description" content="A panda-led restaurant concept with a playful 3D experience and a menu for every mood."/>
+  <meta property="og:type" content="website"/>
+  <link rel="icon" href="assets/mootku-panda.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700;800;900&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script>if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('reduce-motion');</script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="loader" id="loader"><div class="loader-panda"><img src="assets/mootku-panda.svg" alt=""/></div><span>GETTING THE TABLE READY</span><i><b></b></i></div>
+  <header class="site-nav" id="siteNav">
+    <div class="nav-inner wrap">
+      <a class="brand" href="#top" aria-label="Mootku home"><img src="assets/mootku-panda.svg" alt=""/><span>MOOTKU<small>CAFÉ & RESTO</small></span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#menu">The menu</a><a href="#story">Our story</a><a href="#mood">Find your mood</a><a href="#space">The space</a><a href="#visit">Visit us</a>
+      </nav>
+      <a class="nav-cta" href="https://mootkucafe.com/menu" target="_blank" rel="noopener">Full menu <span>↗</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false"><i></i><i></i></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+      <div class="hero-ghost" aria-hidden="true">MOOTKU</div>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> CAFÉ & RESTO · BHUBANESWAR</p>
+          <h1><span>Good food.</span><em>Better moods.</em></h1>
+          <p class="hero-lede">A little bit of everything, a whole lot of heart. From slow catch-ups to full-table feasts, there's always something for your mood.</p>
+          <div class="hero-actions"><a class="btn btn-dark" href="#menu">Explore the menu <b>↘</b></a><a class="text-cta" href="#story">Meet Mootku <span>↗</span></a></div>
+          <div class="hero-meta"><span>01 / FOOD FOR EVERY MOOD</span><i></i><span>MADE TO BE SHARED</span></div>
+        </div>
+        <div class="hero-stage" id="heroStage">
+          <div class="stage-topline"><span>THE MOOTKU TABLE</span><span>DRAG TO ROTATE ↗</span></div>
+          <canvas id="heroCanvas" aria-label="Interactive 3D panda chef and Mootku food platter. Drag to rotate." tabindex="0"></canvas>
+          <div class="stage-fallback" id="stageFallback"><img src="assets/mootku-panda.svg" alt="Mootku panda chef"/><span>FOOD FOR EVERY MOOD</span></div>
+          <div class="stage-sticker"><span>FRESH VIBES</span><b>ONLY MOOTKU<br/>APPROVED</b><i>✳</i></div>
+          <div class="stage-caption"><b id="heroDish">The Mootku spread</b><span id="heroDishType">A little bit of everything</span></div><div class="hero-chips" id="heroChips" aria-label="Explore food moods"><button class="active" data-title="The Mootku spread" data-kind="A little bit of everything" data-color="#ff6a13">All moods</button><button data-title="Biryani favourites" data-kind="Rice & biryani" data-color="#d88942">Biryani</button><button data-title="From the tandoor" data-kind="Tandoor & grills" data-color="#c73f00">Tandoor</button><button data-title="Pizza & more" data-kind="Continental bites" data-color="#42633d">Pizza</button><button data-title="Coolers & café sips" data-kind="Drinks & refreshers" data-color="#e7a6a0">Sips</button></div>
+        </div>
+      </div>
+      <div class="hero-bottom wrap"><span>GOOD TIMES START AROUND A TABLE</span><a href="#menu" aria-label="Scroll to menu">↓</a><span>SCROLL TO EXPLORE</span></div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>FOOD FOR EVERY MOOD</span><b>✳</b><span>GOOD FOOD, GOOD PEOPLE</span><b>✳</b><span>MAKE ROOM FOR ONE MORE</span><b>✳</b><span>MOOTKU APPROVED</span><b>✳</b><span>FOOD FOR EVERY MOOD</span><b>✳</b><span>GOOD FOOD, GOOD PEOPLE</span><b>✳</b><span>MAKE ROOM FOR ONE MORE</span><b>✳</b><span>MOOTKU APPROVED</span><b>✳</b></div></div>
+
+    <section class="menu-section section" id="menu">
+      <div class="wrap">
+        <div class="section-top"><p class="eyebrow dark"><span></span> 02 / SOMETHING FOR EVERY CRAVING</p><span class="section-index">THE MENU — 01/04</span></div>
+        <div class="menu-heading"><h2>A menu with<br/><em>many moods.</em></h2><p>From the first bite to the last sip. Find your familiar favourite, or let the panda introduce you to something new.</p></div>
+        <div class="menu-toolbar"><div class="menu-tabs" id="menuTabs" role="tablist" aria-label="Filter menu"><button class="tab active" data-filter="all" role="tab" aria-selected="true">All favourites</button><button class="tab" data-filter="tandoor" role="tab" aria-selected="false">Tandoor</button><button class="tab" data-filter="indian" role="tab" aria-selected="false">North Indian</button><button class="tab" data-filter="biryani" role="tab" aria-selected="false">Biryani</button><button class="tab" data-filter="chinese" role="tab" aria-selected="false">Chinese</button><button class="tab" data-filter="pizza" role="tab" aria-selected="false">Pizza</button><button class="tab" data-filter="drinks" role="tab" aria-selected="false">Drinks</button></div><label class="menu-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="menuSearch" type="search" placeholder="Find a favourite…" aria-label="Search menu"/></label></div>
+        <div class="menu-grid" id="menuGrid"></div>
+        <div class="menu-bottom"><p><span>✳</span> These are selected favourites, not the complete menu.</p><a class="btn btn-orange" href="https://mootkucafe.com/menu" target="_blank" rel="noopener">Explore the full menu <b>↗</b></a></div>
+        <p class="menu-note">Dish selection is based on Mootku's publicly listed menu and bestsellers. Availability and current prices should be confirmed with the café.</p>
+      </div>
+    </section>
+
+    <section class="story-section section" id="story">
+      <div class="wrap">
+        <div class="section-top"><p class="eyebrow"><span></span> 03 / THE HEART BEHIND THE NAME</p><span class="section-index">A LITTLE BACKSTORY</span></div>
+        <div class="story-grid">
+          <div class="story-art">
+            <div class="story-photo"><img src="https://mootkucafe.com/assets/images/news/about.jpg" alt="The warm, plant-filled dining room at Mootku Café" loading="lazy"/></div>
+            <div class="story-panda"><img src="assets/mootku-panda.svg" alt="Mootku's panda chef mascot" loading="lazy"/><span>YOUR FRIENDLY<br/>PANDA CHEF</span></div>
+            <div class="story-stamp">LOVE<br/>ON A<br/>PLATE <b>✳</b></div>
+          </div>
+          <div class="story-copy"><p class="eyebrow dark"><span></span> MORE THAN A PLACE TO EAT</p><h2>A name full<br/>of <em>love.</em></h2><p class="story-lead">Some names are made up. Some names mean everything.</p><p>“Mootku” began as a loving nickname — a little word that carries affection, warmth and togetherness. That feeling grew into a café and resto where friends meet, families gather and ordinary days find a reason to celebrate.</p><p>It's not just about what's on the plate. It's about the people around the table, the stories that stretch past dessert, and a place that feels a little like yours.</p><a class="text-cta dark-link" href="https://mootkucafe.com/about" target="_blank" rel="noopener">The story behind the name <span>↗</span></a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mood-section section" id="mood">
+      <div class="wrap mood-wrap">
+        <div class="mood-intro"><p class="eyebrow"><span></span> 04 / LET THE PANDA PICK</p><h2>What's your<br/><em>mood today?</em></h2><p>Big appetite, little snack, full table or just a cool sip — tap a mood and let Mootku make a suggestion.</p><div class="mood-panda"><img src="assets/mootku-panda.svg" alt="Mootku panda mascot"/></div></div>
+        <div class="mood-picker">
+          <div class="mood-options" id="moodOptions">
+            <button class="mood-option active" data-mood="feast"><span>01</span><b>I'm properly hungry</b><i>↗</i></button>
+            <button class="mood-option" data-mood="share"><span>02</span><b>Something to share</b><i>↗</i></button>
+            <button class="mood-option" data-mood="comfort"><span>03</span><b>Comfort food, please</b><i>↗</i></button>
+            <button class="mood-option" data-mood="refresh"><span>04</span><b>Keep it cool</b><i>↗</i></button>
+          </div>
+          <div class="mood-result" id="moodResult" aria-live="polite"><div class="mood-result-img"><img src="https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=900&q=85" alt="Chicken biryani" loading="lazy"/></div><div class="mood-result-copy"><span>THE PANDA'S PICK</span><h3>Chicken Dum Biryani</h3><p>A proper meal for a proper appetite.</p><a href="https://mootkucafe.com/menu" target="_blank" rel="noopener">Find it on the menu ↗</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-section section" id="space">
+      <div class="wrap">
+        <div class="section-top"><p class="eyebrow dark"><span></span> 05 / COME AS YOU ARE</p><span class="section-index">THE MOOTKU SPACE</span></div>
+        <div class="space-heading"><h2>Stay for the food.<br/><em>Come back for the feeling.</em></h2><p>Casual catch-ups, family meals, celebrations and all the little moments in between. There's a seat for your kind of day.</p></div>
+        <div class="space-gallery">
+          <figure class="gallery-large"><img src="https://mootkucafe.com/assets/images/shop/about.jpg" alt="Mootku's leafy dining room with warm pendant lights" loading="lazy"/><figcaption>THE LONG LUNCH <span>01 / 03</span></figcaption></figure>
+          <figure><img src="https://dineout-media-assets.swiggy.com/swiggy/image/upload/fl_lossy%2Cf_auto%2Cq_auto/DINEOUT_ALL_RESTAURANTS/IMAGES/RESTAURANT_IMAGE_SERVICE/2025/12/1/9b922b91-5f74-41ba-b5dd-c7eb9dbbad72_image6e84851207c224c9c946b48a886feaeb9.JPG" alt="Mootku's cosy lounge and panda-themed wall art" loading="lazy"/><figcaption>THE COSY CORNER <span>02 / 03</span></figcaption></figure>
+          <figure><img src="https://b.zmtcdn.com/data/pictures/1/22418201/caaf228563b4603a0643c904f9462349.jpg?crop=750%3A500%3B%2A%2C%2A&fit=around%7C750%3A500" alt="A plate of food at Mootku Café" loading="lazy"/><figcaption>THE FULL TABLE <span>03 / 03</span></figcaption></figure>
+        </div>
+        <div class="celebrate"><div><span>MAKE A LITTLE MOMENT BIGGER</span><h3>Got something<br/><em>to celebrate?</em></h3></div><a class="btn btn-dark" href="https://wa.me/917978049569?text=Hi%20Mootku%2C%20I%27d%20like%20to%20ask%20about%20a%20celebration." target="_blank" rel="noopener">Talk to the team <b>↗</b></a></div>
+      </div>
+    </section>
+
+    <section class="visit-section section" id="visit">
+      <div class="wrap">
+        <div class="section-top"><p class="eyebrow"><span></span> 06 / YOUR TABLE IS WAITING</p><span class="section-index">COME SAY HELLO</span></div>
+        <div class="visit-grid"><div class="visit-copy"><h2>Find your<br/><em>way to Mootku.</em></h2><p>Bring your people, bring your appetite, and let the panda take it from here.</p><div class="visit-actions"><a class="btn btn-dark" href="https://www.google.com/maps/search/?api=1&query=Mootku+Cafe+ATM+Square+Chandrasekharpur+Bhubaneswar" target="_blank" rel="noopener">Get directions <b>↗</b></a><a class="text-cta" href="tel:+917978049569">Call the café <span>↗</span></a></div></div>
+          <div class="visit-card"><div class="visit-detail"><span>FIND US</span><p>1st Floor, ATM Square,<br/>311/2610, Neeladri Vihar,<br/>Chandrasekharpur, Bhubaneswar,<br/>Odisha 751016</p></div><div class="visit-detail"><span>OPEN EVERY DAY</span><p>Monday – Sunday<br/><strong>11:00 AM – 11:00 PM</strong></p></div><div class="visit-detail"><span>SAY HELLO</span><p><a href="tel:+917978049569">+91 79780 49569</a><br/><a href="tel:+917761034280">+91 77610 34280</a><br/><a href="mailto:mootkucafe@gmail.com">mootkucafe@gmail.com</a></p></div><a class="visit-map" href="https://www.google.com/maps/search/?api=1&query=Mootku+Cafe+ATM+Square+Chandrasekharpur+Bhubaneswar" target="_blank" rel="noopener" aria-label="Open Mootku on Google Maps"><div class="map-grid"></div><div class="map-pin">M</div><span>MOOTKU · CHANDRASEKHARPUR ↗</span></a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="wrap"><div class="footer-top"><a class="brand footer-brand" href="#top"><img src="assets/mootku-panda.svg" alt=""/><span>MOOTKU<small>CAFÉ & RESTO</small></span></a><p>Food for every mood.<br/>A little more love in every visit.</p><a class="back-top" href="#top">BACK TO TOP ↑</a></div><div class="footer-bottom"><span>© MOOTKU CAFÉ & RESTO</span><span>BHUBANESWAR, INDIA</span><span>CONCEPT WEBSITE BY <a href="https://for1s.com" target="_blank" rel="noopener">FOR1S ↗</a></span></div><p class="concept-note">Independent FOR1S concept presentation, not an official Mootku website. Menu highlights and business details are based on publicly available Mootku information. Food imagery is illustrative unless otherwise identified.</p></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="interactions.js" defer></script>
+</body>
+</html>

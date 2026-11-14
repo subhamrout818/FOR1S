@@ -27,6 +27,36 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
+    slug: "mootku-cafe",
+    name: "Mootku Café & Resto",
+    industry: "Café & Restaurant",
+    year: "2026",
+    tags: ["3D / WebGL", "Panda-led experience", "Menu discovery"],
+    summary:
+      "A playful, panda-led café and restaurant experience that moves beyond coffee: bestsellers from tandoor, North Indian, Chinese, biryani, pizza, and coolers, wrapped in Mootku's orange-and-cream 3D art direction.",
+    monogram: "M",
+    hue: ["#FF6A13", "#FFE4CF"],
+    thumbnail: "/demo/mootku-cafe/cover.svg",
+    demoUrl: "/demo/mootku-cafe/index.html",
+    services: [
+      "Custom art direction and visual design",
+      "Interactive 3D panda-chef hero scene",
+      "Responsive frontend and motion design",
+      "Menu discovery, mood picker, and visit journey",
+    ],
+    overview: [
+      "Mootku is a real café and resto in Bhubaneswar with a wide menu spanning tandoor, North Indian, Chinese, biryani, pizza, and café beverages. This concept takes the panda identity and the original orange-and-cream 3D direction from the supplied reference, then reshapes the story around the full dining experience rather than coffee alone.",
+      "The homepage uses a lightweight, draggable 3D panda chef and food platter as its centrepiece. Visitors can explore selected public bestsellers, filter menu categories, use a mood picker for dish inspiration, discover the story behind the name, view the dining space, and find the café.",
+      "This is an independent FOR1S concept prepared for discussion, not an official website launch or a commissioned client result. Menu highlights and contact details are based on public Mootku information; food photography is illustrative unless it is an identified Mootku venue photo. Current availability and prices should be confirmed with the café.",
+    ],
+    highlights: [
+      { label: "Illustrative scope", value: "Restaurant website" },
+      { label: "Hero experience", value: "Interactive 3D / WebGL" },
+      { label: "Visual direction", value: "Panda · orange · cream" },
+      { label: "Project status", value: "Concept demo" },
+    ],
+  },
+  {
     slug: "brew-and-co",
     name: "Brew & Co.",
     industry: "Café & Restaurant",

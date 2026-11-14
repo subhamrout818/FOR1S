@@ -16,8 +16,8 @@ const EVENT_NAMES = new Set([
   "contact_form_success",
   "contact_form_error",
 ]);
-const PROJECTS = new Set(["brew-and-co", "studio-arun", "glow-and-co"]);
-const TIERS = new Set(["personal", "business", "custom"]);
+const PROJECTS = new Set(["brew-and-co", "studio-arun", "glow-and-co", "mootku-cafe"]);
+const TIERS = new Set(["launch", "business", "signature-3d", "custom"]);
 
 let tableReady: Promise<void> | null = null;
 

@@ -11,8 +11,8 @@ type AnalyticsProperties = {
   tier?: string;
 };
 
-const ALLOWED_PROJECTS = new Set(["brew-and-co", "studio-arun", "glow-and-co"]);
-const ALLOWED_TIERS = new Set(["personal", "business", "custom"]);
+const ALLOWED_PROJECTS = new Set(["brew-and-co", "studio-arun", "glow-and-co", "mootku-cafe"]);
+const ALLOWED_TIERS = new Set(["launch", "business", "signature-3d", "custom"]);
 
 /** Send non-PII conversion events to FOR1S's first-party analytics endpoint. */
 export function trackAnalyticsEvent(
