@@ -21,11 +21,15 @@ describe("public team and pricing content", () => {
     assert.equal(haze.image, "/team/haze.svg");
   });
 
-  it("keeps public price display in dollars until pricing strategy is deliberately changed", () => {
-    assert.ok(PRICING_TIERS.length > 0);
+  it("publishes the four India website packages and the ₹69,000 Signature 3D base", () => {
+    assert.deepEqual(PRICING_TIERS.map(({ id }) => id), ["launch", "business", "signature-3d", "custom"]);
     for (const plan of PRICING_TIERS) {
-      assert.match(plan.price, /^\$/);
-      assert.match(plan.priceRange, /^\$/);
+      assert.match(plan.price, /^₹/);
+      assert.match(plan.priceRange, /^₹/);
     }
-  });
+    const signature = PRICING_TIERS.find(({ id }) => id === "signature-3d");
+    assert.ok(signature);
+    assert.equal(signature.price, "₹69,000");
+    assert.ok(signature.specs.some((spec) => spec.includes("no 3D add-on fee")));
+  });;
 });
