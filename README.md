@@ -82,7 +82,7 @@ Launch is not the finish line. Updates, fixes, and improvements keep the site wo
 
 ## Selected work
 
-Three fictional concept sites built as interactive demos. They demonstrate design direction and frontend implementation; they are not presented as completed client engagements.
+Four concept sites built as interactive demos. They demonstrate design direction and frontend implementation; they are not presented as completed client engagements.
 
 <table>
 <tr>
