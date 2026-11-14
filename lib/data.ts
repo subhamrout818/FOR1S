@@ -256,9 +256,8 @@ export const FAQ_ITEMS = [
     id: "q3",
     question: "How much does it cost?",
     answer:
-      "It depends on what you need. Personal websites start around $699, business websites from $1,900, and custom builds from $4,500 and are quoted individually. Every project starts with a free call. We’ll confirm the agreed scope, price, timeline, and any third-party costs before work begins.",
+      "For India, Launch websites start at ₹19,000, Business websites at ₹49,000, Signature 3D websites at ₹69,000, and custom platforms at ₹99,000+. The Signature 3D base includes one bespoke 3D / WebGL hero experience and one custom interactive scene. Add-ons such as CMS, reservations, ordering, extra pages, and content work are priced separately. International projects are quoted in USD. Every project starts with a free discovery call and a written scope.",
   },
-  {
     id: "q4",
     question: "What do I need to provide?",
     answer:
