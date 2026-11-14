@@ -119,3 +119,89 @@ function init3D(){
 }
 init3D();
 })();
+
+/* ===== Deliberate pointer, hover and scroll interactions ===== */
+(function(){
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fine=window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const body=document.body;
+  const progress=document.createElement("div");
+  progress.className="scroll-progress";
+  progress.innerHTML="<span></span>";
+  body.appendChild(progress);
+  const bar=progress.firstElementChild;
+  let scrollTick=false;
+  function updateScroll(){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    bar.style.transform="scaleX("+(max>0?scrollY/max:0)+")";
+    scrollTick=false;
+  }
+  addEventListener("scroll",()=>{if(!scrollTick){requestAnimationFrame(updateScroll);scrollTick=true;}},{passive:true});
+  updateScroll();
+
+  if(!fine||reduce)return;
+  body.classList.add("js-cursor");
+  const glow=document.createElement("div");glow.className="pointer-glow";body.appendChild(glow);
+  const dot=document.createElement("div");dot.className="cursor-dot";body.appendChild(dot);
+  const ring=document.createElement("div");ring.className="cursor-ring";body.appendChild(ring);
+  const label=document.createElement("div");label.className="cursor-label";body.appendChild(label);
+  let x=innerWidth/2,y=innerHeight/2,rx=x,ry=y,dx=x,dy=y,raf=0;
+  function animate(){
+    rx+=(x-rx)*.36;ry+=(y-ry)*.36;dx+=(x-dx)*.18;dy+=(y-dy)*.18;
+    dot.style.transform="translate3d("+x+"px,"+y+"px,0) translate(-50%,-50%)";
+    ring.style.transform="translate3d("+rx+"px,"+ry+"px,0) translate(-50%,-50%)";
+    label.style.transform="translate3d("+dx+"px,"+dy+"px,0) translate(-50%,-50%) scale(1)";
+    raf=requestAnimationFrame(animate);
+  }
+  animate();
+  addEventListener("pointermove",e=>{
+    x=e.clientX;y=e.clientY;
+    document.documentElement.style.setProperty("--cursor-x",x+"px");
+    document.documentElement.style.setProperty("--cursor-y",y+"px");
+  },{passive:true});
+  addEventListener("pointerover",e=>{
+    const target=e.target.closest("a,button,.dish-card,.mood-result,.hero-stage canvas");
+    if(!target){ring.classList.remove("is-active");label.classList.remove("is-active");return;}
+    ring.classList.add("is-active");
+    const txt=target.matches(".dish-card")?"DISCOVER":target.matches(".hero-stage canvas")?"DRAG":target.matches("a,button")?"EXPLORE":"";
+    label.textContent=txt;
+    label.classList.toggle("is-active",!!txt);
+  });
+  addEventListener("pointerout",e=>{
+    if(e.relatedTarget&&!e.relatedTarget.closest("a,button,.dish-card,.mood-result,.hero-stage canvas")){
+      ring.classList.remove("is-active");label.classList.remove("is-active");
+    }
+  });
+  // Magnetic movement on primary CTAs. Never interferes with keyboard focus.
+  document.querySelectorAll(".btn,.nav-cta,.back-top").forEach(el=>{
+    el.addEventListener("pointermove",e=>{
+      if(e.pointerType==="touch")return;
+      const r=el.getBoundingClientRect(),mx=(e.clientX-r.left-r.width/2)/r.width,my=(e.clientY-r.top-r.height/2)/r.height;
+      el.style.transform="translate3d("+(mx*10)+"px,"+(my*8)+"px,0)";
+    });
+    el.addEventListener("pointerleave",()=>{el.style.transform="";});
+  });
+  // Stronger, pointer-reactive card tilt (delegated because menu cards are rendered dynamically).
+  document.addEventListener("pointermove",e=>{
+    const card=e.target.closest(".dish-card");
+    if(!card)return;
+    const r=card.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+    card.style.transform="perspective(900px) rotateX("+((.5-py)*9)+"deg) rotateY("+((px-.5)*11)+"deg) translateY(-7px)";
+    card.style.setProperty("--shine-x",(px*100)+"%");
+    card.style.setProperty("--shine-y",(py*100)+"%");
+  },{passive:true});
+  document.addEventListener("pointerout",e=>{
+    const card=e.target.closest(".dish-card");
+    if(card&&!card.contains(e.relatedTarget))card.style.transform="";
+  });
+  // Hero scene follows the pointer subtly before the user takes manual control.
+  const stage=document.querySelector("#heroStage");
+  if(stage){
+    stage.addEventListener("pointermove",e=>{
+      if(e.target.closest("canvas"))return;
+      const r=stage.getBoundingClientRect();
+      stage.style.setProperty("--stage-x",((e.clientX-r.left)/r.width-.5)*2);
+      stage.style.setProperty("--stage-y",((e.clientY-r.top)/r.height-.5)*2);
+    },{passive:true});
+  }
+})();
